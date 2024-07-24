@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import random
 from itertools import combinations
-from datetime import datetime
+import datetime
 from IPython.display import display
 import matplotlib.pyplot as plt
 import seaborn as sns
