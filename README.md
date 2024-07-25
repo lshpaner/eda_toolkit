@@ -1,5 +1,5 @@
-# EDA Kit
-Welcome to EDA Kit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
+# EDA Toolkit
+Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
 
 ---
 ## Table of Contents
@@ -31,13 +31,13 @@ Welcome to EDA Kit, a collection of utility functions designed to streamline you
 Clone the repository and install the necessary dependencies:
 
 ```bash
-git clone https://github.com/your_username/eda_kit.git
-cd eda_kit
+git clone https://github.com/lshpaner/eda_toolkit.git
+cd eda_toolkit
 pip install -r requirements.txt
 ```
 
 ## Overview
-EDA Kit is a comprehensive toolkit for data analysts and data scientists alike. It provides a suite of functions to handle common EDA tasks, making your workflow more efficient and organized. The toolkit covers everything from directory management and ID generation to complex visualizations and data reporting.
+EDA Toolkit is a comprehensive toolkit for data analysts and data scientists alike. It provides a suite of functions to handle common EDA tasks, making your workflow more efficient and organized. The toolkit covers everything from directory management and ID generation to complex visualizations and data reporting.
 
 ## Functions
 ### Path Directories
@@ -199,8 +199,8 @@ import seaborn as sns
 import textwrap
 import os
 import warnings
-# Import the utility functions from EDA Kit
-from eda_kit import (
+# Import the utility functions from EDA Toolkit
+from eda_toolkit import (
     ensure_directory,
     add_ids,
     strip_trailing_period,
@@ -245,6 +245,6 @@ We welcome contributions! If you have suggestions or improvements, please submit
 6. Create a new Pull Request
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_kit/blob/readme/LICENSE.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/readme/LICENSE.md) file for details.
 
 For more detailed documentation, refer to the docstrings within each function.
