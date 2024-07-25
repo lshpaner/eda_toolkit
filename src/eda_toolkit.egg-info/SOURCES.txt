@@ -1,0 +1,8 @@
+LICENSE.md
+README.md
+setup.py
+src/eda_toolkit.egg-info/PKG-INFO
+src/eda_toolkit.egg-info/SOURCES.txt
+src/eda_toolkit.egg-info/dependency_links.txt
+src/eda_toolkit.egg-info/requires.txt
+src/eda_toolkit.egg-info/top_level.txt
