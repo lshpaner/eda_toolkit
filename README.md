@@ -196,9 +196,9 @@ Creates and saves individual boxplots or violin plots, or an entire grid of plot
 
 ## Usage
 
-Import the module and functions:
-python
-Copy code
+### Import the module and functions
+
+```python
 import pandas as pd
 import numpy as np
 import random
@@ -210,29 +210,52 @@ import seaborn as sns
 import textwrap
 import os
 import warnings
-
 # Import the utility functions from EDA Kit
-from eda_kit import ensure_directory, add_ids, strip_trailing_period, parse_date_with_rule, data_types, dataframe_columns, summarize_all_combinations, save_dataframes_to_excel, contingency_table, highlight_columns, kde_distributions, stacked_crosstab_plot, plot_filtered_dataframes, metrics_box_violin
-Use the functions as needed in your data analysis workflow:
-python
-Copy code
+from eda_kit import (
+    ensure_directory,
+    add_ids,
+    strip_trailing_period,
+    parse_date_with_rule,
+    data_types,
+    dataframe_columns,
+    summarize_all_combinations,
+    save_dataframes_to_excel,
+    contingency_table,
+    highlight_columns,
+    kde_distributions,
+    stacked_crosstab_plot,
+    plot_filtered_dataframes,
+    metrics_box_violin,
+)
+```
+
+### Use the functions as needed in your data analysis workflow
+
+
+```python
 # Example usage of ensure_directory function
 ensure_directory('path/to/your/directory')
+```
 
-# Example usage of add_ids function
+
+### Example usage of add_ids function
+```python
 df = pd.DataFrame({'data': range(10)})
 df_with_ids = add_ids(df)
 print(df_with_ids)
-Contributing
+```
+
+## Contributing
 We welcome contributions! If you have suggestions or improvements, please submit an issue or pull request. Follow the standard GitHub flow for contributing.
 
-Fork the repository
-Create a new branch (git checkout -b feature-branch)
-Make your changes
-Commit your changes (git commit -am 'Add new feature')
-Push to the branch (git push origin feature-branch)
-Create a new Pull Request
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature-branch`)
+3. Make your changes
+4. Commit your changes (`git commit -am 'Add new feature'`)
+5. Push to the branch (`git push origin feature-branch`)
+6. Create a new Pull Request
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_kit/blob/readme/LICENSE.md) file for details.
 
 For more detailed documentation, refer to the docstrings within each function.
