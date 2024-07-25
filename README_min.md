@@ -1,15 +1,15 @@
-# EDA Kit
-Welcome to EDA Kit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
+# EDA Toolkit
+Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
 
 
 ## Prerequisites
 
-Before you install `eda_kit`, ensure your system meets the following requirements:
+Before you install `eda_toolkit`, ensure your system meets the following requirements:
 
-- `Python`: Version `3.7.4` or higher is required to run `eda_kit`.
+- `Python`: Version `3.7.4` or higher is required to run `eda_toolkit`.
 
 
-Additionally, `eda_kit` depends on the following packages, which will be automatically installed when you install `eda_kit`:
+Additionally, `eda_toolkit` depends on the following packages, which will be automatically installed when you install `eda_toolkit`:
 
 - `numpy`: Version 1.21.6 or higher
 - `pandas`: Version 1.3.5 or higher
@@ -21,10 +21,10 @@ Additionally, `eda_kit` depends on the following packages, which will be automat
 
 ## Installation
 
-You can install `eda_kit` directly from PyPI:
+You can install `eda_toolkit` directly from PyPI:
 
 ```bash
-pip install eda_kit
+pip install eda_toolkit
 ```
 
 ## 🌐 Authors' Websites
@@ -35,12 +35,12 @@ https://www.oscargildata.com
 
 ## ⚖️ License
 
-`eda_kit` is distributed under the MIT License. See [LICENSE](https://github.com/lshpaner/eda_kit/blob/readme/LICENSE.md) for more information.
+`eda_toolkit` is distributed under the MIT License. See [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/readme/LICENSE.md) for more information.
 
 
 ## Support
 
-If you have any questions or issues with `eda_kit`, please open an issue on this GitHub repository.
+If you have any questions or issues with `eda_toolkit`, please open an issue on this GitHub repository.
 
 
 
