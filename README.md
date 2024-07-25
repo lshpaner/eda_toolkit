@@ -22,19 +22,8 @@ Welcome to EDA Kit, a collection of utility functions designed to streamline you
     m. [Filtered DataFrame Plots](#filtered-dataframe-plots)  
     n. [Metrics Box and Violin Plots](#metrics-box-and-violin-plots)  
 4. [Usage](#usage)
-
-
-
-
-
-
-
-
-
-
-
-Contributing
-License
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ---
 
