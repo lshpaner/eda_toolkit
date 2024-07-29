@@ -31,20 +31,24 @@ def ensure_directory(path):
 
 def add_ids(
     df,
-    column_name="Patient_ID",
+    id_colname="ID",
+    num_digits=9,
     seed=None,
 ):
     """
-    Add a column of unique, 9-digit IDs to the dataframe.
+    Add a column of unique IDs with a specified number of digits to the dataframe.
 
-    This function sets a random seed and then generates a 9-digit ID for
-    each row in the dataframe. The new IDs are added as a new column with
-    the specified column name, which is placed as the first column in the dataframe.
+    This function sets a random seed and then generates a unique ID with the
+    specified number of digits for each row in the dataframe. The new IDs are
+    added as a new column with the specified column name, which is placed as
+    the first column in the dataframe.
 
     Args:
         df (pd.DataFrame): The dataframe to add IDs to.
-        column_name (str): The name of the new column for the IDs.
-        seed (int, optional): The seed for the random number generator. Defaults to None.
+        id_colname (str): The name of the new column for the IDs.
+        num_digits (int): The number of digits for the unique IDs.
+        seed (int, optional): The seed for the random number generator.
+        Defaults to None.
 
     Returns:
         pd.DataFrame: The updated dataframe with the new ID column.
@@ -52,13 +56,13 @@ def add_ids(
     random.seed(seed)
 
     # Generate a list of unique IDs
-    ids = ["".join(random.choices("0123456789", k=9)) for _ in range(len(df))]
+    ids = ["".join(random.choices("0123456789", k=num_digits)) for _ in range(len(df))]
 
     # Create a new column in df for these IDs
-    df[column_name] = ids
+    df[id_colname] = ids
 
     # Make the new ID column the first column and set it to index
-    df = df.set_index(column_name)
+    df = df.set_index(id_colname)
 
     return df
 
