@@ -34,14 +34,15 @@ def add_ids(
     id_colname="ID",
     num_digits=9,
     seed=None,
+    set_as_index=True,
 ):
     """
     Add a column of unique IDs with a specified number of digits to the dataframe.
 
     This function sets a random seed and then generates a unique ID with the
     specified number of digits for each row in the dataframe. The new IDs are
-    added as a new column with the specified column name, which is placed as
-    the first column in the dataframe.
+    added as a new column with the specified column name, which can be placed as
+    the first column in the dataframe if set_as_index is True.
 
     Args:
         df (pd.DataFrame): The dataframe to add IDs to.
@@ -49,6 +50,8 @@ def add_ids(
         num_digits (int): The number of digits for the unique IDs.
         seed (int, optional): The seed for the random number generator.
         Defaults to None.
+        set_as_index (bool, optional): Whether to set the new ID column as the
+        index. Defaults to True.
 
     Returns:
         pd.DataFrame: The updated dataframe with the new ID column.
@@ -61,8 +64,13 @@ def add_ids(
     # Create a new column in df for these IDs
     df[id_colname] = ids
 
-    # Make the new ID column the first column and set it to index
-    df = df.set_index(id_colname)
+    if set_as_index:
+        # Optionally set the new ID column as the index
+        df = df.set_index(id_colname)
+    else:
+        # Ensure the new ID column is the first column
+        columns = [id_colname] + [col for col in df.columns if col != id_colname]
+        df = df[columns]
 
     return df
 
