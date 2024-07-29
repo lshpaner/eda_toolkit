@@ -1145,17 +1145,23 @@ def metrics_box_violin(
     metrics_boxplot_comp,
     n_rows,
     n_cols,
-    image_path_png,
-    image_path_svg,
-    save_individual=True,
-    save_grid=True,
-    save_both=False,
-    show_legend=True,  # New parameter to toggle legend
-    plot_type="boxplot",  # New parameter to specify plot type
+    image_path_png=None,  # Make image paths optional
+    image_path_svg=None,  # Make image paths optional
+    save_plots=None,  # New parameter to control saving plots
+    show_legend=True,  # Parameter to toggle legend
+    plot_type="boxplot",  # Parameter to specify plot type
+    xlabel_rot=0,  # Parameter to rotate x-axis labels
+    show_plot="both",  # Parameter to control plot display
+    rotate_plot=False,  # New parameter to rotate (pivot) plots
+    individual_figsize=(
+        6,
+        4,
+    ),
+    grid_figsize=None,  # New parameter to specify figure size for grid plots
 ):
     """
-    Create and save individual boxplots or violin plots, an entire grid of plots, or both for
-    given metrics and comparisons.
+    Create and save individual boxplots or violin plots, an entire grid of plots,
+    or both for given metrics and comparisons.
 
     Parameters:
     - df: DataFrame containing the data.
@@ -1163,19 +1169,73 @@ def metrics_box_violin(
     - metrics_boxplot_comp: List of comparison categories (columns in df).
     - n_rows: Number of rows in the subplot grid.
     - n_cols: Number of columns in the subplot grid.
-    - image_path_png: Directory path to save .png images.
-    - image_path_svg: Directory path to save .svg images.
-    - save_individual: Boolean, True if saving each subplot as an individual file.
-    - save_grid: Boolean, True if saving the entire grid as one image.
-    - save_both: Boolean, True if saving both individual and grid images.
+    - image_path_png: Optional directory path to save .png images.
+    - image_path_svg: Optional directory path to save .svg images.
+    - save_plots: String, "all", "individual", or "grid" to control saving plots.
     - show_legend: Boolean, True if showing the legend in the plots.
     - plot_type: String, "boxplot" or "violinplot" to specify the type of plot.
+    - xlabel_rot: Integer, rotation angle for x-axis labels.
+    - show_plot: String, "individual", "grid", or "both" to control plot display.
+    - rotate_plot: Boolean, True if rotating (pivoting) the plots.
+    - individual_figsize: Tuple or list, width and height of the figure for
+      individual plots.
+    - grid_figsize: Tuple or list, width and height of the figure for grid plots.
     """
-    # Ensure the directories exist
+    # Check for valid show_plot values
+    if show_plot not in ["individual", "grid", "both"]:
+        raise ValueError(
+            "Invalid show_plot value selected. Choose from 'individual', "
+            "'grid', or 'both'."
+        )
 
-    if save_both:
-        save_individual = True
-        save_grid = True
+    # Check for valid save_plots values
+    if save_plots not in [None, "all", "individual", "grid"]:
+        raise ValueError(
+            "Invalid save_plots value selected. Choose from 'all', "
+            "'individual', 'grid', or None."
+        )
+
+    # Check if save_plots is set without image paths
+    if save_plots and not (image_path_png or image_path_svg):
+        raise ValueError(
+            "To save plots, specify 'image_path_png' or 'image_path_svg'.",
+        )
+
+    # Check for valid rotate_plot values
+    if not isinstance(rotate_plot, bool):
+        raise ValueError(
+            "Invalid rotate_plot value selected. Choose from 'True' or 'False'."
+        )
+
+    # Check for valid individual_figsize values
+    if not (
+        isinstance(individual_figsize, (tuple, list))
+        and len(individual_figsize) == 2
+        and all(isinstance(x, (int, float)) for x in individual_figsize)
+    ):
+        raise ValueError(
+            "Invalid individual_figsize value. It should be a tuple or list "
+            "of two numbers (width, height)."
+        )
+
+    # Check for valid grid_figsize values if specified
+    if grid_figsize is not None and not (
+        isinstance(grid_figsize, (tuple, list))
+        and len(grid_figsize) == 2
+        and all(isinstance(x, (int, float)) for x in grid_figsize)
+    ):
+        raise ValueError(
+            "Invalid grid_figsize value. It should be a tuple or list of two "
+            "numbers (width, height)."
+        )
+
+    # Set default grid figure size if not specified
+    if grid_figsize is None:
+        grid_figsize = (5 * n_cols, 5 * n_rows)
+
+    # Determine saving options based on save_plots value
+    save_individual = save_plots in ["all", "individual"]
+    save_grid = save_plots in ["all", "grid"]
 
     def get_palette(n_colors):
         return sns.color_palette("tab10", n_colors=n_colors)
@@ -1183,48 +1243,61 @@ def metrics_box_violin(
     # Map plot_type to the corresponding seaborn function
     plot_function = getattr(sns, plot_type)
 
-    # Save individual plots if required
-    if save_individual:
+    # Save and/or show individual plots if required
+    if save_individual or show_plot in ["individual", "both"]:
         for met_comp in metrics_boxplot_comp:
             unique_vals = df[met_comp].value_counts().count()
             palette = get_palette(unique_vals)
             for met_list in metrics_list:
-                plt.figure(figsize=(6, 4))  # Adjust the size as needed
+                plt.figure(figsize=individual_figsize)  # Adjust size as needed
                 ax = plot_function(
-                    x=met_comp,
-                    y=met_list,
+                    x=met_list if rotate_plot else met_comp,
+                    y=met_comp if rotate_plot else met_list,
                     data=df,
                     hue=met_comp,
                     palette=palette,
                     dodge=False,
                 )
                 plt.title(f"Distribution of {met_list} by {met_comp}")
-                plt.xlabel(met_comp)
-                plt.ylabel(met_list)
+                plt.xlabel(met_list if rotate_plot else met_comp)
+                plt.ylabel(met_comp if rotate_plot else met_list)
+                ax.tick_params(axis="x", rotation=xlabel_rot)
 
                 # Toggle legend
                 if not show_legend and ax.legend_:
                     ax.legend_.remove()
 
-                safe_met_list = (
-                    met_list.replace(" ", "_")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("/", "_per_")
-                )
-                filename_png = f"{safe_met_list}_by_{met_comp}.png"
-                filename_svg = f"{safe_met_list}_by_{met_comp}.svg"
-                plt.savefig(
-                    os.path.join(image_path_png, filename_png), bbox_inches="tight"
-                )
-                plt.savefig(
-                    os.path.join(image_path_svg, filename_svg), bbox_inches="tight"
-                )
+                if save_individual:
+                    safe_met_list = (
+                        met_list.replace(" ", "_")
+                        .replace("(", "")
+                        .replace(")", "")
+                        .replace("/", "_per_")
+                    )
+                    if image_path_png:
+                        filename_png = (
+                            f"{safe_met_list}_by_{met_comp}_" f"{plot_type}.png"
+                        )
+                        plt.savefig(
+                            os.path.join(image_path_png, filename_png),
+                            bbox_inches="tight",
+                        )
+                    if image_path_svg:
+                        filename_svg = (
+                            f"{safe_met_list}_by_{met_comp}_" f"{plot_type}.svg"
+                        )
+                        plt.savefig(
+                            os.path.join(image_path_svg, filename_svg),
+                            bbox_inches="tight",
+                        )
+
+                if show_plot in ["individual", "both"]:
+                    plt.show()  # Display the plot
                 plt.close()
 
-    # Save the entire grid if required
-    if save_grid:
-        fig, axs = plt.subplots(n_rows, n_cols, figsize=(5 * n_cols, 5 * n_rows))
+    # Save and/or show the entire grid if required
+    if save_grid or show_plot in ["grid", "both"]:
+        fig, axs = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
         axs = axs.flatten()
 
         for i, ax in enumerate(axs):
@@ -1234,8 +1307,8 @@ def metrics_box_violin(
                 unique_vals = df[met_comp].value_counts().count()
                 palette = get_palette(unique_vals)
                 plot_function(
-                    x=met_comp,
-                    y=met_list,
+                    x=met_list if rotate_plot else met_comp,
+                    y=met_comp if rotate_plot else met_list,
                     data=df,
                     hue=met_comp,
                     ax=ax,
@@ -1243,8 +1316,9 @@ def metrics_box_violin(
                     dodge=False,
                 )
                 ax.set_title(f"Distribution of {met_list} by {met_comp}")
-                ax.set_xlabel(met_comp)
-                ax.set_ylabel(met_list)
+                ax.set_xlabel(met_list if rotate_plot else met_comp)
+                ax.set_ylabel(met_comp if rotate_plot else met_list)
+                ax.tick_params(axis="x", rotation=xlabel_rot)
 
                 # Toggle legend
                 if not show_legend and ax.legend_:
@@ -1253,13 +1327,22 @@ def metrics_box_violin(
                 ax.set_visible(False)
 
         plt.tight_layout()
-        fig.savefig(
-            os.path.join(image_path_png, "all_plots_comparisons.png"),
-            bbox_inches="tight",
-        )
-        fig.savefig(
-            os.path.join(image_path_svg, "all_plots_comparisons.svg"),
-            bbox_inches="tight",
-        )
-        plt.show()  # show the plot(s)
+        if save_grid:
+            if image_path_png:
+                fig.savefig(
+                    os.path.join(
+                        image_path_png, f"all_plots_comparisons_{plot_type}.png"
+                    ),
+                    bbox_inches="tight",
+                )
+            if image_path_svg:
+                fig.savefig(
+                    os.path.join(
+                        image_path_svg, f"all_plots_comparisons_{plot_type}.svg"
+                    ),
+                    bbox_inches="tight",
+                )
+
+        if show_plot in ["grid", "both"]:
+            plt.show()  # Display the plot
         plt.close(fig)

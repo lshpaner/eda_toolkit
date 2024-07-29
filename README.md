@@ -1,5 +1,5 @@
-# EDA Kit
-Welcome to EDA Kit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
+# EDA Toolkit
+Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
 
 ---
 ## Table of Contents
@@ -22,19 +22,9 @@ Welcome to EDA Kit, a collection of utility functions designed to streamline you
     m. [Filtered DataFrame Plots](#filtered-dataframe-plots)  
     n. [Metrics Box and Violin Plots](#metrics-box-and-violin-plots)  
 4. [Usage](#usage)
-
-
-
-
-
-
-
-
-
-
-
-Contributing
-License
+5. [Contributors/Maintainers](#contributorsmaintainers)
+6. [Contributing](#contributing)
+7. [License](#license)
 
 ---
 
@@ -42,13 +32,13 @@ License
 Clone the repository and install the necessary dependencies:
 
 ```bash
-git clone https://github.com/your_username/eda_kit.git
-cd eda_kit
+git clone https://github.com/lshpaner/eda_toolkit.git
+cd eda_toolkit
 pip install -r requirements.txt
 ```
 
 ## Overview
-EDA Kit is a comprehensive toolkit for data analysts and data scientists alike. It provides a suite of functions to handle common EDA tasks, making your workflow more efficient and organized. The toolkit covers everything from directory management and ID generation to complex visualizations and data reporting.
+EDA Toolkit is a comprehensive toolkit for data analysts and data scientists alike. It provides a suite of functions to handle common EDA tasks, making your workflow more efficient and organized. The toolkit covers everything from directory management and ID generation to complex visualizations and data reporting.
 
 ## Functions
 ### Path Directories
@@ -210,8 +200,8 @@ import seaborn as sns
 import textwrap
 import os
 import warnings
-# Import the utility functions from EDA Kit
-from eda_kit import (
+# Import the utility functions from EDA Toolkit
+from eda_toolkit import (
     ensure_directory,
     add_ids,
     strip_trailing_period,
@@ -244,18 +234,28 @@ df = pd.DataFrame({'data': range(10)})
 df_with_ids = add_ids(df)
 print(df_with_ids)
 ```
+## Contributors/Maintainers
+
+<img align="left" width="150" height="150" src="https://www.leonshpaner.com/author/leon-shpaner/avatar_hu48de79c369d5f7d4ff8056a297b2c4c5_1681850_270x270_fill_q90_lanczos_center.jpg">
+
+[Leonid Shpaner](https://github.com/lshpaner) is a Data Scientist at UCLA Health. With over a decade experience in analytics and teaching, he has collaborated on a wide variety of projects within financial services, education, personal development, and healthcare. He serves as a course facilitator for Data Analytics and Applied Statistics at Cornell University and is a lecturer of Statistics in Python for the University of San Diego's M.S. Applied Artificial Intelligence program.  
+
+<br>
+<br>
+<br>
+
+<img align="left" width="150" height="150" src="https://oscargildata.com/portfolio_content/images/Oscar_LinkedIn_Pic.jpeg">
+
+[Oscar Gil](https://github.com/Oscar-Gil-Data) is a Data Scientist at the University of California, Riverside, bringing over ten years of professional experience in the education data management industry. An effective data professional, he excels in Data Warehousing, Data Analytics, Data Wrangling, Machine Learning, SQL, Python, R, Data Automation, and Report Authoring. Oscar holds a Master of Science in Applied Data Science from the University of San Diego.
+
+<br>
+<br>
 
 ## Contributing
 We welcome contributions! If you have suggestions or improvements, please submit an issue or pull request. Follow the standard GitHub flow for contributing.
 
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature-branch`)
-3. Make your changes
-4. Commit your changes (`git commit -am 'Add new feature'`)
-5. Push to the branch (`git push origin feature-branch`)
-6. Create a new Pull Request
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_kit/blob/readme/LICENSE.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/readme/LICENSE.md) file for details.
 
 For more detailed documentation, refer to the docstrings within each function.
