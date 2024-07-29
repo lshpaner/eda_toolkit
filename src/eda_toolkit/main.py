@@ -64,9 +64,13 @@ def add_ids(
     # Create a new column in df for these IDs
     df[id_colname] = ids
 
-    # Optionally set the new ID column as the index
     if set_as_index:
+        # Optionally set the new ID column as the index
         df = df.set_index(id_colname)
+    else:
+        # Ensure the new ID column is the first column
+        columns = [id_colname] + [col for col in df.columns if col != id_colname]
+        df = df[columns]
 
     return df
 
