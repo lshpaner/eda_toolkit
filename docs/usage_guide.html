@@ -58,6 +58,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#ensure_directory"><code class="docutils literal notranslate"><span class="pre">ensure_directory()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#adding-unique-identifiers">Adding Unique Identifiers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#add_ids"><code class="docutils literal notranslate"><span class="pre">add_ids()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -130,13 +134,14 @@ paths for the PNG and SVG image directories, located within an <code class="docu
 in the parent directory. Using the <cite>ensure_directory</cite> function, we then verify
 that these directories exist. If any of the specified directories do not exist,
 the function creates them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">eda_toolkit</span> <span class="c1"># import main library</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import function from library</span>
+<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
 <span class="kn">import</span> <span class="nn">os</span> <span class="c1"># import operating system for dir</span>
-</pre></div>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
 
-<span class="c1"># Go up one level from &#39;notebooks&#39; to the parent directory,</span>
+
+<span class="n">base_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
+
+<span class="c1"># Go up one level from &#39;notebooks&#39; to parent directory,</span>
 <span class="c1"># then into the &#39;data&#39; folder</span>
 <span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
 <span class="n">data_output</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span> <span class="s2">&quot;data_output&quot;</span><span class="p">)</span>
@@ -145,11 +150,11 @@ the function creates them.</p>
 <span class="n">image_path_png</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="s2">&quot;png_images&quot;</span><span class="p">)</span>
 <span class="n">image_path_svg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="s2">&quot;svg_images&quot;</span><span class="p">)</span>
 
-<span class="c1"># Use the function to ensure the &#39;data&#39; directory exists</span>
-<span class="n">eda_toolkit</span><span class="o">.</span><span class="n">ensure_directory</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
-<span class="n">eda_toolkit</span><span class="o">.</span><span class="n">ensure_directory</span><span class="p">(</span><span class="n">data_output</span><span class="p">)</span>
-<span class="n">eda_toolkit</span><span class="o">.</span><span class="n">ensure_directory</span><span class="p">(</span><span class="n">image_path_png</span><span class="p">)</span>
-<span class="n">eda_toolkit</span><span class="o">.</span><span class="n">ensure_directory</span><span class="p">(</span><span class="n">image_path_svg</span><span class="p">)</span>
+<span class="c1"># Use the function to ensure&#39;data&#39; directory exists</span>
+<span class="n">ensure_directory</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+<span class="n">ensure_directory</span><span class="p">(</span><span class="n">data_output</span><span class="p">)</span>
+<span class="n">ensure_directory</span><span class="p">(</span><span class="n">image_path_png</span><span class="p">)</span>
+<span class="n">ensure_directory</span><span class="p">(</span><span class="n">image_path_svg</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
@@ -159,6 +164,127 @@ the function creates them.</p>
 <span class="n">Created</span> <span class="n">directory</span><span class="p">:</span> <span class="o">../</span><span class="n">images</span><span class="o">/</span><span class="n">svg_images</span>
 </pre></div>
 </div>
+</section>
+<section id="adding-unique-identifiers">
+<h1>Adding Unique Identifiers<a class="headerlink" href="#adding-unique-identifiers" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="add_ids">
+<span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Permalink to this definition"></a></dt>
+<dd><p>Add a column of unique IDs with a specified number of digits to the dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The dataframe to add IDs to.</p></li>
+<li><p><strong>id_colname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the new column for the IDs.</p></li>
+<li><p><strong>num_digits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The number of digits for the unique IDs.</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The seed for the random number generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated dataframe with the new ID column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function is used to append a column of unique identifiers with a
+specified number of digits to a given dataframe. This is particularly useful for
+creating unique patient or record IDs in datasets. The function allows you to
+specify a custom column name for the IDs, the number of digits for each ID, and
+optionally set a seed for the random number generator to ensure reproducibility.</p>
+<p><strong>Example Usage</strong></p>
+<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function to add
+a column of unique IDs to a dataframe. We start by importing the necessary libraries
+and creating a sample dataframe. We then use the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function to generate
+and append a column of unique IDs with a specified number of digits to the dataframe.</p>
+<p>First, we import the pandas library and the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function from the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.
+Then, we create a sample dataframe with some data. We call the <cite>add_ids</cite> function,
+specifying the dataframe, the column name for the IDs, the number of digits for each ID,
+and a seed for reproducibility. The function generates unique IDs for each row and
+adds them as the first column in the dataframe.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">add_ids</span>
+
+
+<span class="c1"># Add a column of unique IDs with 9 digits and call it &quot;census_id&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">add_ids</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">id_colname</span><span class="o">=</span><span class="s2">&quot;census_id&quot;</span><span class="p">,</span>
+    <span class="n">num_digits</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>census_id</p></th>
+<th class="head"><p>age</p></th>
+<th class="head"><p>workclass</p></th>
+<th class="head"><p>fnlwgt</p></th>
+<th class="head"><p>education</p></th>
+<th class="head"><p>education-num</p></th>
+<th class="head"><p>marital-status</p></th>
+<th class="head"><p>occupation</p></th>
+<th class="head"><p>relationship</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>82943611</p></td>
+<td><p>39</p></td>
+<td><p>State-gov</p></td>
+<td><p>77516</p></td>
+<td><p>Bachelors</p></td>
+<td><p>13</p></td>
+<td><p>Never-married</p></td>
+<td><p>Adm-clerical</p></td>
+<td><p>Not-in-family</p></td>
+</tr>
+<tr class="row-odd"><td><p>42643227</p></td>
+<td><p>50</p></td>
+<td><p>Self-emp-not-inc</p></td>
+<td><p>83311</p></td>
+<td><p>Bachelors</p></td>
+<td><p>13</p></td>
+<td><p>Married-civ-spouse</p></td>
+<td><p>Exec-managerial</p></td>
+<td><p>Husband</p></td>
+</tr>
+<tr class="row-even"><td><p>93837254</p></td>
+<td><p>38</p></td>
+<td><p>Private</p></td>
+<td><p>215646</p></td>
+<td><p>HS-grad</p></td>
+<td><p>9</p></td>
+<td><p>Divorced</p></td>
+<td><p>Handlers-cleaners</p></td>
+<td><p>Not-in-family</p></td>
+</tr>
+<tr class="row-odd"><td><p>87104229</p></td>
+<td><p>53</p></td>
+<td><p>Private</p></td>
+<td><p>234721</p></td>
+<td><p>11th</p></td>
+<td><p>7</p></td>
+<td><p>Married-civ-spouse</p></td>
+<td><p>Handlers-cleaners</p></td>
+<td><p>Husband</p></td>
+</tr>
+<tr class="row-even"><td><p>90069867</p></td>
+<td><p>28</p></td>
+<td><p>Private</p></td>
+<td><p>338409</p></td>
+<td><p>Bachelors</p></td>
+<td><p>13</p></td>
+<td><p>Married-civ-spouse</p></td>
+<td><p>Prof-specialty</p></td>
+<td><p>Wife</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 
 
