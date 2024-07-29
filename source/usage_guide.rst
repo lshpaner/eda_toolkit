@@ -73,15 +73,14 @@ the function creates them.
 
 .. code-block:: python
 
-
-    import eda_toolkit # import main library
+    # import function from library
+    from eda_toolkit import ensure_directory 
     import os # import operating system for dir
-
-.. code-block:: python
+    
 
     base_path = os.path.join(os.pardir)
 
-    # Go up one level from 'notebooks' to the parent directory, 
+    # Go up one level from 'notebooks' to parent directory, 
     # then into the 'data' folder
     data_path = os.path.join(os.pardir, "data")
     data_output = os.path.join(os.pardir, "data_output")
@@ -90,11 +89,11 @@ the function creates them.
     image_path_png = os.path.join(base_path, "images", "png_images")
     image_path_svg = os.path.join(base_path, "images", "svg_images")
 
-    # Use the function to ensure the 'data' directory exists
-    eda_toolkit.ensure_directory(data_path)
-    eda_toolkit.ensure_directory(data_output)
-    eda_toolkit.ensure_directory(image_path_png)
-    eda_toolkit.ensure_directory(image_path_svg)
+    # Use the function to ensure'data' directory exists
+    ensure_directory(data_path)
+    ensure_directory(data_output)
+    ensure_directory(image_path_png)
+    ensure_directory(image_path_svg)
 
 **Output**
 
@@ -106,53 +105,69 @@ the function creates them.
     Created directory: ../images/svg_images
 
 
-.. function:: add_ids(df, column_name="Patient_ID", seed=None)
+Adding Unique Identifiers
+==========================
 
-    Add a column of unique, 9-digit IDs to the dataframe.
+.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None)
 
-    This function sets a random seed and then generates a 9-digit ID for
-    each row in the dataframe. The new IDs are added as a new column with
-    the specified column name, which is placed as the first column in the dataframe.
+    Add a column of unique IDs with a specified number of digits to the dataframe.
 
     :param df: The dataframe to add IDs to.
     :type df: pd.DataFrame
-    :param column_name: The name of the new column for the IDs.
-    :type column_name: str
+    :param id_colname: The name of the new column for the IDs.
+    :type id_colname: str
+    :param num_digits: The number of digits for the unique IDs.
+    :type num_digits: int
     :param seed: The seed for the random number generator. Defaults to None.
     :type seed: int, optional
 
     :returns: The updated dataframe with the new ID column.
     :rtype: pd.DataFrame
 
-    **Description**
+The ``add_ids`` function is used to append a column of unique identifiers with a 
+specified number of digits to a given dataframe. This is particularly useful for 
+creating unique patient or record IDs in datasets. The function allows you to 
+specify a custom column name for the IDs, the number of digits for each ID, and 
+optionally set a seed for the random number generator to ensure reproducibility.
 
-    The `add_ids` function is used to append a column of unique 9-digit identifiers to a given dataframe. This is particularly useful for creating unique patient or record IDs in datasets. The function allows you to specify a custom column name for the IDs and optionally set a seed for the random number generator to ensure reproducibility.
+**Example Usage**
 
-    **Example Usage**
+In the example below, we demonstrate how to use the ``add_ids`` function to add 
+a column of unique IDs to a dataframe. We start by importing the necessary libraries 
+and creating a sample dataframe. We then use the ``add_ids`` function to generate 
+and append a column of unique IDs with a specified number of digits to the dataframe.
 
-    In the example below, we demonstrate how to use the `add_ids` function to add a column of unique IDs to a dataframe. We start by importing the necessary libraries and creating a sample dataframe. We then use the `add_ids` function to generate and append a column of 9-digit IDs to the dataframe.
+First, we import the pandas library and the ``add_ids`` function from the ``eda_toolkit``. 
+Then, we create a sample dataframe with some data. We call the `add_ids` function, 
+specifying the dataframe, the column name for the IDs, the number of digits for each ID, 
+and a seed for reproducibility. The function generates unique IDs for each row and 
+adds them as the first column in the dataframe.
 
-    .. code-block:: python
+.. code-block:: python
 
-        import pandas as pd
-        import random
-        from eda_toolkit import add_ids
-
-        # Create a sample dataframe
-        data = {
-            "Name": ["Alice", "Bob", "Charlie"],
-            "Age": [25, 30, 35]
-        }
-        df = pd.DataFrame(data)
-
-        # Add a column of unique IDs
-        df_with_ids = add_ids(df, column_name="Patient_ID", seed=42)
-
-        print(df_with_ids)
-
-    This code creates a dataframe with a new column `Patient_ID` containing unique 9-digit identifiers for each row. The `seed` parameter ensures that the IDs are reproducible if the function is run again with the same seed value.
+    import pandas as pd
+    import random
+    from eda_toolkit import add_ids
 
 
+    # Add a column of unique IDs with 9 digits and call it "census_id"
+    df = add_ids(
+        df=df,
+        id_colname="census_id",
+        num_digits=9,
+        seed=111,
+    )
 
+**Output**
 
+.. table::
 
+   ==========  ===  =================  =======  ============  ===============  ==================  =================  ===============
+   census_id   age  workclass          fnlwgt   education     education-num    marital-status      occupation         relationship
+   ==========  ===  =================  =======  ============  ===============  ==================  =================  ===============
+   82943611    39   State-gov          77516    Bachelors     13               Never-married       Adm-clerical       Not-in-family
+   42643227    50   Self-emp-not-inc   83311    Bachelors     13               Married-civ-spouse  Exec-managerial    Husband
+   93837254    38   Private            215646   HS-grad       9                Divorced            Handlers-cleaners  Not-in-family
+   87104229    53   Private            234721   11th          7                Married-civ-spouse  Handlers-cleaners  Husband
+   90069867    28   Private            338409   Bachelors     13               Married-civ-spouse  Prof-specialty     Wife
+   ==========  ===  =================  =======  ============  ===============  ==================  =================  ===============
