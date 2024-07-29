@@ -169,7 +169,7 @@ the function creates them.</p>
 <h1>Adding Unique Identifiers<a class="headerlink" href="#adding-unique-identifiers" title="Permalink to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="add_ids">
-<span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_as_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Permalink to this definition"></a></dt>
 <dd><p>Add a column of unique IDs with a specified number of digits to the dataframe.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -178,6 +178,7 @@ the function creates them.</p>
 <li><p><strong>id_colname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the new column for the IDs.</p></li>
 <li><p><strong>num_digits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The number of digits for the unique IDs.</p></li>
 <li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The seed for the random number generator. Defaults to None.</p></li>
+<li><p><strong>set_as_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to set the new ID column as the index. Defaults to True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -193,21 +194,22 @@ the function creates them.</p>
 specified number of digits to a given dataframe. This is particularly useful for
 creating unique patient or record IDs in datasets. The function allows you to
 specify a custom column name for the IDs, the number of digits for each ID, and
-optionally set a seed for the random number generator to ensure reproducibility.</p>
+optionally set a seed for the random number generator to ensure reproducibility.
+Additionally, you can choose whether to set the new ID column as the index of the dataframe.</p>
 <p><strong>Example Usage</strong></p>
-<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function to add
-a column of unique IDs to a dataframe. We start by importing the necessary libraries
+<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function to add a
+column of unique IDs to a dataframe. We start by importing the necessary libraries
 and creating a sample dataframe. We then use the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function to generate
 and append a column of unique IDs with a specified number of digits to the dataframe.</p>
 <p>First, we import the pandas library and the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function from the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.
-Then, we create a sample dataframe with some data. We call the <cite>add_ids</cite> function,
-specifying the dataframe, the column name for the IDs, the number of digits for each ID,
-and a seed for reproducibility. The function generates unique IDs for each row and
-adds them as the first column in the dataframe.</p>
+Then, we create a sample dataframe with some data. We call the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function,
+specifying the dataframe, the column name for the IDs, the number of digits for
+each ID, a seed for reproducibility, and whether to set the new ID column as the
+index. The function generates unique IDs for each row and adds them as the first
+column in the dataframe.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">add_ids</span>
-
 
 <span class="c1"># Add a column of unique IDs with 9 digits and call it &quot;census_id&quot;</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">add_ids</span><span class="p">(</span>
