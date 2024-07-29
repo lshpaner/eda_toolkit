@@ -34,7 +34,7 @@ def add_ids(
     id_colname="ID",
     num_digits=9,
     seed=None,
-    set_as_index=True,
+    set_as_index=False,
 ):
     """
     Add a column of unique IDs with a specified number of digits to the dataframe.
