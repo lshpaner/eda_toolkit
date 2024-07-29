@@ -108,7 +108,7 @@ the function creates them.
 Adding Unique Identifiers
 ==========================
 
-.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None)
+.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=True)
 
     Add a column of unique IDs with a specified number of digits to the dataframe.
 
@@ -120,6 +120,8 @@ Adding Unique Identifiers
     :type num_digits: int
     :param seed: The seed for the random number generator. Defaults to None.
     :type seed: int, optional
+    :param set_as_index: Whether to set the new ID column as the index. Defaults to True.
+    :type set_as_index: bool, optional
 
     :returns: The updated dataframe with the new ID column.
     :rtype: pd.DataFrame
@@ -128,27 +130,28 @@ The ``add_ids`` function is used to append a column of unique identifiers with a
 specified number of digits to a given dataframe. This is particularly useful for 
 creating unique patient or record IDs in datasets. The function allows you to 
 specify a custom column name for the IDs, the number of digits for each ID, and 
-optionally set a seed for the random number generator to ensure reproducibility.
+optionally set a seed for the random number generator to ensure reproducibility. 
+Additionally, you can choose whether to set the new ID column as the index of the dataframe.
 
 **Example Usage**
 
-In the example below, we demonstrate how to use the ``add_ids`` function to add 
-a column of unique IDs to a dataframe. We start by importing the necessary libraries 
+In the example below, we demonstrate how to use the ``add_ids`` function to add a 
+column of unique IDs to a dataframe. We start by importing the necessary libraries 
 and creating a sample dataframe. We then use the ``add_ids`` function to generate 
 and append a column of unique IDs with a specified number of digits to the dataframe.
 
 First, we import the pandas library and the ``add_ids`` function from the ``eda_toolkit``. 
-Then, we create a sample dataframe with some data. We call the `add_ids` function, 
-specifying the dataframe, the column name for the IDs, the number of digits for each ID, 
-and a seed for reproducibility. The function generates unique IDs for each row and 
-adds them as the first column in the dataframe.
+Then, we create a sample dataframe with some data. We call the ``add_ids`` function, 
+specifying the dataframe, the column name for the IDs, the number of digits for 
+each ID, a seed for reproducibility, and whether to set the new ID column as the 
+index. The function generates unique IDs for each row and adds them as the first 
+column in the dataframe.
 
 .. code-block:: python
 
     import pandas as pd
     import random
     from eda_toolkit import add_ids
-
 
     # Add a column of unique IDs with 9 digits and call it "census_id"
     df = add_ids(
