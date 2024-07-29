@@ -3,20 +3,52 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the EDA Toolkit documentation!
-=========================================
+.. _target-link:
 
-Testing 1234
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/eda_toolkit_logo.svg
+   :alt: EDA Toolkit Logo
+   :align: left
+   :width: 200px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 106px;"></div>
+
+\
+
+\
+
+EDA Toolkit Documentation
+====================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
+   :caption: Getting Started
+
+   getting_started
 
 
+.. toctree::
+   :maxdepth: 3
+   :caption: Usage Guide
 
-Indices and tables
-==================
+   usage_guide
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 3
+   :caption: About KFRE
+
+   acknowledgements
+   citations
+   changelog
+   references
+
+   

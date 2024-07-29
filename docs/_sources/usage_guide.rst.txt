@@ -1,0 +1,114 @@
+.. _usage_guide:   
+
+.. _target-link:
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/eda_toolkit_logo.svg
+   :alt: EDA Toolkit Logo
+   :align: left
+   :width: 250px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 106px;"></div>
+
+\
+
+Description
+===========
+
+This guide provides detailed instructions and examples for using the functions 
+provided in the ``eda_toolkit`` library and how to use them effectively in your projects.
+
+For the ensuing examples, we will leverage the Census Income Data (1994) from
+the UCI Machine Learning Repository. This dataset provides a rich source of
+information for demonstrating the functionalities of the ``eda_toolkit``. You can
+find more details and download the dataset from the `UCI Machine Learning Repository <https://archive.ics.uci.edu/ml/datasets/Census+Income>`_.
+
+
+Path Directories
+=================
+
+.. function:: ensure_directory(path)
+
+    Ensure that the directory exists. If not, create it.
+
+    :param path: The path to the directory that needs to be ensured.
+    :type path: str
+
+    :returns: None
+
+
+The ``ensure_directory`` function is a utility designed to facilitate the 
+management of directory paths within your project. When working with data 
+science projects, it is common to save and load data, images, and other 
+artifacts from specific directories. This function helps in making sure that 
+these directories exist before any read/write operations are performed. If 
+the specified directory does not exist, the function creates it. If it 
+already exists, it does nothing, thus preventing any errors related to 
+missing directories.
+
+
+**Example Usage**
+
+In the example below, we demonstrate how to use the ``ensure_directory`` function 
+to verify and create directories as needed. This example sets up paths for data and 
+image directories, ensuring they exist before performing any operations that depend on them.
+
+First, we define the base path as the parent directory of the current directory. 
+The ``os.pardir`` constant, equivalent to ``..``, is used to navigate up one 
+directory level. Then, we define paths for the data directory and data output 
+directory, both located one level up from the current directory. Next, we set 
+paths for the PNG and SVG image directories, located within an ``images`` folder 
+in the parent directory. Using the `ensure_directory` function, we then verify 
+that these directories exist. If any of the specified directories do not exist, 
+the function creates them.
+
+.. code-block:: python
+
+
+    import eda_toolkit # import main library
+    import os # import operating system for dir
+
+.. code-block:: python
+
+    base_path = os.path.join(os.pardir)
+
+    # Go up one level from 'notebooks' to the parent directory, 
+    # then into the 'data' folder
+    data_path = os.path.join(os.pardir, "data")
+    data_output = os.path.join(os.pardir, "data_output")
+
+    # create image paths
+    image_path_png = os.path.join(base_path, "images", "png_images")
+    image_path_svg = os.path.join(base_path, "images", "svg_images")
+
+    # Use the function to ensure the 'data' directory exists
+    eda_toolkit.ensure_directory(data_path)
+    eda_toolkit.ensure_directory(data_output)
+    eda_toolkit.ensure_directory(image_path_png)
+    eda_toolkit.ensure_directory(image_path_svg)
+
+**Output**
+
+.. code-block:: python
+
+    Created directory: ../data
+    Created directory: ../data_output
+    Created directory: ../images/png_images
+    Created directory: ../images/svg_images
+
+
+
+
+
+
+
+
