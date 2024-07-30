@@ -1039,9 +1039,6 @@ Creating Contingency Tables
 
 This section explains how to create contingency tables from one or more columns in a DataFrame using the ``contingency_table`` function.
 
-Function Definition
--------------------
-
 .. function:: contingency_table(df, cols=None, sort_by=0)
 
     Create a contingency table from one or more columns in a DataFrame, with sorting options.
