@@ -454,13 +454,13 @@ that all float values are correctly represented.</p>
 <dt class="sig sig-object py" id="parse_date_with_rule">
 <span class="sig-name descname"><span class="pre">parse_date_with_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse_date_with_rule" title="Permalink to this definition"></a></dt>
 <dd><p>Parse and standardize date strings based on the provided rule.</p>
-<p>This function takes a date string and standardizes it to the ISO 8601 format
-(YYYY-MM-DD). It assumes dates are provided in either day/month/year or
+<p>This function takes a date string and standardizes it to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format
+(<code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>). It assumes dates are provided in either day/month/year or
 month/day/year format. The function first checks if the first part of the
 date string (day or month) is greater than 12, which unambiguously indicates
 a day/month/year format. If the first part is 12 or less, the function
 attempts to parse the date as month/day/year, falling back to day/month/year
-if the former raises a ValueError due to an impossible date (e.g., month
+if the former raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> due to an impossible date (e.g., month
 being greater than 12).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -473,7 +473,7 @@ being greater than 12).</p>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If date_str is in an unrecognized format or if the function
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">date_str</span></code> is in an unrecognized format or if the function
 cannot parse the date.</p>
 </dd>
 </dl>
@@ -483,7 +483,7 @@ cannot parse the date.</p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
 function to standardize date strings. We start by importing the necessary library
 and creating a sample list of date strings. We then use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
-function to parse and standardize each date string to the ISO 8601 format.</p>
+function to parse and standardize each date string to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">parse_date_with_rule</span>
 
 <span class="c1"># Sample date strings</span>
@@ -497,6 +497,43 @@ function to parse and standardize each date string to the ISO 8601 format.</p>
 </div>
 <p><strong>Output</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;2021-04-15&#39;</span><span class="p">,</span> <span class="s1">&#39;2021-04-15&#39;</span><span class="p">,</span> <span class="s1">&#39;2020-12-01&#39;</span><span class="p">,</span> <span class="s1">&#39;2020-01-12&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In the next example, we demonstrate how to apply the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
+function to a DataFrame column containing date strings using the <code class="docutils literal notranslate"><span class="pre">.apply()</span></code> method.
+This is particularly useful when you need to standardize date formats across an
+entire column in a DataFrame.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Creating the DataFrame</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;date_column&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;31/12/2021&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;01/01/2022&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;12/31/2021&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;13/02/2022&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;07/04/2022&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="s2">&quot;Bob&quot;</span><span class="p">,</span> <span class="s2">&quot;Charlie&quot;</span><span class="p">,</span> <span class="s2">&quot;David&quot;</span><span class="p">,</span> <span class="s2">&quot;Eve&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">150.5</span><span class="p">,</span> <span class="mf">200.75</span><span class="p">,</span> <span class="mf">250.25</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Apply the function to the DataFrame column</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;standardized_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date_column&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">parse_date_with_rule</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">date_column</span>     <span class="n">name</span>  <span class="n">amount</span> <span class="n">standardized_date</span>
+<span class="mi">0</span>   <span class="mi">31</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">2021</span>    <span class="n">Alice</span>  <span class="mf">100.00</span>        <span class="mi">2021</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span>
+<span class="mi">1</span>   <span class="mi">01</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2022</span>      <span class="n">Bob</span>  <span class="mf">150.50</span>        <span class="mi">2022</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>
+<span class="mi">2</span>   <span class="mi">12</span><span class="o">/</span><span class="mi">31</span><span class="o">/</span><span class="mi">2021</span>  <span class="n">Charlie</span>  <span class="mf">200.75</span>        <span class="mi">2021</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span>
+<span class="mi">3</span>   <span class="mi">13</span><span class="o">/</span><span class="mi">02</span><span class="o">/</span><span class="mi">2022</span>    <span class="n">David</span>  <span class="mf">250.25</span>        <span class="mi">2022</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">13</span>
+<span class="mi">4</span>   <span class="mi">07</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2022</span>      <span class="n">Eve</span>  <span class="mf">300.00</span>        <span class="mi">2022</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">07</span>
 </pre></div>
 </div>
 </section>
