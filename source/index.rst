@@ -22,12 +22,7 @@
    
    <div style="height: 106px;"></div>
 
-\
 
-\
-
-EDA Toolkit Documentation
-==========================
 
 .. toctree::
    :maxdepth: 3
