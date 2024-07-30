@@ -51,6 +51,6 @@ html_static_path = ["_static"]
 html_show_sourcelink = False
 
 
-# def setup(app):
-#     app.add_css_file("custom.css")
-#     app.add_js_file("custom.js")
+def setup(app):
+    app.add_css_file("custom.css")
+    app.add_js_file("custom.js")

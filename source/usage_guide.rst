@@ -63,7 +63,7 @@ to verify and create directories as needed. This example sets up paths for data 
 image directories, ensuring they exist before performing any operations that depend on them.
 
 First, we define the base path as the parent directory of the current directory. 
-The ``os.pardir`` constant, equivalent to ``..``, is used to navigate up one 
+The ``os.pardir`` constant, equivalent to ``"..""``, is used to navigate up one 
 directory level. Then, we define paths for the data directory and data output 
 directory, both located one level up from the current directory. 
 
@@ -171,95 +171,106 @@ column in the dataframe.
 .. raw:: html
 
     <style type="text/css">
-    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
     .tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif;font-size:11px;
-    overflow:hidden;padding:0px 5px;word-break:normal;}
+      overflow:hidden;padding:0px 5px;word-break:normal;}
     .tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif;font-size:11px;
-    font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+      font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
     .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
     .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
     .tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
     </style>
-    <table class="tg"><thead>
-    <tr>
-        <th class="tg-zv4m"></th>
-        <th class="tg-aw21">age</th>
-        <th class="tg-aw21">workclass</th>
-        <th class="tg-aw21">fnlwgt</th>
-        <th class="tg-aw21">education</th>
-        <th class="tg-aw21">education-num</th>
-        <th class="tg-aw21">marital-status</th>
-        <th class="tg-aw21">occupation</th>
-        <th class="tg-aw21">relationship</th>
-    </tr></thead>
-    <tbody>
-    <tr>
-        <td class="tg-aw21">census_id</td>
-        <td class="tg-8jgo"></td>
-        <td class="tg-8jgo"></td>
-        <td class="tg-8jgo"></td>
-        <td class="tg-8jgo"></td>
-        <td class="tg-8jgo"></td>
-        <td class="tg-8jgo"></td>
-        <td class="tg-8jgo"></td>
-        <td class="tg-8jgo"></td>
-    </tr>
-    <tr>
-        <td class="tg-zv4m">82943611</td>
-        <td class="tg-8jgo">39</td>
-        <td class="tg-8jgo">State-gov</td>
-        <td class="tg-8jgo">77516</td>
-        <td class="tg-8jgo">Bachelors</td>
-        <td class="tg-8jgo">13</td>
-        <td class="tg-8jgo">Never-married</td>
-        <td class="tg-8jgo">Adm-clerical</td>
-        <td class="tg-8jgo">Not-in-family</td>
-    </tr>
-    <tr>
-        <td class="tg-zv4m">42643227</td>
-        <td class="tg-8jgo">50</td>
-        <td class="tg-8jgo">Self-emp-not-inc</td>
-        <td class="tg-8jgo">83311</td>
-        <td class="tg-8jgo">Bachelors</td>
-        <td class="tg-8jgo">13</td>
-        <td class="tg-8jgo">Married-civ-spouse</td>
-        <td class="tg-8jgo">Exec-managerial</td>
-        <td class="tg-8jgo">Husband</td>
-    </tr>
-    <tr>
-        <td class="tg-zv4m">93837254</td>
-        <td class="tg-8jgo">38</td>
-        <td class="tg-8jgo">Private</td>
-        <td class="tg-8jgo">215646</td>
-        <td class="tg-8jgo">HS-grad</td>
-        <td class="tg-8jgo">9</td>
-        <td class="tg-8jgo">Divorced</td>
-        <td class="tg-8jgo">Handlers-cleaners</td>
-        <td class="tg-8jgo">Not-in-family</td>
-    </tr>
-    <tr>
-        <td class="tg-zv4m">87104229</td>
-        <td class="tg-8jgo">53</td>
-        <td class="tg-8jgo">Private</td>
-        <td class="tg-8jgo">234721</td>
-        <td class="tg-8jgo">11th</td>
-        <td class="tg-8jgo">7</td>
-        <td class="tg-8jgo">Married-civ-spouse</td>
-        <td class="tg-8jgo">Handlers-cleaners</td>
-        <td class="tg-8jgo">Husband</td>
-    </tr>
-    <tr>
-        <td class="tg-zv4m">90069867</td>
-        <td class="tg-8jgo">28</td>
-        <td class="tg-8jgo">Private</td>
-        <td class="tg-8jgo">338409</td>
-        <td class="tg-8jgo">Bachelors</td>
-        <td class="tg-8jgo">13</td>
-        <td class="tg-8jgo">Married-civ-spouse</td>
-        <td class="tg-8jgo">Prof-specialty</td>
-        <td class="tg-8jgo">Wife</td>
-    </tr>
-    </tbody></table>
+    <div class="tg-wrap">
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-zv4m"></th>
+          <th class="tg-aw21">age</th>
+          <th class="tg-aw21">workclass</th>
+          <th class="tg-aw21">fnlwgt</th>
+          <th class="tg-aw21">education</th>
+          <th class="tg-aw21">education-num</th>
+          <th class="tg-aw21">marital-status</th>
+          <th class="tg-aw21">occupation</th>
+          <th class="tg-aw21">relationship</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-aw21">census_id</td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">82943611</td>
+          <td class="tg-8jgo">39</td>
+          <td class="tg-8jgo">State-gov</td>
+          <td class="tg-8jgo">77516</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Never-married</td>
+          <td class="tg-8jgo">Adm-clerical</td>
+          <td class="tg-8jgo">Not-in-family</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">42643227</td>
+          <td class="tg-8jgo">50</td>
+          <td class="tg-8jgo">Self-emp-not-inc</td>
+          <td class="tg-8jgo">83311</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Exec-managerial</td>
+          <td class="tg-8jgo">Husband</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">93837254</td>
+          <td class="tg-8jgo">38</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">215646</td>
+          <td class="tg-8jgo">HS-grad</td>
+          <td class="tg-8jgo">9</td>
+          <td class="tg-8jgo">Divorced</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Not-in-family</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">87104229</td>
+          <td class="tg-8jgo">53</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">234721</td>
+          <td class="tg-8jgo">11th</td>
+          <td class="tg-8jgo">7</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Husband</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">90069867</td>
+          <td class="tg-8jgo">28</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">338409</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Prof-specialty</td>
+          <td class="tg-8jgo">Wife</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
 
 \
 
@@ -311,11 +322,11 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
 
     <table>
         <tr>
-            <td style="padding-right: 10px; font-family: Consolas; font-size: 11px;">
+            <td style="padding-right: 10px; font-family: monospace; font-size: 12px;">
 
                 <strong>Before:</strong>
 
-                <table border="1" style="width: 150px; text-align: center; font-family: Consolas; font-size: 11px;">
+                <table border="1" style="width: 150px; text-align: center; font-family: monospace; font-size: 12px;">
                     <tr>
                         <th>Index</th>
                         <th>Value</th>
@@ -347,11 +358,11 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
                 </table>
 
             </td>
-            <td style="padding-left: 10px; font-family: Consolas; font-size: 11px;">
+            <td style="padding-left: 10px; font-family: monospace; font-size: 12px;">
 
                 <strong>After:</strong>
 
-                <table border="1" style="width: 150px; text-align: center; font-family: Consolas; font-size: 11px;">
+                <table border="1" style="width: 150px; text-align: center; font-family: monospace; font-size: 12px;">
                     <tr>
                         <th>Index</th>
                         <th>Value</th>
@@ -742,6 +753,223 @@ function to analyze a DataFrame's columns.
 
 
 \
+
+
+Generating Summary Tables for Variable Combinations
+-----------------------------------------------------
+
+This section explains how to generate summary tables for all possible combinations of specified variables 
+in a DataFrame and save them to an Excel file. We will use the ``summarize_all_combinations`` function for this purpose.
+
+
+.. function:: summarize_all_combinations(df, variables, data_path, data_name, min_length=2)
+
+    Generates summary tables for all possible combinations of the specified
+    variables in the DataFrame and saves them to an Excel file.
+
+    :param df: The pandas DataFrame containing the data.
+    :type df: pandas.DataFrame
+    :param variables: List of unique variables to generate combinations.
+    :type variables: list
+    :param data_path: Path where the output Excel file will be saved.
+    :type data_path: str
+    :param data_name: Name of the output Excel file.
+    :type data_name: str
+    :param min_length: Minimum length of combinations to generate. Defaults to ``2``.
+    :type min_length: int
+
+    :returns: A dictionary of summary tables and a list of all generated combinations.
+    :rtype: tuple(dict, list)
+
+The function returns two outputs:
+
+1. ``summary_tables``: A dictionary where each key is a tuple representing a combination 
+of variables, and each value is a DataFrame containing the summary table for that combination. 
+Each summary table includes the count and proportion of occurrences for each unique combination of values.
+
+2. ``all_combinations``: A list of all generated combinations of the specified variables. 
+This is useful for understanding which combinations were analyzed and included in the summary tables.
+
+**Example Usage**
+
+Below, we use the ``summarize_all_combinations`` function to generate summary tables for the specified 
+variables from a DataFrame containing the census data [1]_.
+
+.. code-block:: python
+
+    # Define unique variables for the analysis
+    unique_vars = [
+        "age_group",
+        "workclass",
+        "education",
+        "occupation",
+        "race",
+        "sex",
+        "income",
+    ]
+
+    # Generate summary tables for all combinations of the specified variables
+    summary_tables, all_combinations = summarize_all_combinations(
+        df=df,
+        data_path=data_output,
+        variables=unique_vars,
+        data_name="census_summary_tables.xlsx",
+    )
+
+    # Print all combinations of variables
+    print(all_combinations)
+
+**Output**
+
+.. code-blocK:: python 
+
+    [('age_group', 'workclass'),
+    ('age_group', 'education'),
+    ('age_group', 'occupation'),
+    ('age_group', 'race'),
+    ('age_group', 'sex'),
+    ('age_group', 'income'),
+    ('workclass', 'education'),
+    ('workclass', 'occupation'),
+    ('workclass', 'race'),
+    ('workclass', 'sex'),
+    ('workclass', 'income'),
+    ('education', 'occupation'),
+    ('education', 'race'),
+    ('education', 'sex'),
+    ('education', 'income'),
+    ('occupation', 'race'),
+    ('occupation', 'sex'),
+    ('occupation', 'income'),
+    ('race', 'sex'),
+    ('race', 'income'),
+    ('sex', 'income'),
+    ('age_group', 'workclass', 'education'),
+    ('age_group', 'workclass', 'occupation'),
+    ('age_group', 'workclass', 'race'),
+    ('age_group', 'workclass', 'sex'),
+    ('age_group', 'workclass', 'income'),
+    ('age_group', 'education', 'occupation'),
+    ('age_group', 'education', 'race'),
+    ('age_group', 'education', 'sex'),
+    ('age_group', 'education', 'income'),
+    ('age_group', 'occupation', 'race'),
+    ('age_group', 'occupation', 'sex'),
+    ('age_group', 'occupation', 'income'),
+    ('age_group', 'race', 'sex'),
+    ('age_group', 'race', 'income'),
+    ('age_group', 'sex', 'income'),
+    ('workclass', 'education', 'occupation'),
+    ('workclass', 'education', 'race'),
+    ('workclass', 'education', 'sex'),
+    ('workclass', 'education', 'income'),
+    ('workclass', 'occupation', 'race'),
+    ('workclass', 'occupation', 'sex'),
+    ('workclass', 'occupation', 'income'),
+    ('workclass', 'race', 'sex'),
+    ('workclass', 'race', 'income'),
+    ('workclass', 'sex', 'income'),
+    ('education', 'occupation', 'race'),
+    ('education', 'occupation', 'sex'),
+    ('education', 'occupation', 'income'),
+    ('education', 'race', 'sex'),
+    ('education', 'race', 'income'),
+    ('education', 'sex', 'income'),
+    ('occupation', 'race', 'sex'),
+    ('occupation', 'race', 'income'),
+    ('occupation', 'sex', 'income'),
+    ('race', 'sex', 'income'),
+    ('age_group', 'workclass', 'education', 'occupation'),
+    ('age_group', 'workclass', 'education', 'race'),
+    ('age_group', 'workclass', 'education', 'sex'),
+    ('age_group', 'workclass', 'education', 'income'),
+    ('age_group', 'workclass', 'occupation', 'race'),
+    ('age_group', 'workclass', 'occupation', 'sex'),
+    ('age_group', 'workclass', 'occupation', 'income'),
+    ('age_group', 'workclass', 'race', 'sex'),
+    ('age_group', 'workclass', 'race', 'income'),
+    ('age_group', 'workclass', 'sex', 'income'),
+    ('age_group', 'education', 'occupation', 'race'),
+    ('age_group', 'education', 'occupation', 'sex'),
+    ('age_group', 'education', 'occupation', 'income'),
+    ('age_group', 'education', 'race', 'sex'),
+    ('age_group', 'education', 'race', 'income'),
+    ('age_group', 'education', 'sex', 'income'),
+    ('age_group', 'occupation', 'race', 'sex'),
+    ('age_group', 'occupation', 'race', 'income'),
+    ('age_group', 'occupation', 'sex', 'income'),
+    ('age_group', 'race', 'sex', 'income'),
+    ('workclass', 'education', 'occupation', 'race'),
+    ('workclass', 'education', 'occupation', 'sex'),
+    ('workclass', 'education', 'occupation', 'income'),
+    ('workclass', 'education', 'race', 'sex'),
+    ('workclass', 'education', 'race', 'income'),
+    ('workclass', 'education', 'sex', 'income'),
+    ('workclass', 'occupation', 'race', 'sex'),
+    ('workclass', 'occupation', 'race', 'income'),
+    ('workclass', 'occupation', 'sex', 'income'),
+    ('workclass', 'race', 'sex', 'income'),
+    ('education', 'occupation', 'race', 'sex'),
+    ('education', 'occupation', 'race', 'income'),
+    ('education', 'occupation', 'sex', 'income'),
+    ('education', 'race', 'sex', 'income'),
+    ('occupation', 'race', 'sex', 'income'),
+    ('age_group', 'workclass', 'education', 'occupation', 'race'),
+    ('age_group', 'workclass', 'education', 'occupation', 'sex'),
+    ('age_group', 'workclass', 'education', 'occupation', 'income'),
+    ('age_group', 'workclass', 'education', 'race', 'sex'),
+    ('age_group', 'workclass', 'education', 'race', 'income'),
+    ('age_group', 'workclass', 'education', 'sex', 'income'),
+    ('age_group', 'workclass', 'occupation', 'race', 'sex'),
+    ('age_group', 'workclass', 'occupation', 'race', 'income'),
+    ('age_group', 'workclass', 'occupation', 'sex', 'income'),
+    ('age_group', 'workclass', 'race', 'sex', 'income'),
+    ('age_group', 'education', 'occupation', 'race', 'sex'),
+    ('age_group', 'education', 'occupation', 'race', 'income'),
+    ('age_group', 'education', 'occupation', 'sex', 'income'),
+    ('age_group', 'education', 'race', 'sex', 'income'),
+    ('age_group', 'occupation', 'race', 'sex', 'income'),
+    ('workclass', 'education', 'occupation', 'race', 'sex'),
+    ('workclass', 'education', 'occupation', 'race', 'income'),
+    ('workclass', 'education', 'occupation', 'sex', 'income'),
+    ('workclass', 'education', 'race', 'sex', 'income'),
+    ('workclass', 'occupation', 'race', 'sex', 'income'),
+    ('education', 'occupation', 'race', 'sex', 'income'),
+    ('age_group', 'workclass', 'education', 'occupation', 'race', 'sex'),
+    ('age_group', 'workclass', 'education', 'occupation', 'race', 'income'),
+    ('age_group', 'workclass', 'education', 'occupation', 'sex', 'income'),
+    ('age_group', 'workclass', 'education', 'race', 'sex', 'income'),
+    ('age_group', 'workclass', 'occupation', 'race', 'sex', 'income'),
+    ('age_group', 'education', 'occupation', 'race', 'sex', 'income'),
+    ('workclass', 'education', 'occupation', 'race', 'sex', 'income'),
+    ('age_group',
+    'workclass',
+    'education',
+    'occupation',
+    'race',
+    'sex',
+    'income')]
+
+
+When applied to the US Census data, the output Excel file will contain summary tables for all possible combinations of the specified variables. 
+The first sheet will be a Table of Contents with hyperlinks to each summary table.
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/summarize_all_combinations.gif
+   :alt: EDA Toolkit Logo
+   :align: left
+   :width: 800px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 106px;"></div>
 
 
 
