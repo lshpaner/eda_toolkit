@@ -393,5 +393,109 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
 
 \
 
+Standardized Dates
+==================
+
+.. function:: parse_date_with_rule(date_str)
+
+    Parse and standardize date strings based on the provided rule.
+
+    This function takes a date string and standardizes it to the ISO 8601 format
+    (YYYY-MM-DD). It assumes dates are provided in either day/month/year or
+    month/day/year format. The function first checks if the first part of the
+    date string (day or month) is greater than 12, which unambiguously indicates
+    a day/month/year format. If the first part is 12 or less, the function
+    attempts to parse the date as month/day/year, falling back to day/month/year
+    if the former raises a ValueError due to an impossible date (e.g., month
+    being greater than 12).
+
+    :param date_str: A date string to be standardized.
+    :type date_str: str
+
+    :returns: A standardized date string in the format YYYY-MM-DD.
+    :rtype: str
+
+    :raises ValueError: If date_str is in an unrecognized format or if the function
+                        cannot parse the date.
+
+**Example Usage**
+
+In the example below, we demonstrate how to use the ``parse_date_with_rule`` 
+function to standardize date strings. We start by importing the necessary library 
+and creating a sample list of date strings. We then use the ``parse_date_with_rule`` 
+function to parse and standardize each date string to the ISO 8601 format.
+
+.. code-block:: python
+
+    from datetime import datetime
+
+    # Sample date strings
+    date_strings = ["15/04/2021", "04/15/2021", "01/12/2020", "12/01/2020"]
+
+    # Standardize the date strings
+    standardized_dates = [parse_date_with_rule(date) for date in date_strings]
+
+    print(standardized_dates)
+
+**Output**
+
+.. code-block:: python
+
+    ['2021-04-15', '2021-04-15', '2020-12-01', '2020-01-12']
+
+
+Binning Numerical Columns
+--------------------------
+
+If your DataFrame (e.g., the census data [1]_) 
+does not have age or any other numerical column of interest binned, you can 
+apply the following binning logic to categorize the data. Below, we use the age 
+column from the UCI Machine Learning Repository as an example:
+
+.. code-block:: python
+
+    # Create age bins so that the ages can be categorized
+    bin_ages = [
+        0,
+        18,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100,
+        float("inf"),
+    ]
+
+    # Create labels for the bins
+    label_ages = [
+        "< 18",
+        "18-29",
+        "30-39",
+        "40-49",
+        "50-59",
+        "60-69",
+        "70-79",
+        "80-89",
+        "90-99",
+        "100 +",
+    ]
+
+    # Categorize the ages and assign to a new variable
+    df["age_group"] = pd.cut(
+        df["age"],
+        bins=bin_ages,
+        labels=label_ages,
+        right=False,
+    )
+
+`Note:` This code snippet creates age bins and assigns a corresponding age group 
+label to each age in the DataFrame. The ``pd.cut`` function from pandas is used to 
+categorize the ages and assign them to a new column, ``age_group``. Adjust the bins 
+and labels as needed for your specific data.
+
+
 
 .. [1] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
