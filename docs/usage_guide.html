@@ -485,7 +485,7 @@ cannot parse the date.</p>
 function to standardize date strings. We start by importing the necessary library
 and creating a sample list of date strings. We then use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
 function to parse and standardize each date string to the ISO 8601 format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">parse_date_with_rule</span>
 
 <span class="c1"># Sample date strings</span>
 <span class="n">date_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;15/04/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;04/15/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;01/12/2020&quot;</span><span class="p">,</span> <span class="s2">&quot;12/01/2020&quot;</span><span class="p">]</span>
