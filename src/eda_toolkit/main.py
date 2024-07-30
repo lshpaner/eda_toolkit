@@ -399,7 +399,11 @@ def summarize_all_combinations(
 ################################################################################
 
 
-def save_dataframes_to_excel(file_path, df_dict, decimal_places=2):
+def save_dataframes_to_excel(
+    file_path,
+    df_dict,
+    decimal_places=0,
+):
     """
     Save multiple DataFrames to separate sheets in an Excel file with customized
     formatting.
@@ -437,19 +441,32 @@ def save_dataframes_to_excel(file_path, df_dict, decimal_places=2):
         # Customize cell format (left align)
         cell_format_left = workbook.add_format({"align": "left"})  # Left align
 
-        # Customize number format
-        number_format_str = f"0.{decimal_places * '0'}"
-        cell_format_number = workbook.add_format(
-            {
-                "align": "left",
-                "num_format": number_format_str,
-            }  # Left align  # Number format
-        )
+        # Customize number format based on decimal_places
+        if decimal_places == 0:
+            number_format_str = "0"
+            cell_format_number = workbook.add_format(
+                {
+                    "align": "left",
+                    "num_format": number_format_str,
+                }  # Left align  # Number format
+            )
+        else:
+            number_format_str = f"0.{decimal_places * '0'}"
+            cell_format_number = workbook.add_format(
+                {
+                    "align": "left",
+                    "num_format": number_format_str,
+                }  # Left align  # Number format
+            )
 
         # Write each DataFrame to its respective sheet
         for sheet_name, df in df_dict.items():
             # Round numeric columns to the specified number of decimal places
             df = df.round(decimal_places)
+            if decimal_places == 0:
+                df = df.apply(
+                    lambda x: x.astype(int) if pd.api.types.is_numeric_dtype(x) else x
+                )
             df.to_excel(writer, sheet_name=sheet_name, index=False)
             worksheet = writer.sheets[sheet_name]
 
@@ -459,7 +476,10 @@ def save_dataframes_to_excel(file_path, df_dict, decimal_places=2):
 
             # Auto-fit all columns with added space
             for col_num, col_name in enumerate(df.columns):
-                max_length = max(df[col_name].astype(str).map(len).max(), len(col_name))
+                max_length = max(
+                    df[col_name].astype(str).map(len).max(),
+                    len(col_name),
+                )
                 # Determine if the column is numeric by dtype
                 if pd.api.types.is_numeric_dtype(df[col_name]):
                     worksheet.set_column(
