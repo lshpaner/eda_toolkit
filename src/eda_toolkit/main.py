@@ -3,6 +3,7 @@ import numpy as np
 import random
 from itertools import combinations
 import datetime
+from datetime import datetime
 from IPython.display import display
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -31,20 +32,27 @@ def ensure_directory(path):
 
 def add_ids(
     df,
-    column_name="Patient_ID",
+    id_colname="ID",
+    num_digits=9,
     seed=None,
+    set_as_index=False,
 ):
     """
-    Add a column of unique, 9-digit IDs to the dataframe.
+    Add a column of unique IDs with a specified number of digits to the dataframe.
 
-    This function sets a random seed and then generates a 9-digit ID for
-    each row in the dataframe. The new IDs are added as a new column with
-    the specified column name, which is placed as the first column in the dataframe.
+    This function sets a random seed and then generates a unique ID with the
+    specified number of digits for each row in the dataframe. The new IDs are
+    added as a new column with the specified column name, which can be placed as
+    the first column in the dataframe if set_as_index is True.
 
     Args:
         df (pd.DataFrame): The dataframe to add IDs to.
-        column_name (str): The name of the new column for the IDs.
-        seed (int, optional): The seed for the random number generator. Defaults to None.
+        id_colname (str): The name of the new column for the IDs.
+        num_digits (int): The number of digits for the unique IDs.
+        seed (int, optional): The seed for the random number generator.
+        Defaults to None.
+        set_as_index (bool, optional): Whether to set the new ID column as the
+        index. Defaults to True.
 
     Returns:
         pd.DataFrame: The updated dataframe with the new ID column.
@@ -52,13 +60,18 @@ def add_ids(
     random.seed(seed)
 
     # Generate a list of unique IDs
-    ids = ["".join(random.choices("0123456789", k=9)) for _ in range(len(df))]
+    ids = ["".join(random.choices("0123456789", k=num_digits)) for _ in range(len(df))]
 
     # Create a new column in df for these IDs
-    df[column_name] = ids
+    df[id_colname] = ids
 
-    # Make the new ID column the first column and set it to index
-    df = df.set_index(column_name)
+    if set_as_index:
+        # Optionally set the new ID column as the index
+        df = df.set_index(id_colname)
+    else:
+        # Ensure the new ID column is the first column
+        columns = [id_colname] + [col for col in df.columns if col != id_colname]
+        df = df[columns]
 
     return df
 
@@ -129,6 +142,7 @@ def parse_date_with_rule(date_str):
         ValueError: If date_str is in an unrecognized format or if the function
         cannot parse the date.
     """
+    
     parts = date_str.split("/")
     # If the first part is greater than 12, it can only be a day, thus d/m/Y
     if int(parts[0]) > 12:
@@ -136,9 +150,9 @@ def parse_date_with_rule(date_str):
     # Otherwise, try both formats where ambiguity exists
     else:
         try:
-            return datetime.strptime(date_str, "%m/%d/%Y").strftime("%Y-%m-%d")
-        except ValueError:
             return datetime.strptime(date_str, "%d/%m/%Y").strftime("%Y-%m-%d")
+        except ValueError:
+            return datetime.strptime(date_str, "%m/%d/%Y").strftime("%Y-%m-%d")
 
 
 ################################################################################
