@@ -142,6 +142,7 @@ def parse_date_with_rule(date_str):
         ValueError: If date_str is in an unrecognized format or if the function
         cannot parse the date.
     """
+    
     parts = date_str.split("/")
     # If the first part is greater than 12, it can only be a day, thus d/m/Y
     if int(parts[0]) > 12:
