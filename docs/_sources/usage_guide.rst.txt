@@ -172,9 +172,9 @@ column in the dataframe.
 
     <style type="text/css">
     .tg  {border-collapse:collapse;border-spacing:0;}
-    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif;font-size:11px;
     overflow:hidden;padding:0px 5px;word-break:normal;}
-    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif;font-size:11px;
     font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
     .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
     .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
@@ -311,11 +311,11 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
 
     <table>
         <tr>
-            <td style="padding-right: 10px;">
+            <td style="padding-right: 10px; font-family: Consolas; font-size: 11px;">
 
                 <strong>Before:</strong>
 
-                <table border="1" style="width: 150px; text-align: center;">
+                <table border="1" style="width: 150px; text-align: center; font-family: Consolas; font-size: 11px;">
                     <tr>
                         <th>Index</th>
                         <th>Value</th>
@@ -347,11 +347,11 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
                 </table>
 
             </td>
-            <td style="padding-left: 10px;">
+            <td style="padding-left: 10px; font-family: Consolas; font-size: 11px;">
 
                 <strong>After:</strong>
 
-                <table border="1" style="width: 150px; text-align: center;">
+                <table border="1" style="width: 150px; text-align: center; font-family: Consolas; font-size: 11px;">
                     <tr>
                         <th>Index</th>
                         <th>Value</th>
@@ -386,6 +386,7 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
         </tr>
     </table>
 
+
 \
 
 `Note:` The last row shows 6 as an `int` with a trailing period with its conversion to `float`.
@@ -412,7 +413,7 @@ Standardized Dates
     :param date_str: A date string to be standardized.
     :type date_str: str
 
-    :returns: A standardized date string in the format YYYY-MM-DD.
+    :returns: A standardized date string in the format ``YYYY-MM-DD``.
     :rtype: str
 
     :raises ValueError: If ``date_str`` is in an unrecognized format or if the function
@@ -486,6 +487,263 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
     4   07/04/2022      Eve  300.00        2022-04-07
 
 
+DataFrame Analysis
+-------------------
+
+.. function:: dataframe_columns(df)
+
+    Analyze DataFrame columns, including dtype, null values, and unique value counts.
+
+    This function analyzes the columns of a DataFrame, providing details about the data type, 
+    the number and percentage of ``null`` values, the total number of unique values, and the most 
+    frequent unique value along with its count and percentage. It handles special cases such as 
+    converting date columns and replacing empty strings with Pandas NA values.
+
+    :param df: The DataFrame to analyze.
+    :type df: pandas.DataFrame
+
+    :returns: A DataFrame with the analysis results for each column.
+    :rtype: pandas.DataFrame
+
+**Example Usage**
+
+In the example below, we demonstrate how to use the ``dataframe_columns`` 
+function to analyze a DataFrame's columns.
+
+.. code-block:: python
+
+    import pandas as pd
+    dataframe_columns(df=df)
+
+
+**Output**
+
+`Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)` [1]_
+
+.. code-block:: python
+
+    Shape:  (48842, 16) 
+
+    Total seconds of processing time: 0.861555
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    }
+    .tg  {border:none;border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-style:solid;border-width:0px;font-family:Consolas, monospace;font-size:11px;overflow:hidden;padding:0px 6px;
+    word-break:normal;}
+    .tg th{border-style:solid;border-width:0px;font-family:Consolas, monospace;font-size:11px;font-weight:normal;
+    overflow:hidden;padding:0px 6px;word-break:normal;}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+    .tg .tg-dvpl{border-color:inherit;text-align:right;vertical-align:top}
+    .tg .tg-rvpl{border-color:inherit;text-align:right;vertical-align:top}
+    </style>
+    <div class="tg-wrap">
+    <table class="tg">
+        <thead>
+        <tr>
+            <th class="tg-rvpl"></th>
+            <th class="tg-rvpl"><span style="font-weight:bold">column</span></th>
+            <th class="tg-rvpl"><span style="font-weight:bold">dtype</span></th>
+            <th class="tg-0pky"><span style="font-weight:bold">null_total</span></th>
+            <th class="tg-0pky"><span style="font-weight:bold">null_pct</span></th>
+            <th class="tg-0pky"><span style="font-weight:bold">unique_values_total</span></th>
+            <th class="tg-0pky"><span style="font-weight:bold">max_unique_value</span></th>
+            <th class="tg-0pky"><span style="font-weight:bold">max_unique_value_total</span></th>
+            <th class="tg-0pky"><span style="font-weight:bold">max_unique_value_pct</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="tg-rvpl">0</td>
+            <td class="tg-dvpl">age</td>
+            <td class="tg-dvpl">int64</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">74</td>
+            <td class="tg-dvpl">36</td>
+            <td class="tg-dvpl">1348</td>
+            <td class="tg-dvpl">2.76</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">1</td>
+            <td class="tg-dvpl">workclass</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">963</td>
+            <td class="tg-dvpl">1.97</td>
+            <td class="tg-dvpl">9</td>
+            <td class="tg-dvpl">Private</td>
+            <td class="tg-dvpl">33906</td>
+            <td class="tg-dvpl">69.42</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">2</td>
+            <td class="tg-dvpl">fnlwgt</td>
+            <td class="tg-dvpl">int64</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">28523</td>
+            <td class="tg-dvpl">203488</td>
+            <td class="tg-dvpl">21</td>
+            <td class="tg-dvpl">0.04</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">3</td>
+            <td class="tg-dvpl">education</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">16</td>
+            <td class="tg-dvpl">HS-grad</td>
+            <td class="tg-dvpl">15784</td>
+            <td class="tg-dvpl">32.32</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">4</td>
+            <td class="tg-dvpl">education-num</td>
+            <td class="tg-dvpl">int64</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">16</td>
+            <td class="tg-dvpl">9</td>
+            <td class="tg-dvpl">15784</td>
+            <td class="tg-dvpl">32.32</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">5</td>
+            <td class="tg-dvpl">marital-status</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">7</td>
+            <td class="tg-dvpl">Married-civ-spouse</td>
+            <td class="tg-dvpl">22379</td>
+            <td class="tg-dvpl">45.82</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">6</td>
+            <td class="tg-dvpl">occupation</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">966</td>
+            <td class="tg-dvpl">1.98</td>
+            <td class="tg-dvpl">15</td>
+            <td class="tg-dvpl">Prof-specialty</td>
+            <td class="tg-dvpl">6172</td>
+            <td class="tg-dvpl">12.64</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">7</td>
+            <td class="tg-dvpl">relationship</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">6</td>
+            <td class="tg-dvpl">Husband</td>
+            <td class="tg-dvpl">19716</td>
+            <td class="tg-dvpl">40.37</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">8</td>
+            <td class="tg-dvpl">race</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">5</td>
+            <td class="tg-dvpl">White</td>
+            <td class="tg-dvpl">41762</td>
+            <td class="tg-dvpl">85.5</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">9</td>
+            <td class="tg-dvpl">sex</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">2</td>
+            <td class="tg-dvpl">Male</td>
+            <td class="tg-dvpl">32650</td>
+            <td class="tg-dvpl">66.85</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">10</td>
+            <td class="tg-dvpl">capital-gain</td>
+            <td class="tg-dvpl">int64</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">123</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">44807</td>
+            <td class="tg-dvpl">91.74</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">11</td>
+            <td class="tg-dvpl">capital-loss</td>
+            <td class="tg-dvpl">int64</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">99</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">46560</td>
+            <td class="tg-dvpl">95.33</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">12</td>
+            <td class="tg-dvpl">hours-per-week</td>
+            <td class="tg-dvpl">int64</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">96</td>
+            <td class="tg-dvpl">40</td>
+            <td class="tg-dvpl">22803</td>
+            <td class="tg-dvpl">46.69</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">13</td>
+            <td class="tg-dvpl">native-country</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">274</td>
+            <td class="tg-dvpl">0.56</td>
+            <td class="tg-dvpl">42</td>
+            <td class="tg-dvpl">United-States</td>
+            <td class="tg-dvpl">43832</td>
+            <td class="tg-dvpl">89.74</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">14</td>
+            <td class="tg-dvpl">income</td>
+            <td class="tg-dvpl">object</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">4</td>
+            <td class="tg-dvpl">&lt;=50K</td>
+            <td class="tg-dvpl">24720</td>
+            <td class="tg-dvpl">50.61</td>
+        </tr>
+        <tr>
+            <td class="tg-rvpl">15</td>
+            <td class="tg-dvpl">age_group</td>
+            <td class="tg-dvpl">category</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">9</td>
+            <td class="tg-dvpl">18-29</td>
+            <td class="tg-dvpl">13920</td>
+            <td class="tg-dvpl">28.5</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+
+
+\
+
+
 
 Binning Numerical Columns
 ---------------------------
@@ -538,6 +796,8 @@ column from the UCI Machine Learning Repository as an example:
 label to each age in the DataFrame. The ``pd.cut`` function from pandas is used to 
 categorize the ages and assign them to a new column, ``age_group``. Adjust the bins 
 and labels as needed for your specific data.
+
+
 
 
 

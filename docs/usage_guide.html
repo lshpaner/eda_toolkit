@@ -71,6 +71,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#parse_date_with_rule"><code class="docutils literal notranslate"><span class="pre">parse_date_with_rule()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#dataframe-analysis">DataFrame Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dataframe_columns"><code class="docutils literal notranslate"><span class="pre">dataframe_columns()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#binning-numerical-columns">Binning Numerical Columns</a></li>
 </ul>
 </li>
@@ -105,7 +109,7 @@
 <p>This guide provides detailed instructions and examples for using the functions
 provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
 <p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
 information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
 </section>
 <section id="data-preparation-and-management">
@@ -234,12 +238,12 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif;font-size:11px;
 overflow:hidden;padding:0px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif;font-size:11px;
 font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
 .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
 .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
@@ -371,11 +375,11 @@ that all float values are correctly represented.</p>
 <p><cite>First 6 Rows of Data Before and After Removing Trailing Periods (Adapted from Example)</cite></p>
 <table>
     <tr>
-        <td style="padding-right: 10px;">
+        <td style="padding-right: 10px; font-family: Consolas; font-size: 11px;">
 
             <strong>Before:</strong>
 
-            <table border="1" style="width: 150px; text-align: center;">
+            <table border="1" style="width: 150px; text-align: center; font-family: Consolas; font-size: 11px;">
                 <tr>
                     <th>Index</th>
                     <th>Value</th>
@@ -407,11 +411,11 @@ that all float values are correctly represented.</p>
             </table>
 
         </td>
-        <td style="padding-left: 10px;">
+        <td style="padding-left: 10px; font-family: Consolas; font-size: 11px;">
 
             <strong>After:</strong>
 
-            <table border="1" style="width: 150px; text-align: center;">
+            <table border="1" style="width: 150px; text-align: center; font-family: Consolas; font-size: 11px;">
                 <tr>
                     <th>Index</th>
                     <th>Value</th>
@@ -467,7 +471,7 @@ being greater than 12).</p>
 <dd class="field-odd"><p><strong>date_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A date string to be standardized.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A standardized date string in the format YYYY-MM-DD.</p>
+<dd class="field-even"><p>A standardized date string in the format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
@@ -537,9 +541,257 @@ entire column in a DataFrame.</p>
 </pre></div>
 </div>
 </section>
+<section id="dataframe-analysis">
+<h2>DataFrame Analysis<a class="headerlink" href="#dataframe-analysis" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="dataframe_columns">
+<span class="sig-name descname"><span class="pre">dataframe_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataframe_columns" title="Permalink to this definition"></a></dt>
+<dd><p>Analyze DataFrame columns, including dtype, null values, and unique value counts.</p>
+<p>This function analyzes the columns of a DataFrame, providing details about the data type,
+the number and percentage of <code class="docutils literal notranslate"><span class="pre">null</span></code> values, the total number of unique values, and the most
+frequent unique value along with its count and percentage. It handles special cases such as
+converting date columns and replacing empty strings with Pandas NA values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame to analyze.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the analysis results for each column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Example Usage</strong></p>
+<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
+function to analyze a DataFrame’s columns.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
+</pre></div>
+</div>
+<style type="text/css">
+.tg-wrap {
+width: 100%;
+overflow-x: auto;
+-webkit-overflow-scrolling: touch;
+}
+.tg  {border:none;border-collapse:collapse;border-spacing:0;margin:0px auto;}
+.tg td{border-style:solid;border-width:0px;font-family:Consolas, monospace;font-size:11px;overflow:hidden;padding:0px 6px;
+word-break:normal;}
+.tg th{border-style:solid;border-width:0px;font-family:Consolas, monospace;font-size:11px;font-weight:normal;
+overflow:hidden;padding:0px 6px;word-break:normal;}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-dvpl{border-color:inherit;text-align:right;vertical-align:top}
+.tg .tg-rvpl{border-color:inherit;text-align:right;vertical-align:top}
+</style>
+<div class="tg-wrap">
+<table class="tg">
+    <thead>
+    <tr>
+        <th class="tg-rvpl"></th>
+        <th class="tg-rvpl"><span style="font-weight:bold">column</span></th>
+        <th class="tg-rvpl"><span style="font-weight:bold">dtype</span></th>
+        <th class="tg-0pky"><span style="font-weight:bold">null_total</span></th>
+        <th class="tg-0pky"><span style="font-weight:bold">null_pct</span></th>
+        <th class="tg-0pky"><span style="font-weight:bold">unique_values_total</span></th>
+        <th class="tg-0pky"><span style="font-weight:bold">max_unique_value</span></th>
+        <th class="tg-0pky"><span style="font-weight:bold">max_unique_value_total</span></th>
+        <th class="tg-0pky"><span style="font-weight:bold">max_unique_value_pct</span></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="tg-rvpl">0</td>
+        <td class="tg-dvpl">age</td>
+        <td class="tg-dvpl">int64</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">74</td>
+        <td class="tg-dvpl">36</td>
+        <td class="tg-dvpl">1348</td>
+        <td class="tg-dvpl">2.76</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">1</td>
+        <td class="tg-dvpl">workclass</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">963</td>
+        <td class="tg-dvpl">1.97</td>
+        <td class="tg-dvpl">9</td>
+        <td class="tg-dvpl">Private</td>
+        <td class="tg-dvpl">33906</td>
+        <td class="tg-dvpl">69.42</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">2</td>
+        <td class="tg-dvpl">fnlwgt</td>
+        <td class="tg-dvpl">int64</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">28523</td>
+        <td class="tg-dvpl">203488</td>
+        <td class="tg-dvpl">21</td>
+        <td class="tg-dvpl">0.04</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">3</td>
+        <td class="tg-dvpl">education</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">16</td>
+        <td class="tg-dvpl">HS-grad</td>
+        <td class="tg-dvpl">15784</td>
+        <td class="tg-dvpl">32.32</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">4</td>
+        <td class="tg-dvpl">education-num</td>
+        <td class="tg-dvpl">int64</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">16</td>
+        <td class="tg-dvpl">9</td>
+        <td class="tg-dvpl">15784</td>
+        <td class="tg-dvpl">32.32</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">5</td>
+        <td class="tg-dvpl">marital-status</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">7</td>
+        <td class="tg-dvpl">Married-civ-spouse</td>
+        <td class="tg-dvpl">22379</td>
+        <td class="tg-dvpl">45.82</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">6</td>
+        <td class="tg-dvpl">occupation</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">966</td>
+        <td class="tg-dvpl">1.98</td>
+        <td class="tg-dvpl">15</td>
+        <td class="tg-dvpl">Prof-specialty</td>
+        <td class="tg-dvpl">6172</td>
+        <td class="tg-dvpl">12.64</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">7</td>
+        <td class="tg-dvpl">relationship</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">6</td>
+        <td class="tg-dvpl">Husband</td>
+        <td class="tg-dvpl">19716</td>
+        <td class="tg-dvpl">40.37</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">8</td>
+        <td class="tg-dvpl">race</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">5</td>
+        <td class="tg-dvpl">White</td>
+        <td class="tg-dvpl">41762</td>
+        <td class="tg-dvpl">85.5</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">9</td>
+        <td class="tg-dvpl">sex</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">2</td>
+        <td class="tg-dvpl">Male</td>
+        <td class="tg-dvpl">32650</td>
+        <td class="tg-dvpl">66.85</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">10</td>
+        <td class="tg-dvpl">capital-gain</td>
+        <td class="tg-dvpl">int64</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">123</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">44807</td>
+        <td class="tg-dvpl">91.74</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">11</td>
+        <td class="tg-dvpl">capital-loss</td>
+        <td class="tg-dvpl">int64</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">99</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">46560</td>
+        <td class="tg-dvpl">95.33</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">12</td>
+        <td class="tg-dvpl">hours-per-week</td>
+        <td class="tg-dvpl">int64</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">96</td>
+        <td class="tg-dvpl">40</td>
+        <td class="tg-dvpl">22803</td>
+        <td class="tg-dvpl">46.69</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">13</td>
+        <td class="tg-dvpl">native-country</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">274</td>
+        <td class="tg-dvpl">0.56</td>
+        <td class="tg-dvpl">42</td>
+        <td class="tg-dvpl">United-States</td>
+        <td class="tg-dvpl">43832</td>
+        <td class="tg-dvpl">89.74</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">14</td>
+        <td class="tg-dvpl">income</td>
+        <td class="tg-dvpl">object</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">4</td>
+        <td class="tg-dvpl">&lt;=50K</td>
+        <td class="tg-dvpl">24720</td>
+        <td class="tg-dvpl">50.61</td>
+    </tr>
+    <tr>
+        <td class="tg-rvpl">15</td>
+        <td class="tg-dvpl">age_group</td>
+        <td class="tg-dvpl">category</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">9</td>
+        <td class="tg-dvpl">18-29</td>
+        <td class="tg-dvpl">13920</td>
+        <td class="tg-dvpl">28.5</td>
+    </tr>
+    </tbody>
+</table>
+</div><p></p>
+</section>
 <section id="binning-numerical-columns">
 <h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
-<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
+<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id5" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
 does not have age or any other numerical column of interest binned, you can
 apply the following binning logic to categorize the data. Below, we use the age
 column from the UCI Machine Learning Repository as an example:</p>
@@ -586,9 +838,9 @@ label to each age in the DataFrame. The <code class="docutils literal notranslat
 categorize the ages and assign them to a new column, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>. Adjust the bins
 and labels as needed for your specific data.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id4" role="note">
+<aside class="footnote brackets" id="id5" role="note">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>)</span>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
 </aside>
