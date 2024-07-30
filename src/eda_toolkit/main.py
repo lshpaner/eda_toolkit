@@ -2,14 +2,18 @@ import pandas as pd
 import numpy as np
 import random
 from itertools import combinations
-import datetime
-from datetime import datetime
 from IPython.display import display
 import matplotlib.pyplot as plt
 import seaborn as sns
 import textwrap
 import os
+import sys
 import warnings
+
+if sys.version_info >= (3, 7):
+    from datetime import datetime
+else:
+    import datetime
 
 
 ################################################################################
@@ -142,7 +146,7 @@ def parse_date_with_rule(date_str):
         ValueError: If date_str is in an unrecognized format or if the function
         cannot parse the date.
     """
-    
+
     parts = date_str.split("/")
     # If the first part is greater than 12, it can only be a day, thus d/m/Y
     if int(parts[0]) > 12:
@@ -216,8 +220,12 @@ def dataframe_columns(df):
         str:       Prints the shape of the dataframe at top
         dataframe: column_value_counts list in DataFrame format
     """
+
     print("Shape: ", df.shape, "\n")
-    start_time = datetime.datetime.now()
+    start_time = (
+        datetime.now() if sys.version_info >= (3, 7) else datetime.datetime.now()
+    )
+
     # Convert dbdate dtype to datetime
     for col in df.columns:
         if df[col].dtype == "dbdate":
@@ -249,8 +257,13 @@ def dataframe_columns(df):
                 ),
             }
         )
-    stop_time = datetime.datetime.now()
-    print("Total seconds of processing time:", (stop_time - start_time).total_seconds())
+    stop_time = (
+        datetime.now() if sys.version_info >= (3, 7) else datetime.datetime.now()
+    )
+    print(
+        "Total seconds of processing time:",
+        (stop_time - start_time).total_seconds(),
+    )
     return pd.DataFrame(columns_value_counts)
 
 
