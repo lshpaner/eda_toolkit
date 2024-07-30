@@ -75,8 +75,8 @@ directories do not exist, the function creates them.
 
 .. code-block:: python
 
-    # import function from library
     from eda_toolkit import ensure_directory 
+    
     import os # import operating system for dir
     
 
@@ -151,8 +151,6 @@ column in the dataframe.
 
 .. code-block:: python
 
-    import pandas as pd
-    import random
     from eda_toolkit import add_ids
 
     # Add a column of unique IDs with 9 digits and call it "census_id"
@@ -301,7 +299,6 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
 
 .. code-block:: python
 
-    import pandas as pd
     from eda_toolkit import strip_trailing_period
 
     # Create a sample dataframe with trailing periods in some values
@@ -523,7 +520,8 @@ function to analyze a DataFrame's columns.
 
 .. code-block:: python
 
-    import pandas as pd
+    from eda_toolkit import dataframe_columns
+
     dataframe_columns(df=df)
 
 
@@ -754,7 +752,6 @@ function to analyze a DataFrame's columns.
 
 \
 
-
 Generating Summary Tables for Variable Combinations
 -----------------------------------------------------
 
@@ -796,6 +793,8 @@ Below, we use the ``summarize_all_combinations`` function to generate summary ta
 variables from a DataFrame containing the census data [1]_.
 
 .. code-block:: python
+
+    from eda_toolkit import summarize_all_combinations
 
     # Define unique variables for the analysis
     unique_vars = [
@@ -970,6 +969,69 @@ The first sheet will be a Table of Contents with hyperlinks to each summary tabl
 .. raw:: html
    
    <div style="height: 106px;"></div>
+
+
+
+Saving DataFrames to Excel with Customized Formatting
+-------------------------------------------------------
+
+This section explains how to save multiple DataFrames to separate sheets in an Excel file with customized formatting using the ``save_dataframes_to_excel`` function.
+
+
+.. function:: save_dataframes_to_excel(file_path, df_dict, decimal_places=0)
+
+    Save multiple DataFrames to separate sheets in an Excel file with customized
+    formatting.
+
+    :param file_path: Full path to the output Excel file.
+    :type file_path: str
+    :param df_dict: Dictionary where keys are sheet names and values are DataFrames to save.
+    :type df_dict: dict
+    :param decimal_places: Number of decimal places to round numeric columns. Default is 0.
+    :type decimal_places: int
+
+    :notes:
+        - The function will autofit columns and left-align text.
+        - Numeric columns will be formatted with the specified number of decimal places.
+        - Headers will be bold and left-aligned without borders.
+
+The function performs the following tasks:
+- Writes each DataFrame to its respective sheet in the Excel file.
+- Rounds numeric columns to the specified number of decimal places.
+- Applies customized formatting to headers and cells.
+- Autofits columns based on the content length.
+
+**Example Usage**
+
+Below, we use the `save_dataframes_to_excel` function to save two DataFrames: the original DataFrame and a filtered DataFrame with ages between 18 and 40.
+
+.. code-block:: python
+
+    from eda_toolkit import save_dataframes_to_excel
+
+    # Example usage
+    file_name = "df_census.xlsx"  # Name of the output Excel file
+    file_path = os.path.join(data_path, file_name) 
+
+    # filter DataFrame to Ages 18-40
+    filtered_df = df[(df["age"] > 18) & (df["age"] < 40)]
+
+    df_dict = {
+        "original_df": df,
+        "ages_18_to_40": filtered_df,
+    }
+
+    save_dataframes_to_excel(
+        file_path=file_path,
+        df_dict=df_dict,
+        decimal_places=0,
+    )
+
+
+**Output**
+
+The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages between `18` and `40`, each on separate sheets with customized formatting.
+
 
 
 
