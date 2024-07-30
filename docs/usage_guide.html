@@ -69,6 +69,11 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#standardized-dates">Standardized Dates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parse_date_with_rule"><code class="docutils literal notranslate"><span class="pre">parse_date_with_rule()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#binning-numerical-columns">Binning Numerical Columns</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -100,7 +105,7 @@
 <p>This guide provides detailed instructions and examples for using the functions
 provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
 <p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
 information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
 </section>
 <section id="data-preparation-and-management">
@@ -229,7 +234,7 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id3" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
 .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
@@ -442,10 +447,111 @@ that all float values are correctly represented.</p>
 </table><p></p>
 <p><cite>Note:</cite> The last row shows 6 as an <cite>int</cite> with a trailing period with its conversion to <cite>float</cite>.</p>
 <p></p>
+</section>
+</section>
+<section id="standardized-dates">
+<h1>Standardized Dates<a class="headerlink" href="#standardized-dates" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="parse_date_with_rule">
+<span class="sig-name descname"><span class="pre">parse_date_with_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse_date_with_rule" title="Permalink to this definition"></a></dt>
+<dd><p>Parse and standardize date strings based on the provided rule.</p>
+<p>This function takes a date string and standardizes it to the ISO 8601 format
+(YYYY-MM-DD). It assumes dates are provided in either day/month/year or
+month/day/year format. The function first checks if the first part of the
+date string (day or month) is greater than 12, which unambiguously indicates
+a day/month/year format. If the first part is 12 or less, the function
+attempts to parse the date as month/day/year, falling back to day/month/year
+if the former raises a ValueError due to an impossible date (e.g., month
+being greater than 12).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>date_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A date string to be standardized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A standardized date string in the format YYYY-MM-DD.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If date_str is in an unrecognized format or if the function
+cannot parse the date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Example Usage</strong></p>
+<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
+function to standardize date strings. We start by importing the necessary library
+and creating a sample list of date strings. We then use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
+function to parse and standardize each date string to the ISO 8601 format.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="c1"># Sample date strings</span>
+<span class="n">date_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;15/04/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;04/15/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;01/12/2020&quot;</span><span class="p">,</span> <span class="s2">&quot;12/01/2020&quot;</span><span class="p">]</span>
+
+<span class="c1"># Standardize the date strings</span>
+<span class="n">standardized_dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_date_with_rule</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">date_strings</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">standardized_dates</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;2021-04-15&#39;</span><span class="p">,</span> <span class="s1">&#39;2021-04-15&#39;</span><span class="p">,</span> <span class="s1">&#39;2020-12-01&#39;</span><span class="p">,</span> <span class="s1">&#39;2020-01-12&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="binning-numerical-columns">
+<h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
+<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
+does not have age or any other numerical column of interest binned, you can
+apply the following binning logic to categorize the data. Below, we use the age
+column from the UCI Machine Learning Repository as an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create age bins so that the ages can be categorized</span>
+<span class="n">bin_ages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">18</span><span class="p">,</span>
+    <span class="mi">30</span><span class="p">,</span>
+    <span class="mi">40</span><span class="p">,</span>
+    <span class="mi">50</span><span class="p">,</span>
+    <span class="mi">60</span><span class="p">,</span>
+    <span class="mi">70</span><span class="p">,</span>
+    <span class="mi">80</span><span class="p">,</span>
+    <span class="mi">90</span><span class="p">,</span>
+    <span class="mi">100</span><span class="p">,</span>
+    <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># Create labels for the bins</span>
+<span class="n">label_ages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;&lt; 18&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;18-29&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;30-39&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;40-49&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;50-59&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;60-69&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;70-79&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;80-89&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;90-99&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;100 +&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># Categorize the ages and assign to a new variable</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">],</span>
+    <span class="n">bins</span><span class="o">=</span><span class="n">bin_ages</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="n">label_ages</span><span class="p">,</span>
+    <span class="n">right</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>Note:</cite> This code snippet creates age bins and assigns a corresponding age group
+label to each age in the DataFrame. The <code class="docutils literal notranslate"><span class="pre">pd.cut</span></code> function from pandas is used to
+categorize the ages and assign them to a new column, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>. Adjust the bins
+and labels as needed for your specific data.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id3" role="note">
+<aside class="footnote brackets" id="id4" role="note">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>)</span>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
 </aside>
