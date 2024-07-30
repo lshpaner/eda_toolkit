@@ -1030,7 +1030,76 @@ Below, we use the `save_dataframes_to_excel` function to save two DataFrames: th
 
 **Output**
 
-The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages between `18` and `40`, each on separate sheets with customized formatting.
+The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages 
+between `18` and `40`, each on separate sheets with customized formatting.
+
+
+Creating Contingency Tables
+----------------------------
+
+This section explains how to create contingency tables from one or more columns in a DataFrame using the ``contingency_table`` function.
+
+.. function:: contingency_table(df, cols=None, sort_by=0)
+
+    Create a contingency table from one or more columns in a DataFrame, with sorting options.
+
+    :param df: The DataFrame to analyze.
+    :type df: pandas.DataFrame
+    :param cols: Name of the column (as a string) for a single column or list of column names for multiple columns. Must provide at least one column.
+    :type cols: str or list, optional
+    :param sort_by: Enter ``0`` to sort results by column groups; enter ``1`` to sort results by totals in descending order.
+    :type sort_by: int
+
+    :raises ValueError: If no columns are specified or if sort_by is not ``0`` or ``1``.
+    :returns: A DataFrame with the specified columns, ``'Total'``, and ``'Percentage'``.
+    :rtype: pandas.DataFrame
+
+**Example Usage**
+
+Below, we use the ``contingency_table`` function to create a contingency table 
+from the specified columns in a DataFrame containing census data [1]_
+
+.. code-block:: python
+
+    from eda_toolkit import contingency_table
+
+    # Example usage
+    contingency_table(
+        df=df,
+        cols=[
+            "age_group",
+            "workclass",
+            "race",
+            "sex",
+        ],
+        sort_by=1,
+    )
+
+**Output**
+
+The output will be a contingency table with the specified columns, showing the 
+total counts and percentages of occurrences for each combination of values. The 
+table will be sorted by the ``'Total'`` column in descending order because ``sort_by`` 
+is set to ``1``.
+
+
+.. code-block:: python
+
+    
+        age_group     workclass                race     sex  Total  Percentage
+    0       30-39       Private               White    Male   5856       11.99
+    1       18-29       Private               White    Male   5623       11.51
+    2       40-49       Private               White    Male   4267        8.74
+    3       18-29       Private               White  Female   3680        7.53
+    4       50-59       Private               White    Male   2565        5.25
+    ..        ...           ...                 ...     ...    ...         ...
+    467     50-59   Federal-gov               Other    Male      1        0.00
+    468     50-59     Local-gov  Asian-Pac-Islander  Female      1        0.00
+    469     70-79  Self-emp-inc               Black    Male      1        0.00
+    470     80-89     Local-gov  Asian-Pac-Islander    Male      1        0.00
+    471                                                      48842      100.00
+
+    [472 rows x 6 columns]
 
 
 

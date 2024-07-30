@@ -85,6 +85,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#save_dataframes_to_excel"><code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-contingency-tables">Creating Contingency Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-definition">Function Definition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#contingency_table"><code class="docutils literal notranslate"><span class="pre">contingency_table()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#binning-numerical-columns">Binning Numerical Columns</a></li>
 </ul>
 </li>
@@ -119,7 +124,7 @@
 <p>This guide provides detailed instructions and examples for using the functions
 provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
 <p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id6" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id7" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
 information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
 </section>
 <section id="data-preparation-and-management">
@@ -246,7 +251,7 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id7" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <style type="text/css">
 .tg-wrap {
   width: 100%;
@@ -590,7 +595,7 @@ function to analyze a DataFrame’s columns.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
 <span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
@@ -843,7 +848,7 @@ Each summary table includes the count and proportion of occurrences for each uni
 This is useful for understanding which combinations were analyzed and included in the summary tables.</p>
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
-variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id6" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id7" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
@@ -1057,11 +1062,82 @@ formatting.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p>The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages between <cite>18</cite> and <cite>40</cite>, each on separate sheets with customized formatting.</p>
+<p>The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages
+between <cite>18</cite> and <cite>40</cite>, each on separate sheets with customized formatting.</p>
+</section>
+<section id="creating-contingency-tables">
+<h2>Creating Contingency Tables<a class="headerlink" href="#creating-contingency-tables" title="Permalink to this heading"></a></h2>
+<p>This section explains how to create contingency tables from one or more columns in a DataFrame using the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function.</p>
+</section>
+<section id="function-definition">
+<h2>Function Definition<a class="headerlink" href="#function-definition" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="contingency_table">
+<span class="sig-name descname"><span class="pre">contingency_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#contingency_table" title="Permalink to this definition"></a></dt>
+<dd><p>Create a contingency table from one or more columns in a DataFrame, with sorting options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame to analyze.</p></li>
+<li><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Name of the column (as a string) for a single column or list of column names for multiple columns. Must provide at least one column.</p></li>
+<li><p><strong>sort_by</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Enter <code class="docutils literal notranslate"><span class="pre">0</span></code> to sort results by column groups; enter <code class="docutils literal notranslate"><span class="pre">1</span></code> to sort results by totals in descending order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If no columns are specified or if sort_by is not <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A DataFrame with the specified columns, <code class="docutils literal notranslate"><span class="pre">'Total'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'Percentage'</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Example Usage</strong></p>
+<p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
+from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id7" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
+
+<span class="c1"># Example usage</span>
+<span class="n">contingency_table</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">cols</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;age_group&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;workclass&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;race&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sex&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">sort_by</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<p>The output will be a contingency table with the specified columns, showing the
+total counts and percentages of occurrences for each combination of values. The
+table will be sorted by the <code class="docutils literal notranslate"><span class="pre">'Total'</span></code> column in descending order because <code class="docutils literal notranslate"><span class="pre">sort_by</span></code>
+is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">age_group</span>     <span class="n">workclass</span>                <span class="n">race</span>     <span class="n">sex</span>  <span class="n">Total</span>  <span class="n">Percentage</span>
+<span class="mi">0</span>       <span class="mi">30</span><span class="o">-</span><span class="mi">39</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">5856</span>       <span class="mf">11.99</span>
+<span class="mi">1</span>       <span class="mi">18</span><span class="o">-</span><span class="mi">29</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">5623</span>       <span class="mf">11.51</span>
+<span class="mi">2</span>       <span class="mi">40</span><span class="o">-</span><span class="mi">49</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">4267</span>        <span class="mf">8.74</span>
+<span class="mi">3</span>       <span class="mi">18</span><span class="o">-</span><span class="mi">29</span>       <span class="n">Private</span>               <span class="n">White</span>  <span class="n">Female</span>   <span class="mi">3680</span>        <span class="mf">7.53</span>
+<span class="mi">4</span>       <span class="mi">50</span><span class="o">-</span><span class="mi">59</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">2565</span>        <span class="mf">5.25</span>
+<span class="o">..</span>        <span class="o">...</span>           <span class="o">...</span>                 <span class="o">...</span>     <span class="o">...</span>    <span class="o">...</span>         <span class="o">...</span>
+<span class="mi">467</span>     <span class="mi">50</span><span class="o">-</span><span class="mi">59</span>   <span class="n">Federal</span><span class="o">-</span><span class="n">gov</span>               <span class="n">Other</span>    <span class="n">Male</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
+<span class="mi">468</span>     <span class="mi">50</span><span class="o">-</span><span class="mi">59</span>     <span class="n">Local</span><span class="o">-</span><span class="n">gov</span>  <span class="n">Asian</span><span class="o">-</span><span class="n">Pac</span><span class="o">-</span><span class="n">Islander</span>  <span class="n">Female</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
+<span class="mi">469</span>     <span class="mi">70</span><span class="o">-</span><span class="mi">79</span>  <span class="n">Self</span><span class="o">-</span><span class="n">emp</span><span class="o">-</span><span class="n">inc</span>               <span class="n">Black</span>    <span class="n">Male</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
+<span class="mi">470</span>     <span class="mi">80</span><span class="o">-</span><span class="mi">89</span>     <span class="n">Local</span><span class="o">-</span><span class="n">gov</span>  <span class="n">Asian</span><span class="o">-</span><span class="n">Pac</span><span class="o">-</span><span class="n">Islander</span>    <span class="n">Male</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
+<span class="mi">471</span>                                                      <span class="mi">48842</span>      <span class="mf">100.00</span>
+
+<span class="p">[</span><span class="mi">472</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">6</span> <span class="n">columns</span><span class="p">]</span>
+</pre></div>
+</div>
 </section>
 <section id="binning-numerical-columns">
 <h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
-<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id6" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
+<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id7" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
 does not have age or any other numerical column of interest binned, you can
 apply the following binning logic to categorize the data. Below, we use the age
 column from the UCI Machine Learning Repository as an example:</p>
@@ -1108,9 +1184,9 @@ label to each age in the DataFrame. The <code class="docutils literal notranslat
 categorize the ages and assign them to a new column, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>. Adjust the bins
 and labels as needed for your specific data.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id6" role="note">
+<aside class="footnote brackets" id="id7" role="note">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id5">5</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id5">5</a>,<a role="doc-backlink" href="#id6">6</a>)</span>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
 </aside>
