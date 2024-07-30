@@ -467,58 +467,63 @@ def save_dataframes_to_excel(file_path, df_dict, decimal_places=2):
 
 def contingency_table(df, col1, col2, SortBy):
     """
-    Function to create contingency table from one or two columns in dataframe,
-    with sorting options.
+    Function to create contingency table from one 
+    or two columns in dataframe, with sorting options.
 
     Args:
         df (dataframe): the dataframe to analyze
+
         col1 (str): name of the first column in the dataframe to include
+        
         col2 (str): name of the second column in the dataframe to include
-                    if no second column, enter "None"
-        SortBy (str): enter 'Group' to sort results by col1 + col2 group
-                    any other value will sort by col1 + col2 group totals
+                * if no second column, leave an empty string: ''
+        
+        SortBy (int): enter 0 to sort results by col1 + col2 group
+                      enter 1 to sort results by totals descending
 
     Raises:
         No Raises
 
     Returns:
-        dataframe: dataframe with three columns; 'Groups', 'GroupTotal', and 'GroupPct'
+        dataframe: dataframe with col1 + col2, 'Total', and 'Percentage'
     """
-    if col2 != "None":
+    if col2 != '':
         group_cols = [col1, col2]
     else:
         group_cols = [col1]
 
     # Create the contingency table with observed=True
     cont_df = (
-        df.groupby(group_cols, observed=True).size().reset_index(name="GroupTotal")
+        df.groupby(group_cols, observed=True).size().reset_index(name="Total")
     )
 
     # Calculate the percentage
-    cont_df["GroupPct"] = 100 * cont_df["GroupTotal"] / len(df)
+    cont_df["Percentage"] = 100 * cont_df["Total"] / len(df)
 
     # Sort values based on provided SortBy parameter
-    if SortBy == "Group":
+    if SortBy == 0:
         cont_df = cont_df.sort_values(by=group_cols)
+    elif SortBy == 1:
+        cont_df = cont_df.sort_values(by="Total", ascending=False)
     else:
-        cont_df = cont_df.sort_values(by="GroupTotal", ascending=False)
+        cont_df = cont_df.sort_values(by=group_cols)
 
     # Results for all groups
     all_groups = pd.DataFrame(
         [
             {
-                **{col: "All" for col in group_cols},
-                "GroupTotal": cont_df["GroupTotal"].sum(),
-                "GroupPct": cont_df["GroupPct"].sum(),
+                **{col: "" for col in group_cols},
+                "Total": cont_df["Total"].sum(),
+                "Percentage": cont_df["Percentage"].sum(),
             }
         ]
     )
 
     # Combine results
-    c_table = pd.concat([cont_df, all_groups], ignore_index=True)
+    c_table = pd.concat([cont_df.fillna(''), all_groups.fillna('')], ignore_index=True)
 
     # Update GroupPct to reflect as a percentage rounded to 2 decimal places
-    c_table["GroupPct"] = c_table["GroupPct"].round(2)
+    c_table["Percentage"] = c_table["Percentage"].round(2)
 
     return c_table
 
