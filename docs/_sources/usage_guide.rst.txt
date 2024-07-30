@@ -161,22 +161,10 @@ column in the dataframe.
         id_colname="census_id",
         num_digits=9,
         seed=111,
-
+        set_as_index=True, 
     )
 
 **Output**
-
-.. .. table::
-
-..    ============  ===  ================  =======  ==========  ==============  ==================  =================  =============
-..    census_id     age  workclass         fnlwgt   education   education-num   marital-status      occupation         relationship
-..    ============  ===  ================  =======  ==========  ==============  ==================  =================  =============
-..    82943611      39   State-gov         77516    Bachelors   13              Never-married       Adm-clerical       Not-in-family
-..    42643227      50   Self-emp-not-inc  83311    Bachelors   13              Married-civ-spouse  Exec-managerial    Husband
-..    93837254      38   Private           215646   HS-grad     9               Divorced            Handlers-cleaners  Not-in-family
-..    87104229      53   Private           234721   11th        7               Married-civ-spouse  Handlers-cleaners  Husband
-..    90069867      28   Private           338409   Bachelors   13              Married-civ-spouse  Prof-specialty     Wife
-..    ============  ===  ================  =======  ==========  ==============  ==================  =================  =============
 
 `First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)` [1]_
 
