@@ -19,22 +19,22 @@
    
    <div style="height: 106px;"></div>
 
-\
-
 Description
 ===========
 
 This guide provides detailed instructions and examples for using the functions 
 provided in the ``eda_toolkit`` library and how to use them effectively in your projects.
 
-For the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository. This dataset provides a rich source of
-information for demonstrating the functionalities of the ``eda_toolkit``. You can
-find more details and download the dataset from the `UCI Machine Learning Repository <https://archive.ics.uci.edu/ml/datasets/Census+Income>`_.
+For most of the ensuing examples, we will leverage the Census Income Data (1994) from
+the UCI Machine Learning Repository [1]_. This dataset provides a rich source of
+information for demonstrating the functionalities of the ``eda_toolkit``.
 
 
-Path Directories
-=================
+Data Preparation and Management
+===============================
+
+Path directories
+----------------
 
 .. function:: ensure_directory(path)
 
@@ -106,7 +106,7 @@ the function creates them.
 
 
 Adding Unique Identifiers
-==========================
+--------------------------
 
 .. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=True)
 
@@ -118,9 +118,9 @@ Adding Unique Identifiers
     :type id_colname: str
     :param num_digits: The number of digits for the unique IDs.
     :type num_digits: int
-    :param seed: The seed for the random number generator. Defaults to None.
+    :param seed: The seed for the random number generator. Defaults to ``None``.
     :type seed: int, optional
-    :param set_as_index: Whether to set the new ID column as the index. Defaults to True.
+    :param set_as_index: Whether to set the new ID column as the index. Defaults to ``False``.
     :type set_as_index: bool, optional
 
     :returns: The updated dataframe with the new ID column.
@@ -159,18 +159,249 @@ column in the dataframe.
         id_colname="census_id",
         num_digits=9,
         seed=111,
+
     )
 
 **Output**
 
-.. table::
+.. .. table::
 
-   ==========  ===  =================  =======  ============  ===============  ==================  =================  ===============
-   census_id   age  workclass          fnlwgt   education     education-num    marital-status      occupation         relationship
-   ==========  ===  =================  =======  ============  ===============  ==================  =================  ===============
-   82943611    39   State-gov          77516    Bachelors     13               Never-married       Adm-clerical       Not-in-family
-   42643227    50   Self-emp-not-inc   83311    Bachelors     13               Married-civ-spouse  Exec-managerial    Husband
-   93837254    38   Private            215646   HS-grad       9                Divorced            Handlers-cleaners  Not-in-family
-   87104229    53   Private            234721   11th          7                Married-civ-spouse  Handlers-cleaners  Husband
-   90069867    28   Private            338409   Bachelors     13               Married-civ-spouse  Prof-specialty     Wife
-   ==========  ===  =================  =======  ============  ===============  ==================  =================  ===============
+..    ============  ===  ================  =======  ==========  ==============  ==================  =================  =============
+..    census_id     age  workclass         fnlwgt   education   education-num   marital-status      occupation         relationship
+..    ============  ===  ================  =======  ==========  ==============  ==================  =================  =============
+..    82943611      39   State-gov         77516    Bachelors   13              Never-married       Adm-clerical       Not-in-family
+..    42643227      50   Self-emp-not-inc  83311    Bachelors   13              Married-civ-spouse  Exec-managerial    Husband
+..    93837254      38   Private           215646   HS-grad     9               Divorced            Handlers-cleaners  Not-in-family
+..    87104229      53   Private           234721   11th        7               Married-civ-spouse  Handlers-cleaners  Husband
+..    90069867      28   Private           338409   Bachelors   13              Married-civ-spouse  Prof-specialty     Wife
+..    ============  ===  ================  =======  ==========  ==============  ==================  =================  =============
+
+`First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)` [1]_
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+    .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+    .tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+    </style>
+    <table class="tg"><thead>
+    <tr>
+        <th class="tg-zv4m"></th>
+        <th class="tg-aw21">age</th>
+        <th class="tg-aw21">workclass</th>
+        <th class="tg-aw21">fnlwgt</th>
+        <th class="tg-aw21">education</th>
+        <th class="tg-aw21">education-num</th>
+        <th class="tg-aw21">marital-status</th>
+        <th class="tg-aw21">occupation</th>
+        <th class="tg-aw21">relationship</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td class="tg-aw21">census_id</td>
+        <td class="tg-8jgo"></td>
+        <td class="tg-8jgo"></td>
+        <td class="tg-8jgo"></td>
+        <td class="tg-8jgo"></td>
+        <td class="tg-8jgo"></td>
+        <td class="tg-8jgo"></td>
+        <td class="tg-8jgo"></td>
+        <td class="tg-8jgo"></td>
+    </tr>
+    <tr>
+        <td class="tg-zv4m">82943611</td>
+        <td class="tg-8jgo">39</td>
+        <td class="tg-8jgo">State-gov</td>
+        <td class="tg-8jgo">77516</td>
+        <td class="tg-8jgo">Bachelors</td>
+        <td class="tg-8jgo">13</td>
+        <td class="tg-8jgo">Never-married</td>
+        <td class="tg-8jgo">Adm-clerical</td>
+        <td class="tg-8jgo">Not-in-family</td>
+    </tr>
+    <tr>
+        <td class="tg-zv4m">42643227</td>
+        <td class="tg-8jgo">50</td>
+        <td class="tg-8jgo">Self-emp-not-inc</td>
+        <td class="tg-8jgo">83311</td>
+        <td class="tg-8jgo">Bachelors</td>
+        <td class="tg-8jgo">13</td>
+        <td class="tg-8jgo">Married-civ-spouse</td>
+        <td class="tg-8jgo">Exec-managerial</td>
+        <td class="tg-8jgo">Husband</td>
+    </tr>
+    <tr>
+        <td class="tg-zv4m">93837254</td>
+        <td class="tg-8jgo">38</td>
+        <td class="tg-8jgo">Private</td>
+        <td class="tg-8jgo">215646</td>
+        <td class="tg-8jgo">HS-grad</td>
+        <td class="tg-8jgo">9</td>
+        <td class="tg-8jgo">Divorced</td>
+        <td class="tg-8jgo">Handlers-cleaners</td>
+        <td class="tg-8jgo">Not-in-family</td>
+    </tr>
+    <tr>
+        <td class="tg-zv4m">87104229</td>
+        <td class="tg-8jgo">53</td>
+        <td class="tg-8jgo">Private</td>
+        <td class="tg-8jgo">234721</td>
+        <td class="tg-8jgo">11th</td>
+        <td class="tg-8jgo">7</td>
+        <td class="tg-8jgo">Married-civ-spouse</td>
+        <td class="tg-8jgo">Handlers-cleaners</td>
+        <td class="tg-8jgo">Husband</td>
+    </tr>
+    <tr>
+        <td class="tg-zv4m">90069867</td>
+        <td class="tg-8jgo">28</td>
+        <td class="tg-8jgo">Private</td>
+        <td class="tg-8jgo">338409</td>
+        <td class="tg-8jgo">Bachelors</td>
+        <td class="tg-8jgo">13</td>
+        <td class="tg-8jgo">Married-civ-spouse</td>
+        <td class="tg-8jgo">Prof-specialty</td>
+        <td class="tg-8jgo">Wife</td>
+    </tr>
+    </tbody></table>
+
+\
+
+
+Trailing Period Removal
+-----------------------
+
+.. function:: strip_trailing_period(df, column_name)
+
+    Strip the trailing period from floats in a specified column of a DataFrame, if present.
+
+    :param df: The DataFrame containing the column to be processed.
+    :type df: pd.DataFrame
+    :param column_name: The name of the column containing floats with potential trailing periods.
+    :type column_name: str
+
+    :returns: The updated DataFrame with the trailing periods removed from the specified column.
+    :rtype: pd.DataFrame
+
+    The ``strip_trailing_period`` function is designed to remove trailing periods 
+    from float values in a specified column of a DataFrame. This can be particularly 
+    useful when dealing with data that has been inconsistently formatted, ensuring 
+    that all float values are correctly represented.
+
+**Example Usage**
+
+In the example below, we demonstrate how to use the ``strip_trailing_period`` function to clean a column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame. We then use the ``strip_trailing_period`` function to remove any trailing periods from the specified column.
+
+.. code-block:: python
+
+    import pandas as pd
+    from eda_toolkit import strip_trailing_period
+
+    # Create a sample dataframe with trailing periods in some values
+    data = {
+        "values": [1.0, 2.0, 3.0, 4.0, 5.0, 6.],
+    }
+    df = pd.DataFrame(data)
+
+    # Remove trailing periods from the 'values' column
+    df = strip_trailing_period(df=df, column_name="values")
+
+
+**Output**
+
+`First 6 Rows of Data Before and After Removing Trailing Periods (Adapted from Example)`
+
+.. raw:: html
+
+    <table>
+        <tr>
+            <td style="padding-right: 10px;">
+
+                <strong>Before:</strong>
+
+                <table border="1" style="width: 150px; text-align: center;">
+                    <tr>
+                        <th>Index</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>1.0</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>2.0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>3.0</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>5.0</td>
+                    </tr>
+                    <tr style="background-color: #FFCCCC;">
+                        <td>5</td>
+                        <td>6.</td>
+                    </tr>
+                </table>
+
+            </td>
+            <td style="padding-left: 10px;">
+
+                <strong>After:</strong>
+
+                <table border="1" style="width: 150px; text-align: center;">
+                    <tr>
+                        <th>Index</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>1.0</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>2.0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>3.0</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>5.0</td>
+                    </tr>
+                    <tr style="background-color: #FFCCCC;">
+                        <td>5</td>
+                        <td>6.0</td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+\
+
+`Note:` The last row shows 6 as an `int` with a trailing period with its conversion to `float`.
+
+
+\
+
+
+.. [1] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
