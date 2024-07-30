@@ -81,6 +81,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#summarize_all_combinations"><code class="docutils literal notranslate"><span class="pre">summarize_all_combinations()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-dataframes-to-excel-with-customized-formatting">Saving DataFrames to Excel with Customized Formatting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#save_dataframes_to_excel"><code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#binning-numerical-columns">Binning Numerical Columns</a></li>
 </ul>
 </li>
@@ -156,8 +160,8 @@ directory, both located one level up from the current directory.</p>
 <code class="docutils literal notranslate"><span class="pre">images</span></code> folder in the parent directory. Using the <code class="docutils literal notranslate"><span class="pre">ensure_directory</span></code>
 function, we then verify that these directories exist. If any of the specified
 directories do not exist, the function creates them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import function from library</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
+
 <span class="kn">import</span> <span class="nn">os</span> <span class="c1"># import operating system for dir</span>
 
 
@@ -229,9 +233,7 @@ specifying the dataframe, the column name for the IDs, the number of digits for
 each ID, a seed for reproducibility, and whether to set the new ID column as the
 index. The function generates unique IDs for each row and adds them as the first
 column in the dataframe.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">add_ids</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">add_ids</span>
 
 <span class="c1"># Add a column of unique IDs with 9 digits and call it &quot;census_id&quot;</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">add_ids</span><span class="p">(</span>
@@ -374,8 +376,7 @@ that all float values are correctly represented.</p>
 
 <p><strong>Example Usage</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to clean a column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame. We then use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to remove any trailing periods from the specified column.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">strip_trailing_period</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">strip_trailing_period</span>
 
 <span class="c1"># Create a sample dataframe with trailing periods in some values</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
@@ -583,7 +584,8 @@ converting date columns and replacing empty strings with Pandas NA values.</p>
 <p><strong>Example Usage</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
 function to analyze a DataFrame’s columns.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">dataframe_columns</span>
+
 <span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -842,7 +844,9 @@ This is useful for understanding which combinations were analyzed and included i
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
 variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id6" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define unique variables for the analysis</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
+
+<span class="c1"># Define unique variables for the analysis</span>
 <span class="n">unique_vars</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age_group&quot;</span><span class="p">,</span>
     <span class="s2">&quot;workclass&quot;</span><span class="p">,</span>
@@ -998,6 +1002,63 @@ variables from a DataFrame containing the census data <a class="footnote-referen
 The first sheet will be a Table of Contents with hyperlinks to each summary table.</p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/summarize_all_combinations.gif"><img alt="EDA Toolkit Logo" class="align-left" src="_images/summarize_all_combinations.gif" style="width: 800px;" /></a>
 </div><div style="height: 106px;"></div></section>
+<section id="saving-dataframes-to-excel-with-customized-formatting">
+<h2>Saving DataFrames to Excel with Customized Formatting<a class="headerlink" href="#saving-dataframes-to-excel-with-customized-formatting" title="Permalink to this heading"></a></h2>
+<p>This section explains how to save multiple DataFrames to separate sheets in an Excel file with customized formatting using the <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> function.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="save_dataframes_to_excel">
+<span class="sig-name descname"><span class="pre">save_dataframes_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#save_dataframes_to_excel" title="Permalink to this definition"></a></dt>
+<dd><p>Save multiple DataFrames to separate sheets in an Excel file with customized
+formatting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Full path to the output Excel file.</p></li>
+<li><p><strong>df_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Dictionary where keys are sheet names and values are DataFrames to save.</p></li>
+<li><p><strong>decimal_places</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of decimal places to round numeric columns. Default is 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Notes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>The function will autofit columns and left-align text.</p></li>
+<li><p>Numeric columns will be formatted with the specified number of decimal places.</p></li>
+<li><p>Headers will be bold and left-aligned without borders.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The function performs the following tasks:
+- Writes each DataFrame to its respective sheet in the Excel file.
+- Rounds numeric columns to the specified number of decimal places.
+- Applies customized formatting to headers and cells.
+- Autofits columns based on the content length.</p>
+<p><strong>Example Usage</strong></p>
+<p>Below, we use the <cite>save_dataframes_to_excel</cite> function to save two DataFrames: the original DataFrame and a filtered DataFrame with ages between 18 and 40.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
+
+<span class="c1"># Example usage</span>
+<span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;df_census.xlsx&quot;</span>  <span class="c1"># Name of the output Excel file</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+<span class="c1"># filter DataFrame to Ages 18-40</span>
+<span class="n">filtered_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">18</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">)]</span>
+
+<span class="n">df_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;original_df&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">,</span>
+    <span class="s2">&quot;ages_18_to_40&quot;</span><span class="p">:</span> <span class="n">filtered_df</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">save_dataframes_to_excel</span><span class="p">(</span>
+    <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span>
+    <span class="n">df_dict</span><span class="o">=</span><span class="n">df_dict</span><span class="p">,</span>
+    <span class="n">decimal_places</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<p>The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages between <cite>18</cite> and <cite>40</cite>, each on separate sheets with customized formatting.</p>
+</section>
 <section id="binning-numerical-columns">
 <h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
 <p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id6" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
