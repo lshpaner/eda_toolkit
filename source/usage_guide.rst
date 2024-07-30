@@ -166,6 +166,10 @@ column in the dataframe.
 
 `First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)` [1]_
 
+.. code-block:: bash
+
+    DataFrame index is unique.
+
 .. raw:: html
 
     <style type="text/css">
@@ -211,7 +215,7 @@ column in the dataframe.
           <td class="tg-8jgo"></td>
         </tr>
         <tr>
-          <td class="tg-zv4m">82943611</td>
+          <td class="tg-zv4m">74130842</td>
           <td class="tg-8jgo">39</td>
           <td class="tg-8jgo">State-gov</td>
           <td class="tg-8jgo">77516</td>
@@ -222,7 +226,7 @@ column in the dataframe.
           <td class="tg-8jgo">Not-in-family</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">42643227</td>
+          <td class="tg-zv4m">97751875</td>
           <td class="tg-8jgo">50</td>
           <td class="tg-8jgo">Self-emp-not-inc</td>
           <td class="tg-8jgo">83311</td>
@@ -233,7 +237,7 @@ column in the dataframe.
           <td class="tg-8jgo">Husband</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">93837254</td>
+          <td class="tg-zv4m">12202842</td>
           <td class="tg-8jgo">38</td>
           <td class="tg-8jgo">Private</td>
           <td class="tg-8jgo">215646</td>
@@ -244,7 +248,7 @@ column in the dataframe.
           <td class="tg-8jgo">Not-in-family</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">87104229</td>
+          <td class="tg-zv4m">96078789</td>
           <td class="tg-8jgo">53</td>
           <td class="tg-8jgo">Private</td>
           <td class="tg-8jgo">234721</td>
@@ -255,7 +259,7 @@ column in the dataframe.
           <td class="tg-8jgo">Husband</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">90069867</td>
+          <td class="tg-zv4m">35130194</td>
           <td class="tg-8jgo">28</td>
           <td class="tg-8jgo">Private</td>
           <td class="tg-8jgo">338409</td>
@@ -1103,6 +1107,151 @@ is set to ``1``.
     [472 rows x 6 columns]
 
 
+\
+
+Highlighting Specific Columns in a DataFrame
+---------------------------------------------
+
+This section explains how to highlight specific columns in a DataFrame using the ``highlight_columns`` function.
+
+**Highlight specific columns in a DataFrame with a specified background color.**
+
+.. function:: highlight_columns(df, columns, color="yellow")
+
+    :param df: The DataFrame to be styled.
+    :type df: pandas.DataFrame
+    :param columns: List of column names to be highlighted.
+    :type columns: list of str
+    :param color: The background color to be applied for highlighting (default is `"yellow"`).
+    :type color: str, optional
+
+    :returns: A Styler object with the specified columns highlighted.
+    :rtype: pandas.io.formats.style.Styler
+
+**Example Usage**
+
+Below, we use the ``highlight_columns`` function to highlight the ``age`` and ``education`` 
+columns in the first 5 rows of the census [1]_ DataFrame with a pink background color.
+
+.. code-block:: python
+
+    from eda_toolkit import highlight_columns
+
+    # Applying the highlight function
+    highlighted_df = highlight_columns(
+        df=df,
+        columns=["age", "education"],
+        color="#F8C5C8",
+    )
+
+    highlighted_df
+
+**Output**
+
+The output will be a DataFrame with the specified columns highlighted in the given background color. 
+The ``age`` and ``education`` columns will be highlighted in pink.
+
+The resulting styled DataFrame can be displayed in a Jupyter Notebook or saved to an 
+HTML file using the ``.render()`` method of the Styler object.
+
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg  {border:none;border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-style:solid;border-width:0px;font-family:monospace, sans-serif;font-size:11px;overflow:hidden;padding:0px 5px;
+    word-break:normal;}
+    .tg th{border-style:solid;border-width:0px;font-family:monospace, sans-serif;font-size:11px;font-weight:normal;
+    overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg .tg-zv36{background-color:#ffffff;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
+    .tg .tg-c6of{background-color:#ffffff;border-color:inherit;text-align:left;vertical-align:top}
+    .tg .tg-7g6k{background-color:#ffffff;border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-3xi5{background-color:#ffffff;border-color:inherit;text-align:center;vertical-align:top}
+    .tg .tg-6qlg{background-color:#f8c5c8;border-color:inherit;text-align:center;vertical-align:top}
+    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
+    <div class="tg-wrap"><table class="tg"><thead>
+    <tr>
+        <th class="tg-c6of"></th>
+        <th class="tg-7g6k">age</th>
+        <th class="tg-7g6k">workclass</th>
+        <th class="tg-7g6k">fnlwgt</th>
+        <th class="tg-7g6k">education</th>
+        <th class="tg-7g6k">education-num</th>
+        <th class="tg-7g6k">marital-status</th>
+        <th class="tg-7g6k">occupation</th>
+        <th class="tg-7g6k">relationship</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td class="tg-zv36">census_id</td>
+        <td class="tg-3xi5"></td>
+        <td class="tg-3xi5"></td>
+        <td class="tg-3xi5"></td>
+        <td class="tg-3xi5"></td>
+        <td class="tg-3xi5"></td>
+        <td class="tg-3xi5"></td>
+        <td class="tg-3xi5"></td>
+        <td class="tg-3xi5"></td>
+    </tr>
+    <tr>
+        <td class="tg-c6of">82943611</td>
+        <td class="tg-6qlg">39</td>
+        <td class="tg-3xi5">State-gov</td>
+        <td class="tg-3xi5">77516</td>
+        <td class="tg-6qlg">Bachelors</td>
+        <td class="tg-3xi5">13</td>
+        <td class="tg-3xi5">Never-married</td>
+        <td class="tg-3xi5">Adm-clerical</td>
+        <td class="tg-3xi5">Not-in-family</td>
+    </tr>
+    <tr>
+        <td class="tg-c6of">42643227</td>
+        <td class="tg-6qlg">50</td>
+        <td class="tg-3xi5">Self-emp-not-inc</td>
+        <td class="tg-3xi5">83311</td>
+        <td class="tg-6qlg">Bachelors</td>
+        <td class="tg-3xi5">13</td>
+        <td class="tg-3xi5">Married-civ-spouse</td>
+        <td class="tg-3xi5">Exec-managerial</td>
+        <td class="tg-3xi5">Husband</td>
+    </tr>
+    <tr>
+        <td class="tg-c6of">93837254</td>
+        <td class="tg-6qlg">38</td>
+        <td class="tg-3xi5">Private</td>
+        <td class="tg-3xi5">215646</td>
+        <td class="tg-6qlg">HS-grad</td>
+        <td class="tg-3xi5">9</td>
+        <td class="tg-3xi5">Divorced</td>
+        <td class="tg-3xi5">Handlers-cleaners</td>
+        <td class="tg-3xi5">Not-in-family</td>
+    </tr>
+    <tr>
+        <td class="tg-c6of">87104229</td>
+        <td class="tg-6qlg">53</td>
+        <td class="tg-3xi5">Private</td>
+        <td class="tg-3xi5">234721</td>
+        <td class="tg-6qlg">11th</td>
+        <td class="tg-3xi5">7</td>
+        <td class="tg-3xi5">Married-civ-spouse</td>
+        <td class="tg-3xi5">Handlers-cleaners</td>
+        <td class="tg-3xi5">Husband</td>
+    </tr>
+    <tr>
+        <td class="tg-c6of">90069867</td>
+        <td class="tg-6qlg">28</td>
+        <td class="tg-3xi5">Private</td>
+        <td class="tg-3xi5">338409</td>
+        <td class="tg-6qlg">Bachelors</td>
+        <td class="tg-3xi5">13</td>
+        <td class="tg-3xi5">Married-civ-spouse</td>
+        <td class="tg-3xi5">Prof-specialty</td>
+        <td class="tg-3xi5">Wife</td>
+    </tr>
+    </tbody></table></div>
+
+
+\
 
 
 Binning Numerical Columns
