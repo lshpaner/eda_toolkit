@@ -400,13 +400,13 @@ Standardized Dates
 
     Parse and standardize date strings based on the provided rule.
 
-    This function takes a date string and standardizes it to the ISO 8601 format
-    (YYYY-MM-DD). It assumes dates are provided in either day/month/year or
+    This function takes a date string and standardizes it to the ``ISO 8601`` format
+    (``YYYY-MM-DD``). It assumes dates are provided in either day/month/year or
     month/day/year format. The function first checks if the first part of the
     date string (day or month) is greater than 12, which unambiguously indicates
     a day/month/year format. If the first part is 12 or less, the function
     attempts to parse the date as month/day/year, falling back to day/month/year
-    if the former raises a ValueError due to an impossible date (e.g., month
+    if the former raises a ``ValueError`` due to an impossible date (e.g., month
     being greater than 12).
 
     :param date_str: A date string to be standardized.
@@ -415,7 +415,7 @@ Standardized Dates
     :returns: A standardized date string in the format YYYY-MM-DD.
     :rtype: str
 
-    :raises ValueError: If date_str is in an unrecognized format or if the function
+    :raises ValueError: If ``date_str`` is in an unrecognized format or if the function
                         cannot parse the date.
 
 **Example Usage**
@@ -423,7 +423,7 @@ Standardized Dates
 In the example below, we demonstrate how to use the ``parse_date_with_rule`` 
 function to standardize date strings. We start by importing the necessary library 
 and creating a sample list of date strings. We then use the ``parse_date_with_rule`` 
-function to parse and standardize each date string to the ISO 8601 format.
+function to parse and standardize each date string to the ``ISO 8601`` format.
 
 .. code-block:: python
 
@@ -442,6 +442,49 @@ function to parse and standardize each date string to the ISO 8601 format.
 .. code-block:: python
 
     ['2021-04-15', '2021-04-15', '2020-12-01', '2020-01-12']
+
+
+
+.. important:: 
+    
+    In the next example, we demonstrate how to apply the ``parse_date_with_rule`` 
+    function to a DataFrame column containing date strings using the ``.apply()`` method. 
+    This is particularly useful when you need to standardize date formats across an 
+    entire column in a DataFrame.
+
+.. code-block:: python
+
+    # Creating the DataFrame
+    data = {
+        "date_column": [
+            "31/12/2021",
+            "01/01/2022",
+            "12/31/2021",
+            "13/02/2022",
+            "07/04/2022",
+        ],
+        "name": ["Alice", "Bob", "Charlie", "David", "Eve"],
+        "amount": [100.0, 150.5, 200.75, 250.25, 300.0],
+    }
+
+    df = pd.DataFrame(data)
+
+    # Apply the function to the DataFrame column
+    df["standardized_date"] = df["date_column"].apply(parse_date_with_rule)
+
+    print(df)
+
+**Output**
+
+.. code-block:: python
+
+       date_column     name  amount standardized_date
+    0   31/12/2021    Alice  100.00        2021-12-31
+    1   01/01/2022      Bob  150.50        2022-01-01
+    2   12/31/2021  Charlie  200.75        2021-12-31
+    3   13/02/2022    David  250.25        2022-02-13
+    4   07/04/2022      Eve  300.00        2022-04-07
+
 
 
 Binning Numerical Columns
