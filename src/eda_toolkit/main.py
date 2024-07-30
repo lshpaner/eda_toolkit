@@ -478,54 +478,63 @@ def save_dataframes_to_excel(file_path, df_dict, decimal_places=2):
 ################################################################################
 
 
-def contingency_table(df, col1, col2, SortBy):
+def contingency_table(df, cols=None, sort_by=0):
     """
-    Function to create contingency table from one 
-    or two columns in dataframe, with sorting options.
+    Function to create a contingency table from one or more columns in a
+    dataframe, with sorting options.
 
     Args:
         df (dataframe): the dataframe to analyze
 
-        col1 (str): name of the first column in the dataframe to include
-        
-        col2 (str): name of the second column in the dataframe to include
-                * if no second column, leave an empty string: ''
-        
-        SortBy (int): enter 0 to sort results by col1 + col2 group
-                      enter 1 to sort results by totals descending
+        cols (str or list, optional): name of the column (as a string) for a
+        single column or list of column names for multiple columns.
+        Must provide at least one column.
+
+        sort_by (int): enter 0 to sort results by cols group
+        enter 1 to sort results by totals descending
 
     Raises:
-        No Raises
+        ValueError: if no columns are specified or if sort_by is not 0 or 1
 
     Returns:
-        dataframe: dataframe with col1 + col2, 'Total', and 'Percentage'
+        dataframe: dataframe with specified columns, 'Total', and 'Percentage'
     """
-    if col2 != '':
-        group_cols = [col1, col2]
-    else:
-        group_cols = [col1]
+
+    if not cols or (isinstance(cols, list) and not cols):
+        raise ValueError("At least one DataFrame column must be specified.")
+
+    if sort_by not in [0, 1]:
+        raise ValueError("sort_by must be 0 or 1.")
+
+    if isinstance(cols, str):
+        cols = [cols]
 
     # Create the contingency table with observed=True
     cont_df = (
-        df.groupby(group_cols, observed=True).size().reset_index(name="Total")
+        df.groupby(cols, observed=True)
+        .size()
+        .reset_index(
+            name="Total",
+        )
     )
 
     # Calculate the percentage
     cont_df["Percentage"] = 100 * cont_df["Total"] / len(df)
 
-    # Sort values based on provided SortBy parameter
-    if SortBy == 0:
-        cont_df = cont_df.sort_values(by=group_cols)
-    elif SortBy == 1:
+    # Sort values based on provided sort_by parameter
+    if sort_by == 0:
+        cont_df = cont_df.sort_values(by=cols)
+    elif sort_by == 1:
         cont_df = cont_df.sort_values(by="Total", ascending=False)
-    else:
-        cont_df = cont_df.sort_values(by=group_cols)
+
+    # Convert categorical columns to string to avoid fillna issue
+    cont_df[cols] = cont_df[cols].astype(str)
 
     # Results for all groups
     all_groups = pd.DataFrame(
         [
             {
-                **{col: "" for col in group_cols},
+                **{col: "" for col in cols},
                 "Total": cont_df["Total"].sum(),
                 "Percentage": cont_df["Percentage"].sum(),
             }
@@ -533,7 +542,10 @@ def contingency_table(df, col1, col2, SortBy):
     )
 
     # Combine results
-    c_table = pd.concat([cont_df.fillna(''), all_groups.fillna('')], ignore_index=True)
+    c_table = pd.concat(
+        [cont_df.fillna(""), all_groups.fillna("")],
+        ignore_index=True,
+    )
 
     # Update GroupPct to reflect as a percentage rounded to 2 decimal places
     c_table["Percentage"] = c_table["Percentage"].round(2)
