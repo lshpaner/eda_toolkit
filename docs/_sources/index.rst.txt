@@ -27,7 +27,7 @@
 \
 
 EDA Toolkit Documentation
-====================
+==========================
 
 .. toctree::
    :maxdepth: 3

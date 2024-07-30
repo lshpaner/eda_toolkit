@@ -54,12 +54,19 @@
 <p class="caption" role="heading"><span class="caption-text">Usage Guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#path-directories">Path Directories</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#ensure_directory"><code class="docutils literal notranslate"><span class="pre">ensure_directory()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#data-preparation-and-management">Data Preparation and Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#path-directories">Path directories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ensure_directory"><code class="docutils literal notranslate"><span class="pre">ensure_directory()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#adding-unique-identifiers">Adding Unique Identifiers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#add_ids"><code class="docutils literal notranslate"><span class="pre">add_ids()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-unique-identifiers">Adding Unique Identifiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#add_ids"><code class="docutils literal notranslate"><span class="pre">add_ids()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trailing-period-removal">Trailing Period Removal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#strip_trailing_period"><code class="docutils literal notranslate"><span class="pre">strip_trailing_period()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -88,18 +95,18 @@
            <div itemprop="articleBody">
              
   <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" width="250px" /></a>
-</div><div style="height: 106px;"></div><p></p>
-<section id="description">
+</div><div style="height: 106px;"></div><section id="description">
 <h1>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h1>
 <p>This guide provides detailed instructions and examples for using the functions
 provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
-<p>For the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository. This dataset provides a rich source of
-information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>. You can
-find more details and download the dataset from the <a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/Census+Income">UCI Machine Learning Repository</a>.</p>
+<p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
 </section>
+<section id="data-preparation-and-management">
+<h1>Data Preparation and Management<a class="headerlink" href="#data-preparation-and-management" title="Permalink to this heading"></a></h1>
 <section id="path-directories">
-<h1>Path Directories<a class="headerlink" href="#path-directories" title="Permalink to this heading"></a></h1>
+<h2>Path directories<a class="headerlink" href="#path-directories" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="ensure_directory">
 <span class="sig-name descname"><span class="pre">ensure_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ensure_directory" title="Permalink to this definition"></a></dt>
@@ -166,7 +173,7 @@ the function creates them.</p>
 </div>
 </section>
 <section id="adding-unique-identifiers">
-<h1>Adding Unique Identifiers<a class="headerlink" href="#adding-unique-identifiers" title="Permalink to this heading"></a></h1>
+<h2>Adding Unique Identifiers<a class="headerlink" href="#adding-unique-identifiers" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="add_ids">
 <span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_as_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Permalink to this definition"></a></dt>
@@ -177,8 +184,8 @@ the function creates them.</p>
 <li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The dataframe to add IDs to.</p></li>
 <li><p><strong>id_colname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the new column for the IDs.</p></li>
 <li><p><strong>num_digits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The number of digits for the unique IDs.</p></li>
-<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The seed for the random number generator. Defaults to None.</p></li>
-<li><p><strong>set_as_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to set the new ID column as the index. Defaults to True.</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The seed for the random number generator. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>set_as_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to set the new ID column as the index. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -217,76 +224,232 @@ column in the dataframe.</p>
     <span class="n">id_colname</span><span class="o">=</span><span class="s2">&quot;census_id&quot;</span><span class="p">,</span>
     <span class="n">num_digits</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
     <span class="n">seed</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span>
+
 <span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>census_id</p></th>
-<th class="head"><p>age</p></th>
-<th class="head"><p>workclass</p></th>
-<th class="head"><p>fnlwgt</p></th>
-<th class="head"><p>education</p></th>
-<th class="head"><p>education-num</p></th>
-<th class="head"><p>marital-status</p></th>
-<th class="head"><p>occupation</p></th>
-<th class="head"><p>relationship</p></th>
-</tr>
-</thead>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id3" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+.tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+.tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+</style>
+<table class="tg"><thead>
+<tr>
+    <th class="tg-zv4m"></th>
+    <th class="tg-aw21">age</th>
+    <th class="tg-aw21">workclass</th>
+    <th class="tg-aw21">fnlwgt</th>
+    <th class="tg-aw21">education</th>
+    <th class="tg-aw21">education-num</th>
+    <th class="tg-aw21">marital-status</th>
+    <th class="tg-aw21">occupation</th>
+    <th class="tg-aw21">relationship</th>
+</tr></thead>
 <tbody>
-<tr class="row-even"><td><p>82943611</p></td>
-<td><p>39</p></td>
-<td><p>State-gov</p></td>
-<td><p>77516</p></td>
-<td><p>Bachelors</p></td>
-<td><p>13</p></td>
-<td><p>Never-married</p></td>
-<td><p>Adm-clerical</p></td>
-<td><p>Not-in-family</p></td>
+<tr>
+    <td class="tg-aw21">census_id</td>
+    <td class="tg-8jgo"></td>
+    <td class="tg-8jgo"></td>
+    <td class="tg-8jgo"></td>
+    <td class="tg-8jgo"></td>
+    <td class="tg-8jgo"></td>
+    <td class="tg-8jgo"></td>
+    <td class="tg-8jgo"></td>
+    <td class="tg-8jgo"></td>
 </tr>
-<tr class="row-odd"><td><p>42643227</p></td>
-<td><p>50</p></td>
-<td><p>Self-emp-not-inc</p></td>
-<td><p>83311</p></td>
-<td><p>Bachelors</p></td>
-<td><p>13</p></td>
-<td><p>Married-civ-spouse</p></td>
-<td><p>Exec-managerial</p></td>
-<td><p>Husband</p></td>
+<tr>
+    <td class="tg-zv4m">82943611</td>
+    <td class="tg-8jgo">39</td>
+    <td class="tg-8jgo">State-gov</td>
+    <td class="tg-8jgo">77516</td>
+    <td class="tg-8jgo">Bachelors</td>
+    <td class="tg-8jgo">13</td>
+    <td class="tg-8jgo">Never-married</td>
+    <td class="tg-8jgo">Adm-clerical</td>
+    <td class="tg-8jgo">Not-in-family</td>
 </tr>
-<tr class="row-even"><td><p>93837254</p></td>
-<td><p>38</p></td>
-<td><p>Private</p></td>
-<td><p>215646</p></td>
-<td><p>HS-grad</p></td>
-<td><p>9</p></td>
-<td><p>Divorced</p></td>
-<td><p>Handlers-cleaners</p></td>
-<td><p>Not-in-family</p></td>
+<tr>
+    <td class="tg-zv4m">42643227</td>
+    <td class="tg-8jgo">50</td>
+    <td class="tg-8jgo">Self-emp-not-inc</td>
+    <td class="tg-8jgo">83311</td>
+    <td class="tg-8jgo">Bachelors</td>
+    <td class="tg-8jgo">13</td>
+    <td class="tg-8jgo">Married-civ-spouse</td>
+    <td class="tg-8jgo">Exec-managerial</td>
+    <td class="tg-8jgo">Husband</td>
 </tr>
-<tr class="row-odd"><td><p>87104229</p></td>
-<td><p>53</p></td>
-<td><p>Private</p></td>
-<td><p>234721</p></td>
-<td><p>11th</p></td>
-<td><p>7</p></td>
-<td><p>Married-civ-spouse</p></td>
-<td><p>Handlers-cleaners</p></td>
-<td><p>Husband</p></td>
+<tr>
+    <td class="tg-zv4m">93837254</td>
+    <td class="tg-8jgo">38</td>
+    <td class="tg-8jgo">Private</td>
+    <td class="tg-8jgo">215646</td>
+    <td class="tg-8jgo">HS-grad</td>
+    <td class="tg-8jgo">9</td>
+    <td class="tg-8jgo">Divorced</td>
+    <td class="tg-8jgo">Handlers-cleaners</td>
+    <td class="tg-8jgo">Not-in-family</td>
 </tr>
-<tr class="row-even"><td><p>90069867</p></td>
-<td><p>28</p></td>
-<td><p>Private</p></td>
-<td><p>338409</p></td>
-<td><p>Bachelors</p></td>
-<td><p>13</p></td>
-<td><p>Married-civ-spouse</p></td>
-<td><p>Prof-specialty</p></td>
-<td><p>Wife</p></td>
+<tr>
+    <td class="tg-zv4m">87104229</td>
+    <td class="tg-8jgo">53</td>
+    <td class="tg-8jgo">Private</td>
+    <td class="tg-8jgo">234721</td>
+    <td class="tg-8jgo">11th</td>
+    <td class="tg-8jgo">7</td>
+    <td class="tg-8jgo">Married-civ-spouse</td>
+    <td class="tg-8jgo">Handlers-cleaners</td>
+    <td class="tg-8jgo">Husband</td>
 </tr>
-</tbody>
-</table>
+<tr>
+    <td class="tg-zv4m">90069867</td>
+    <td class="tg-8jgo">28</td>
+    <td class="tg-8jgo">Private</td>
+    <td class="tg-8jgo">338409</td>
+    <td class="tg-8jgo">Bachelors</td>
+    <td class="tg-8jgo">13</td>
+    <td class="tg-8jgo">Married-civ-spouse</td>
+    <td class="tg-8jgo">Prof-specialty</td>
+    <td class="tg-8jgo">Wife</td>
+</tr>
+</tbody></table><p></p>
+</section>
+<section id="trailing-period-removal">
+<h2>Trailing Period Removal<a class="headerlink" href="#trailing-period-removal" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="strip_trailing_period">
+<span class="sig-name descname"><span class="pre">strip_trailing_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#strip_trailing_period" title="Permalink to this definition"></a></dt>
+<dd><p>Strip the trailing period from floats in a specified column of a DataFrame, if present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame containing the column to be processed.</p></li>
+<li><p><strong>column_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the column containing floats with potential trailing periods.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated DataFrame with the trailing periods removed from the specified column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function is designed to remove trailing periods
+from float values in a specified column of a DataFrame. This can be particularly
+useful when dealing with data that has been inconsistently formatted, ensuring
+that all float values are correctly represented.</p>
+</dd></dl>
+
+<p><strong>Example Usage</strong></p>
+<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to clean a column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame. We then use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to remove any trailing periods from the specified column.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">strip_trailing_period</span>
+
+<span class="c1"># Create a sample dataframe with trailing periods in some values</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Remove trailing periods from the &#39;values&#39; column</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">strip_trailing_period</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="s2">&quot;values&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<p><cite>First 6 Rows of Data Before and After Removing Trailing Periods (Adapted from Example)</cite></p>
+<table>
+    <tr>
+        <td style="padding-right: 10px;">
+
+            <strong>Before:</strong>
+
+            <table border="1" style="width: 150px; text-align: center;">
+                <tr>
+                    <th>Index</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1.0</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2.0</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>3.0</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>4.0</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>5.0</td>
+                </tr>
+                <tr style="background-color: #FFCCCC;">
+                    <td>5</td>
+                    <td>6.</td>
+                </tr>
+            </table>
+
+        </td>
+        <td style="padding-left: 10px;">
+
+            <strong>After:</strong>
+
+            <table border="1" style="width: 150px; text-align: center;">
+                <tr>
+                    <th>Index</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1.0</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2.0</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>3.0</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>4.0</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>5.0</td>
+                </tr>
+                <tr style="background-color: #FFCCCC;">
+                    <td>5</td>
+                    <td>6.0</td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table><p></p>
+<p><cite>Note:</cite> The last row shows 6 as an <cite>int</cite> with a trailing period with its conversion to <cite>float</cite>.</p>
+<p></p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
+</aside>
+</aside>
+</section>
 </section>
 
 
