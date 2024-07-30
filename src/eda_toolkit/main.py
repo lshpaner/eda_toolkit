@@ -61,10 +61,32 @@ def add_ids(
     Returns:
         pd.DataFrame: The updated dataframe with the new ID column.
     """
+    # Check for unique indices
+    if df.index.duplicated().any():
+        print("Warning: DataFrame index is not unique.")
+        print(
+            "Duplicate index entries:",
+            df.index[df.index.duplicated()].tolist(),
+        )
+    else:
+        print("DataFrame index is unique.")
+
     random.seed(seed)
 
-    # Generate a list of unique IDs
-    ids = ["".join(random.choices("0123456789", k=num_digits)) for _ in range(len(df))]
+    # Ensure the first digit is non-zero
+    def generate_id():
+        first_digit = random.choice("123456789")
+        other_digits = "".join(random.choices("0123456789", k=num_digits - 1))
+        return first_digit + other_digits
+
+    # Generate a set of unique IDs
+    ids = set()
+    while len(ids) < len(df):
+        new_ids = {generate_id() for _ in range(len(df) - len(ids))}
+        ids.update(new_ids)
+
+    # Convert the set of unique IDs to a list
+    ids = list(ids)
 
     # Create a new column in df for these IDs
     df[id_colname] = ids
