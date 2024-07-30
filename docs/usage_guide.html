@@ -136,11 +136,11 @@ image directories, ensuring they exist before performing any operations that dep
 <p>First, we define the base path as the parent directory of the current directory.
 The <code class="docutils literal notranslate"><span class="pre">os.pardir</span></code> constant, equivalent to <code class="docutils literal notranslate"><span class="pre">..</span></code>, is used to navigate up one
 directory level. Then, we define paths for the data directory and data output
-directory, both located one level up from the current directory. Next, we set
-paths for the PNG and SVG image directories, located within an <code class="docutils literal notranslate"><span class="pre">images</span></code> folder
-in the parent directory. Using the <cite>ensure_directory</cite> function, we then verify
-that these directories exist. If any of the specified directories do not exist,
-the function creates them.</p>
+directory, both located one level up from the current directory.</p>
+<p>Next, we set paths for the PNG and SVG image directories, located within an
+<code class="docutils literal notranslate"><span class="pre">images</span></code> folder in the parent directory. Using the <code class="docutils literal notranslate"><span class="pre">ensure_directory</span></code>
+function, we then verify that these directories exist. If any of the specified
+directories do not exist, the function creates them.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import function from library</span>
 <span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
 <span class="kn">import</span> <span class="nn">os</span> <span class="c1"># import operating system for dir</span>

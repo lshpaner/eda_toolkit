@@ -65,11 +65,13 @@ image directories, ensuring they exist before performing any operations that dep
 First, we define the base path as the parent directory of the current directory. 
 The ``os.pardir`` constant, equivalent to ``..``, is used to navigate up one 
 directory level. Then, we define paths for the data directory and data output 
-directory, both located one level up from the current directory. Next, we set 
-paths for the PNG and SVG image directories, located within an ``images`` folder 
-in the parent directory. Using the `ensure_directory` function, we then verify 
-that these directories exist. If any of the specified directories do not exist, 
-the function creates them.
+directory, both located one level up from the current directory. 
+
+
+Next, we set paths for the PNG and SVG image directories, located within an 
+``images`` folder in the parent directory. Using the ``ensure_directory`` 
+function, we then verify that these directories exist. If any of the specified 
+directories do not exist, the function creates them.
 
 .. code-block:: python
 
