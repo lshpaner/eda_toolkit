@@ -957,7 +957,7 @@ The first sheet will be a Table of Contents with hyperlinks to each summary tabl
 
    <div class="no-click">
 
-.. image:: ../assets/summarize_all_combinations.gif
+.. image:: ../assets/summarize_all_combinations_animated.gif
    :alt: EDA Toolkit Logo
    :align: left
    :width: 800px
