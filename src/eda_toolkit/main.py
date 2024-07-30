@@ -478,60 +478,87 @@ def save_dataframes_to_excel(file_path, df_dict, decimal_places=2):
 ################################################################################
 
 
-def contingency_table(df, col1, col2, SortBy):
+def contingency_table(df, cols=None, sort_by=0):
     """
-    Function to create contingency table from one or two columns in dataframe,
-    with sorting options.
+    Function to create a contingency table from one or more columns in a
+    dataframe, with sorting options.
 
     Args:
         df (dataframe): the dataframe to analyze
-        col1 (str): name of the first column in the dataframe to include
-        col2 (str): name of the second column in the dataframe to include
-                    if no second column, enter "None"
-        SortBy (str): enter 'Group' to sort results by col1 + col2 group
-                    any other value will sort by col1 + col2 group totals
+
+        cols (str or list, optional): name of the column (as a string) for a
+        single column or list of column names for multiple columns. Must provide
+        at least one column.
+
+        sort_by (int): enter 0 to sort results by cols group enter 1 to sort
+        results by totals descending
 
     Raises:
-        No Raises
+        ValueError: if no columns are specified or if sort_by is not 0 or 1
 
     Returns:
-        dataframe: dataframe with three columns; 'Groups', 'GroupTotal', and 'GroupPct'
+        dataframe: dataframe with specified columns, 'Total', and 'Percentage'
     """
-    if col2 != "None":
-        group_cols = [col1, col2]
-    else:
-        group_cols = [col1]
+    # Ensure at least one column is specified
+    if not cols or (isinstance(cols, list) and not cols):
+        raise ValueError("At least one DataFrame column must be specified.")
+
+    # Ensure sort_by is either 0 or 1
+    if sort_by not in [0, 1]:
+        raise ValueError("sort_by must be 0 or 1.")
+
+    # Convert single column to list
+    if isinstance(cols, str):
+        cols = [cols]
+
+    # Convert categorical columns to string to avoid fillna issue
+    for col in cols:
+        if df[col].dtype.name == "category":
+            df[col] = df[col].astype(str)
+
+    # Fill NA values in the dataframe
+    df = df.fillna("")
 
     # Create the contingency table with observed=True
     cont_df = (
-        df.groupby(group_cols, observed=True).size().reset_index(name="GroupTotal")
+        df.groupby(cols, observed=True)
+        .size()
+        .reset_index(
+            name="Total",
+        )
     )
 
     # Calculate the percentage
-    cont_df["GroupPct"] = 100 * cont_df["GroupTotal"] / len(df)
+    cont_df["Percentage"] = 100 * cont_df["Total"] / len(df)
 
-    # Sort values based on provided SortBy parameter
-    if SortBy == "Group":
-        cont_df = cont_df.sort_values(by=group_cols)
-    else:
-        cont_df = cont_df.sort_values(by="GroupTotal", ascending=False)
+    # Sort values based on provided sort_by parameter
+    if sort_by == 0:
+        cont_df = cont_df.sort_values(by=cols)
+    elif sort_by == 1:
+        cont_df = cont_df.sort_values(by="Total", ascending=False)
+
+    # Convert categorical columns to string to avoid fillna issue
+    cont_df[cols] = cont_df[cols].astype(str)
 
     # Results for all groups
     all_groups = pd.DataFrame(
         [
             {
-                **{col: "All" for col in group_cols},
-                "GroupTotal": cont_df["GroupTotal"].sum(),
-                "GroupPct": cont_df["GroupPct"].sum(),
+                **{col: "" for col in cols},
+                "Total": cont_df["Total"].sum(),
+                "Percentage": cont_df["Percentage"].sum(),
             }
         ]
     )
 
     # Combine results
-    c_table = pd.concat([cont_df, all_groups], ignore_index=True)
+    c_table = pd.concat(
+        [cont_df.fillna(""), all_groups.fillna("")],
+        ignore_index=True,
+    )
 
     # Update GroupPct to reflect as a percentage rounded to 2 decimal places
-    c_table["GroupPct"] = c_table["GroupPct"].round(2)
+    c_table["Percentage"] = c_table["Percentage"].round(2)
 
     return c_table
 
