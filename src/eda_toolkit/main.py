@@ -3,6 +3,7 @@ import numpy as np
 import random
 from itertools import combinations
 import datetime
+from datetime import datetime
 from IPython.display import display
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -148,9 +149,9 @@ def parse_date_with_rule(date_str):
     # Otherwise, try both formats where ambiguity exists
     else:
         try:
-            return datetime.strptime(date_str, "%m/%d/%Y").strftime("%Y-%m-%d")
-        except ValueError:
             return datetime.strptime(date_str, "%d/%m/%Y").strftime("%Y-%m-%d")
+        except ValueError:
+            return datetime.strptime(date_str, "%m/%d/%Y").strftime("%Y-%m-%d")
 
 
 ################################################################################
