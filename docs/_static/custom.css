@@ -1,1 +1,14 @@
 /* This file intentionally left blank. */
+.no-click {
+    pointer-events: none;
+}
+
+.docutils table caption {
+    text-align: left;
+}
+
+.sphinxsidebarwrapper img {
+    display: block;
+    margin: 0 auto;
+    padding: 20px 0;
+}
