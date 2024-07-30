@@ -956,10 +956,10 @@ The first sheet will be a Table of Contents with hyperlinks to each summary tabl
 
    <div class="no-click">
 
-.. image:: ../assets/summarize_all_combinations_animated.gif
+.. image:: ../assets/sum_all_combos.gif
    :alt: EDA Toolkit Logo
    :align: left
-   :width: 800px
+   :width: 900px
 
 .. raw:: html
 
