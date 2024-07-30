@@ -67,13 +67,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#strip_trailing_period"><code class="docutils literal notranslate"><span class="pre">strip_trailing_period()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#standardized-dates">Standardized Dates</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parse_date_with_rule"><code class="docutils literal notranslate"><span class="pre">parse_date_with_rule()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#standardized-dates">Standardized Dates</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#parse_date_with_rule"><code class="docutils literal notranslate"><span class="pre">parse_date_with_rule()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#binning-numerical-columns">Binning Numerical Columns</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#binning-numerical-columns">Binning Numerical Columns</a></li>
 </ul>
 
         </div>
@@ -448,9 +448,8 @@ that all float values are correctly represented.</p>
 <p><cite>Note:</cite> The last row shows 6 as an <cite>int</cite> with a trailing period with its conversion to <cite>float</cite>.</p>
 <p></p>
 </section>
-</section>
 <section id="standardized-dates">
-<h1>Standardized Dates<a class="headerlink" href="#standardized-dates" title="Permalink to this heading"></a></h1>
+<h2>Standardized Dates<a class="headerlink" href="#standardized-dates" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="parse_date_with_rule">
 <span class="sig-name descname"><span class="pre">parse_date_with_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse_date_with_rule" title="Permalink to this definition"></a></dt>
@@ -502,7 +501,7 @@ function to parse and standardize each date string to the ISO 8601 format.</p>
 </div>
 </section>
 <section id="binning-numerical-columns">
-<h1>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h1>
+<h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
 <p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
 does not have age or any other numerical column of interest binned, you can
 apply the following binning logic to categorize the data. Below, we use the age
@@ -556,6 +555,7 @@ and labels as needed for your specific data.</p>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
 </aside>
+</section>
 </section>
 
 

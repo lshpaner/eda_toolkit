@@ -394,7 +394,7 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
 \
 
 Standardized Dates
-==================
+-------------------
 
 .. function:: parse_date_with_rule(date_str)
 
@@ -445,7 +445,7 @@ function to parse and standardize each date string to the ISO 8601 format.
 
 
 Binning Numerical Columns
-==========================
+---------------------------
 
 If your DataFrame (e.g., the census data [1]_) 
 does not have age or any other numerical column of interest binned, you can 
