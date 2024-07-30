@@ -487,11 +487,11 @@ def contingency_table(df, cols=None, sort_by=0):
         df (dataframe): the dataframe to analyze
 
         cols (str or list, optional): name of the column (as a string) for a
-        single column or list of column names for multiple columns.
-        Must provide at least one column.
+        single column or list of column names for multiple columns. Must provide
+        at least one column.
 
-        sort_by (int): enter 0 to sort results by cols group
-        enter 1 to sort results by totals descending
+        sort_by (int): enter 0 to sort results by cols group enter 1 to sort
+        results by totals descending
 
     Raises:
         ValueError: if no columns are specified or if sort_by is not 0 or 1
@@ -499,15 +499,25 @@ def contingency_table(df, cols=None, sort_by=0):
     Returns:
         dataframe: dataframe with specified columns, 'Total', and 'Percentage'
     """
-
+    # Ensure at least one column is specified
     if not cols or (isinstance(cols, list) and not cols):
         raise ValueError("At least one DataFrame column must be specified.")
 
+    # Ensure sort_by is either 0 or 1
     if sort_by not in [0, 1]:
         raise ValueError("sort_by must be 0 or 1.")
 
+    # Convert single column to list
     if isinstance(cols, str):
         cols = [cols]
+
+    # Convert categorical columns to string to avoid fillna issue
+    for col in cols:
+        if df[col].dtype.name == "category":
+            df[col] = df[col].astype(str)
+
+    # Fill NA values in the dataframe
+    df = df.fillna("")
 
     # Create the contingency table with observed=True
     cont_df = (
