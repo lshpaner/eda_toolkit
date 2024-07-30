@@ -71,11 +71,11 @@ Key Features
 
 Prerequisites
 -------------
-Before you install ``kfre``, ensure your system meets the following requirements:
+Before you install ``eda_toolkit``, ensure your system meets the following requirements:
 
-- **Python**: version ``3.6`` or higher is required to run ``kfre``.
+- **Python**: version ``3.7.4`` or higher is required to run ``eda_toolkit``.
 
-Additionally, ``kfre`` depends on the following packages, which will be automatically installed when you install ``kfre``:
+Additionally, ``kfre`` depends on the following packages, which will be automatically installed when you install ``eda_toolkit``:
 
 - ``numpy``: version ``1.21.6`` or higher
 - ``pandas``: version ``1.3.5`` or higher
