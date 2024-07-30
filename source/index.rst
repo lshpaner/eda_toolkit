@@ -23,6 +23,8 @@
    <div style="height: 106px;"></div>
 
 
+Documentation
+==============
 
 .. toctree::
    :maxdepth: 3
