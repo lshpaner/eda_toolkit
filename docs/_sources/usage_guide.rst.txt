@@ -36,9 +36,9 @@ Data Preparation and Management
 Path directories
 ----------------
 
-.. function:: ensure_directory(path)
+**Ensure that the directory exists. If not, create it.**
 
-    Ensure that the directory exists. If not, create it.
+.. function:: ensure_directory(path)
 
     :param path: The path to the directory that needs to be ensured.
     :type path: str
@@ -110,9 +110,9 @@ directories do not exist, the function creates them.
 Adding Unique Identifiers
 --------------------------
 
-.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=True)
+**Add a column of unique IDs with a specified number of digits to the dataframe.**
 
-    Add a column of unique IDs with a specified number of digits to the dataframe.
+.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=True)
 
     :param df: The dataframe to add IDs to.
     :type df: pd.DataFrame
@@ -276,9 +276,9 @@ column in the dataframe.
 Trailing Period Removal
 -----------------------
 
-.. function:: strip_trailing_period(df, column_name)
+**Strip the trailing period from floats in a specified column of a DataFrame, if present.**
 
-    Strip the trailing period from floats in a specified column of a DataFrame, if present.
+.. function:: strip_trailing_period(df, column_name)
 
     :param df: The DataFrame containing the column to be processed.
     :type df: pd.DataFrame
@@ -295,7 +295,9 @@ Trailing Period Removal
 
 **Example Usage**
 
-In the example below, we demonstrate how to use the ``strip_trailing_period`` function to clean a column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame. We then use the ``strip_trailing_period`` function to remove any trailing periods from the specified column.
+In the example below, we demonstrate how to use the ``strip_trailing_period`` function to clean a 
+column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame. 
+We then use the ``strip_trailing_period`` function to remove any trailing periods from the specified column.
 
 .. code-block:: python
 
@@ -405,9 +407,9 @@ In the example below, we demonstrate how to use the ``strip_trailing_period`` fu
 Standardized Dates
 -------------------
 
-.. function:: parse_date_with_rule(date_str)
+**Parse and standardize date strings based on the provided rule.**
 
-    Parse and standardize date strings based on the provided rule.
+.. function:: parse_date_with_rule(date_str)
 
     This function takes a date string and standardizes it to the ``ISO 8601`` format
     (``YYYY-MM-DD``). It assumes dates are provided in either day/month/year or
@@ -498,14 +500,14 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
 DataFrame Analysis
 -------------------
 
-.. function:: dataframe_columns(df)
+**Analyze DataFrame columns, including dtype, null values, and unique value counts.**
 
-    Analyze DataFrame columns, including dtype, null values, and unique value counts.
+.. function:: dataframe_columns(df)
 
     This function analyzes the columns of a DataFrame, providing details about the data type, 
     the number and percentage of ``null`` values, the total number of unique values, and the most 
     frequent unique value along with its count and percentage. It handles special cases such as 
-    converting date columns and replacing empty strings with Pandas NA values.
+    converting date columns and replacing empty strings with Pandas ``NA`` values.
 
     :param df: The DataFrame to analyze.
     :type df: pandas.DataFrame
@@ -755,14 +757,11 @@ function to analyze a DataFrame's columns.
 Generating Summary Tables for Variable Combinations
 -----------------------------------------------------
 
-This section explains how to generate summary tables for all possible combinations of specified variables 
-in a DataFrame and save them to an Excel file. We will use the ``summarize_all_combinations`` function for this purpose.
+**This function generates summary tables for all possible combinations of specified variables 
+in a DataFrame and save them to an Excel file.**
 
 
 .. function:: summarize_all_combinations(df, variables, data_path, data_name, min_length=2)
-
-    Generates summary tables for all possible combinations of the specified
-    variables in the DataFrame and saves them to an Excel file.
 
     :param df: The pandas DataFrame containing the data.
     :type df: pandas.DataFrame
@@ -974,14 +973,14 @@ The first sheet will be a Table of Contents with hyperlinks to each summary tabl
 
 Saving DataFrames to Excel with Customized Formatting
 -------------------------------------------------------
+**Save multiple DataFrames to separate sheets in an Excel file with customized
+formatting.**
+
 
 This section explains how to save multiple DataFrames to separate sheets in an Excel file with customized formatting using the ``save_dataframes_to_excel`` function.
 
 
 .. function:: save_dataframes_to_excel(file_path, df_dict, decimal_places=0)
-
-    Save multiple DataFrames to separate sheets in an Excel file with customized
-    formatting.
 
     :param file_path: Full path to the output Excel file.
     :type file_path: str
@@ -996,6 +995,7 @@ This section explains how to save multiple DataFrames to separate sheets in an E
         - Headers will be bold and left-aligned without borders.
 
 The function performs the following tasks:
+
 - Writes each DataFrame to its respective sheet in the Excel file.
 - Rounds numeric columns to the specified number of decimal places.
 - Applies customized formatting to headers and cells.
@@ -1003,7 +1003,8 @@ The function performs the following tasks:
 
 **Example Usage**
 
-Below, we use the `save_dataframes_to_excel` function to save two DataFrames: the original DataFrame and a filtered DataFrame with ages between 18 and 40.
+Below, we use the ``save_dataframes_to_excel`` function to save two DataFrames: 
+the original DataFrame and a filtered DataFrame with ages between `18` and `40`.
 
 .. code-block:: python
 
@@ -1037,11 +1038,11 @@ between `18` and `40`, each on separate sheets with customized formatting.
 Creating Contingency Tables
 ----------------------------
 
+**Create a contingency table from one or more columns in a DataFrame, with sorting options.**
+
 This section explains how to create contingency tables from one or more columns in a DataFrame using the ``contingency_table`` function.
 
 .. function:: contingency_table(df, cols=None, sort_by=0)
-
-    Create a contingency table from one or more columns in a DataFrame, with sorting options.
 
     :param df: The DataFrame to analyze.
     :type df: pandas.DataFrame
