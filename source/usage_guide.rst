@@ -427,7 +427,7 @@ function to parse and standardize each date string to the ISO 8601 format.
 
 .. code-block:: python
 
-    from datetime import datetime
+    from eda_toolkit import parse_date_with_rule
 
     # Sample date strings
     date_strings = ["15/04/2021", "04/15/2021", "01/12/2020", "12/01/2020"]
