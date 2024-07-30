@@ -22,9 +22,8 @@
    
    <div style="height: 106px;"></div>
 
-
-Documentation
-==============
+Table of Contents
+==================
 
 .. toctree::
    :maxdepth: 3
