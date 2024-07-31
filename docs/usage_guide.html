@@ -1392,8 +1392,24 @@ statistical graphics.</p>
 <li><p><strong>stat</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The type of statistic to display on the y-axis (<code class="docutils literal notranslate"><span class="pre">'count'</span></code>, <code class="docutils literal notranslate"><span class="pre">'density'</span></code>, <code class="docutils literal notranslate"><span class="pre">'frequency'</span></code>, <code class="docutils literal notranslate"><span class="pre">'probability'</span></code>, <code class="docutils literal notranslate"><span class="pre">'proportion'</span></code>, <code class="docutils literal notranslate"><span class="pre">'percent'</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">'density'</span></code>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – <ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">'hist'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kde'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'both'</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">stat</span></code> is not one of ‘count’, ‘density’, ‘frequency’, ‘probability’, ‘proportion’, ‘percent’.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">log_scale_vars</span></code> contains variables that are not present in the DataFrame.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">fill</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> and <code class="docutils literal notranslate"><span class="pre">hist_edgecolor</span></code> is not the default.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.12)"><strong>UserWarning</strong></a> – <ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">stat</span></code> is set to ‘count’ while <code class="docutils literal notranslate"><span class="pre">kde</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, as it may produce misleading plots.</p></li>
+<li><p>If both <code class="docutils literal notranslate"><span class="pre">bins</span></code> and <code class="docutils literal notranslate"><span class="pre">binwidth</span></code> are specified, which may affect performance.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
