@@ -1253,7 +1253,6 @@ HTML file using the ``.render()`` method of the Styler object.
 
 \
 
-
 Binning Numerical Columns
 ---------------------------
 
@@ -1306,6 +1305,93 @@ label to each age in the DataFrame. The ``pd.cut`` function from pandas is used 
 categorize the ages and assign them to a new column, ``age_group``. Adjust the bins 
 and labels as needed for your specific data.
 
+
+Dynamic Plots
+================
+
+KDE and Histogram Distribution Plots
+--------------------------------------
+
+Generate KDE or histogram distribution plots for specified columns in a DataFrame.
+
+The ``kde_distributions`` function is a versatile tool designed for generating 
+Kernel Density Estimate (KDE) plots, histograms, or a combination of both for 
+specified columns within a DataFrame. This function is particularly useful for 
+visualizing the distribution of numerical data across various categories or groups. 
+It leverages the powerful ``seaborn`` library for plotting, which is built on top of 
+``matplotlib`` and provides a high-level interface for drawing attractive and informative 
+statistical graphics.
+
+
+**Key Features and Parameters**
+
+- **Flexible Plotting**: The function supports creating histograms, KDE plots, or a combination of both for specified columns, allowing users to visualize data distributions effectively.
+- **Leverages Seaborn Library**: The function is built on the ``seaborn`` library, which provides high-level, attractive visualizations, making it easy to create complex plots with minimal code.
+- **Customization**: Users have control over plot aesthetics, such as colors, fill options, grid sizes, and more, allowing them to tailor the visualizations to their needs.
+- **Log Scaling**: The function includes an option to apply logarithmic scaling to specific variables, which is useful when dealing with data that spans several orders of magnitude.
+- **Output Options**: The function supports saving plots as PNG or SVG files, with customizable filenames and output directories, making it easy to integrate the plots into reports or presentations.
+
+
+.. function:: kde_distributions(df, vars_of_interest=None, grid_figsize=(10, 8), single_figsize=(6, 4), kde=True, hist_color="#0000FF", kde_color="#FF0000", hist_edgecolor="#000000", hue=None, fill=True, n_rows=1, n_cols=1, w_pad=1.0, h_pad=1.0, text_wrap=50, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_path_png=None, single_var_image_path_svg=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, stat="density",)
+
+    :param df: The DataFrame containing the data to plot.
+    :type df: pandas.DataFrame
+    :param vars_of_interest: List of column names for which to generate distribution plots.
+    :type vars_of_interest: list of str, optional
+    :param grid_figsize: Size of the overall grid figure. Defaults to ``(10, 8)``.
+    :type grid_figsize: tuple, optional
+    :param single_figsize: Size of individual figures. Defaults to ``(6, 4)``.
+    :type single_figsize: tuple, optional
+    :param kde: Whether to include KDE plots on the histograms. Defaults to ``True``.
+    :type kde: bool, optional
+    :param hist_color: Color of the histogram bars. Defaults to ``'#0000FF'``.
+    :type hist_color: str, optional
+    :param kde_color: Color of the KDE plot. Defaults to ``'#FF0000'``.
+    :type kde_color: str, optional
+    :param hist_edgecolor: Color of the histogram bar edges. Defaults to ``'#000000'``.
+    :type hist_edgecolor: str, optional
+    :param hue: Column name to group data by.
+    :type hue: str, optional
+    :param fill: Whether to fill the histogram bars with color. Defaults to ``True``.
+    :type fill: bool, optional
+    :param n_rows: Number of rows in the subplot grid. Defaults to ``1``.
+    :type n_rows: int, optional
+    :param n_cols: Number of columns in the subplot grid. Defaults to ``1``.
+    :type n_cols: int, optional
+    :param w_pad: Width padding between subplots. Defaults to ``1.0``.
+    :type w_pad: float, optional
+    :param h_pad: Height padding between subplots. Defaults to ``1.0``.
+    :type h_pad: float, optional
+    :param text_wrap: Maximum width of the title text before wrapping. Defaults to ``50``.
+    :type text_wrap: int, optional
+    :param image_path_png: Directory path to save the PNG image of the overall distribution plots.
+    :type image_path_png: str, optional
+    :param image_path_svg: Directory path to save the SVG image of the overall distribution plots.
+    :type image_path_svg: str, optional
+    :param image_filename: Filename to use when saving the overall distribution plots.
+    :type image_filename: str, optional
+    :param bbox_inches: Bounding box to use when saving the figure. For example, ``'tight'``.
+    :type bbox_inches: str, optional
+    :param single_var_image_path_png: Directory path to save the PNG images of the separate distribution plots.
+    :type single_var_image_path_png: str, optional
+    :param single_var_image_path_svg: Directory path to save the SVG images of the separate distribution plots.
+    :type single_var_image_path_svg: str, optional
+    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename.
+    :type single_var_image_filename: str, optional
+    :param y_axis_label: Label for the y-axis. Defaults to ``'Density'``.
+    :type y_axis_label: str, optional
+    :param plot_type: The type of plot to generate (``'hist'``, ``'kde'``, or ``'both'``). Defaults to ``'both'``.
+    :type plot_type: str, optional
+    :param log_scale_vars: List of variable names to apply log scaling.
+    :type log_scale_vars: list of str, optional
+    :param bins: Specification of histogram bins. Defaults to ``'auto'``.
+    :type bins: int or sequence, optional
+    :param binwidth: Width of each bin, overrides bins but can be used with binrange.
+    :type binwidth: number or pair of numbers, optional
+    :param stat: The type of statistic to display on the y-axis (``'count'``, ``'density'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``). Defaults to ``'density'``.
+    :type stat: str, optional
+
+    :returns: ``None``
 
 
 
