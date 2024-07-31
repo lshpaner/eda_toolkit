@@ -26,7 +26,7 @@ This guide provides detailed instructions and examples for using the functions
 provided in the ``eda_toolkit`` library and how to use them effectively in your projects.
 
 For most of the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository [1]_. This dataset provides a rich source of
+the UCI Machine Learning Repository [#]_. This dataset provides a rich source of
 information for demonstrating the functionalities of the ``eda_toolkit``.
 
 
@@ -1305,11 +1305,8 @@ categorize the ages and assign them to a new column, ``age_group``. Adjust the b
 and labels as needed for your specific data.
 
 
-Dynamic Plots
-================
-
 KDE and Histogram Distribution Plots
---------------------------------------
+=======================================
 
 Generate KDE or histogram distribution plots for specified columns in a DataFrame.
 
@@ -1317,51 +1314,56 @@ The ``kde_distributions`` function is a versatile tool designed for generating
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for 
 specified columns within a DataFrame. This function is particularly useful for 
 visualizing the distribution of numerical data across various categories or groups. 
-It leverages the powerful ``seaborn`` library for plotting, which is built on top of 
-``matplotlib`` and provides a high-level interface for drawing attractive and informative 
+It leverages the powerful seaborn library [2]_ for plotting, which is built on top of 
+matplotlib [3]_ and provides a high-level interface for drawing attractive and informative 
 statistical graphics.
 
 
 **Key Features and Parameters**
 
 - **Flexible Plotting**: The function supports creating histograms, KDE plots, or a combination of both for specified columns, allowing users to visualize data distributions effectively.
-- **Leverages Seaborn Library**: The function is built on the ``seaborn`` library, which provides high-level, attractive visualizations, making it easy to create complex plots with minimal code.
-- **Customization**: Users have control over plot aesthetics, such as colors, fill options, grid sizes, and more, allowing them to tailor the visualizations to their needs.
+- **Leverages Seaborn Library**: The function is built on the `seaborn` library, which provides high-level, attractive visualizations, making it easy to create complex plots with minimal code.
+- **Customization**: Users have control over plot aesthetics, such as colors, fill options, grid sizes, axis labels, tick marks, and more, allowing them to tailor the visualizations to their needs.
+- **Scientific Notation Control**: The function allows disabling scientific notation on the axes, providing better readability for certain types of data.
 - **Log Scaling**: The function includes an option to apply logarithmic scaling to specific variables, which is useful when dealing with data that spans several orders of magnitude.
 - **Output Options**: The function supports saving plots as PNG or SVG files, with customizable filenames and output directories, making it easy to integrate the plots into reports or presentations.
 
+.. function:: kde_distributions(df, vars_of_interest=None, grid_figsize=(10, 8), single_figsize=(6, 4), kde=True, hist_color="#0000FF", kde_color="#FF0000", hist_edgecolor="#000000", hue=None, fill=True, n_rows=1, n_cols=1, w_pad=1.0, h_pad=1.0, text_wrap=50, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_path_png=None, single_var_image_path_svg=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=8, disable_sci_notation=False, stat="density")
 
-.. function:: kde_distributions(df, vars_of_interest=None, grid_figsize=(10, 8), single_figsize=(6, 4), kde=True, hist_color="#0000FF", kde_color="#FF0000", hist_edgecolor="#000000", hue=None, fill=True, n_rows=1, n_cols=1, w_pad=1.0, h_pad=1.0, text_wrap=50, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_path_png=None, single_var_image_path_svg=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, stat="density",)
+    Generate KDE or histogram distribution plots for specified columns in a DataFrame.
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
     :param vars_of_interest: List of column names for which to generate distribution plots.
     :type vars_of_interest: list of str, optional
-    :param grid_figsize: Size of the overall grid figure. Defaults to ``(10, 8)``.
+    :param grid_figsize: Size of the overall grid figure, default is ``(10, 8)``.
     :type grid_figsize: tuple, optional
-    :param single_figsize: Size of individual figures. Defaults to ``(6, 4)``.
+    :param single_figsize: Size of individual figures for each variable, default is ``(6, 4)``.
     :type single_figsize: tuple, optional
-    :param kde: Whether to include KDE plots on the histograms. Defaults to ``True``.
+    :param kde: Whether to include KDE plots on the histograms, default is ``True``.
     :type kde: bool, optional
-    :param hist_color: Color of the histogram bars. Defaults to ``'#0000FF'``.
+    :param hist_color: Color of the histogram bars, default is ``'#0000FF'``.
     :type hist_color: str, optional
-    :param kde_color: Color of the KDE plot. Defaults to ``'#FF0000'``.
+    :param kde_color: Color of the KDE plot, default is ``'#FF0000'``.
     :type kde_color: str, optional
-    :param hist_edgecolor: Color of the histogram bar edges. Defaults to ``'#000000'``.
+    :param hist_edgecolor: Color of the histogram bar edges, default is ``'#000000'``.
     :type hist_edgecolor: str, optional
-    :param hue: Column name to group data by.
+    :param hue: Column name to group data by, adding different colors for each group.
     :type hue: str, optional
-    :param fill: Whether to fill the histogram bars with color. Defaults to ``True``.
+    :param fill: Whether to fill the histogram bars with color, default is ``True``.
     :type fill: bool, optional
-    :param n_rows: Number of rows in the subplot grid. Defaults to ``1``.
+    :param fill_alpha: Alpha transparency for the fill color of the histogram bars, where
+            ``0`` is fully transparent and ``1`` is fully opaque. Default is ``1``.
+    :type fill_alpha: float, optional
+    :param n_rows: Number of rows in the subplot grid, default is ``1``.
     :type n_rows: int, optional
-    :param n_cols: Number of columns in the subplot grid. Defaults to ``1``.
+    :param n_cols: Number of columns in the subplot grid, default is ``1``.
     :type n_cols: int, optional
-    :param w_pad: Width padding between subplots. Defaults to ``1.0``.
+    :param w_pad: Width padding between subplots, default is ``1.0``.
     :type w_pad: float, optional
-    :param h_pad: Height padding between subplots. Defaults to ``1.0``.
+    :param h_pad: Height padding between subplots, default is ``1.0``.
     :type h_pad: float, optional
-    :param text_wrap: Maximum width of the title text before wrapping. Defaults to ``50``.
+    :param text_wrap: Maximum width of the title text before wrapping, default is ``50``.
     :type text_wrap: int, optional
     :param image_path_png: Directory path to save the PNG image of the overall distribution plots.
     :type image_path_png: str, optional
@@ -1375,36 +1377,270 @@ statistical graphics.
     :type single_var_image_path_png: str, optional
     :param single_var_image_path_svg: Directory path to save the SVG images of the separate distribution plots.
     :type single_var_image_path_svg: str, optional
-    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename.
+    :param single_var_image_filename: Filename to use when saving the separate distribution plots.
+            The variable name will be appended to this filename.
     :type single_var_image_filename: str, optional
-    :param y_axis_label: Label for the y-axis. Defaults to ``'Density'``.
+    :param y_axis_label: The label to display on the y-axis, default is ``'Density'``.
     :type y_axis_label: str, optional
-    :param plot_type: The type of plot to generate (``'hist'``, ``'kde'``, or ``'both'``). Defaults to ``'both'``.
+    :param plot_type: The type of plot to generate, options are ``'hist'``, ``'kde'``, or ``'both'``. Default is ``'both'``.
     :type plot_type: str, optional
     :param log_scale_vars: List of variable names to apply log scaling.
     :type log_scale_vars: list of str, optional
-    :param bins: Specification of histogram bins. Defaults to ``'auto'``.
+    :param bins: Specification of histogram bins, default is ``'auto'``.
     :type bins: int or sequence, optional
     :param binwidth: Width of each bin, overrides bins but can be used with binrange.
     :type binwidth: number or pair of numbers, optional
-    :param stat: The type of statistic to display on the y-axis (``'count'``, ``'density'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``). Defaults to ``'density'``.
+    :param label_fontsize: Font size for axis labels, including xlabel, ylabel, and tick marks, default is ``10``.
+    :type label_fontsize: int, optional
+    :param disable_sci_notation: Toggle to disable scientific notation on axes, default is ``False``.
+    :type disable_sci_notation: bool, optional
+    :param stat: Aggregate statistic to compute in each bin (e.g., ``'count'``, ``'frequency'``,
+            ``'probability'``, ``'percent'``, ``'density'``), default is ``'density'``.
     :type stat: str, optional
 
+    
     :raises ValueError: 
-
         - If ``plot_type`` is not one of ``'hist'``, ``'kde'``, or ``'both'``.
-        - If ``stat`` is not one of 'count', 'density', 'frequency', 'probability', 'proportion', 'percent'.
+        - If ``stat`` is not one of ``'count'``, ``'density'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``.
         - If ``log_scale_vars`` contains variables that are not present in the DataFrame.
         - If ``fill`` is set to ``False`` and ``hist_edgecolor`` is not the default.
     
     :raises UserWarning:
-
         - If ``stat`` is set to 'count' while ``kde`` is ``True``, as it may produce misleading plots.
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
 
     :returns: ``None``
 
+\
+
+.. raw:: html
+    
+    <br>
 
 
 
-.. [1] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
+KDE and Histograms Example
+---------------------------
+
+In the below example, the ``kde_distributions`` function is used to generate 
+histograms for several variables of interest: ``"age"``, ``"education-num"``, 
+``"hours-per-week"``, and ``"capital-gain"``. These variables represent 
+different demographic and financial attributes from the dataset. The 
+``kde=True`` parameter ensures that a Kernel Density Estimate (KDE) plot is 
+overlaid on the histograms, providing a smoothed representation of the data's 
+probability density.
+
+The visualizations are arranged in a single row of four columns, as specified 
+by ``n_rows=1`` and ``n_cols=4``, respectively. The overall size of the grid 
+figure is set to `16 inches` wide and `4 inches tall` (``grid_figsize=(16, 4)``), 
+while each individual plot is configured to be `4 inches` by `4 inches` 
+(``single_figsize=(4, 4)``). The ``fill=True`` parameter fills the histogram 
+bars with color, and the spacing between the subplots is managed using 
+``w_pad=1`` and ``h_pad=1``, which add `1 inch` of padding both horizontally and 
+vertically.
+
+To handle longer titles, the ``text_wrap=50`` parameter ensures that the title 
+text wraps to a new line after `50 characters`. The ``bbox_inches="tight"`` setting 
+is used when saving the figure, ensuring that it is cropped to remove any excess 
+whitespace around the edges. The variables specified in ``vars_of_interest`` are 
+passed directly to the function for visualization.
+
+Each plot is saved individually with filenames that are prefixed by 
+``"kde_density_single_distribution"``, followed by the variable name. The `y-axis`
+for all plots is labeled as "Density" (``y_axis_label="Density"``), reflecting that 
+the height of the bars or KDE line represents the data's density. The histograms 
+are divided into `10 bins` (``bins=10``), offering a clear view of the distribution 
+of each variable.
+
+The ``plot_type="hist"`` parameter indicates that only histograms will be generated 
+for each variable. Additionally, the font sizes for the axis labels and tick labels 
+are set to `16 points` (``label_fontsize=16``) and `14 points` (``tick_fontsize=14``), 
+respectively, ensuring that all text within the plots is legible and well-formatted.
+
+
+.. code-block:: python
+
+    vars_of_interest = [
+        "age",
+        "education-num",
+        "hours-per-week",
+        "capital-gain",
+    ]
+
+    kde_distributions(
+        df=df,
+        kde=True,
+        n_rows=1,
+        n_cols=4,
+        grid_figsize=(16, 4),  # Size of the overall grid figure
+        single_figsize=(4, 4),  # Size of individual figures
+        fill=True,
+        fill_alpha=0.60,
+        w_pad=1,
+        h_pad=1,
+        text_wrap=50,
+        bbox_inches="tight",
+        vars_of_interest=vars_of_interest,
+        single_var_image_filename="kde_density_single_distribution",
+        y_axis_label="Density",
+        bins=10,
+        plot_type="hist",
+        label_fontsize=16,  # Font size for axis labels
+        tick_fontsize=14,  # Font size for tick labels
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/kde_density_distributions.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Histogram Example (Density)
+----------------------------
+
+In this example, the kde_distributions function is used to generate histograms for 
+the variables ``"age"``, ``"education-num"``, ``"hours-per-week"``, and ``"capital-gain"``, 
+but with ``kde=False``, meaning no KDE plots are included—only histograms are displayed. 
+The plots are arranged in a single row of four columns (``n_rows=1, n_cols=4``), 
+with a grid size of `16x4 inches` (``grid_figsize=(16, 4)``). The histograms are 
+divided into `10 bins` (``bins=10``), and the y-axis is labeled "Density" (``y_axis_label="Density"``).
+Font sizes for the axis labels and tick labels are set to `16` and `14` points, 
+respectively, ensuring clarity in the visualizations. This setup focuses on the 
+histogram representation without the KDE overlay.
+
+
+.. code-block:: python
+
+    vars_of_interest = [
+        "age",
+        "education-num",
+        "hours-per-week",
+        "capital-gain",
+    ]
+
+    kde_distributions(
+        df=df,
+        kde=False,
+        n_rows=1,
+        n_cols=4,
+        grid_figsize=(16, 4),  # Size of the overall grid figure
+        single_figsize=(4, 4),  # Size of individual figures
+        w_pad=1,
+        h_pad=1,
+        text_wrap=50,
+        bbox_inches="tight",
+        vars_of_interest=vars_of_interest,
+        single_var_image_filename="kde_density_single_distribution",
+        y_axis_label="Density",
+        bins=10,
+        plot_type="hist",
+        stat="Density",
+        label_fontsize=16,  # Font size for axis labels
+        tick_fontsize=14,  # Font size for tick labels
+    )
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/hist_density_distributions.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+
+\
+
+
+Histogram Example (Count)
+--------------------------
+
+In this example, the kde_distributions function is modified to generate histograms 
+with a few key changes. The ``hist_color`` is set to `"orange"`, changing the color of the 
+histogram bars. The `y-axis` label is updated to "Count" (``y_axis_label="Count"``), 
+reflecting that the histograms display the count of observations within each bin. 
+Additionally, the stat parameter is set to `"Count"` to show the actual counts instead of 
+densities. The rest of the parameters remain the same as in the previous example, 
+with the plots arranged in a single row of four columns (``n_rows=1, n_cols=4``), 
+a grid size of `16x4 inches`, and a bin count of `10`. This setup focuses on 
+visualizing the raw counts in the dataset using orange-colored histograms.
+
+.. code-block:: python
+
+
+    vars_of_interest = [
+        "age",
+        "education-num",
+        "hours-per-week",
+        "capital-gain",
+    ]
+
+    kde_distributions(
+        df=df,
+        kde=False,
+        n_rows=1,
+        n_cols=4,
+        grid_figsize=(16, 4),  # Size of the overall grid figure
+        single_figsize=(4, 4),  # Size of individual figures
+        w_pad=1,
+        h_pad=1,
+        text_wrap=50,
+        hist_color="orange",
+        bbox_inches="tight",
+        vars_of_interest=vars_of_interest,
+        y_axis_label="Count",
+        bins=10,
+        plot_type="hist",
+        stat="Count",
+        label_fontsize=16,  # Font size for axis labels
+        tick_fontsize=14,  # Font size for tick labels
+    )
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/count_hist_density_distributions.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+\
+
+.. [#] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
+
+.. [2] Michael Waskom (2021). Seaborn: statistical data visualization. *Journal of Open Source Software*, 6(60), 3021, https://doi.org/10.21105/joss.03021.
+
+.. [3] Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. *Computing in Science & Engineering*, 9(3), 90-95. https://doi.org/10.1109/MCSE.2007.55
