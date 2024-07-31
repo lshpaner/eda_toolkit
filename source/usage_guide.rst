@@ -1054,7 +1054,6 @@ This section explains how to create contingency tables from one or more columns 
     :type cols: str or list, optional
     :param sort_by: Enter ``0`` to sort results by column groups; enter ``1`` to sort results by totals in descending order.
     :type sort_by: int
-
     :raises ValueError: If no columns are specified or if sort_by is not ``0`` or ``1``.
     :returns: A DataFrame with the specified columns, ``'Total'``, and ``'Percentage'``.
     :rtype: pandas.DataFrame
@@ -1390,6 +1389,18 @@ statistical graphics.
     :type binwidth: number or pair of numbers, optional
     :param stat: The type of statistic to display on the y-axis (``'count'``, ``'density'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``). Defaults to ``'density'``.
     :type stat: str, optional
+
+    :raises ValueError: 
+
+        - If ``plot_type`` is not one of ``'hist'``, ``'kde'``, or ``'both'``.
+        - If ``stat`` is not one of 'count', 'density', 'frequency', 'probability', 'proportion', 'percent'.
+        - If ``log_scale_vars`` contains variables that are not present in the DataFrame.
+        - If ``fill`` is set to ``False`` and ``hist_edgecolor`` is not the default.
+    
+    :raises UserWarning:
+
+        - If ``stat`` is set to 'count' while ``kde`` is ``True``, as it may produce misleading plots.
+        - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
 
     :returns: ``None``
 
