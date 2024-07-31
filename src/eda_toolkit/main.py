@@ -10,6 +10,7 @@ import os
 import sys
 import warnings
 
+
 if sys.version_info >= (3, 7):
     from datetime import datetime
 else:
@@ -112,7 +113,8 @@ def strip_trailing_period(
     column_name,
 ):
     """
-    Strip the trailing period from floats in a specified column of a DataFrame, if present.
+    Strip the trailing period from floats in a specified column of a DataFrame,
+    if present.
 
     Parameters:
     -----------
@@ -125,7 +127,8 @@ def strip_trailing_period(
     Returns:
     --------
     pd.DataFrame
-        The updated DataFrame with the trailing periods removed from the specified column.
+        The updated DataFrame with the trailing periods removed from the
+        specified column.
     """
 
     def fix_value(value):
@@ -644,10 +647,15 @@ def highlight_columns(df, columns, color="yellow"):
 
 def kde_distributions(
     df,
-    dist_list,
-    x,
-    y,
+    vars_of_interest=None,
+    grid_figsize=(10, 8),  # Size of the overall grid figure
+    single_figsize=(6, 4),  # Size of individual figures
     kde=True,
+    hist_color="#0000FF",  # Default color blue as hex code
+    kde_color="#FF0000",  # Default color red as hex code
+    hist_edgecolor="#000000",  # Default edge color black as hex code
+    hue=None,  # Added hue parameter
+    fill=True,  # Added fill parameter
     n_rows=1,
     n_cols=1,
     w_pad=1.0,
@@ -657,12 +665,16 @@ def kde_distributions(
     image_path_svg=None,
     image_filename=None,
     bbox_inches=None,
-    vars_of_interest=None,  # List of variables of interest
     single_var_image_path_png=None,
     single_var_image_path_svg=None,
     single_var_image_filename=None,
-    y_axis="count",  # Parameter to control y-axis ('count' or 'density')
+    y_axis_label="Density",  # Customizable y-axis label
     plot_type="both",  # Parameter to control the plot type ('hist', 'kde', or 'both')
+    log_scale_vars=None,  # Parameter to specify which variables to apply log scale
+    bins="auto",  # Default to 'auto' as per sns
+    binwidth=None,  # Parameter to control the width of bins
+    stat="density",  # Parameter to control stat ('count', 'density',
+    # 'frequency', 'probability', 'proportion', 'percent')
 ):
     """
     Generate KDE or histogram distribution plots for specified columns in a DataFrame.
@@ -672,17 +684,32 @@ def kde_distributions(
     df : pandas.DataFrame
         The DataFrame containing the data to plot.
 
-    dist_list : list of str
+    vars_of_interest : list of str, optional
         List of column names for which to generate distribution plots.
 
-    x : int or float
-        Width of the overall figure.
+    grid_figsize : tuple, optional (default=(10, 8))
+        Size of the overall grid figure.
 
-    y : int or float
-        Height of the overall figure.
+    single_figsize : tuple, optional (default=(6, 4))
+        Size of individual figures.
 
     kde : bool, optional (default=True)
         Whether to include KDE plots on the histograms.
+
+    hist_color : str, optional (default='#0000FF')
+        Color of the histogram bars.
+
+    kde_color : str, optional (default='#FF0000')
+        Color of the KDE plot.
+
+    hist_edgecolor : str, optional (default='#000000')
+        Color of the histogram bar edges.
+
+    hue : str, optional
+        Column name to group data by.
+
+    fill : bool, optional (default=True)
+        Whether to fill the histogram bars with color.
 
     n_rows : int, optional (default=1)
         Number of rows in the subplot grid.
@@ -711,9 +738,6 @@ def kde_distributions(
     bbox_inches : str, optional
         Bounding box to use when saving the figure. For example, 'tight'.
 
-    vars_of_interest : list of str, optional
-        List of column names for which to generate separate distribution plots.
-
     single_var_image_path_png : str, optional
         Directory path to save the PNG images of the separate distribution plots.
 
@@ -724,63 +748,161 @@ def kde_distributions(
         Filename to use when saving the separate distribution plots.
         The variable name will be appended to this filename.
 
-    y_axis : str, optional (default='count')
-        The type of y-axis to display ('count' or 'density').
+    y_axis_label : str, optional (default='Count')
+        Label for the y-axis.
 
     plot_type : str, optional (default='both')
         The type of plot to generate ('hist', 'kde', or 'both').
+
+    log_scale_vars : list of str, optional
+        List of variable names to apply log scaling.
+
+    bins : int or sequence, optional (default='auto')
+        Specification of histogram bins.
+
+    binwidth : number or pair of numbers, optional
+        Width of each bin, overrides bins but can be used with binrange.
+
+    stat : str, optional (default='density')
+        The type of statistic to display on the y-axis ('count', 'density',
+        'frequency', 'probability', 'proportion', 'percent').
 
     Returns:
     --------
     None
     """
 
-    if not dist_list:
-        print("Error: No distribution list provided.")
-        return
+    valid_stats = [
+        "count",
+        "density",
+        "frequency",
+        "probability",
+        "proportion",
+        "percent",
+    ]
 
-    y_axis = y_axis.lower()
-    if y_axis not in ["count", "density"]:
-        raise ValueError('y_axis can either be "count" or "density"')
+    if vars_of_interest is None:
+        print("Error: No variables of interest provided.")
+        return
 
     plot_type = plot_type.lower()
     if plot_type not in ["hist", "kde", "both"]:
         raise ValueError('plot_type can either be "hist", "kde", or "both"')
 
-    # Calculate the number of plots
-    num_plots = len(dist_list)
-    total_slots = n_rows * n_cols
+    stat = stat.lower()
+    if stat not in valid_stats:
+        raise ValueError(f"stat can either be {', '.join(valid_stats)}")
+
+    # Warn if stat="count" and kde=True
+    if stat == "count" and kde:
+        warnings.warn("Using KDE with stat='count' may produce misleading plots.")
+
+    # Check if edgecolor is being set while fill is False
+    if not fill and hist_edgecolor != "#000000":
+        raise ValueError("Cannot change edgecolor when fill is set to False")
+
+    # Check if all log_scale_vars are in the DataFrame
+    if log_scale_vars:
+        if isinstance(log_scale_vars, str):
+            log_scale_vars = [log_scale_vars]
+        invalid_vars = [var for var in log_scale_vars if var not in df.columns]
+        if invalid_vars:
+            raise ValueError(f"Invalid log_scale_vars: {invalid_vars}")
+
+    # Warn if both bins and binwidth are specified
+    if bins != "auto" and binwidth is not None:
+        warnings.warn(
+            "Specifying both bins and binwidth may affect performance.",
+            UserWarning,
+        )
 
     # Create subplots grid
-    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(x, y))
+    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=grid_figsize)
 
     # Flatten the axes array to simplify iteration
     axes = axes.flatten()
 
     # Iterate over the provided column list and corresponding axes
-    for ax, col in zip(axes[:num_plots], dist_list):
+    for ax, col in zip(axes[: len(vars_of_interest)], vars_of_interest):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", UserWarning)
             # Wrap the title if it's too long
             title = f"Distribution of {col}"
 
-            if plot_type == "hist" or plot_type == "both":
-                sns.histplot(
-                    df[col],
-                    kde=False if plot_type == "hist" else kde,
-                    ax=ax,
-                    stat="density" if y_axis == "density" else "count",
-                )
-            if plot_type == "kde":
-                sns.kdeplot(df[col], ax=ax, fill=True)
-            elif plot_type == "both":
-                sns.kdeplot(df[col], ax=ax)
+            # Determine if log scale should be applied to this variable
+            log_scale = col in log_scale_vars if log_scale_vars else False
 
-            ax.set_ylabel("Density" if y_axis == "density" else "Count")
+            # Filter out non-positive values if log_scale is True
+            data = df[df[col] > 0] if log_scale else df
+
+            if plot_type == "hist":
+                sns.histplot(
+                    data=data,
+                    x=col,
+                    kde=kde,
+                    ax=ax,
+                    hue=hue,
+                    color=hist_color if hue is None and fill else None,
+                    edgecolor=hist_edgecolor,
+                    stat=stat,
+                    fill=fill,
+                    log_scale=log_scale,
+                    bins=(
+                        bins if binwidth is None else None
+                    ),  # Use bins if binwidth is None
+                    binwidth=binwidth,
+                )
+                if kde:
+                    sns.kdeplot(
+                        data=data,
+                        x=col,
+                        ax=ax,
+                        hue=hue,
+                        color=kde_color if hue is None else None,
+                        log_scale=log_scale,
+                    )
+            elif plot_type == "kde":
+                sns.kdeplot(
+                    data=data,
+                    x=col,
+                    ax=ax,
+                    hue=hue,
+                    color=kde_color,
+                    fill=True,
+                    log_scale=log_scale,
+                )
+            elif plot_type == "both":
+                sns.histplot(
+                    data=data,
+                    x=col,
+                    kde=False,
+                    ax=ax,
+                    hue=hue,
+                    color=hist_color if hue is None and fill else None,
+                    edgecolor=hist_edgecolor,
+                    stat=stat,
+                    fill=fill,
+                    log_scale=log_scale,
+                    bins=(
+                        bins if binwidth is None else None
+                    ),  # Use bins if binwidth is None
+                    binwidth=binwidth,
+                )
+                if kde:
+                    sns.kdeplot(
+                        data=data,
+                        x=col,
+                        ax=ax,
+                        hue=hue,
+                        color=kde_color if hue is None else None,
+                        log_scale=log_scale,
+                    )
+
+            ax.set_ylabel(y_axis_label)
             ax.set_title("\n".join(textwrap.wrap(title, width=text_wrap)))
 
     # Hide any remaining axes
-    for ax in axes[num_plots:]:
+    for ax in axes[len(vars_of_interest) :]:
         ax.axis("off")
 
     # Adjust layout with specified padding
@@ -802,24 +924,81 @@ def kde_distributions(
     # Generate separate plots for each variable of interest if provided
     if vars_of_interest:
         for var in vars_of_interest:
-            fig, ax = plt.subplots(figsize=(x, y))
+            fig, ax = plt.subplots(figsize=single_figsize)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", UserWarning)
                 title = f"Distribution of {var}"
 
-                if plot_type == "hist" or plot_type == "both":
-                    sns.histplot(
-                        df[var],
-                        kde=False if plot_type == "hist" else kde,
-                        ax=ax,
-                        stat="density" if y_axis == "density" else "count",
-                    )
-                if plot_type == "kde":
-                    sns.kdeplot(df[var], ax=ax, fill=True)
-                elif plot_type == "both":
-                    sns.kdeplot(df[var], ax=ax)
+                # Determine if log scale should be applied to this variable
+                log_scale = var in log_scale_vars if log_scale_vars else False
 
-                ax.set_ylabel("Density" if y_axis == "density" else "Count")
+                # Filter out non-positive values if log_scale is True
+                data = df[df[var] > 0] if log_scale else df
+
+                if plot_type == "hist":
+                    sns.histplot(
+                        data=data,
+                        x=var,
+                        kde=kde,
+                        ax=ax,
+                        hue=hue,
+                        color=hist_color if hue is None and fill else None,
+                        edgecolor=hist_edgecolor,
+                        stat=stat,
+                        fill=fill,
+                        log_scale=log_scale,
+                        bins=(
+                            bins if binwidth is None else None
+                        ),  # Use bins if binwidth is None
+                        binwidth=binwidth,
+                    )
+                    if kde:
+                        sns.kdeplot(
+                            data=data,
+                            x=var,
+                            ax=ax,
+                            hue=hue,
+                            color=kde_color if hue is None else None,
+                            log_scale=log_scale,
+                        )
+                elif plot_type == "kde":
+                    sns.kdeplot(
+                        data=data,
+                        x=var,
+                        ax=ax,
+                        hue=hue,
+                        color=kde_color,
+                        fill=True,
+                        log_scale=log_scale,
+                    )
+                elif plot_type == "both":
+                    sns.histplot(
+                        data=data,
+                        x=var,
+                        kde=False,
+                        ax=ax,
+                        hue=hue,
+                        color=hist_color if hue is None and fill else None,
+                        edgecolor=hist_edgecolor,
+                        stat=stat,
+                        fill=fill,
+                        log_scale=log_scale,
+                        bins=(
+                            bins if binwidth is None else None
+                        ),  # Use bins if binwidth is None
+                        binwidth=binwidth,
+                    )
+                    if kde:
+                        sns.kdeplot(
+                            data=data,
+                            x=var,
+                            ax=ax,
+                            hue=hue,
+                            color=kde_color if hue is None else None,
+                            log_scale=log_scale,
+                        )
+
+                ax.set_ylabel(y_axis_label)
                 ax.set_title("\n".join(textwrap.wrap(title, width=text_wrap)))
 
             plt.tight_layout()
@@ -843,7 +1022,8 @@ def kde_distributions(
                 )
             plt.close(
                 fig
-            )  # Close the figure after saving to avoid displaying it multiple times
+            )  # Close the figure after saving to avoid displaying it multiple
+            # times
 
 
 ################################################################################
