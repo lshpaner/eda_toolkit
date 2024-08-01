@@ -1459,6 +1459,8 @@ respectively, ensuring that all text within the plots is legible and well-format
 
 .. code-block:: python
 
+    from eda_toolkit import kde_distributions
+
     vars_of_interest = [
         "age",
         "education-num",
@@ -1520,6 +1522,8 @@ histogram representation without the KDE overlay.
 
 .. code-block:: python
 
+    from eda_toolkit import kde_distributions
+
     vars_of_interest = [
         "age",
         "education-num",
@@ -1580,6 +1584,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.
 
 .. code-block:: python
 
+    from eda_toolkit import kde_distributions
 
     vars_of_interest = [
         "age",
