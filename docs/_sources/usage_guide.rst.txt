@@ -2091,7 +2091,7 @@ DataFrames by assigning them to their own vriables. For example:
     crosstab_age_income = crosstabs_dict["income"]
 
 
-Pivoting Stacked Bar Plots Example
+Pivoted Stacked Bar Plots Example
 -----------------------------------
 
 To create horizontal stacked bar plots, simply set the ``kind`` parameter to 
@@ -2103,7 +2103,7 @@ to compare categories when there are many labels on the y-axis.
 
    <div class="no-click">
 
-.. image:: ../assets/Stacked_Bar_Age_sex_pivoted.svg
+.. image:: ../assets/Stacked_Bar_Age_income_pivoted.svg
    :alt: KDE Distributions
    :align: center
    :width: 900px
@@ -2116,7 +2116,70 @@ to compare categories when there are many labels on the y-axis.
    
    <div style="height: 50px;"></div>
 
-\
+
+Non-Normalized Stacked Bar Plots Example
+----------------------------------------------------
+
+To create stacked bar plots without the normalized versions, set the ``plot_type`` 
+parameter to ``"regular"`` in the ``stacked_crosstab_plot`` function. This option 
+removes the display of normalized plots beneath the regular versions. Alternatively, 
+setting the ``plot_type`` to ``"normalized"`` will display only the normalized plots. 
+The example below demonstrates regular stacked bar plots for income by age.
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/Stacked_Bar_Age_income_regular.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Regular Non-Stacked Bar Plots Example
+----------------------------------------------------
+
+To generate regular (non-stacked) bar plots without displaying their normalized 
+versions, set the ``plot_type`` parameter to ``"regular"`` in the ``stacked_crosstab_plot`` 
+function and enable ``remove_stacks`` by setting it to ``True``. This configuration 
+removes any stacked elements and prevents the display of normalized plots beneath 
+the regular versions. Alternatively, setting ``plot_type`` to ``"normalized"`` 
+will display only the normalized plots.
+
+When unstacking bar plots in this fashion, the distribution is aligned in descending 
+order, making it easier to visualize the most prevalent categories.
+
+In the example below, the color of the bars has been set to a dark grey (``#333333``), 
+and the legend has been removed by setting ``show_legend=False``. This illustrates 
+regular bar plots for income by age, without stacking.
+
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/Bar_Age_regular_income.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
 
 .. [#] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
 
