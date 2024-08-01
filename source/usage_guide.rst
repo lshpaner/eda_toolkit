@@ -1423,16 +1423,15 @@ KDE and Histograms Example
 ---------------------------
 
 In the below example, the ``kde_distributions`` function is used to generate 
-histograms for several variables of interest: ``"age"``, ``"education-num"``, 
-``"hours-per-week"``, and ``"capital-gain"``. These variables represent 
-different demographic and financial attributes from the dataset. The 
-``kde=True`` parameter ensures that a Kernel Density Estimate (KDE) plot is 
-overlaid on the histograms, providing a smoothed representation of the data's 
-probability density.
+histograms for several variables of interest: ``"age"``, ``"education-num"``, and
+``"hours-per-week"``. These variables represent different demographic and 
+financial attributes from the dataset. The ``kde=True`` parameter ensures that a 
+Kernel Density Estimate (KDE) plot is overlaid on the histograms, providing a 
+smoothed representation of the data's probability density.
 
 The visualizations are arranged in a single row of four columns, as specified 
-by ``n_rows=1`` and ``n_cols=4``, respectively. The overall size of the grid 
-figure is set to `16 inches` wide and `4 inches tall` (``grid_figsize=(16, 4)``), 
+by ``n_rows=1`` and ``n_cols=3``, respectively. The overall size of the grid 
+figure is set to `14 inches` wide and `4 inches tall` (``grid_figsize=(14, 4)``), 
 while each individual plot is configured to be `4 inches` by `4 inches` 
 (``single_figsize=(4, 4)``). The ``fill=True`` parameter fills the histogram 
 bars with color, and the spacing between the subplots is managed using 
@@ -1464,15 +1463,14 @@ respectively, ensuring that all text within the plots is legible and well-format
         "age",
         "education-num",
         "hours-per-week",
-        "capital-gain",
     ]
 
     kde_distributions(
         df=df,
         kde=True,
         n_rows=1,
-        n_cols=4,
-        grid_figsize=(16, 4),  # Size of the overall grid figure
+        n_cols=3,
+        grid_figsize=(14, 4),  # Size of the overall grid figure
         single_figsize=(4, 4),  # Size of individual figures
         fill=True,
         fill_alpha=0.60,
@@ -1481,7 +1479,6 @@ respectively, ensuring that all text within the plots is legible and well-format
         text_wrap=50,
         bbox_inches="tight",
         vars_of_interest=vars_of_interest,
-        single_var_image_filename="kde_density_single_distribution",
         y_axis_label="Density",
         bins=10,
         plot_type="hist",
@@ -1496,7 +1493,7 @@ respectively, ensuring that all text within the plots is legible and well-format
 .. image:: ../assets/kde_density_distributions.svg
    :alt: KDE Distributions
    :align: center
-   :width: 900px
+   :width: 950px
 
 .. raw:: html
 
@@ -1511,10 +1508,10 @@ Histogram Example (Density)
 ----------------------------
 
 In this example, the kde_distributions function is used to generate histograms for 
-the variables ``"age"``, ``"education-num"``, ``"hours-per-week"``, and ``"capital-gain"``, 
-but with ``kde=False``, meaning no KDE plots are included—only histograms are displayed. 
-The plots are arranged in a single row of four columns (``n_rows=1, n_cols=4``), 
-with a grid size of `16x4 inches` (``grid_figsize=(16, 4)``). The histograms are 
+the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with 
+``kde=False``, meaning no KDE plots are included—only histograms are displayed. 
+The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
+with a grid size of `14x4 inches` (``grid_figsize=(14, 4)``). The histograms are 
 divided into `10 bins` (``bins=10``), and the y-axis is labeled "Density" (``y_axis_label="Density"``).
 Font sizes for the axis labels and tick labels are set to `16` and `14` points, 
 respectively, ensuring clarity in the visualizations. This setup focuses on the 
@@ -1527,22 +1524,20 @@ histogram representation without the KDE overlay.
         "age",
         "education-num",
         "hours-per-week",
-        "capital-gain",
     ]
 
     kde_distributions(
         df=df,
         kde=False,
         n_rows=1,
-        n_cols=4,
-        grid_figsize=(16, 4),  # Size of the overall grid figure
+        n_cols=3,
+        grid_figsize=(14, 4),  # Size of the overall grid figure
         single_figsize=(4, 4),  # Size of individual figures
         w_pad=1,
         h_pad=1,
         text_wrap=50,
         bbox_inches="tight",
         vars_of_interest=vars_of_interest,
-        single_var_image_filename="kde_density_single_distribution",
         y_axis_label="Density",
         bins=10,
         plot_type="hist",
@@ -1570,10 +1565,6 @@ histogram representation without the KDE overlay.
    <div style="height: 50px;"></div>
 
 
-
-\
-
-
 Histogram Example (Count)
 --------------------------
 
@@ -1584,7 +1575,7 @@ reflecting that the histograms display the count of observations within each bin
 Additionally, the stat parameter is set to `"Count"` to show the actual counts instead of 
 densities. The rest of the parameters remain the same as in the previous example, 
 with the plots arranged in a single row of four columns (``n_rows=1, n_cols=4``), 
-a grid size of `16x4 inches`, and a bin count of `10`. This setup focuses on 
+a grid size of `14x4 inches`, and a bin count of `10`. This setup focuses on 
 visualizing the raw counts in the dataset using orange-colored histograms.
 
 .. code-block:: python
@@ -1594,15 +1585,14 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         "age",
         "education-num",
         "hours-per-week",
-        "capital-gain",
     ]
 
     kde_distributions(
         df=df,
         kde=False,
         n_rows=1,
-        n_cols=4,
-        grid_figsize=(16, 4),  # Size of the overall grid figure
+        n_cols=3,
+        grid_figsize=(14, 4),  # Size of the overall grid figure
         single_figsize=(4, 4),  # Size of individual figures
         w_pad=1,
         h_pad=1,
@@ -1623,7 +1613,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.
 
    <div class="no-click">
 
-.. image:: ../assets/count_hist_density_distributions.svg
+.. image:: ../assets/count_hist_distributions.svg
    :alt: KDE Distributions
    :align: center
    :width: 900px
