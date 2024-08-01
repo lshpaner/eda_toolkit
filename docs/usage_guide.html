@@ -106,7 +106,9 @@
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#stacked_crosstab_plot"><code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#stacked-bar-plots-with-crosstabs-example">Stacked Bar Plots With Crosstabs Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pivoting-stacked-bar-plots-example">Pivoting Stacked Bar Plots Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pivoted-stacked-bar-plots-example">Pivoted Stacked Bar Plots Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#non-normalized-stacked-bar-plots-example">Non-Normalized Stacked Bar Plots Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regular-non-stacked-bar-plots-example">Regular Non-Stacked Bar Plots Example</a></li>
 </ul>
 </li>
 </ul>
@@ -1967,15 +1969,38 @@ DataFrames by assigning them to their own vriables. For example:</p>
 </pre></div>
 </div>
 </section>
-<section id="pivoting-stacked-bar-plots-example">
-<h2>Pivoting Stacked Bar Plots Example<a class="headerlink" href="#pivoting-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
+<section id="pivoted-stacked-bar-plots-example">
+<h2>Pivoted Stacked Bar Plots Example<a class="headerlink" href="#pivoted-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
 <p>To create horizontal stacked bar plots, simply set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
 <code class="docutils literal notranslate"><span class="pre">&quot;barh&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span> <span class="pre">function</span></code>. This option pivots the
 standard vertical stacked bar plot into a horizontal orientation, making it easier
 to compare categories when there are many labels on the y-axis.</p>
-<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_sex_pivoted.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_sex_pivoted.svg" width="900px" /></a>
-</div><div style="height: 50px;"></div><p></p>
-<aside class="footnote-list brackets">
+<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_pivoted.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income_pivoted.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div></section>
+<section id="non-normalized-stacked-bar-plots-example">
+<h2>Non-Normalized Stacked Bar Plots Example<a class="headerlink" href="#non-normalized-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
+<p>To create stacked bar plots without the normalized versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>
+parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function. This option
+removes the display of normalized plots beneath the regular versions. Alternatively,
+setting the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display only the normalized plots.
+The example below demonstrates regular stacked bar plots for income by age.</p>
+<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_regular.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income_regular.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div></section>
+<section id="regular-non-stacked-bar-plots-example">
+<h2>Regular Non-Stacked Bar Plots Example<a class="headerlink" href="#regular-non-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
+<p>To generate regular (non-stacked) bar plots without displaying their normalized
+versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
+function and enable <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> by setting it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This configuration
+removes any stacked elements and prevents the display of normalized plots beneath
+the regular versions. Alternatively, setting <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code>
+will display only the normalized plots.</p>
+<p>When unstacking bar plots in this fashion, the distribution is aligned in descending
+order, making it easier to visualize the most prevalent categories.</p>
+<p>In the example below, the color of the bars has been set to a dark grey (<code class="docutils literal notranslate"><span class="pre">#333333</span></code>),
+and the legend has been removed by setting <code class="docutils literal notranslate"><span class="pre">show_legend=False</span></code>. This illustrates
+regular bar plots for income by age, without stacking.</p>
+<div class="no-click"><a class="reference internal image-reference" href="_images/Bar_Age_regular_income.svg"><img alt="KDE Distributions" class="align-center" src="_images/Bar_Age_regular_income.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div><aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id10" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
