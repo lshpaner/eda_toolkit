@@ -1717,7 +1717,8 @@ Stacked Bar Plots With Crosstabs Example
 
 The provided code snippet demonstrates how to use the ``stacked_crosstab_plot`` 
 function to generate stacked bar plots and corresponding crosstabs for different 
-columns in a DataFrame. Here's a detailed breakdown of the code:
+columns in a DataFrame. Here's a detailed breakdown of the code using the census
+dataset as an example [1]_.
 
 First, the ``func_col`` list is defined, specifying the columns ``["sex", "income"]`` 
 to be analyzed. These columns will be used in the loop to generate separate plots. 
@@ -2094,7 +2095,7 @@ DataFrames by assigning them to their own vriables. For example:
 Pivoted Stacked Bar Plots Example
 -----------------------------------
 
-To create horizontal stacked bar plots, simply set the ``kind`` parameter to 
+Using the census dataset [1]_, to create horizontal stacked bar plots, set the ``kind`` parameter to 
 ``"barh"`` in the ``stacked_crosstab_plot function``. This option pivots the 
 standard vertical stacked bar plot into a horizontal orientation, making it easier 
 to compare categories when there are many labels on the y-axis.
@@ -2120,11 +2121,12 @@ to compare categories when there are many labels on the y-axis.
 Non-Normalized Stacked Bar Plots Example
 ----------------------------------------------------
 
-To create stacked bar plots without the normalized versions, set the ``plot_type`` 
-parameter to ``"regular"`` in the ``stacked_crosstab_plot`` function. This option 
-removes the display of normalized plots beneath the regular versions. Alternatively, 
-setting the ``plot_type`` to ``"normalized"`` will display only the normalized plots. 
-The example below demonstrates regular stacked bar plots for income by age.
+In the census data [1]_, to create stacked bar plots without the normalized versions, 
+set the ``plot_type`` parameter to ``"regular"`` in the ``stacked_crosstab_plot`` 
+function. This option removes the display of normalized plots beneath the regular 
+versions. Alternatively, setting the ``plot_type`` to ``"normalized"`` will display 
+only the normalized plots. The example below demonstrates regular stacked bar plots 
+for income by age.
 
 .. raw:: html
 
@@ -2147,12 +2149,12 @@ The example below demonstrates regular stacked bar plots for income by age.
 Regular Non-Stacked Bar Plots Example
 ----------------------------------------------------
 
-To generate regular (non-stacked) bar plots without displaying their normalized 
-versions, set the ``plot_type`` parameter to ``"regular"`` in the ``stacked_crosstab_plot`` 
-function and enable ``remove_stacks`` by setting it to ``True``. This configuration 
-removes any stacked elements and prevents the display of normalized plots beneath 
-the regular versions. Alternatively, setting ``plot_type`` to ``"normalized"`` 
-will display only the normalized plots.
+In the census data [1]_, to generate regular (non-stacked) bar plots without 
+displaying their normalized versions, set the ``plot_type`` parameter to ``"regular"`` 
+in the ``stacked_crosstab_plot`` function and enable ``remove_stacks`` by setting 
+it to ``True``. This configuration removes any stacked elements and prevents the 
+display of normalized plots beneath the regular versions. Alternatively, setting 
+``plot_type`` to ``"normalized"`` will display only the normalized plots.
 
 When unstacking bar plots in this fashion, the distribution is aligned in descending 
 order, making it easier to visualize the most prevalent categories.
