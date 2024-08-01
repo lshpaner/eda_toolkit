@@ -1424,15 +1424,14 @@ The variable name will be appended to this filename.</p></li>
 <br><section id="kde-and-histograms-example">
 <h2>KDE and Histograms Example<a class="headerlink" href="#kde-and-histograms-example" title="Permalink to this heading"></a></h2>
 <p>In the below example, the <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> function is used to generate
-histograms for several variables of interest: <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;education-num&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;hours-per-week&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;capital-gain&quot;</span></code>. These variables represent
-different demographic and financial attributes from the dataset. The
-<code class="docutils literal notranslate"><span class="pre">kde=True</span></code> parameter ensures that a Kernel Density Estimate (KDE) plot is
-overlaid on the histograms, providing a smoothed representation of the data’s
-probability density.</p>
+histograms for several variables of interest: <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;education-num&quot;</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">&quot;hours-per-week&quot;</span></code>. These variables represent different demographic and
+financial attributes from the dataset. The <code class="docutils literal notranslate"><span class="pre">kde=True</span></code> parameter ensures that a
+Kernel Density Estimate (KDE) plot is overlaid on the histograms, providing a
+smoothed representation of the data’s probability density.</p>
 <p>The visualizations are arranged in a single row of four columns, as specified
-by <code class="docutils literal notranslate"><span class="pre">n_rows=1</span></code> and <code class="docutils literal notranslate"><span class="pre">n_cols=4</span></code>, respectively. The overall size of the grid
-figure is set to <cite>16 inches</cite> wide and <cite>4 inches tall</cite> (<code class="docutils literal notranslate"><span class="pre">grid_figsize=(16,</span> <span class="pre">4)</span></code>),
+by <code class="docutils literal notranslate"><span class="pre">n_rows=1</span></code> and <code class="docutils literal notranslate"><span class="pre">n_cols=3</span></code>, respectively. The overall size of the grid
+figure is set to <cite>14 inches</cite> wide and <cite>4 inches tall</cite> (<code class="docutils literal notranslate"><span class="pre">grid_figsize=(14,</span> <span class="pre">4)</span></code>),
 while each individual plot is configured to be <cite>4 inches</cite> by <cite>4 inches</cite>
 (<code class="docutils literal notranslate"><span class="pre">single_figsize=(4,</span> <span class="pre">4)</span></code>). The <code class="docutils literal notranslate"><span class="pre">fill=True</span></code> parameter fills the histogram
 bars with color, and the spacing between the subplots is managed using
@@ -1457,15 +1456,14 @@ respectively, ensuring that all text within the plots is legible and well-format
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
     <span class="s2">&quot;education-num&quot;</span><span class="p">,</span>
     <span class="s2">&quot;hours-per-week&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;capital-gain&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="n">kde_distributions</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
     <span class="n">single_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of individual figures</span>
     <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
@@ -1474,7 +1472,6 @@ respectively, ensuring that all text within the plots is legible and well-format
     <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="n">vars_of_interest</span><span class="o">=</span><span class="n">vars_of_interest</span><span class="p">,</span>
-    <span class="n">single_var_image_filename</span><span class="o">=</span><span class="s2">&quot;kde_density_single_distribution&quot;</span><span class="p">,</span>
     <span class="n">y_axis_label</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
     <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span>
@@ -1483,15 +1480,15 @@ respectively, ensuring that all text within the plots is legible and well-format
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="no-click"><a class="reference internal image-reference" href="_images/kde_density_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/kde_density_distributions.svg" width="900px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/kde_density_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/kde_density_distributions.svg" width="950px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="histogram-example-density">
 <h2>Histogram Example (Density)<a class="headerlink" href="#histogram-example-density" title="Permalink to this heading"></a></h2>
 <p>In this example, the kde_distributions function is used to generate histograms for
-the variables <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;education-num&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;hours-per-week&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;capital-gain&quot;</span></code>,
-but with <code class="docutils literal notranslate"><span class="pre">kde=False</span></code>, meaning no KDE plots are included—only histograms are displayed.
-The plots are arranged in a single row of four columns (<code class="docutils literal notranslate"><span class="pre">n_rows=1,</span> <span class="pre">n_cols=4</span></code>),
-with a grid size of <cite>16x4 inches</cite> (<code class="docutils literal notranslate"><span class="pre">grid_figsize=(16,</span> <span class="pre">4)</span></code>). The histograms are
+the variables <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;education-num&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;hours-per-week&quot;</span></code> but with
+<code class="docutils literal notranslate"><span class="pre">kde=False</span></code>, meaning no KDE plots are included—only histograms are displayed.
+The plots are arranged in a single row of four columns (<code class="docutils literal notranslate"><span class="pre">n_rows=1,</span> <span class="pre">n_cols=3</span></code>),
+with a grid size of <cite>14x4 inches</cite> (<code class="docutils literal notranslate"><span class="pre">grid_figsize=(14,</span> <span class="pre">4)</span></code>). The histograms are
 divided into <cite>10 bins</cite> (<code class="docutils literal notranslate"><span class="pre">bins=10</span></code>), and the y-axis is labeled “Density” (<code class="docutils literal notranslate"><span class="pre">y_axis_label=&quot;Density&quot;</span></code>).
 Font sizes for the axis labels and tick labels are set to <cite>16</cite> and <cite>14</cite> points,
 respectively, ensuring clarity in the visualizations. This setup focuses on the
@@ -1500,22 +1497,20 @@ histogram representation without the KDE overlay.</p>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
     <span class="s2">&quot;education-num&quot;</span><span class="p">,</span>
     <span class="s2">&quot;hours-per-week&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;capital-gain&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="n">kde_distributions</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">kde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
     <span class="n">single_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of individual figures</span>
     <span class="n">w_pad</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">h_pad</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
     <span class="n">vars_of_interest</span><span class="o">=</span><span class="n">vars_of_interest</span><span class="p">,</span>
-    <span class="n">single_var_image_filename</span><span class="o">=</span><span class="s2">&quot;kde_density_single_distribution&quot;</span><span class="p">,</span>
     <span class="n">y_axis_label</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
     <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span>
@@ -1526,8 +1521,7 @@ histogram representation without the KDE overlay.</p>
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/hist_density_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/hist_density_distributions.svg" width="900px" /></a>
-</div><div style="height: 50px;"></div><p></p>
-</section>
+</div><div style="height: 50px;"></div></section>
 <section id="histogram-example-count">
 <h2>Histogram Example (Count)<a class="headerlink" href="#histogram-example-count" title="Permalink to this heading"></a></h2>
 <p>In this example, the kde_distributions function is modified to generate histograms
@@ -1537,21 +1531,20 @@ reflecting that the histograms display the count of observations within each bin
 Additionally, the stat parameter is set to <cite>“Count”</cite> to show the actual counts instead of
 densities. The rest of the parameters remain the same as in the previous example,
 with the plots arranged in a single row of four columns (<code class="docutils literal notranslate"><span class="pre">n_rows=1,</span> <span class="pre">n_cols=4</span></code>),
-a grid size of <cite>16x4 inches</cite>, and a bin count of <cite>10</cite>. This setup focuses on
+a grid size of <cite>14x4 inches</cite>, and a bin count of <cite>10</cite>. This setup focuses on
 visualizing the raw counts in the dataset using orange-colored histograms.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
     <span class="s2">&quot;education-num&quot;</span><span class="p">,</span>
     <span class="s2">&quot;hours-per-week&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;capital-gain&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 <span class="n">kde_distributions</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">kde</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
     <span class="n">single_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of individual figures</span>
     <span class="n">w_pad</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">h_pad</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -1568,7 +1561,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="no-click"><a class="reference internal image-reference" href="_images/count_hist_density_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/count_hist_density_distributions.svg" width="900px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/count_hist_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/count_hist_distributions.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><p></p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id10" role="note">
