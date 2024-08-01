@@ -1738,6 +1738,10 @@ which will be displayed on top of each respective plot.
         "Income",
     ]
 
+.. code-block:: python
+
+    from eda_toolkit import stacked_crosstab_plot
+
     # Call the stacked_crosstab_plot function
     stacked_crosstab_plot(
         df=df,
