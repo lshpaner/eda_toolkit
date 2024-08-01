@@ -1704,7 +1704,8 @@ The function also supports generating both regular and normalized stacked bar pl
     :rtype: dict or None
 
 
-**Example Usage**
+Stacked Bar Plots With Crosstabs Example
+-----------------------------------------
 
 The provided code snippet demonstrates how to use the ``stacked_crosstab_plot`` 
 function to generate stacked bar plots and corresponding crosstabs for different 
@@ -2080,6 +2081,32 @@ DataFrames by assigning them to their own vriables. For example:
 
     crosstab_age_sex = crosstabs_dict["sex"]
     crosstab_age_income = crosstabs_dict["income"]
+
+
+Pivoting Stacked Bar Plots Example
+-----------------------------------
+
+To create horizontal stacked bar plots, simply set the ``kind`` parameter to 
+``"barh"`` in the ``stacked_crosstab_plot function``. This option pivots the 
+standard vertical stacked bar plot into a horizontal orientation, making it easier 
+to compare categories when there are many labels on the y-axis.
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/Stacked_Bar_Age_sex_pivoted.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
 
 \
 

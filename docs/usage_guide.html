@@ -105,6 +105,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#stacked_crosstab_plot"><code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stacked-bar-plots-with-crosstabs-example">Stacked Bar Plots With Crosstabs Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pivoting-stacked-bar-plots-example">Pivoting Stacked Bar Plots Example</a></li>
 </ul>
 </li>
 </ul>
@@ -1635,7 +1637,8 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
 </dl>
 </dd></dl>
 
-<p><strong>Example Usage</strong></p>
+<section id="stacked-bar-plots-with-crosstabs-example">
+<h2>Stacked Bar Plots With Crosstabs Example<a class="headerlink" href="#stacked-bar-plots-with-crosstabs-example" title="Permalink to this heading"></a></h2>
 <p>The provided code snippet demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function to generate stacked bar plots and corresponding crosstabs for different
 columns in a DataFrame. Here’s a detailed breakdown of the code:</p>
@@ -1959,7 +1962,15 @@ DataFrames by assigning them to their own vriables. For example:</p>
 <span class="n">crosstab_age_income</span> <span class="o">=</span> <span class="n">crosstabs_dict</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p></p>
+</section>
+<section id="pivoting-stacked-bar-plots-example">
+<h2>Pivoting Stacked Bar Plots Example<a class="headerlink" href="#pivoting-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
+<p>To create horizontal stacked bar plots, simply set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
+<code class="docutils literal notranslate"><span class="pre">&quot;barh&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span> <span class="pre">function</span></code>. This option pivots the
+standard vertical stacked bar plot into a horizontal orientation, making it easier
+to compare categories when there are many labels on the y-axis.</p>
+<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_sex_pivoted.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_sex_pivoted.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div><p></p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id10" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
@@ -1974,6 +1985,7 @@ DataFrames by assigning them to their own vriables. For example:</p>
 <p>Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. <em>Computing in Science &amp; Engineering</em>, 9(3), 90-95. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a></p>
 </aside>
 </aside>
+</section>
 </section>
 
 
