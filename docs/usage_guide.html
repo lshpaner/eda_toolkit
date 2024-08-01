@@ -103,6 +103,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#histogram-example-count">Histogram Example (Count)</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stacked_crosstab_plot"><code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -412,11 +416,11 @@ We then use the <code class="docutils literal notranslate"><span class="pre">str
 <p><cite>First 6 Rows of Data Before and After Removing Trailing Periods (Adapted from Example)</cite></p>
 <table>
     <tr>
-        <td style="padding-right: 10px; font-family: monospace; font-size: 12px;">
+        <td style="padding-right: 10px; font-family: Arial; font-size: 14px;">
 
             <strong>Before:</strong>
 
-            <table border="1" style="width: 150px; text-align: center; font-family: monospace; font-size: 12px;">
+            <table border="1" style="width: 150px; text-align: center; font-family: Arial; font-size: 14px;">
                 <tr>
                     <th>Index</th>
                     <th>Value</th>
@@ -448,11 +452,11 @@ We then use the <code class="docutils literal notranslate"><span class="pre">str
             </table>
 
         </td>
-        <td style="padding-left: 10px; font-family: monospace; font-size: 12px;">
+        <td style="padding-left: 10px; font-family: Arial; font-size: 14px;">
 
             <strong>After:</strong>
 
-            <table border="1" style="width: 150px; text-align: center; font-family: monospace; font-size: 12px;">
+            <table border="1" style="width: 150px; text-align: center; font-family: Arial; font-size: 14px;">
                 <tr>
                     <th>Index</th>
                     <th>Value</th>
@@ -1018,7 +1022,7 @@ variables from a DataFrame containing the census data <a class="footnote-referen
 </div>
 <p>When applied to the US Census data, the output Excel file will contain summary tables for all possible combinations of the specified variables.
 The first sheet will be a Table of Contents with hyperlinks to each summary table.</p>
-<div class="no-click"><a class="reference internal image-reference" href="_images/sum_all_combos.gif"><img alt="EDA Toolkit Logo" class="align-left" src="_images/sum_all_combos.gif" style="width: 900px;" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/summarize_combos.gif"><img alt="EDA Toolkit Logo" class="align-left" src="_images/summarize_combos.gif" style="width: 900px;" /></a>
 </div><div style="height: 106px;"></div></section>
 <section id="saving-dataframes-to-excel-with-customized-formatting">
 <h2>Saving DataFrames to Excel with Customized Formatting<a class="headerlink" href="#saving-dataframes-to-excel-with-customized-formatting" title="Permalink to this heading"></a></h2>
@@ -1568,7 +1572,379 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/count_hist_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/count_hist_distributions.svg" width="900px" /></a>
-</div><div style="height: 50px;"></div><p></p>
+</div><div style="height: 50px;"></div></section>
+</section>
+<section id="stacked-crosstab-plots">
+<h1>Stacked Crosstab Plots<a class="headerlink" href="#stacked-crosstab-plots" title="Permalink to this heading"></a></h1>
+<p><strong>Generates stacked bar plots and crosstabs for specified columns in a DataFrame.</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function is a versatile tool for generating stacked bar plots and contingency tables (crosstabs) from a pandas DataFrame. This function is particularly useful for visualizing categorical data across multiple columns, allowing users to easily compare distributions and relationships between variables. It offers extensive customization options, including control over plot appearance, color schemes, and the ability to save plots in multiple formats.</p>
+<p>The function also supports generating both regular and normalized stacked bar plots, with the option to return the generated crosstabs as a dictionary for further analysis.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="stacked_crosstab_plot">
+<span class="sig-name descname"><span class="pre">stacked_crosstab_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_labels_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bar'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_formats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stacked_crosstab_plot" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The pandas DataFrame containing the data.</p></li>
+<li><p><strong>col</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the column in the DataFrame to be analyzed.</p></li>
+<li><p><strong>func_col</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – List of ground truth columns to be analyzed.</p></li>
+<li><p><strong>legend_labels_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – List of legend labels for each ground truth column.</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – List of titles for the plots.</p></li>
+<li><p><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The kind of plot to generate (e.g., ‘bar’, ‘barh’). Defaults to <code class="docutils literal notranslate"><span class="pre">'bar'</span></code>.</p></li>
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – The width of the bars in the bar plot. Defaults to <code class="docutils literal notranslate"><span class="pre">0.9</span></code>.</p></li>
+<li><p><strong>rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The rotation angle of the x-axis labels. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>custom_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Specifies a custom order for the categories in the <code class="docutils literal notranslate"><span class="pre">col</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>image_path_png</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path where generated PNG plot images will be saved. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path where generated SVG plot images will be saved. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>save_formats</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – List of file formats to save plot images in. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – List of colors to use for the plots. If not provided, a default color scheme is used. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>output</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specify the output type: <code class="docutils literal notranslate"><span class="pre">&quot;plots_only&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;crosstabs_only&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p><strong>return_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Specify whether to return the crosstabs dictionary. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The width of the figure. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The height of the figure. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The padding between the subplots. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Prefix for filename when output includes plots. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>logscale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Apply log scale to the y-axis. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>plot_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specify the type of plot to generate: <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p><strong>show_legend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Specify whether to show the legend. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for axis labels. Defaults to <code class="docutils literal notranslate"><span class="pre">12</span></code>.</p></li>
+<li><p><strong>tick_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for tick labels on the axes. Defaults to <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – <ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">output</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;plots_only&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;crosstabs_only&quot;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code>.</p></li>
+<li><p>If the lengths of <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, and <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> do not match.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> is not provided when output includes plots.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.12)"><strong>KeyError</strong></a> – <ul>
+<li><p>If any of the columns specified in <code class="docutils literal notranslate"><span class="pre">col</span></code> or <code class="docutils literal notranslate"><span class="pre">func_col</span></code> are missing from the DataFrame.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary of crosstabs DataFrames if <code class="docutils literal notranslate"><span class="pre">return_dict</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, otherwise <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>Example Usage</strong></p>
+<p>The provided code snippet demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
+function to generate stacked bar plots and corresponding crosstabs for different
+columns in a DataFrame. Here’s a detailed breakdown of the code:</p>
+<p>First, the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list is defined, specifying the columns <code class="docutils literal notranslate"><span class="pre">[&quot;sex&quot;,</span> <span class="pre">&quot;income&quot;]</span></code>
+to be analyzed. These columns will be used in the loop to generate separate plots.
+The <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> is then defined, with each entry corresponding to a
+column in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>. In this case, the labels for the <code class="docutils literal notranslate"><span class="pre">sex</span></code> column are
+<code class="docutils literal notranslate"><span class="pre">[&quot;Male&quot;,</span> <span class="pre">&quot;Female&quot;]</span></code>, and for the <code class="docutils literal notranslate"><span class="pre">income</span></code> column, they are <code class="docutils literal notranslate"><span class="pre">[&quot;&lt;=50K&quot;,</span> <span class="pre">&quot;&gt;50K&quot;]</span></code>.
+These labels will be used to annotate the legends of the plots.</p>
+<p>Next, the <code class="docutils literal notranslate"><span class="pre">title</span></code> list is defined, providing titles for each plot corresponding
+to the columns in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>. The titles are set to <code class="docutils literal notranslate"><span class="pre">[&quot;Sex&quot;,</span> <span class="pre">&quot;Income&quot;]</span></code>,
+which will be displayed on top of each respective plot.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the func_col to use in the loop in order of usage</span>
+<span class="n">func_col</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;income&quot;</span><span class="p">]</span>
+
+<span class="c1"># Define the legend_labels to use in the loop</span>
+<span class="n">legend_labels_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;Male&quot;</span><span class="p">,</span> <span class="s2">&quot;Female&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;&lt;=50K&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;50K&quot;</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="c1"># Define titles for the plots</span>
+<span class="n">title</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Income&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># Call the stacked_crosstab_plot function</span>
+<span class="n">stacked_crosstab_plot</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;age_group&quot;</span><span class="p">,</span>
+    <span class="n">func_col</span><span class="o">=</span><span class="n">func_col</span><span class="p">,</span>
+    <span class="n">legend_labels_list</span><span class="o">=</span><span class="n">legend_labels_list</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">rot</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="c1"># axis rotation angle</span>
+    <span class="n">custom_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#00BFC4&quot;</span><span class="p">,</span> <span class="s2">&quot;#F8766D&quot;</span><span class="p">],</span> <span class="c1"># default color schema</span>
+    <span class="n">output</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">p</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">logscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The above example generates stacked bar plots for <code class="docutils literal notranslate"><span class="pre">&quot;sex&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code>
+grouped by <code class="docutils literal notranslate"><span class="pre">&quot;education&quot;</span></code>. The plots are executed with legends, labels, and
+tick sizes customized for clarity. The function returns a dictionary of
+crosstabs for further analysis or export.</p>
+<p><strong>Importance of Correctly Aligning Labels</strong></p>
+<p>It is crucial to properly align the elements in the <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>,
+<code class="docutils literal notranslate"><span class="pre">title</span></code>, and <code class="docutils literal notranslate"><span class="pre">func_col</span></code> parameters when using the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
+function. Each of these lists must be ordered consistently because the function
+relies on their alignment to correctly assign labels and titles to the
+corresponding plots and legends.</p>
+<p>For instance, in the example above:</p>
+<ul class="simple">
+<li><p>The first element in <code class="docutils literal notranslate"><span class="pre">func_col</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;sex&quot;</span></code>, and it is aligned with the first set of labels <code class="docutils literal notranslate"><span class="pre">[&quot;Male&quot;,</span> <span class="pre">&quot;Female&quot;]</span></code> in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> and the first title <code class="docutils literal notranslate"><span class="pre">&quot;Sex&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">title</span></code> list.</p></li>
+<li><p>Similarly, the second element in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code>, aligns with the labels <code class="docutils literal notranslate"><span class="pre">[&quot;&lt;=50K&quot;,</span> <span class="pre">&quot;&gt;50K&quot;]</span></code> and the title <code class="docutils literal notranslate"><span class="pre">&quot;Income&quot;</span></code>.</p></li>
+</ul>
+<p>Misalignment between these lists would result in incorrect labels or titles being
+applied to the plots, potentially leading to confusion or misinterpretation of the data.
+Therefore, it’s important to ensure that each list is ordered appropriately and
+consistently to accurately reflect the data being visualized.</p>
+<p><strong>Proper Setup of Lists</strong></p>
+<p>When setting up the <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, and <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, ensure
+that each element in the lists corresponds to the correct variable in the DataFrame.
+This involves:</p>
+<ul class="simple">
+<li><p><strong>Ordering</strong>: Maintaining the same order across all three lists to ensure that labels and titles correspond correctly to the data being plotted.</p></li>
+<li><p><strong>Consistency</strong>: Double-checking that each label in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> matches the categories present in the corresponding <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, and that the <code class="docutils literal notranslate"><span class="pre">title</span></code> accurately describes the plot.</p></li>
+</ul>
+<p>By adhering to these guidelines, you can ensure that the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
+function produces accurate and meaningful visualizations that are easy to interpret and analyze.</p>
+<p><strong>Output</strong></p>
+<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_sex.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_sex.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div><div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div><style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg .tg-mwxe{text-align:right;vertical-align:middle}
+.tg .tg-p3ql{background-color:rgba(130, 130, 130, 0.08);text-align:right;vertical-align:middle}
+.tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
+.tg .tg-7zrl{text-align:left;vertical-align:bottom}
+.tg .tg-zt7h{font-weight:bold;text-align:right;vertical-align:middle}
+.tg .tg-k750{background-color:rgba(130, 130, 130, 0.08);font-weight:bold;text-align:right;vertical-align:middle}
+@media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}
+</style>
+<div class="tg-wrap"><table class="tg"><thead>
+<tr>
+    <th class="tg-yla0" colspan="6">Crosstab for sex</th>
+</tr>
+<tr style="height: 10px;"><!-- Added empty row for spacing -->
+    <td colspan="6" style="border: none;"></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td class="tg-zt7h">sex</td>
+    <td class="tg-zt7h">Male</td>
+    <td class="tg-zt7h">Female</td>
+    <td class="tg-zt7h">Total</td>
+    <td class="tg-zt7h">Male_%</td>
+    <td class="tg-zt7h">Female_%</td>
+</tr>
+<tr>
+    <td class="tg-k750">age_group</td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+</tr>
+<tr>
+    <td class="tg-mwxe">&lt; 18</td>
+    <td class="tg-mwxe">295</td>
+    <td class="tg-mwxe">300</td>
+    <td class="tg-mwxe">595</td>
+    <td class="tg-mwxe">49.58</td>
+    <td class="tg-mwxe">50.42</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">18-29</td>
+    <td class="tg-p3ql">5707</td>
+    <td class="tg-p3ql">8213</td>
+    <td class="tg-p3ql">13920</td>
+    <td class="tg-p3ql">41</td>
+    <td class="tg-p3ql">59</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">30-39</td>
+    <td class="tg-mwxe">3853</td>
+    <td class="tg-mwxe">9076</td>
+    <td class="tg-mwxe">12929</td>
+    <td class="tg-mwxe">29.8</td>
+    <td class="tg-mwxe">70.2</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">40-49</td>
+    <td class="tg-p3ql">3188</td>
+    <td class="tg-p3ql">7536</td>
+    <td class="tg-p3ql">10724</td>
+    <td class="tg-p3ql">29.73</td>
+    <td class="tg-p3ql">70.27</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">50-59</td>
+    <td class="tg-mwxe">1873</td>
+    <td class="tg-mwxe">4746</td>
+    <td class="tg-mwxe">6619</td>
+    <td class="tg-mwxe">28.3</td>
+    <td class="tg-mwxe">71.7</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">60-69</td>
+    <td class="tg-p3ql">939</td>
+    <td class="tg-p3ql">2115</td>
+    <td class="tg-p3ql">3054</td>
+    <td class="tg-p3ql">30.75</td>
+    <td class="tg-p3ql">69.25</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">70-79</td>
+    <td class="tg-mwxe">280</td>
+    <td class="tg-mwxe">535</td>
+    <td class="tg-mwxe">815</td>
+    <td class="tg-mwxe">34.36</td>
+    <td class="tg-mwxe">65.64</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">80-89</td>
+    <td class="tg-p3ql">40</td>
+    <td class="tg-p3ql">91</td>
+    <td class="tg-p3ql">131</td>
+    <td class="tg-p3ql">30.53</td>
+    <td class="tg-p3ql">69.47</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">90-99</td>
+    <td class="tg-mwxe">17</td>
+    <td class="tg-mwxe">38</td>
+    <td class="tg-mwxe">55</td>
+    <td class="tg-mwxe">30.91</td>
+    <td class="tg-mwxe">69.09</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">Total</td>
+    <td class="tg-p3ql">16192</td>
+    <td class="tg-p3ql">32650</td>
+    <td class="tg-p3ql">48842</td>
+    <td class="tg-p3ql">33.15</td>
+    <td class="tg-p3ql">66.85</td>
+</tr>
+<tr style="height: 10px;"><!-- Added empty row for spacing -->
+    <td colspan="6" style="border: none;"></td>
+</tr>
+<tr>
+    <th class="tg-yla0" colspan="6">Crosstab for income</th>
+</tr>
+<tr style="height: 10px;"><!-- Added empty row for spacing -->
+    <td colspan="6" style="border: none;"></td>
+</tr>
+<tr>
+    <td class="tg-zt7h">income</td>
+    <td class="tg-zt7h">&lt;=50K</td>
+    <td class="tg-zt7h">&gt;50K</td>
+    <td class="tg-zt7h">Total</td>
+    <td class="tg-zt7h">&lt;=50K_%</td>
+    <td class="tg-zt7h">&gt;50K_%</td>
+</tr>
+<tr>
+    <td class="tg-k750">age_group</td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+    <td class="tg-k750"> </td>
+</tr>
+<tr>
+    <td class="tg-mwxe">&lt; 18</td>
+    <td class="tg-mwxe">595</td>
+    <td class="tg-mwxe">0</td>
+    <td class="tg-mwxe">595</td>
+    <td class="tg-mwxe">100</td>
+    <td class="tg-mwxe">0</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">18-29</td>
+    <td class="tg-p3ql">13174</td>
+    <td class="tg-p3ql">746</td>
+    <td class="tg-p3ql">13920</td>
+    <td class="tg-p3ql">94.64</td>
+    <td class="tg-p3ql">5.36</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">30-39</td>
+    <td class="tg-mwxe">9468</td>
+    <td class="tg-mwxe">3461</td>
+    <td class="tg-mwxe">12929</td>
+    <td class="tg-mwxe">73.23</td>
+    <td class="tg-mwxe">26.77</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">40-49</td>
+    <td class="tg-p3ql">6738</td>
+    <td class="tg-p3ql">3986</td>
+    <td class="tg-p3ql">10724</td>
+    <td class="tg-p3ql">62.83</td>
+    <td class="tg-p3ql">37.17</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">50-59</td>
+    <td class="tg-mwxe">4110</td>
+    <td class="tg-mwxe">2509</td>
+    <td class="tg-mwxe">6619</td>
+    <td class="tg-mwxe">62.09</td>
+    <td class="tg-mwxe">37.91</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">60-69</td>
+    <td class="tg-p3ql">2245</td>
+    <td class="tg-p3ql">809</td>
+    <td class="tg-p3ql">3054</td>
+    <td class="tg-p3ql">73.51</td>
+    <td class="tg-p3ql">26.49</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">70-79</td>
+    <td class="tg-mwxe">668</td>
+    <td class="tg-mwxe">147</td>
+    <td class="tg-mwxe">815</td>
+    <td class="tg-mwxe">81.96</td>
+    <td class="tg-mwxe">18.04</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">80-89</td>
+    <td class="tg-p3ql">115</td>
+    <td class="tg-p3ql">16</td>
+    <td class="tg-p3ql">131</td>
+    <td class="tg-p3ql">87.79</td>
+    <td class="tg-p3ql">12.21</td>
+</tr>
+<tr>
+    <td class="tg-mwxe">90-99</td>
+    <td class="tg-mwxe">42</td>
+    <td class="tg-mwxe">13</td>
+    <td class="tg-mwxe">55</td>
+    <td class="tg-mwxe">76.36</td>
+    <td class="tg-mwxe">23.64</td>
+</tr>
+<tr>
+    <td class="tg-p3ql">Total</td>
+    <td class="tg-p3ql">37155</td>
+    <td class="tg-p3ql">11687</td>
+    <td class="tg-p3ql">48842</td>
+    <td class="tg-p3ql">76.07</td>
+    <td class="tg-p3ql">23.93</td>
+</tr>
+</tbody></table></div><p></p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id10" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
@@ -1583,7 +1959,6 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
 <p>Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. <em>Computing in Science &amp; Engineering</em>, 9(3), 90-95. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a></p>
 </aside>
 </aside>
-</section>
 </section>
 
 
