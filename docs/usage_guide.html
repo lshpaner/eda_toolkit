@@ -111,6 +111,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#regular-non-stacked-bar-plots-example">Regular Non-Stacked Bar Plots Example</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#box-and-violin-plots">Box and Violin Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#box_violin_plot"><code class="docutils literal notranslate"><span class="pre">box_violin_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#box-plots-grid-example">Box Plots Grid Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#violin-plots-grid-example">Violin Plots Grid Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pivoted-violin-plots-grid-example">Pivoted Violin Plots Grid Example</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -142,7 +149,7 @@
 <p>This guide provides detailed instructions and examples for using the functions
 provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
 <p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id14" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id17" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
 information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
 </section>
 <section id="data-preparation-and-management">
@@ -269,7 +276,7 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id14" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id17" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>DataFrame<span class="w"> </span>index<span class="w"> </span>is<span class="w"> </span>unique.
 </pre></div>
 </div>
@@ -618,7 +625,7 @@ function to analyze a DataFrame’s columns.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id14" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id17" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
 <span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
@@ -869,7 +876,7 @@ Each summary table includes the count and proportion of occurrences for each uni
 This is useful for understanding which combinations were analyzed and included in the summary tables.</p>
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
-variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id14" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id17" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
@@ -1118,7 +1125,7 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
-from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id14" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id17" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
 
 <span class="c1"># Example usage</span>
@@ -1183,7 +1190,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
-columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id14" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
+columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id17" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
 
 <span class="c1"># Applying the highlight function</span>
@@ -1296,7 +1303,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
 </section>
 <section id="binning-numerical-columns">
 <h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
-<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id14" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
+<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id17" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
 does not have age or any other numerical column of interest binned, you can
 apply the following binning logic to categorize the data. Below, we use the age
 column from the UCI Machine Learning Repository as an example:</p>
@@ -1351,8 +1358,8 @@ and labels as needed for your specific data.</p>
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for
 specified columns within a DataFrame. This function is particularly useful for
 visualizing the distribution of numerical data across various categories or groups.
-It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id15" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
-matplotlib <a class="footnote-reference brackets" href="#id16" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
+It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id18" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
+matplotlib <a class="footnote-reference brackets" href="#id19" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
 statistical graphics.</p>
 <p><strong>Key Features and Parameters</strong></p>
 <ul class="simple">
@@ -1490,7 +1497,7 @@ respectively, ensuring that all text within the plots is legible and well-format
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="no-click"><a class="reference internal image-reference" href="_images/kde_density_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/kde_density_distributions.svg" width="950px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/kde_density_distributions.svg"><img alt="KDE Distributions - KDE (+) Histograms (Density)" class="align-center" src="_images/kde_density_distributions.svg" width="950px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="histogram-example-density">
 <h2>Histogram Example (Density)<a class="headerlink" href="#histogram-example-density" title="Permalink to this heading"></a></h2>
@@ -1532,7 +1539,7 @@ histogram representation without the KDE overlay.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="no-click"><a class="reference internal image-reference" href="_images/hist_density_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/hist_density_distributions.svg" width="900px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/hist_density_distributions.svg"><img alt="KDE Distributions - Histograms (Density)" class="align-center" src="_images/hist_density_distributions.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="histogram-example-count">
 <h2>Histogram Example (Count)<a class="headerlink" href="#histogram-example-count" title="Permalink to this heading"></a></h2>
@@ -1575,7 +1582,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="no-click"><a class="reference internal image-reference" href="_images/count_hist_distributions.svg"><img alt="KDE Distributions" class="align-center" src="_images/count_hist_distributions.svg" width="900px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/count_hist_distributions.svg"><img alt="KDE Distributions - Histograms (Count)" class="align-center" src="_images/count_hist_distributions.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div></section>
 </section>
 <section id="stacked-crosstab-plots">
@@ -1648,7 +1655,7 @@ or normalized plots.</p>
 <p>The provided code snippet demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function to generate stacked bar plots and corresponding crosstabs for different
 columns in a DataFrame. Here’s a detailed breakdown of the code using the census
-dataset as an example <a class="footnote-reference brackets" href="#id14" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+dataset as an example <a class="footnote-reference brackets" href="#id17" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>First, the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list is defined, specifying the columns <code class="docutils literal notranslate"><span class="pre">[&quot;sex&quot;,</span> <span class="pre">&quot;income&quot;]</span></code>
 to be analyzed. These columns will be used in the loop to generate separate plots.
 The <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> is then defined, with each entry corresponding to a
@@ -1732,7 +1739,7 @@ This involves:</p>
 function produces accurate and meaningful visualizations that are easy to interpret and analyze.</p>
 <p><strong>Output</strong></p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_sex.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_sex.svg" width="900px" /></a>
-</div><div style="height: 50px;"></div><div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div><div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income.svg"><img alt="Stacked Bar Plot Age vs. Income" class="align-center" src="_images/Stacked_Bar_Age_income.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When you set <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>, you are able to see the crosstabs printed out
@@ -1972,25 +1979,25 @@ DataFrames by assigning them to their own vriables. For example:</p>
 </section>
 <section id="pivoted-stacked-bar-plots-example">
 <h2>Pivoted Stacked Bar Plots Example<a class="headerlink" href="#pivoted-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>Using the census dataset <a class="footnote-reference brackets" href="#id14" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
+<p>Using the census dataset <a class="footnote-reference brackets" href="#id17" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
 <code class="docutils literal notranslate"><span class="pre">&quot;barh&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span> <span class="pre">function</span></code>. This option pivots the
 standard vertical stacked bar plot into a horizontal orientation, making it easier
 to compare categories when there are many labels on the y-axis.</p>
-<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_pivoted.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income_pivoted.svg" width="900px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_pivoted.svg"><img alt="Stacked Bar Plot Age vs. Income (Pivoted)" class="align-center" src="_images/Stacked_Bar_Age_income_pivoted.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="non-normalized-stacked-bar-plots-example">
 <h2>Non-Normalized Stacked Bar Plots Example<a class="headerlink" href="#non-normalized-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id14" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
+<p>In the census data <a class="footnote-reference brackets" href="#id17" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
 set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function. This option removes the display of normalized plots beneath the regular
 versions. Alternatively, setting the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display
 only the normalized plots. The example below demonstrates regular stacked bar plots
 for income by age.</p>
-<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_regular.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income_regular.svg" width="900px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_regular.svg"><img alt="Stacked Bar Plot Age vs. Income (Regular)" class="align-center" src="_images/Stacked_Bar_Age_income_regular.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="regular-non-stacked-bar-plots-example">
 <h2>Regular Non-Stacked Bar Plots Example<a class="headerlink" href="#regular-non-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id14" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
+<p>In the census data <a class="footnote-reference brackets" href="#id17" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
 displaying their normalized versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>
 in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function and enable <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> by setting
 it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This configuration removes any stacked elements and prevents the
@@ -2001,17 +2008,185 @@ order, making it easier to visualize the most prevalent categories.</p>
 <p>In the example below, the color of the bars has been set to a dark grey (<code class="docutils literal notranslate"><span class="pre">#333333</span></code>),
 and the legend has been removed by setting <code class="docutils literal notranslate"><span class="pre">show_legend=False</span></code>. This illustrates
 regular bar plots for income by age, without stacking.</p>
-<div class="no-click"><a class="reference internal image-reference" href="_images/Bar_Age_regular_income.svg"><img alt="KDE Distributions" class="align-center" src="_images/Bar_Age_regular_income.svg" width="900px" /></a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/Bar_Age_regular_income.svg"><img alt="Bar Plot Age vs. Income (Regular)" class="align-center" src="_images/Bar_Age_regular_income.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div></section>
+</section>
+<section id="box-and-violin-plots">
+<h1>Box and Violin Plots<a class="headerlink" href="#box-and-violin-plots" title="Permalink to this heading"></a></h1>
+<p><strong>Create and save individual boxplots or violin plots, an entire grid of plots,
+or both for given metrics and comparisons.</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">box_violin_plot</span></code> function is designed to generate both individual and grid
+plots of boxplots or violin plots for a set of specified metrics against comparison
+categories within a DataFrame. This function offers flexibility in how the plots are
+presented and saved, allowing users to create detailed visualizations that highlight
+the distribution of metrics across different categories.</p>
+<p>With options to customize the plot type (<code class="docutils literal notranslate"><span class="pre">boxplot</span></code> or <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>),
+axis label rotation, figure size, and whether to display or save the plots, this
+function can be adapted for a wide range of data visualization needs. Users can
+choose to display individual plots, a grid of plots, or both, depending on the
+requirements of their analysis.</p>
+<p>Additionally, the function includes features for rotating the plots, adjusting
+the font sizes of labels, and selectively showing or hiding legends. It also
+supports the automatic saving of plots in either PNG or SVG format, depending on
+the specified paths, making it a powerful tool for producing publication-quality
+figures.</p>
+<p>The function is particularly useful in scenarios where the user needs to compare
+the distribution of multiple metrics across different categories, enabling a
+clear visual analysis of how these metrics vary within the dataset.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="box_violin_plot">
+<span class="sig-name descname"><span class="pre">box_violin_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_boxplot_comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'boxplot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel_rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">individual_figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#box_violin_plot" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing the data to plot.</p></li>
+<li><p><strong>metrics_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – List of metric names (columns in df) to plot.</p></li>
+<li><p><strong>metrics_boxplot_comp</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – List of comparison categories (columns in df).</p></li>
+<li><p><strong>n_rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of rows in the subplot grid.</p></li>
+<li><p><strong>n_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of columns in the subplot grid.</p></li>
+<li><p><strong>image_path_png</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Optional directory path to save <code class="docutils literal notranslate"><span class="pre">.png</span></code> images.</p></li>
+<li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Optional directory path to save <code class="docutils literal notranslate"><span class="pre">.svg</span></code> images.</p></li>
+<li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String, <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code> to control saving plots.</p></li>
+<li><p><strong>show_legend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Boolean, True if showing the legend in the plots.</p></li>
+<li><p><strong>plot_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specify the type of plot, either <code class="docutils literal notranslate"><span class="pre">&quot;boxplot&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;violinplot&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;boxplot&quot;</span></code>.</p></li>
+<li><p><strong>xlabel_rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Rotation angle for x-axis labels. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>show_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specify the plot display mode: <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p><strong>rotate_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Boolean, True if rotating (pivoting) the plots.</p></li>
+<li><p><strong>individual_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Width and height of the figure for individual plots. Default is (<code class="docutils literal notranslate"><span class="pre">6,</span> <span class="pre">4</span></code>).</p></li>
+<li><p><strong>grid_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Width and height of the figure for grid plots.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – <ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">show_plot</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> is not one of None, <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> is set without specifying <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> or <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">rotate_plot</span></code> is not a boolean value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">individual_figsize</span></code> is not a tuple or list of two numbers.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">grid_figsize</span></code> is specified but is not a tuple or list of two numbers.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+<p>This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, a grid of plots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.</p>
+</dd></dl>
+
+<section id="box-plots-grid-example">
+<h2>Box Plots Grid Example<a class="headerlink" href="#box-plots-grid-example" title="Permalink to this heading"></a></h2>
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id17" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, the box_violin_plot function is employed to create a grid of
+boxplots, comparing different metrics against the <code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code> column in the
+DataFrame. The <code class="docutils literal notranslate"><span class="pre">metrics_boxplot_comp</span></code> parameter is set to [<code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code>], meaning
+that the comparison will be based on different age groups. The <code class="docutils literal notranslate"><span class="pre">metrics_list</span></code> is
+provided as <code class="docutils literal notranslate"><span class="pre">age_boxplot_list</span></code>, which contains the specific metrics to be visualized.
+The function is configured to arrange the plots in a grid format with <cite>3</cite> rows and <cite>4</cite>
+columns, using the <code class="docutils literal notranslate"><span class="pre">n_rows=3</span></code> and <code class="docutils literal notranslate"><span class="pre">n_cols=4</span></code> parameters. The <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> and
+<code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code> parameters are specified to save the plots in both PNG and
+SVG formats, and the save_plots option is set to <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, ensuring that both
+individual and grid plots are saved.</p>
+<p>The plots are displayed in a grid format, as indicated by the <code class="docutils literal notranslate"><span class="pre">show_plot=&quot;grid&quot;</span></code>
+parameter. The <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;boxplot&quot;</span></code>, so the function will generate
+boxplots for each metric in the list. Additionally, the <cite>x-axis</cite> labels are rotated
+by 90 degrees (<code class="docutils literal notranslate"><span class="pre">xlabel_rot=90</span></code>) to ensure that the labels are legible. The legend is
+hidden by setting <code class="docutils literal notranslate"><span class="pre">show_legend=False</span></code>, keeping the plots clean and focused on the data.
+This configuration provides a comprehensive visual comparison of the specified
+metrics across different age groups, with all plots saved for future reference or publication.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">age_boxplot_list</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;education-num&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hours-per-week&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+
+<span class="n">metrics_boxplot_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
+
+<span class="n">box_violin_plot</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">metrics_list</span><span class="o">=</span><span class="n">age_boxplot_list</span><span class="p">,</span>
+    <span class="n">metrics_boxplot_comp</span><span class="o">=</span><span class="n">metrics_boxplot_comp</span><span class="p">,</span>
+    <span class="n">n_rows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
+    <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
+    <span class="n">save_plots</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;boxplot&quot;</span><span class="p">,</span>
+    <span class="n">xlabel_rot</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="no-click"><a class="reference internal image-reference" href="_images/all_plots_comparisons_boxplot.svg"><img alt="Box Plot Comparisons" class="align-center" src="_images/all_plots_comparisons_boxplot.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div></section>
+<section id="violin-plots-grid-example">
+<h2>Violin Plots Grid Example<a class="headerlink" href="#violin-plots-grid-example" title="Permalink to this heading"></a></h2>
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id17" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
+<code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>. This adjustment will generate violin plots instead
+of boxplots while maintaining all other settings.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+
+<span class="n">metrics_boxplot_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
+
+<span class="n">box_violin_plot</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">metrics_list</span><span class="o">=</span><span class="n">age_boxplot_list</span><span class="p">,</span>
+    <span class="n">metrics_boxplot_comp</span><span class="o">=</span><span class="n">metrics_boxplot_comp</span><span class="p">,</span>
+    <span class="n">n_rows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
+    <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
+    <span class="n">save_plots</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;violinplot&quot;</span><span class="p">,</span>
+    <span class="n">xlabel_rot</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="no-click"><a class="reference internal image-reference" href="_images/all_plots_comparisons_violinplot.svg"><img alt="Violin Plot Comparisons" class="align-center" src="_images/all_plots_comparisons_violinplot.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div></section>
+<section id="pivoted-violin-plots-grid-example">
+<h2>Pivoted Violin Plots Grid Example<a class="headerlink" href="#pivoted-violin-plots-grid-example" title="Permalink to this heading"></a></h2>
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id17" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
+to pivot the plot, changing the orientation of the axes while keeping the <cite>x-axis</cite> labels upright.
+This adjustment flips the axes, providing a different perspective on the data distribution.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="n">impor</span> <span class="n">box_violin_plot</span>
+
+<span class="n">metrics_boxplot_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
+
+<span class="n">box_violin_plot</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">metrics_list</span><span class="o">=</span><span class="n">age_boxplot_list</span><span class="p">,</span>
+    <span class="n">metrics_boxplot_comp</span><span class="o">=</span><span class="n">metrics_boxplot_comp</span><span class="p">,</span>
+    <span class="n">n_rows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
+    <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
+    <span class="n">save_plots</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="n">rotate_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;violinplot&quot;</span><span class="p">,</span>
+    <span class="n">xlabel_rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="no-click"><a class="reference internal image-reference" href="_images/all_plots_comparisons_violinplot_pivoted.svg"><img alt="Violin Plot Comparisons (Pivoted)" class="align-center" src="_images/all_plots_comparisons_violinplot_pivoted.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id14" role="note">
+<aside class="footnote brackets" id="id17" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id15" role="note">
+<aside class="footnote brackets" id="id18" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">2</a><span class="fn-bracket">]</span></span>
 <p>Michael Waskom (2021). Seaborn: statistical data visualization. <em>Journal of Open Source Software</em>, 6(60), 3021, <a class="reference external" href="https://doi.org/10.21105/joss.03021">https://doi.org/10.21105/joss.03021</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id16" role="note">
+<aside class="footnote brackets" id="id19" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">3</a><span class="fn-bracket">]</span></span>
 <p>Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. <em>Computing in Science &amp; Engineering</em>, 9(3), 90-95. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a></p>
 </aside>
