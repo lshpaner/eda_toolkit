@@ -1838,6 +1838,11 @@ function produces accurate and meaningful visualizations that are easy to interp
    <div style="height: 50px;"></div>
 
 
+.. note::
+
+    When you set ``return_dict=True``, you are able to see the crosstabs printed out 
+    as shown below. 
+
 .. raw:: html
 
     <style type="text/css">
@@ -2065,6 +2070,16 @@ function produces accurate and meaningful visualizations that are easy to interp
         <td class="tg-p3ql">23.93</td>
     </tr>
     </tbody></table></div>
+
+\
+
+When you set ``return_dict=True``, you can access these crosstabs as 
+DataFrames by assigning them to their own vriables. For example: 
+
+.. code-block:: python 
+
+    crosstab_age_sex = crosstabs_dict["sex"]
+    crosstab_age_income = crosstabs_dict["income"]
 
 \
 

@@ -1723,7 +1723,12 @@ function produces accurate and meaningful visualizations that are easy to interp
 <p><strong>Output</strong></p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_sex.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_sex.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income.svg" width="900px" /></a>
-</div><div style="height: 50px;"></div><style type="text/css">
+</div><div style="height: 50px;"></div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When you set <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>, you are able to see the crosstabs printed out
+as shown below.</p>
+</div>
+<style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
 .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
 overflow:hidden;padding:0px 5px;word-break:normal;}
@@ -1948,6 +1953,13 @@ font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
     <td class="tg-p3ql">23.93</td>
 </tr>
 </tbody></table></div><p></p>
+<p>When you set <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>, you can access these crosstabs as
+DataFrames by assigning them to their own vriables. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">crosstab_age_sex</span> <span class="o">=</span> <span class="n">crosstabs_dict</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span>
+<span class="n">crosstab_age_income</span> <span class="o">=</span> <span class="n">crosstabs_dict</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p></p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id10" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
