@@ -142,7 +142,7 @@
 <p>This guide provides detailed instructions and examples for using the functions
 provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
 <p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id10" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id14" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
 information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
 </section>
 <section id="data-preparation-and-management">
@@ -269,7 +269,7 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id10" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id14" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>DataFrame<span class="w"> </span>index<span class="w"> </span>is<span class="w"> </span>unique.
 </pre></div>
 </div>
@@ -618,7 +618,7 @@ function to analyze a DataFrame’s columns.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id10" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id14" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
 <span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
@@ -869,7 +869,7 @@ Each summary table includes the count and proportion of occurrences for each uni
 This is useful for understanding which combinations were analyzed and included in the summary tables.</p>
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
-variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id10" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id14" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
@@ -1118,7 +1118,7 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
-from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id10" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id14" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
 
 <span class="c1"># Example usage</span>
@@ -1183,7 +1183,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
-columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id10" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
+columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id14" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
 
 <span class="c1"># Applying the highlight function</span>
@@ -1296,7 +1296,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
 </section>
 <section id="binning-numerical-columns">
 <h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
-<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id10" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
+<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id14" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
 does not have age or any other numerical column of interest binned, you can
 apply the following binning logic to categorize the data. Below, we use the age
 column from the UCI Machine Learning Repository as an example:</p>
@@ -1351,8 +1351,8 @@ and labels as needed for your specific data.</p>
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for
 specified columns within a DataFrame. This function is particularly useful for
 visualizing the distribution of numerical data across various categories or groups.
-It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id11" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
-matplotlib <a class="footnote-reference brackets" href="#id12" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
+It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id15" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
+matplotlib <a class="footnote-reference brackets" href="#id16" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
 statistical graphics.</p>
 <p><strong>Key Features and Parameters</strong></p>
 <ul class="simple">
@@ -1647,7 +1647,8 @@ or normalized plots.</p>
 <h2>Stacked Bar Plots With Crosstabs Example<a class="headerlink" href="#stacked-bar-plots-with-crosstabs-example" title="Permalink to this heading"></a></h2>
 <p>The provided code snippet demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function to generate stacked bar plots and corresponding crosstabs for different
-columns in a DataFrame. Here’s a detailed breakdown of the code:</p>
+columns in a DataFrame. Here’s a detailed breakdown of the code using the census
+dataset as an example <a class="footnote-reference brackets" href="#id14" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>First, the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list is defined, specifying the columns <code class="docutils literal notranslate"><span class="pre">[&quot;sex&quot;,</span> <span class="pre">&quot;income&quot;]</span></code>
 to be analyzed. These columns will be used in the loop to generate separate plots.
 The <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> is then defined, with each entry corresponding to a
@@ -1971,7 +1972,7 @@ DataFrames by assigning them to their own vriables. For example:</p>
 </section>
 <section id="pivoted-stacked-bar-plots-example">
 <h2>Pivoted Stacked Bar Plots Example<a class="headerlink" href="#pivoted-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>To create horizontal stacked bar plots, simply set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
+<p>Using the census dataset <a class="footnote-reference brackets" href="#id14" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
 <code class="docutils literal notranslate"><span class="pre">&quot;barh&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span> <span class="pre">function</span></code>. This option pivots the
 standard vertical stacked bar plot into a horizontal orientation, making it easier
 to compare categories when there are many labels on the y-axis.</p>
@@ -1979,21 +1980,22 @@ to compare categories when there are many labels on the y-axis.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="non-normalized-stacked-bar-plots-example">
 <h2>Non-Normalized Stacked Bar Plots Example<a class="headerlink" href="#non-normalized-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>To create stacked bar plots without the normalized versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>
-parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function. This option
-removes the display of normalized plots beneath the regular versions. Alternatively,
-setting the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display only the normalized plots.
-The example below demonstrates regular stacked bar plots for income by age.</p>
+<p>In the census data <a class="footnote-reference brackets" href="#id14" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
+set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
+function. This option removes the display of normalized plots beneath the regular
+versions. Alternatively, setting the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display
+only the normalized plots. The example below demonstrates regular stacked bar plots
+for income by age.</p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_regular.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_income_regular.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="regular-non-stacked-bar-plots-example">
 <h2>Regular Non-Stacked Bar Plots Example<a class="headerlink" href="#regular-non-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>To generate regular (non-stacked) bar plots without displaying their normalized
-versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
-function and enable <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> by setting it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This configuration
-removes any stacked elements and prevents the display of normalized plots beneath
-the regular versions. Alternatively, setting <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code>
-will display only the normalized plots.</p>
+<p>In the census data <a class="footnote-reference brackets" href="#id14" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
+displaying their normalized versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>
+in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function and enable <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> by setting
+it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This configuration removes any stacked elements and prevents the
+display of normalized plots beneath the regular versions. Alternatively, setting
+<code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display only the normalized plots.</p>
 <p>When unstacking bar plots in this fashion, the distribution is aligned in descending
 order, making it easier to visualize the most prevalent categories.</p>
 <p>In the example below, the color of the bars has been set to a dark grey (<code class="docutils literal notranslate"><span class="pre">#333333</span></code>),
@@ -2001,15 +2003,15 @@ and the legend has been removed by setting <code class="docutils literal notrans
 regular bar plots for income by age, without stacking.</p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/Bar_Age_regular_income.svg"><img alt="KDE Distributions" class="align-center" src="_images/Bar_Age_regular_income.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id10" role="note">
+<aside class="footnote brackets" id="id14" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id11" role="note">
+<aside class="footnote brackets" id="id15" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">2</a><span class="fn-bracket">]</span></span>
 <p>Michael Waskom (2021). Seaborn: statistical data visualization. <em>Journal of Open Source Software</em>, 6(60), 3021, <a class="reference external" href="https://doi.org/10.21105/joss.03021">https://doi.org/10.21105/joss.03021</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id12" role="note">
+<aside class="footnote brackets" id="id16" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">3</a><span class="fn-bracket">]</span></span>
 <p>Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. <em>Computing in Science &amp; Engineering</em>, 9(3), 90-95. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a></p>
 </aside>
