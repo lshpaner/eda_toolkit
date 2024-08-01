@@ -1493,7 +1493,7 @@ respectively, ensuring that all text within the plots is legible and well-format
    <div class="no-click">
 
 .. image:: ../assets/kde_density_distributions.svg
-   :alt: KDE Distributions
+   :alt: KDE Distributions - KDE (+) Histograms (Density)
    :align: center
    :width: 950px
 
@@ -1556,7 +1556,7 @@ histogram representation without the KDE overlay.
    <div class="no-click">
 
 .. image:: ../assets/hist_density_distributions.svg
-   :alt: KDE Distributions
+   :alt: KDE Distributions - Histograms (Density)
    :align: center
    :width: 900px
 
@@ -1619,7 +1619,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.
    <div class="no-click">
 
 .. image:: ../assets/count_hist_distributions.svg
-   :alt: KDE Distributions
+   :alt: KDE Distributions - Histograms (Count)
    :align: center
    :width: 900px
 
@@ -1835,7 +1835,7 @@ function produces accurate and meaningful visualizations that are easy to interp
    <div class="no-click">
 
 .. image:: ../assets/Stacked_Bar_Age_income.svg
-   :alt: KDE Distributions
+   :alt: Stacked Bar Plot Age vs. Income
    :align: center
    :width: 900px
 
@@ -2105,7 +2105,7 @@ to compare categories when there are many labels on the y-axis.
    <div class="no-click">
 
 .. image:: ../assets/Stacked_Bar_Age_income_pivoted.svg
-   :alt: KDE Distributions
+   :alt: Stacked Bar Plot Age vs. Income (Pivoted)
    :align: center
    :width: 900px
 
@@ -2133,7 +2133,7 @@ for income by age.
    <div class="no-click">
 
 .. image:: ../assets/Stacked_Bar_Age_income_regular.svg
-   :alt: KDE Distributions
+   :alt: Stacked Bar Plot Age vs. Income (Regular)
    :align: center
    :width: 900px
 
@@ -2164,13 +2164,12 @@ and the legend has been removed by setting ``show_legend=False``. This illustrat
 regular bar plots for income by age, without stacking.
 
 
-
 .. raw:: html
 
    <div class="no-click">
 
 .. image:: ../assets/Bar_Age_regular_income.svg
-   :alt: KDE Distributions
+   :alt: Bar Plot Age vs. Income (Regular)
    :align: center
    :width: 900px
 
@@ -2182,6 +2181,244 @@ regular bar plots for income by age, without stacking.
    
    <div style="height: 50px;"></div>
 
+
+Box and Violin Plots
+===========================
+
+**Create and save individual boxplots or violin plots, an entire grid of plots, 
+or both for given metrics and comparisons.**
+
+The ``box_violin_plot`` function is designed to generate both individual and grid 
+plots of boxplots or violin plots for a set of specified metrics against comparison 
+categories within a DataFrame. This function offers flexibility in how the plots are 
+presented and saved, allowing users to create detailed visualizations that highlight 
+the distribution of metrics across different categories.
+
+With options to customize the plot type (``boxplot`` or ``violinplot``), 
+axis label rotation, figure size, and whether to display or save the plots, this 
+function can be adapted for a wide range of data visualization needs. Users can 
+choose to display individual plots, a grid of plots, or both, depending on the 
+requirements of their analysis.
+
+Additionally, the function includes features for rotating the plots, adjusting 
+the font sizes of labels, and selectively showing or hiding legends. It also 
+supports the automatic saving of plots in either PNG or SVG format, depending on 
+the specified paths, making it a powerful tool for producing publication-quality 
+figures.
+
+The function is particularly useful in scenarios where the user needs to compare 
+the distribution of multiple metrics across different categories, enabling a 
+clear visual analysis of how these metrics vary within the dataset.
+
+
+.. function:: box_violin_plot(df, metrics_list, metrics_boxplot_comp, n_rows, n_cols, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None)
+
+    :param df: The DataFrame containing the data to plot.
+    :type df: pandas.DataFrame
+    :param metrics_list: List of metric names (columns in df) to plot.
+    :type metrics_list: list of str
+    :param metrics_boxplot_comp: List of comparison categories (columns in df).
+    :type metrics_boxplot_comp: list of str
+    :param n_rows: Number of rows in the subplot grid.
+    :type n_rows: int
+    :param n_cols: Number of columns in the subplot grid.
+    :type n_cols: int
+    :param image_path_png: Optional directory path to save ``.png`` images.
+    :type image_path_png: str, optional
+    :param image_path_svg: Optional directory path to save ``.svg`` images.
+    :type image_path_svg: str, optional
+    :param save_plots: String, ``"all"``, ``"individual"``, or ``"grid"`` to control saving plots.
+    :type save_plots: str, optional
+    :param show_legend: Boolean, True if showing the legend in the plots.
+    :type show_legend: bool, optional
+    :param plot_type: Specify the type of plot, either ``"boxplot"`` or ``"violinplot"``. Default is ``"boxplot"``.
+    :type plot_type: str, optional
+    :param xlabel_rot: Rotation angle for x-axis labels. Default is ``0``.
+    :type xlabel_rot: int, optional
+    :param show_plot: Specify the plot display mode: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
+    :type show_plot: str, optional
+    :param rotate_plot: Boolean, True if rotating (pivoting) the plots.
+    :type rotate_plot: bool, optional
+    :param individual_figsize: Width and height of the figure for individual plots. Default is (``6, 4``).
+    :type individual_figsize: tuple or list, optional
+    :param grid_figsize: Width and height of the figure for grid plots.
+    :type grid_figsize: tuple or list, optional
+
+    :raises ValueError:
+        - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
+        - If ``save_plots`` is not one of None, ``"all"``, ``"individual"``, or ``"grid"``.
+        - If ``save_plots`` is set without specifying ``image_path_png`` or ``image_path_svg``.
+        - If ``rotate_plot`` is not a boolean value.
+        - If ``individual_figsize`` is not a tuple or list of two numbers.
+        - If ``grid_figsize`` is specified but is not a tuple or list of two numbers.
+
+    :returns: ``None``
+
+    This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, a grid of plots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.
+
+Box Plots Grid Example
+-----------------------
+
+In this example with the US census data [1]_, the box_violin_plot function is employed to create a grid of 
+boxplots, comparing different metrics against the ``"age_group"`` column in the 
+DataFrame. The ``metrics_boxplot_comp`` parameter is set to [``"age_group"``], meaning 
+that the comparison will be based on different age groups. The ``metrics_list`` is 
+provided as ``age_boxplot_list``, which contains the specific metrics to be visualized. 
+The function is configured to arrange the plots in a grid format with `3` rows and `4`
+columns, using the ``n_rows=3`` and ``n_cols=4`` parameters. The ``image_path_png`` and 
+``image_path_svg`` parameters are specified to save the plots in both PNG and 
+SVG formats, and the save_plots option is set to ``"all"``, ensuring that both 
+individual and grid plots are saved.
+
+The plots are displayed in a grid format, as indicated by the ``show_plot="grid"`` 
+parameter. The ``plot_type`` is set to ``"boxplot"``, so the function will generate 
+boxplots for each metric in the list. Additionally, the `x-axis` labels are rotated 
+by 90 degrees (``xlabel_rot=90``) to ensure that the labels are legible. The legend is 
+hidden by setting ``show_legend=False``, keeping the plots clean and focused on the data. 
+This configuration provides a comprehensive visual comparison of the specified 
+metrics across different age groups, with all plots saved for future reference or publication.
+
+
+.. code-block:: python
+
+    age_boxplot_list = df[
+        [
+            "education-num",
+            "hours-per-week",
+        ]
+    ].columns.to_list()
+
+
+.. code-block:: python
+
+    from eda_toolkit import box_violin_plot
+
+    metrics_boxplot_comp = ["age_group"]
+
+    box_violin_plot(
+        df=df,
+        metrics_list=age_boxplot_list,
+        metrics_boxplot_comp=metrics_boxplot_comp,
+        n_rows=3,
+        n_cols=4,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        save_plots="all",
+        show_plot="both",
+        show_legend=False,
+        plot_type="boxplot",
+        xlabel_rot=90,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/all_plots_comparisons_boxplot.svg
+   :alt: Box Plot Comparisons
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+Violin Plots Grid Example
+--------------------------
+
+In this example with the US census data [1]_, we keep everything the same as the prior example, but change the 
+``plot_type`` to ``violinplot``. This adjustment will generate violin plots instead 
+of boxplots while maintaining all other settings.
+
+
+.. code-block:: python
+
+    from eda_toolkit import box_violin_plot
+
+    metrics_boxplot_comp = ["age_group"]
+
+    box_violin_plot(
+        df=df,
+        metrics_list=age_boxplot_list,
+        metrics_boxplot_comp=metrics_boxplot_comp,
+        n_rows=3,
+        n_cols=4,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        save_plots="all",
+        show_plot="both",
+        show_legend=False,
+        plot_type="violinplot",
+        xlabel_rot=90,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/all_plots_comparisons_violinplot.svg
+   :alt: Violin Plot Comparisons
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Pivoted Violin Plots Grid Example
+------------------------------------
+
+In this example with the US census data [1]_, we set ``xlabel_rot=0`` and ``rotate_plot=True`` 
+to pivot the plot, changing the orientation of the axes while keeping the `x-axis` labels upright. 
+This adjustment flips the axes, providing a different perspective on the data distribution.
+
+.. code-block:: python
+
+    from eda_toolkit impor box_violin_plot
+
+    metrics_boxplot_comp = ["age_group"]
+
+    box_violin_plot(
+        df=df,
+        metrics_list=age_boxplot_list,
+        metrics_boxplot_comp=metrics_boxplot_comp,
+        n_rows=3,
+        n_cols=4,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        save_plots="all",
+        show_plot="both",
+        rotate_plot=True,
+        show_legend=False,
+        plot_type="violinplot",
+        xlabel_rot=0,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/all_plots_comparisons_violinplot_pivoted.svg
+   :alt: Violin Plot Comparisons (Pivoted)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
 
 .. [#] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
 
