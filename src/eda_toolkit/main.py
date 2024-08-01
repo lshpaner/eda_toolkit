@@ -4,12 +4,12 @@ import random
 from itertools import combinations
 from IPython.display import display
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker  # Import for formatting
 import seaborn as sns
 import textwrap
 import os
 import sys
 import warnings
-
 
 if sys.version_info >= (3, 7):
     from datetime import datetime
@@ -656,6 +656,7 @@ def kde_distributions(
     hist_edgecolor="#000000",  # Default edge color black as hex code
     hue=None,  # Added hue parameter
     fill=True,  # Added fill parameter
+    fill_alpha=1,  # Transparency level for the fill
     n_rows=1,
     n_cols=1,
     w_pad=1.0,
@@ -668,16 +669,23 @@ def kde_distributions(
     single_var_image_path_png=None,
     single_var_image_path_svg=None,
     single_var_image_filename=None,
-    y_axis_label="Density",  # Customizable y-axis label
-    plot_type="both",  # Parameter to control the plot type ('hist', 'kde', or 'both')
+    y_axis_label="Density",  # Parameter to control y-axis label
+    plot_type="both",  # Parameter to control plot type ('hist', 'kde', or 'both')
     log_scale_vars=None,  # Parameter to specify which variables to apply log scale
     bins="auto",  # Default to 'auto' as per sns
     binwidth=None,  # Parameter to control the width of bins
-    stat="density",  # Parameter to control stat ('count', 'density',
-    # 'frequency', 'probability', 'proportion', 'percent')
+    label_fontsize=10,  # Fontsize control for labels
+    tick_fontsize=10,  # Fontsize control for tick labels
+    disable_sci_notation=False,  # Toggle for scientific notation
+    stat="density",  # Control the aggregate statistic for histograms
 ):
     """
-    Generate KDE or histogram distribution plots for specified columns in a DataFrame.
+    Generate KDE and/or histogram distribution plots for columns in a DataFrame.
+
+    This function provides a flexible way to visualize the distribution of
+    data for specified columns in a DataFrame. It supports both kernel density
+    estimation (KDE) and histograms, with options to customize various aspects
+    of the plots, including colors, labels, binning, and scaling.
 
     Parameters:
     -----------
@@ -691,7 +699,7 @@ def kde_distributions(
         Size of the overall grid figure.
 
     single_figsize : tuple, optional (default=(6, 4))
-        Size of individual figures.
+        Size of individual figures for each variable.
 
     kde : bool, optional (default=True)
         Whether to include KDE plots on the histograms.
@@ -706,10 +714,14 @@ def kde_distributions(
         Color of the histogram bar edges.
 
     hue : str, optional
-        Column name to group data by.
+        Column name to group data by, adding different colors for each group.
 
     fill : bool, optional (default=True)
         Whether to fill the histogram bars with color.
+
+    fill_alpha : float, optional (default=1)
+        Alpha transparency for the fill color of the histogram bars, where
+        0 is fully transparent and 1 is fully opaque.
 
     n_rows : int, optional (default=1)
         Number of rows in the subplot grid.
@@ -748,8 +760,8 @@ def kde_distributions(
         Filename to use when saving the separate distribution plots.
         The variable name will be appended to this filename.
 
-    y_axis_label : str, optional (default='Count')
-        Label for the y-axis.
+    y_axis_label : str, optional (default='Density')
+        The label to display on the y-axis.
 
     plot_type : str, optional (default='both')
         The type of plot to generate ('hist', 'kde', or 'both').
@@ -763,53 +775,57 @@ def kde_distributions(
     binwidth : number or pair of numbers, optional
         Width of each bin, overrides bins but can be used with binrange.
 
+    label_fontsize : int, optional (default=10)
+        Font size for axis labels, including xlabel, ylabel, and tick marks.
+
+    disable_sci_notation : bool, optional (default=False)
+        Toggle to disable scientific notation on axes.
+
     stat : str, optional (default='density')
-        The type of statistic to display on the y-axis ('count', 'density',
-        'frequency', 'probability', 'proportion', 'percent').
+        Aggregate statistic to compute in each bin (e.g., 'count', 'frequency',
+        'probability', 'percent', 'density').
 
     Returns:
     --------
     None
+        This function does not return any value but generates and optionally
+        saves distribution plots for the specified columns in the DataFrame.
     """
-
-    valid_stats = [
-        "count",
-        "density",
-        "frequency",
-        "probability",
-        "proportion",
-        "percent",
-    ]
 
     if vars_of_interest is None:
         print("Error: No variables of interest provided.")
         return
 
-    plot_type = plot_type.lower()
-    if plot_type not in ["hist", "kde", "both"]:
-        raise ValueError('plot_type can either be "hist", "kde", or "both"')
+    # Validate stat parameter
+    valid_stats = [
+        "count",
+        "frequency",
+        "probability",
+        "proportion",
+        "percent",
+        "density",
+    ]
+    if stat.lower() not in valid_stats:
+        raise ValueError(
+            f"Invalid stat value. Expected one of {valid_stats}, "
+            f"got '{stat}' instead."
+        )
 
-    stat = stat.lower()
-    if stat not in valid_stats:
-        raise ValueError(f"stat can either be {', '.join(valid_stats)}")
-
-    # Warn if stat="count" and kde=True
-    if stat == "count" and kde:
-        warnings.warn("Using KDE with stat='count' may produce misleading plots.")
+    # Check if all log_scale_vars are in the DataFrame
+    if log_scale_vars:
+        invalid_vars = [var for var in log_scale_vars if var not in df.columns]
+        if invalid_vars:
+            raise ValueError(f"Invalid log_scale_vars: {invalid_vars}")
 
     # Check if edgecolor is being set while fill is False
     if not fill and hist_edgecolor != "#000000":
         raise ValueError("Cannot change edgecolor when fill is set to False")
 
-    # Check if all log_scale_vars are in the DataFrame
-    if log_scale_vars:
-        if isinstance(log_scale_vars, str):
-            log_scale_vars = [log_scale_vars]
-        invalid_vars = [var for var in log_scale_vars if var not in df.columns]
-        if invalid_vars:
-            raise ValueError(f"Invalid log_scale_vars: {invalid_vars}")
+    # Check if fill_alpha is being set while fill is False
+    if not fill and fill_alpha != 0.6:
+        raise ValueError("Cannot set fill_alpha when fill is set to False")
 
-    # Warn if both bins and binwidth are specified
+    # Warn if both bins and binwidth are set
     if bins != "auto" and binwidth is not None:
         warnings.warn(
             "Specifying both bins and binwidth may affect performance.",
@@ -844,12 +860,11 @@ def kde_distributions(
                     hue=hue,
                     color=hist_color if hue is None and fill else None,
                     edgecolor=hist_edgecolor,
-                    stat=stat,
+                    stat=stat.lower(),
                     fill=fill,
+                    alpha=fill_alpha,  # Apply the alpha value for transparency
                     log_scale=log_scale,
-                    bins=(
-                        bins if binwidth is None else None
-                    ),  # Use bins if binwidth is None
+                    bins=bins,
                     binwidth=binwidth,
                 )
                 if kde:
@@ -880,12 +895,11 @@ def kde_distributions(
                     hue=hue,
                     color=hist_color if hue is None and fill else None,
                     edgecolor=hist_edgecolor,
-                    stat=stat,
+                    stat=stat.lower(),
                     fill=fill,
+                    alpha=fill_alpha,  # Apply the alpha value for transparency
                     log_scale=log_scale,
-                    bins=(
-                        bins if binwidth is None else None
-                    ),  # Use bins if binwidth is None
+                    bins=bins,
                     binwidth=binwidth,
                 )
                 if kde:
@@ -898,8 +912,24 @@ def kde_distributions(
                         log_scale=log_scale,
                     )
 
-            ax.set_ylabel(y_axis_label)
-            ax.set_title("\n".join(textwrap.wrap(title, width=text_wrap)))
+            ax.set_xlabel(col, fontsize=label_fontsize)
+            ax.set_ylabel(y_axis_label.capitalize(), fontsize=label_fontsize)
+            ax.set_title(
+                "\n".join(textwrap.wrap(title, width=text_wrap)),
+                fontsize=label_fontsize,
+            )
+            ax.tick_params(
+                axis="both", labelsize=tick_fontsize
+            )  # Control tick fontsize separately
+
+            # Disable scientific notation if requested
+            if disable_sci_notation:
+                ax.xaxis.set_major_formatter(
+                    mticker.ScalarFormatter(useMathText=False),
+                )
+                ax.yaxis.set_major_formatter(
+                    mticker.ScalarFormatter(useMathText=False),
+                )
 
     # Hide any remaining axes
     for ax in axes[len(vars_of_interest) :]:
@@ -944,12 +974,11 @@ def kde_distributions(
                         hue=hue,
                         color=hist_color if hue is None and fill else None,
                         edgecolor=hist_edgecolor,
-                        stat=stat,
+                        stat=stat.lower(),
                         fill=fill,
+                        alpha=fill_alpha,  # Apply alpha value for transparency
                         log_scale=log_scale,
-                        bins=(
-                            bins if binwidth is None else None
-                        ),  # Use bins if binwidth is None
+                        bins=bins,
                         binwidth=binwidth,
                     )
                     if kde:
@@ -980,12 +1009,11 @@ def kde_distributions(
                         hue=hue,
                         color=hist_color if hue is None and fill else None,
                         edgecolor=hist_edgecolor,
-                        stat=stat,
+                        stat=stat.lower(),
                         fill=fill,
+                        alpha=fill_alpha,  # Apply alpha value for transparency
                         log_scale=log_scale,
-                        bins=(
-                            bins if binwidth is None else None
-                        ),  # Use bins if binwidth is None
+                        bins=bins,
                         binwidth=binwidth,
                     )
                     if kde:
@@ -998,8 +1026,24 @@ def kde_distributions(
                             log_scale=log_scale,
                         )
 
-                ax.set_ylabel(y_axis_label)
-                ax.set_title("\n".join(textwrap.wrap(title, width=text_wrap)))
+                ax.set_xlabel(var, fontsize=label_fontsize)
+                ax.set_ylabel(y_axis_label.capitalize(), fontsize=label_fontsize)
+                ax.set_title(
+                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
+                ax.tick_params(
+                    axis="both", labelsize=tick_fontsize
+                )  # Control tick fontsize separately
+
+                # Disable scientific notation if requested
+                if disable_sci_notation:
+                    ax.xaxis.set_major_formatter(
+                        mticker.ScalarFormatter(useMathText=False)
+                    )
+                    ax.yaxis.set_major_formatter(
+                        mticker.ScalarFormatter(useMathText=False)
+                    )
 
             plt.tight_layout()
 
@@ -1022,8 +1066,7 @@ def kde_distributions(
                 )
             plt.close(
                 fig
-            )  # Close the figure after saving to avoid displaying it multiple
-            # times
+            )  # Close figure after saving to avoid displaying it multiple times
 
 
 ################################################################################
