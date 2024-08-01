@@ -325,11 +325,11 @@ We then use the ``strip_trailing_period`` function to remove any trailing period
 
     <table>
         <tr>
-            <td style="padding-right: 10px; font-family: monospace; font-size: 12px;">
+            <td style="padding-right: 10px; font-family: Arial; font-size: 14px;">
 
                 <strong>Before:</strong>
 
-                <table border="1" style="width: 150px; text-align: center; font-family: monospace; font-size: 12px;">
+                <table border="1" style="width: 150px; text-align: center; font-family: Arial; font-size: 14px;">
                     <tr>
                         <th>Index</th>
                         <th>Value</th>
@@ -361,11 +361,11 @@ We then use the ``strip_trailing_period`` function to remove any trailing period
                 </table>
 
             </td>
-            <td style="padding-left: 10px; font-family: monospace; font-size: 12px;">
+            <td style="padding-left: 10px; font-family: Arial; font-size: 14px;">
 
                 <strong>After:</strong>
 
-                <table border="1" style="width: 150px; text-align: center; font-family: monospace; font-size: 12px;">
+                <table border="1" style="width: 150px; text-align: center; font-family: Arial; font-size: 14px;">
                     <tr>
                         <th>Index</th>
                         <th>Value</th>
@@ -960,7 +960,7 @@ The first sheet will be a Table of Contents with hyperlinks to each summary tabl
 
    <div class="no-click">
 
-.. image:: ../assets/sum_all_combos.gif
+.. image:: ../assets/summarize_combos.gif
    :alt: EDA Toolkit Logo
    :align: left
    :width: 900px
@@ -1631,6 +1631,436 @@ visualizing the raw counts in the dataset using orange-colored histograms.
    
    <div style="height: 50px;"></div>
 
+Stacked Crosstab Plots
+=======================
+
+**Generates stacked bar plots and crosstabs for specified columns in a DataFrame.**
+
+The ``stacked_crosstab_plot`` function is a versatile tool for generating stacked bar plots and contingency tables (crosstabs) from a pandas DataFrame. This function is particularly useful for visualizing categorical data across multiple columns, allowing users to easily compare distributions and relationships between variables. It offers extensive customization options, including control over plot appearance, color schemes, and the ability to save plots in multiple formats.
+
+The function also supports generating both regular and normalized stacked bar plots, with the option to return the generated crosstabs as a dictionary for further analysis. 
+
+.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, label_fontsize=12, tick_fontsize=10)
+
+    :param df: The pandas DataFrame containing the data.
+    :type df: pandas.DataFrame
+    :param col: The name of the column in the DataFrame to be analyzed.
+    :type col: str
+    :param func_col: List of ground truth columns to be analyzed.
+    :type func_col: list
+    :param legend_labels_list: List of legend labels for each ground truth column.
+    :type legend_labels_list: list
+    :param title: List of titles for the plots.
+    :type title: list
+    :param kind: The kind of plot to generate (e.g., 'bar', 'barh'). Defaults to ``'bar'``.
+    :type kind: str, optional
+    :param width: The width of the bars in the bar plot. Defaults to ``0.9``.
+    :type width: float, optional
+    :param rot: The rotation angle of the x-axis labels. Defaults to ``0``.
+    :type rot: int, optional
+    :param custom_order: Specifies a custom order for the categories in the ``col``. Defaults to ``None``.
+    :type custom_order: list, optional
+    :param image_path_png: Directory path where generated PNG plot images will be saved. Defaults to ``None``.
+    :type image_path_png: str, optional
+    :param image_path_svg: Directory path where generated SVG plot images will be saved. Defaults to ``None``.
+    :type image_path_svg: str, optional
+    :param save_formats: List of file formats to save plot images in. Defaults to ``None``.
+    :type save_formats: list, optional
+    :param color: List of colors to use for the plots. If not provided, a default color scheme is used. Defaults to ``None``.
+    :type color: list, optional
+    :param output: Specify the output type: ``"plots_only"``, ``"crosstabs_only"``, or ``"both"``. Defaults to ``"both"``.
+    :type output: str, optional
+    :param return_dict: Specify whether to return the crosstabs dictionary. Defaults to ``False``.
+    :type return_dict: bool, optional
+    :param x: The width of the figure. Defaults to ``None``.
+    :type x: int, optional
+    :param y: The height of the figure. Defaults to ``None``.
+    :type y: int, optional
+    :param p: The padding between the subplots. Defaults to ``None``.
+    :type p: int, optional
+    :param file_prefix: Prefix for filename when output includes plots. Defaults to ``None``.
+    :type file_prefix: str, optional
+    :param logscale: Apply log scale to the y-axis. Defaults to ``False``.
+    :type logscale: bool, optional
+    :param plot_type: Specify the type of plot to generate: ``"both"``, ``"regular"``, ``"normalized"``. Defaults to ``"both"``.
+    :type plot_type: str, optional
+    :param show_legend: Specify whether to show the legend. Defaults to ``True``.
+    :type show_legend: bool, optional
+    :param label_fontsize: Font size for axis labels. Defaults to ``12``.
+    :type label_fontsize: int, optional
+    :param tick_fontsize: Font size for tick labels on the axes. Defaults to ``10``.
+    :type tick_fontsize: int, optional
+    
+    :raises ValueError: 
+        - If ``output`` is not one of ``"both"``, ``"plots_only"``, or ``"crosstabs_only"``.
+        - If ``plot_type`` is not one of ``"both"``, ``"regular"``, or ``"normalized"``.
+        - If the lengths of ``title``, ``func_col``, and ``legend_labels_list`` do not match.
+        - If ``file_prefix`` is not provided when output includes plots.
+    
+    :raises KeyError: 
+        - If any of the columns specified in ``col`` or ``func_col`` are missing from the DataFrame.
+
+    :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is ``True``, otherwise ``None``.
+    :rtype: dict or None
+
+
+**Example Usage**
+
+The provided code snippet demonstrates how to use the ``stacked_crosstab_plot`` 
+function to generate stacked bar plots and corresponding crosstabs for different 
+columns in a DataFrame. Here's a detailed breakdown of the code:
+
+First, the ``func_col`` list is defined, specifying the columns ``["sex", "income"]`` 
+to be analyzed. These columns will be used in the loop to generate separate plots. 
+The ``legend_labels_list`` is then defined, with each entry corresponding to a 
+column in ``func_col``. In this case, the labels for the ``sex`` column are 
+``["Male", "Female"]``, and for the ``income`` column, they are ``["<=50K", ">50K"]``. 
+These labels will be used to annotate the legends of the plots.
+
+Next, the ``title`` list is defined, providing titles for each plot corresponding 
+to the columns in ``func_col``. The titles are set to ``["Sex", "Income"]``, 
+which will be displayed on top of each respective plot.
+
+.. code-block:: python
+
+    # Define the func_col to use in the loop in order of usage
+    func_col = ["sex", "income"]
+
+    # Define the legend_labels to use in the loop
+    legend_labels_list = [
+        ["Male", "Female"],
+        ["<=50K", ">50K"],
+    ]
+
+    # Define titles for the plots
+    title = [
+        "Sex",
+        "Income",
+    ]
+
+    # Call the stacked_crosstab_plot function
+    stacked_crosstab_plot(
+        df=df,
+        col="age_group",
+        func_col=func_col,
+        legend_labels_list=legend_labels_list,
+        title=title,
+        kind="bar",
+        width=0.8, 
+        rot=45, # axis rotation angle
+        custom_order=None,
+        color=["#00BFC4", "#F8766D"], # default color schema
+        output="both",
+        return_dict=True,
+        x=14,
+        y=8,
+        p=10,
+        logscale=False,
+        plot_type="both",
+        show_legend=True,
+        label_fontsize=14,
+        tick_fontsize=12,
+    )
+
+The above example generates stacked bar plots for ``"sex"`` and ``"income"`` 
+grouped by ``"education"``. The plots are executed with legends, labels, and 
+tick sizes customized for clarity. The function returns a dictionary of 
+crosstabs for further analysis or export.
+
+**Importance of Correctly Aligning Labels**
+
+It is crucial to properly align the elements in the ``legend_labels_list``, 
+``title``, and ``func_col`` parameters when using the ``stacked_crosstab_plot`` 
+function. Each of these lists must be ordered consistently because the function 
+relies on their alignment to correctly assign labels and titles to the 
+corresponding plots and legends. 
+
+For instance, in the example above:  
+
+- The first element in ``func_col`` is ``"sex"``, and it is aligned with the first set of labels ``["Male", "Female"]`` in ``legend_labels_list`` and the first title ``"Sex"`` in the ``title`` list.
+- Similarly, the second element in ``func_col``, ``"income"``, aligns with the labels ``["<=50K", ">50K"]`` and the title ``"Income"``.
+
+Misalignment between these lists would result in incorrect labels or titles being 
+applied to the plots, potentially leading to confusion or misinterpretation of the data. 
+Therefore, it's important to ensure that each list is ordered appropriately and 
+consistently to accurately reflect the data being visualized.
+
+**Proper Setup of Lists**
+
+When setting up the ``legend_labels_list``, ``title``, and ``func_col``, ensure 
+that each element in the lists corresponds to the correct variable in the DataFrame. 
+This involves:
+
+- **Ordering**: Maintaining the same order across all three lists to ensure that labels and titles correspond correctly to the data being plotted.
+- **Consistency**: Double-checking that each label in ``legend_labels_list`` matches the categories present in the corresponding ``func_col``, and that the ``title`` accurately describes the plot.
+
+By adhering to these guidelines, you can ensure that the ``stacked_crosstab_plot`` 
+function produces accurate and meaningful visualizations that are easy to interpret and analyze.
+
+**Output**
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/Stacked_Bar_Age_sex.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/Stacked_Bar_Age_income.svg
+   :alt: KDE Distributions
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg .tg-mwxe{text-align:right;vertical-align:middle}
+    .tg .tg-p3ql{background-color:rgba(130, 130, 130, 0.08);text-align:right;vertical-align:middle}
+    .tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
+    .tg .tg-7zrl{text-align:left;vertical-align:bottom}
+    .tg .tg-zt7h{font-weight:bold;text-align:right;vertical-align:middle}
+    .tg .tg-k750{background-color:rgba(130, 130, 130, 0.08);font-weight:bold;text-align:right;vertical-align:middle}
+    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}
+    </style>
+    <div class="tg-wrap"><table class="tg"><thead>
+    <tr>
+        <th class="tg-yla0" colspan="6">Crosstab for sex</th>
+    </tr>
+    <tr style="height: 10px;"><!-- Added empty row for spacing -->
+        <td colspan="6" style="border: none;"></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="tg-zt7h">sex</td>
+        <td class="tg-zt7h">Male</td>
+        <td class="tg-zt7h">Female</td>
+        <td class="tg-zt7h">Total</td>
+        <td class="tg-zt7h">Male_%</td>
+        <td class="tg-zt7h">Female_%</td>
+    </tr>
+    <tr>
+        <td class="tg-k750">age_group</td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">&lt; 18</td>
+        <td class="tg-mwxe">295</td>
+        <td class="tg-mwxe">300</td>
+        <td class="tg-mwxe">595</td>
+        <td class="tg-mwxe">49.58</td>
+        <td class="tg-mwxe">50.42</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">18-29</td>
+        <td class="tg-p3ql">5707</td>
+        <td class="tg-p3ql">8213</td>
+        <td class="tg-p3ql">13920</td>
+        <td class="tg-p3ql">41</td>
+        <td class="tg-p3ql">59</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">30-39</td>
+        <td class="tg-mwxe">3853</td>
+        <td class="tg-mwxe">9076</td>
+        <td class="tg-mwxe">12929</td>
+        <td class="tg-mwxe">29.8</td>
+        <td class="tg-mwxe">70.2</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">40-49</td>
+        <td class="tg-p3ql">3188</td>
+        <td class="tg-p3ql">7536</td>
+        <td class="tg-p3ql">10724</td>
+        <td class="tg-p3ql">29.73</td>
+        <td class="tg-p3ql">70.27</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">50-59</td>
+        <td class="tg-mwxe">1873</td>
+        <td class="tg-mwxe">4746</td>
+        <td class="tg-mwxe">6619</td>
+        <td class="tg-mwxe">28.3</td>
+        <td class="tg-mwxe">71.7</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">60-69</td>
+        <td class="tg-p3ql">939</td>
+        <td class="tg-p3ql">2115</td>
+        <td class="tg-p3ql">3054</td>
+        <td class="tg-p3ql">30.75</td>
+        <td class="tg-p3ql">69.25</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">70-79</td>
+        <td class="tg-mwxe">280</td>
+        <td class="tg-mwxe">535</td>
+        <td class="tg-mwxe">815</td>
+        <td class="tg-mwxe">34.36</td>
+        <td class="tg-mwxe">65.64</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">80-89</td>
+        <td class="tg-p3ql">40</td>
+        <td class="tg-p3ql">91</td>
+        <td class="tg-p3ql">131</td>
+        <td class="tg-p3ql">30.53</td>
+        <td class="tg-p3ql">69.47</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">90-99</td>
+        <td class="tg-mwxe">17</td>
+        <td class="tg-mwxe">38</td>
+        <td class="tg-mwxe">55</td>
+        <td class="tg-mwxe">30.91</td>
+        <td class="tg-mwxe">69.09</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">Total</td>
+        <td class="tg-p3ql">16192</td>
+        <td class="tg-p3ql">32650</td>
+        <td class="tg-p3ql">48842</td>
+        <td class="tg-p3ql">33.15</td>
+        <td class="tg-p3ql">66.85</td>
+    </tr>
+    <tr style="height: 10px;"><!-- Added empty row for spacing -->
+        <td colspan="6" style="border: none;"></td>
+    </tr>
+    <tr>
+        <th class="tg-yla0" colspan="6">Crosstab for income</th>
+    </tr>
+    <tr style="height: 10px;"><!-- Added empty row for spacing -->
+        <td colspan="6" style="border: none;"></td>
+    </tr>
+    <tr>
+        <td class="tg-zt7h">income</td>
+        <td class="tg-zt7h">&lt;=50K</td>
+        <td class="tg-zt7h">&gt;50K</td>
+        <td class="tg-zt7h">Total</td>
+        <td class="tg-zt7h">&lt;=50K_%</td>
+        <td class="tg-zt7h">&gt;50K_%</td>
+    </tr>
+    <tr>
+        <td class="tg-k750">age_group</td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+        <td class="tg-k750"> </td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">&lt; 18</td>
+        <td class="tg-mwxe">595</td>
+        <td class="tg-mwxe">0</td>
+        <td class="tg-mwxe">595</td>
+        <td class="tg-mwxe">100</td>
+        <td class="tg-mwxe">0</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">18-29</td>
+        <td class="tg-p3ql">13174</td>
+        <td class="tg-p3ql">746</td>
+        <td class="tg-p3ql">13920</td>
+        <td class="tg-p3ql">94.64</td>
+        <td class="tg-p3ql">5.36</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">30-39</td>
+        <td class="tg-mwxe">9468</td>
+        <td class="tg-mwxe">3461</td>
+        <td class="tg-mwxe">12929</td>
+        <td class="tg-mwxe">73.23</td>
+        <td class="tg-mwxe">26.77</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">40-49</td>
+        <td class="tg-p3ql">6738</td>
+        <td class="tg-p3ql">3986</td>
+        <td class="tg-p3ql">10724</td>
+        <td class="tg-p3ql">62.83</td>
+        <td class="tg-p3ql">37.17</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">50-59</td>
+        <td class="tg-mwxe">4110</td>
+        <td class="tg-mwxe">2509</td>
+        <td class="tg-mwxe">6619</td>
+        <td class="tg-mwxe">62.09</td>
+        <td class="tg-mwxe">37.91</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">60-69</td>
+        <td class="tg-p3ql">2245</td>
+        <td class="tg-p3ql">809</td>
+        <td class="tg-p3ql">3054</td>
+        <td class="tg-p3ql">73.51</td>
+        <td class="tg-p3ql">26.49</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">70-79</td>
+        <td class="tg-mwxe">668</td>
+        <td class="tg-mwxe">147</td>
+        <td class="tg-mwxe">815</td>
+        <td class="tg-mwxe">81.96</td>
+        <td class="tg-mwxe">18.04</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">80-89</td>
+        <td class="tg-p3ql">115</td>
+        <td class="tg-p3ql">16</td>
+        <td class="tg-p3ql">131</td>
+        <td class="tg-p3ql">87.79</td>
+        <td class="tg-p3ql">12.21</td>
+    </tr>
+    <tr>
+        <td class="tg-mwxe">90-99</td>
+        <td class="tg-mwxe">42</td>
+        <td class="tg-mwxe">13</td>
+        <td class="tg-mwxe">55</td>
+        <td class="tg-mwxe">76.36</td>
+        <td class="tg-mwxe">23.64</td>
+    </tr>
+    <tr>
+        <td class="tg-p3ql">Total</td>
+        <td class="tg-p3ql">37155</td>
+        <td class="tg-p3ql">11687</td>
+        <td class="tg-p3ql">48842</td>
+        <td class="tg-p3ql">76.07</td>
+        <td class="tg-p3ql">23.93</td>
+    </tr>
+    </tbody></table></div>
 
 \
 
