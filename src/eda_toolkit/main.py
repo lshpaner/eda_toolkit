@@ -1095,47 +1095,115 @@ def stacked_crosstab_plot(
     p=None,
     file_prefix=None,
     logscale=False,
-    plot_type="both",  # New parameter for plot type
+    plot_type="both",
     show_legend=True,
+    label_fontsize=12,
+    tick_fontsize=10,
+    remove_stacks=False,
 ):
     """
-    Generates stacked bar plots and crosstabs for specified columns.
+    Generates stacked or regular bar plots and crosstabs for specified columns.
+
+    This function allows users to create stacked bar plots (or regular bar plots
+    if stacks are removed) and corresponding crosstabs for specific columns
+    in a DataFrame. It provides options to customize the appearance, including
+    font sizes for axis labels and tick labels, and to choose between regular
+    or normalized plots.
 
     Parameters:
-    - df (DataFrame): The pandas DataFrame containing the data.
-    - col (str): The name of the column in the DataFrame to be analyzed.
-    - func_col (list): List of ground truth columns to be analyzed.
-    - legend_labels_list (list): List of legend labels for each ground truth column.
-    - title (list): List of titles for the plots.
-    - kind (str, optional): The kind of plot to generate (e.g., 'bar', 'barh').
-      Defaults to 'bar'.
-    - width (float, optional): The width of the bars in the bar plot. Defaults to 0.9.
-    - rot (int, optional): The rotation angle of the x-axis labels. Defaults to 0.
-    - custom_order (list, optional): Specifies a custom order for the categories in the 'col'.
-    - image_path_png (str, optional): Directory path where generated PNG plot images
-      will be saved.
-    - image_path_svg (str, optional): Directory path where generated SVG plot images
-      will be saved.
-    - save_formats (list, optional): List of file formats to save the plot images in.
-    - color (list, optional): List of colors to use for the plots. If not provided,
-      a default color scheme is used.
-    - output (str, optional): Specify the output type: "plots_only", "crosstabs_only", or "both".
-      Defaults to "both".
-    - return_dict (bool, optional): Specify whether to return the crosstabs dictionary.
-      Defaults to False.
-    - x (int, optional): The width of the figure.
-    - y (int, optional): The height of the figure.
-    - p (int, optional): The padding between the subplots.
-    - file_prefix (str, optional): Prefix for the filename when output includes plots.
-    - logscale (bool, optional): Apply log scale to the y-axis. Defaults to False.
-    - plot_type (str, optional): Specify the type of plot to generate: "both", "regular",
-      "normalized". Defaults to "both".
-    - show_legend (bool, optional): Specify whether to show the legend. Defaults to True.
+    -----------
+    df : pandas.DataFrame
+        The DataFrame containing the data to plot.
+
+    col : str
+        The name of the column in the DataFrame to be analyzed.
+
+    func_col : list
+        List of ground truth columns to be analyzed.
+
+    legend_labels_list : list
+        List of legend labels for each ground truth column.
+
+    title : list
+        List of titles for the plots.
+
+    kind : str, optional (default='bar')
+        The kind of plot to generate ('bar' or 'barh' for horizontal bars).
+
+    width : float, optional (default=0.9)
+        The width of the bars in the bar plot.
+
+    rot : int, optional (default=0)
+        The rotation angle of the x-axis labels.
+
+    custom_order : list, optional
+        Specifies a custom order for the categories in the `col`.
+
+    image_path_png : str, optional
+        Directory path where generated PNG plot images will be saved.
+
+    image_path_svg : str, optional
+        Directory path where generated SVG plot images will be saved.
+
+    save_formats : list, optional
+        List of file formats to save the plot images in.
+
+    color : list, optional
+        List of colors to use for the plots. If not provided, a default
+        color scheme is used.
+
+    output : str, optional (default='both')
+        Specify the output type: "plots_only", "crosstabs_only", or "both".
+
+    return_dict : bool, optional (default=False)
+        Specify whether to return the crosstabs dictionary.
+
+    x : int, optional
+        The width of the figure.
+
+    y : int, optional
+        The height of the figure.
+
+    p : int, optional
+        The padding between the subplots.
+
+    file_prefix : str, optional
+        Prefix for the filename when output includes plots.
+
+    logscale : bool, optional (default=False)
+        Apply log scale to the y-axis.
+
+    plot_type : str, optional (default='both')
+        Specify the type of plot to generate: "both", "regular", "normalized".
+
+    show_legend : bool, optional (default=True)
+        Specify whether to show the legend.
+
+    label_fontsize : int, optional (default=12)
+        Font size for axis labels.
+
+    tick_fontsize : int, optional (default=10)
+        Font size for tick labels on the axes.
+
+    remove_stacks : bool, optional (default=False)
+        If True, removes stacks and creates a regular bar plot using only
+        the `col` parameter. Only works when `plot_type` is set to 'regular'.
 
     Returns:
-    - crosstabs_dict (dict): Dictionary of crosstabs DataFrames if return_dict is True.
-    - None: If return_dict is False.
+    --------
+    crosstabs_dict : dict
+        Dictionary of crosstabs DataFrames if `return_dict` is True.
+
+    None
+        If `return_dict` is False.
     """
+
+    # Check if remove_stacks is used correctly
+    if remove_stacks and plot_type != "regular":
+        raise ValueError(
+            "remove_stacks can only be used when plot_type is set to 'regular'."
+        )
+
     # Check if the output parameter is valid
     valid_outputs = ["both", "plots_only", "crosstabs_only"]
     if output not in valid_outputs:
@@ -1166,8 +1234,8 @@ def stacked_crosstab_plot(
     # Check if the lengths of title, func_col, and legend_labels_list match
     if not (len(title) == len(func_col) == len(legend_labels_list)):
         raise ValueError(
-            "Length mismatch: Ensure that the lengths of title, func_col, and legend_labels_list are equal. "
-            "Check for missing items or commas."
+            "Length mismatch: Ensure that the lengths of title, func_col, "
+            "and legend_labels_list are equal. Check for missing items or commas."
         )
 
     # Work on a copy of the DataFrame to avoid modifying the original
@@ -1183,7 +1251,10 @@ def stacked_crosstab_plot(
     # Generate plots if output is "both" or "plots_only"
     if output in ["both", "plots_only"]:
         if file_prefix is None:
-            raise ValueError("file_prefix must be provided when output includes plots")
+            raise ValueError(
+                "file_prefix must be provided when output " "includes plots"
+            )
+
         # Set default values for x, y, and p if not provided
         if x is None:
             x = 12
@@ -1218,67 +1289,126 @@ def stacked_crosstab_plot(
             fig, axes = plt.subplots(nrows=nrows, ncols=1, figsize=(x, y))
             fig.tight_layout(w_pad=5, pad=p, h_pad=5)
 
-            # Define crosstabdest to avoid UnboundLocalError
-            crosstabdest = pd.crosstab(df_copy[col], df_copy[truth])
-            try:
-                crosstabdest.columns = legend  # Rename the columns to match the legend
-            except ValueError:
-                raise ValueError(
-                    f"Length mismatch: Crosstab columns ({len(crosstabdest.columns)}) and legend ({len(legend)}). "
-                    "Check the length of your legend_labels_list, func_col, and title to make sure you are not missing an item or comma or have an extra item."
-                )
-
-            if plot_type in ["both", "regular"]:
-                # Plot the first graph (absolute counts)
-                title1 = f"Prevalence of {tit} by {col.replace('_', ' ').title()}"
+            if remove_stacks:
+                # Create a regular bar plot using only the `col` parameter
+                counts = df_copy[col].value_counts()
+                title1 = f"Distribution of {col.replace('_', ' ').title()}"
                 xlabel1 = f"{col.replace('_', ' ')}"
                 ylabel1 = "Count"
-                crosstabdest.plot(
+                counts.plot(
                     kind=kind,
-                    stacked=True,
-                    title=title1,
                     ax=axes[0] if plot_type == "both" else axes,
-                    color=color,
+                    color=color[0],
                     width=width,
                     rot=rot,
                     fontsize=12,
                     logy=logscale,  # Apply log scale if logscale is True
                 )
                 ax0 = axes[0] if plot_type == "both" else axes
-                ax0.set_title(title1, fontsize=12)
-                ax0.set_xlabel(xlabel1, fontsize=12)
-                ax0.set_ylabel(ylabel1, fontsize=12)
+
+                if kind == "barh":
+                    ax0.set_xlabel(ylabel1, fontsize=label_fontsize)
+                    ax0.set_ylabel(xlabel1, fontsize=label_fontsize)
+                else:
+                    ax0.set_xlabel(xlabel1, fontsize=label_fontsize)
+                    ax0.set_ylabel(ylabel1, fontsize=label_fontsize)
+
+                ax0.set_title(title1, fontsize=label_fontsize)
+                ax0.tick_params(axis="both", labelsize=tick_fontsize)
+
                 if show_legend:
-                    ax0.legend(legend, fontsize=12)
+                    ax0.legend([col], fontsize=12)
                 else:
                     ax0.legend().remove()
 
-            if plot_type in ["both", "normalized"]:
-                # Plotting the second, normalized stacked bar graph
-                title2 = f"Prevalence of {tit} by {col.replace('_', ' ').title()} (Normalized)"
-                xlabel2 = f"{col.replace('_', ' ')}"
-                ylabel2 = "Percentage"
-                crosstabdestnorm = crosstabdest.div(crosstabdest.sum(1), axis=0)
-                crosstabdestnorm.plot(
-                    kind=kind,
-                    stacked=True,
-                    title=title2,
-                    ylabel="Percentage",
-                    ax=axes[1] if plot_type == "both" else axes,
-                    color=color,
-                    width=width,
-                    rot=rot,
-                    fontsize=12,
-                    logy=logscale,  # Apply log scale if logscale is True
-                )
-                ax1 = axes[1] if plot_type == "both" else axes
-                ax1.set_title(label=title2, fontsize=12)
-                ax1.set_xlabel(xlabel2, fontsize=12)
-                ax1.set_ylabel(ylabel2, fontsize=12)
-                if show_legend:
-                    ax1.legend(legend, fontsize=12)
-                else:
-                    ax1.legend().remove()
+            else:
+                # Define crosstabdest to avoid UnboundLocalError
+                crosstabdest = pd.crosstab(df_copy[col], df_copy[truth])
+                try:
+                    crosstabdest.columns = legend  # Rename columns
+                except ValueError:
+                    raise ValueError(
+                        f"Length mismatch: Crosstab columns "
+                        f"({len(crosstabdest.columns)}) and legend "
+                        f"({len(legend)}). Check the length of your "
+                        "legend_labels_list, func_col, and title to ensure "
+                        "you are not missing an item, comma, or have an extra "
+                        "item."
+                    )
+
+                if plot_type in ["both", "regular"]:
+                    # Plot the first graph (absolute counts)
+                    title1 = f"Prevalence of {tit} by {col.replace('_', ' ').title()}"
+                    xlabel1 = f"{col.replace('_', ' ')}"
+                    ylabel1 = "Count"
+                    crosstabdest.plot(
+                        kind=kind,
+                        stacked=True,
+                        title=title1,
+                        ax=axes[0] if plot_type == "both" else axes,
+                        color=color,
+                        width=width,
+                        rot=rot,
+                        fontsize=12,
+                        logy=logscale,  # Apply log scale if logscale is True
+                    )
+                    ax0 = axes[0] if plot_type == "both" else axes
+
+                    if kind == "barh":
+                        ax0.set_xlabel(ylabel1, fontsize=label_fontsize)
+                        ax0.set_ylabel(xlabel1, fontsize=label_fontsize)
+                    else:
+                        ax0.set_xlabel(xlabel1, fontsize=label_fontsize)
+                        ax0.set_ylabel(ylabel1, fontsize=label_fontsize)
+
+                    # Set tick fontsize
+                    ax0.tick_params(axis="both", labelsize=tick_fontsize)
+
+                    if show_legend:
+                        ax0.legend(legend, fontsize=12)
+                    else:
+                        ax0.legend().remove()
+
+                if plot_type in ["both", "normalized"]:
+                    # Plotting the second, normalized stacked bar graph
+                    title2 = (
+                        f"Prevalence of {tit} by {col.replace('_', ' ').title()} "
+                        f"(Normalized)"
+                    )
+                    xlabel2 = f"{col.replace('_', ' ')}"
+                    ylabel2 = "Percentage"
+                    crosstabdestnorm = crosstabdest.div(
+                        crosstabdest.sum(1),
+                        axis=0,
+                    )
+                    crosstabdestnorm.plot(
+                        kind=kind,
+                        stacked=True,
+                        title=title2,
+                        ylabel="Percentage",
+                        ax=axes[1] if plot_type == "both" else axes,
+                        color=color,
+                        width=width,
+                        rot=rot,
+                        fontsize=12,
+                        logy=logscale,  # Apply log scale if logscale is True
+                    )
+                    ax1 = axes[1] if plot_type == "both" else axes
+
+                    if kind == "barh":
+                        ax1.set_xlabel(ylabel2, fontsize=label_fontsize)
+                        ax1.set_ylabel(xlabel2, fontsize=label_fontsize)
+                    else:
+                        ax1.set_xlabel(xlabel2, fontsize=label_fontsize)
+                        ax1.set_ylabel(ylabel2, fontsize=label_fontsize)
+
+                    # Set tick fontsize
+                    ax1.tick_params(axis="both", labelsize=tick_fontsize)
+
+                    if show_legend:
+                        ax1.legend(legend, fontsize=12)
+                    else:
+                        ax1.legend().remove()
 
             fig.align_ylabels()
             if save_formats and isinstance(image_path, dict):
@@ -1339,7 +1469,8 @@ def stacked_crosstab_plot(
             print("Crosstab for " + col_results)
             display(crosstab_df)
             # Store the crosstab in the dictionary
-            crosstabs_dict[col_results] = crosstab_df  # Use col_results as the key
+            # Use col_results as the key
+            crosstabs_dict[col_results] = crosstab_df
 
     # Return the crosstabs_dict only if return_dict is True
     if return_dict:
