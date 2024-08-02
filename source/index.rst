@@ -20,10 +20,10 @@
 
 .. raw:: html
    
-   <div style="height: 106px;"></div>
+   <div style="height: 100px;"></div>
 
 Table of Contents
-=====================
+======================
 
 .. toctree::
    :maxdepth: 3
