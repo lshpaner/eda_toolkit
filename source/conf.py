@@ -9,7 +9,7 @@
 project = "EDA Toolkit"
 copyright = "2024, Leonid Shpaner, Oscar Gil"
 author = "Leonid Shpaner, Oscar Gil"
-release = "0.0.1b0"
+release = "0.0.4"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
