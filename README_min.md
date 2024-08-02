@@ -5,9 +5,11 @@
 
 <br>
 
-<img src="https://raw.githubusercontent.com/lshpaner/kfre/main/assets/kfre_logo.svg" width="200" style="border: none; outline: none; box-shadow: none;" oncontextmenu="return false;">
+<img src="https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/eda_toolkit_logo.svg" width="200" style="border: none; outline: none; box-shadow: none;" oncontextmenu="return false;">
 
-Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
+<br> 
+
+Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, some data preprocessing, reporting, visualizations, and more, helping you efficiently handle various aspects of data manipulation and analysis.
 
 
 ## Prerequisites
@@ -59,11 +61,11 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
 @software{shpaner_2024_13162633,
   author       = {Shpaner, Leonid and
                   Gil, Oscar},
-  title        = {lshpaner/eda\_toolkit: eda\_toolkit 0.0.1c},
+  title        = {lshpaner/eda\_toolkit: eda\_toolkit 0.0.2},
   month        = aug,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {0.0.1c},
+  version      = {0.0.2},
   doi          = {10.5281/zenodo.13162633},
   url          = {https://doi.org/10.5281/zenodo.13162633}
 }
