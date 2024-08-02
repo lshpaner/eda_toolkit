@@ -1,4 +1,12 @@
-# EDA Toolkit
+[![PyPI](https://img.shields.io/pypi/v/eda_toolkit.svg)](https://pypi.org/project/eda_toolkit/)
+[![Downloads](https://pepy.tech/badge/eda_toolkit)](https://pepy.tech/project/eda_toolkit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lshpaner/eda_toolkit/blob/main/LICENSE.md)
+[![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.13162633.svg)](https://doi.org/10.5281/zenodo.13162633)
+
+<br>
+
+<img src="https://raw.githubusercontent.com/lshpaner/kfre/main/assets/kfre_logo.svg" width="200" style="border: none; outline: none; box-shadow: none;" oncontextmenu="return false;">
+
 Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
 
 
@@ -61,6 +69,21 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
 }
 
 ```
+
+## Acknowledgements
+
+We would like to express our deepest gratitude to Dr. Ebrahim Tarshizi, our past mentor during our time in the University of San Diego M.S. Applied Data Science Program. His unwavering dedication and mentorship played a pivotal role in our academic journey, guiding us to successfully graduate from the program and pursue successful careers as data scientists. 
+
+We also extend our thanks to the Shiley-Marcos School of Engineering at the University of San Diego for providing an exceptional learning environment and supporting our educational endeavors.
+
+## References
+
+1. Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science & Engineering*, 9(3), 90-95. [https://doi.org/10.1109/MCSE.2007.55](https://doi.org/10.1109/MCSE.2007.55)
+
+2. Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. [https://doi.org/10.24432/C5GP7S](https://doi.org/10.24432/C5GP7S).
+
+3. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. [https://doi.org/10.21105/joss.03021](https://doi.org/10.21105/joss.03021).
+
 
 
 

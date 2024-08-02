@@ -14,7 +14,9 @@ setup(
     project_urls={  # Optional
         "Leonid Shpaner's Website": "https://www.leonshpaner.com",
         "Oscar Gil's Website": "https://www.oscargildata.com",
-        "Source Code": "https://github.com/lshpaner/eda_kit/",
+        "Documentation": "https://lshpaner.github.io/eda_toolkit/",
+        "Zenodo Archive": "https://zenodo.org/records/13162633",
+        "Source Code": "https://github.com/lshpaner/eda_toolkit/",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
