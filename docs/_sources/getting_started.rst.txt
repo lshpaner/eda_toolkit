@@ -1,7 +1,7 @@
 .. _getting_started:   
 
 .. KFRE Python Library Documentation documentation master file, created by
-   sphinx-quickstart on Thu May  2 15:44:56 2024.
+   sphinx-quickstart on Thu May 2 15:44:56 2024.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -22,13 +22,13 @@
 
 .. raw:: html
    
-   <div style="height: 106px;"></div>
+   <div style="height: 100px;"></div>
 
 
 Welcome to the EDA Toolkit Python Library Documentation!
 ========================================================
 .. note::
-   This documentation is for ``eda_toolkit`` version ``0.0.1b0``.
+   This documentation is for ``eda_toolkit`` version ``0.0.3``.
 
 
 The ``eda_toolkit`` is a comprehensive library designed to streamline and 

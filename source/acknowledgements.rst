@@ -17,7 +17,7 @@
 
 .. raw:: html
    
-   <div style="height: 106px;"></div>
+   <div style="height: 100px;"></div>
 
 \
 
