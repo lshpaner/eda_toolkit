@@ -23,7 +23,7 @@
    <div style="height: 100px;"></div>
 
 Table of Contents
-======================
+=====================
 
 .. toctree::
    :maxdepth: 3
