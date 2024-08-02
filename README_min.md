@@ -5,7 +5,7 @@
 
 <br>
 
-<img src="https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/eda_toolkit_logo.svg" width="200" style="border: none; outline: none; box-shadow: none;" oncontextmenu="return false;">
+<img src="https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/eda_toolkit_logo.svg" width="350" style="border: none; outline: none; box-shadow: none;" oncontextmenu="return false;">
 
 <br> 
 
