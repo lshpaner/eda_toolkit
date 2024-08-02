@@ -49,7 +49,7 @@ https://lshpaner.github.io/eda_toolkit
 2. [Oscar Gil](https://www.oscargildata.com)
 
 
-## Acknowledgements
+## 🙏 Acknowledgements
 
 We would like to express our deepest gratitude to Dr. Ebrahim Tarshizi, our mentor during our time in the University of San Diego M.S. Applied Data Science Program. His unwavering dedication and mentorship played a pivotal role in our academic journey, guiding us to successfully graduate from the program and pursue successful careers as data scientists. 
 
@@ -60,7 +60,7 @@ We also extend our thanks to the Shiley-Marcos School of Engineering at the Univ
 
 `eda_toolkit` is distributed under the MIT License. See [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/main/LICENSE.md) for more information.
 
-## Support
+## 🛟 Support
 
 If you have any questions or issues with `eda_toolkit`, please open an issue on this GitHub repository.
 
@@ -78,7 +78,7 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
   month        = aug,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {0.0.3},
+  version      = {0.0.4},
   doi          = {10.5281/zenodo.13162633},
   url          = {https://doi.org/10.5281/zenodo.13162633}
 }
@@ -86,8 +86,7 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
 ```
 
 
-
-## References
+## 🔖 References
 
 1. Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science & Engineering*, 9(3), 90-95. [https://doi.org/10.1109/MCSE.2007.55](https://doi.org/10.1109/MCSE.2007.55)
 
