@@ -17,7 +17,7 @@
 
 .. raw:: html
    
-   <div style="height: 106px;"></div>
+   <div style="height: 100px;"></div>
 
 Description
 ===========
@@ -2671,8 +2671,9 @@ images in the specified paths.
 
 
 
-.. [#] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
+.. [#] Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. [https://doi.org/10.24432/C5GP7S](https://doi.org/10.24432/C5GP7S).
 
-.. [2] Michael Waskom (2021). Seaborn: statistical data visualization. *Journal of Open Source Software*, 6(60), 3021, https://doi.org/10.21105/joss.03021.
+.. [2] Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. [https://doi.org/10.21105/joss.03021](https://doi.org/10.21105/joss.03021).
 
-.. [3] Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. *Computing in Science & Engineering*, 9(3), 90-95. https://doi.org/10.1109/MCSE.2007.55
+.. [3] Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science & Engineering*, 9(3), 90-95. [https://doi.org/10.1109/MCSE.2007.55](https://doi.org/10.1109/MCSE.2007.55)
+
