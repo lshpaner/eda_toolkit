@@ -118,6 +118,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#pivoted-violin-plots-grid-example">Pivoted Violin Plots Grid Example</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scatter_fit_plot"><code class="docutils literal notranslate"><span class="pre">scatter_fit_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regression-centric-scatter-plots-example">Regression-Centric Scatter Plots Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scatter-plots-grouped-by-category-example">Scatter Plots Grouped by Category Example</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -149,7 +155,7 @@
 <p>This guide provides detailed instructions and examples for using the functions
 provided in the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library and how to use them effectively in your projects.</p>
 <p>For most of the ensuing examples, we will leverage the Census Income Data (1994) from
-the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id17" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
+the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id18" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. This dataset provides a rich source of
 information for demonstrating the functionalities of the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code>.</p>
 </section>
 <section id="data-preparation-and-management">
@@ -276,7 +282,7 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id17" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id18" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>DataFrame<span class="w"> </span>index<span class="w"> </span>is<span class="w"> </span>unique.
 </pre></div>
 </div>
@@ -625,7 +631,7 @@ function to analyze a DataFrame’s columns.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id17" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id18" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
 <span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
@@ -876,7 +882,7 @@ Each summary table includes the count and proportion of occurrences for each uni
 This is useful for understanding which combinations were analyzed and included in the summary tables.</p>
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
-variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id17" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id18" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
@@ -1125,7 +1131,7 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
-from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id17" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id18" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
 
 <span class="c1"># Example usage</span>
@@ -1190,7 +1196,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
-columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id17" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
+columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id18" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
 
 <span class="c1"># Applying the highlight function</span>
@@ -1303,7 +1309,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
 </section>
 <section id="binning-numerical-columns">
 <h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
-<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id17" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
+<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id18" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
 does not have age or any other numerical column of interest binned, you can
 apply the following binning logic to categorize the data. Below, we use the age
 column from the UCI Machine Learning Repository as an example:</p>
@@ -1358,8 +1364,8 @@ and labels as needed for your specific data.</p>
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for
 specified columns within a DataFrame. This function is particularly useful for
 visualizing the distribution of numerical data across various categories or groups.
-It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id18" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
-matplotlib <a class="footnote-reference brackets" href="#id19" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
+It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id19" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
+matplotlib <a class="footnote-reference brackets" href="#id20" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
 statistical graphics.</p>
 <p><strong>Key Features and Parameters</strong></p>
 <ul class="simple">
@@ -1402,7 +1408,7 @@ statistical graphics.</p>
 <li><p><strong>single_var_image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save the SVG images of the separate distribution plots.</p></li>
 <li><p><strong>single_var_image_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Filename to use when saving the separate distribution plots.
 The variable name will be appended to this filename.</p></li>
-<li><p><strong>y_axis_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The label to display on the <cite>y-axis</cite>, default is <code class="docutils literal notranslate"><span class="pre">'Density'</span></code>.</p></li>
+<li><p><strong>y_axis_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The label to display on the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code>, default is <code class="docutils literal notranslate"><span class="pre">'Density'</span></code>.</p></li>
 <li><p><strong>plot_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The type of plot to generate, options are <code class="docutils literal notranslate"><span class="pre">'hist'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kde'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'both'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'both'</span></code>.</p></li>
 <li><p><strong>log_scale_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – List of variable names to apply log scaling.</p></li>
 <li><p><strong>bins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em> or </em><em>sequence</em><em>, </em><em>optional</em>) – Specification of histogram bins, default is <code class="docutils literal notranslate"><span class="pre">'auto'</span></code>.</p></li>
@@ -1411,8 +1417,8 @@ The variable name will be appended to this filename.</p></li>
 <li><p><strong>disable_sci_notation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Toggle to disable scientific notation on axes, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>stat</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Aggregate statistic to compute in each bin (e.g., <code class="docutils literal notranslate"><span class="pre">'count'</span></code>, <code class="docutils literal notranslate"><span class="pre">'frequency'</span></code>,
 <code class="docutils literal notranslate"><span class="pre">'probability'</span></code>, <code class="docutils literal notranslate"><span class="pre">'percent'</span></code>, <code class="docutils literal notranslate"><span class="pre">'density'</span></code>), default is <code class="docutils literal notranslate"><span class="pre">'density'</span></code>.</p></li>
-<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>x-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
-<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>y-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -1460,7 +1466,7 @@ is used when saving the figure, ensuring that it is cropped to remove any excess
 whitespace around the edges. The variables specified in <code class="docutils literal notranslate"><span class="pre">vars_of_interest</span></code> are
 passed directly to the function for visualization.</p>
 <p>Each plot is saved individually with filenames that are prefixed by
-<code class="docutils literal notranslate"><span class="pre">&quot;kde_density_single_distribution&quot;</span></code>, followed by the variable name. The <code class="docutils literal notranslate"><span class="pre">y-axis</span></code>
+<code class="docutils literal notranslate"><span class="pre">&quot;kde_density_single_distribution&quot;</span></code>, followed by the variable name. The <code class="docutils literal notranslate"><span class="pre">`y-axis`</span></code>
 for all plots is labeled as “Density” (<code class="docutils literal notranslate"><span class="pre">y_axis_label=&quot;Density&quot;</span></code>), reflecting that
 the height of the bars or KDE line represents the data’s density. The histograms
 are divided into <cite>10 bins</cite> (<code class="docutils literal notranslate"><span class="pre">bins=10</span></code>), offering a clear view of the distribution
@@ -1508,7 +1514,7 @@ the variables <code class="docutils literal notranslate"><span class="pre">&quot
 <code class="docutils literal notranslate"><span class="pre">kde=False</span></code>, meaning no KDE plots are included—only histograms are displayed.
 The plots are arranged in a single row of four columns (<code class="docutils literal notranslate"><span class="pre">n_rows=1,</span> <span class="pre">n_cols=3</span></code>),
 with a grid size of <cite>14x4 inches</cite> (<code class="docutils literal notranslate"><span class="pre">grid_figsize=(14,</span> <span class="pre">4)</span></code>). The histograms are
-divided into <cite>10 bins</cite> (<code class="docutils literal notranslate"><span class="pre">bins=10</span></code>), and the <cite>y-axis</cite> is labeled “Density” (<code class="docutils literal notranslate"><span class="pre">y_axis_label=&quot;Density&quot;</span></code>).
+divided into <cite>10 bins</cite> (<code class="docutils literal notranslate"><span class="pre">bins=10</span></code>), and the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> is labeled “Density” (<code class="docutils literal notranslate"><span class="pre">y_axis_label=&quot;Density&quot;</span></code>).
 Font sizes for the axis labels and tick labels are set to <cite>16</cite> and <cite>14</cite> points,
 respectively, ensuring clarity in the visualizations. This setup focuses on the
 histogram representation without the KDE overlay.</p>
@@ -1547,7 +1553,7 @@ histogram representation without the KDE overlay.</p>
 <h2>Histogram Example (Count)<a class="headerlink" href="#histogram-example-count" title="Permalink to this heading"></a></h2>
 <p>In this example, the kde_distributions function is modified to generate histograms
 with a few key changes. The <code class="docutils literal notranslate"><span class="pre">hist_color</span></code> is set to <cite>“orange”</cite>, changing the color of the
-histogram bars. The <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> label is updated to “Count” (<code class="docutils literal notranslate"><span class="pre">y_axis_label=&quot;Count&quot;</span></code>),
+histogram bars. The <code class="docutils literal notranslate"><span class="pre">`y-axis`</span></code> label is updated to “Count” (<code class="docutils literal notranslate"><span class="pre">y_axis_label=&quot;Count&quot;</span></code>),
 reflecting that the histograms display the count of observations within each bin.
 Additionally, the stat parameter is set to <cite>“Count”</cite> to show the actual counts instead of
 densities. The rest of the parameters remain the same as in the previous example,
@@ -1611,7 +1617,7 @@ or normalized plots.</p>
 <li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – List of titles for the plots.</p></li>
 <li><p><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The kind of plot to generate (<code class="docutils literal notranslate"><span class="pre">'bar'</span></code> or <code class="docutils literal notranslate"><span class="pre">'barh'</span></code> for horizontal bars), default is <code class="docutils literal notranslate"><span class="pre">'bar'</span></code>.</p></li>
 <li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – The width of the bars in the bar plot, default is <code class="docutils literal notranslate"><span class="pre">0.9</span></code>.</p></li>
-<li><p><strong>rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The rotation angle of the <cite>x-axis</cite> labels, default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The rotation angle of the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels, default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 <li><p><strong>custom_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Specifies a custom order for the categories in the <code class="docutils literal notranslate"><span class="pre">col</span></code>.</p></li>
 <li><p><strong>image_path_png</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path where generated PNG plot images will be saved.</p></li>
 <li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path where generated SVG plot images will be saved.</p></li>
@@ -1623,14 +1629,14 @@ or normalized plots.</p>
 <li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The height of the figure.</p></li>
 <li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The padding between the subplots.</p></li>
 <li><p><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Prefix for the filename when output includes plots.</p></li>
-<li><p><strong>logscale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Apply log scale to the <cite>y-axis</cite>, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>logscale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Apply log scale to the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code>, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>plot_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specify the type of plot to generate: <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
 <li><p><strong>show_legend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Specify whether to show the legend, default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for axis labels, default is <code class="docutils literal notranslate"><span class="pre">12</span></code>.</p></li>
 <li><p><strong>tick_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for tick labels on the axes, default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
 <li><p><strong>remove_stacks</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, removes stacks and creates a regular bar plot using only the <code class="docutils literal notranslate"><span class="pre">col</span></code> parameter. Only works when <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is set to <code class="docutils literal notranslate"><span class="pre">'regular'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>x-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
-<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>y-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -1659,7 +1665,7 @@ or normalized plots.</p>
 <p>The provided code snippet demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function to generate stacked bar plots and corresponding crosstabs for different
 columns in a DataFrame. Here’s a detailed breakdown of the code using the census
-dataset as an example <a class="footnote-reference brackets" href="#id17" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+dataset as an example <a class="footnote-reference brackets" href="#id18" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>First, the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list is defined, specifying the columns <code class="docutils literal notranslate"><span class="pre">[&quot;sex&quot;,</span> <span class="pre">&quot;income&quot;]</span></code>
 to be analyzed. These columns will be used in the loop to generate separate plots.
 The <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> is then defined, with each entry corresponding to a
@@ -1983,15 +1989,15 @@ DataFrames by assigning them to their own vriables. For example:</p>
 </section>
 <section id="pivoted-stacked-bar-plots-example">
 <h2>Pivoted Stacked Bar Plots Example<a class="headerlink" href="#pivoted-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>Using the census dataset <a class="footnote-reference brackets" href="#id17" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
+<p>Using the census dataset <a class="footnote-reference brackets" href="#id18" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
 <code class="docutils literal notranslate"><span class="pre">&quot;barh&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span> <span class="pre">function</span></code>. This option pivots the
 standard vertical stacked bar plot into a horizontal orientation, making it easier
-to compare categories when there are many labels on the <cite>y-axis</cite>.</p>
+to compare categories when there are many labels on the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code>.</p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income_pivoted.svg"><img alt="Stacked Bar Plot Age vs. Income (Pivoted)" class="align-center" src="_images/Stacked_Bar_Age_income_pivoted.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="non-normalized-stacked-bar-plots-example">
 <h2>Non-Normalized Stacked Bar Plots Example<a class="headerlink" href="#non-normalized-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id17" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
+<p>In the census data <a class="footnote-reference brackets" href="#id18" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
 set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function. This option removes the display of normalized plots beneath the regular
 versions. Alternatively, setting the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display
@@ -2001,7 +2007,7 @@ for income by age.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="regular-non-stacked-bar-plots-example">
 <h2>Regular Non-Stacked Bar Plots Example<a class="headerlink" href="#regular-non-stacked-bar-plots-example" title="Permalink to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id17" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
+<p>In the census data <a class="footnote-reference brackets" href="#id18" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
 displaying their normalized versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>
 in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function and enable <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> by setting
 it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This configuration removes any stacked elements and prevents the
@@ -2053,13 +2059,13 @@ clear visual analysis of how these metrics vary within the dataset.</p>
 <li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – String, <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code> to control saving plots.</p></li>
 <li><p><strong>show_legend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Boolean, True if showing the legend in the plots.</p></li>
 <li><p><strong>plot_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specify the type of plot, either <code class="docutils literal notranslate"><span class="pre">&quot;boxplot&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;violinplot&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;boxplot&quot;</span></code>.</p></li>
-<li><p><strong>xlabel_rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Rotation angle for <cite>x-axis</cite> labels. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>xlabel_rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Rotation angle for <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 <li><p><strong>show_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specify the plot display mode: <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
 <li><p><strong>rotate_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Boolean, True if rotating (pivoting) the plots.</p></li>
 <li><p><strong>individual_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Width and height of the figure for individual plots. Default is (<code class="docutils literal notranslate"><span class="pre">6,</span> <span class="pre">4</span></code>).</p></li>
 <li><p><strong>grid_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Width and height of the figure for grid plots.</p></li>
-<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>x-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
-<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>y-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -2082,7 +2088,7 @@ clear visual analysis of how these metrics vary within the dataset.</p>
 
 <section id="box-plots-grid-example">
 <h2>Box Plots Grid Example<a class="headerlink" href="#box-plots-grid-example" title="Permalink to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id17" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, the box_violin_plot function is employed to create a grid of
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id18" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, the box_violin_plot function is employed to create a grid of
 boxplots, comparing different metrics against the <code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code> column in the
 DataFrame. The <code class="docutils literal notranslate"><span class="pre">metrics_boxplot_comp</span></code> parameter is set to [<code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code>], meaning
 that the comparison will be based on different age groups. The <code class="docutils literal notranslate"><span class="pre">metrics_list</span></code> is
@@ -2094,7 +2100,7 @@ SVG formats, and the save_plots option is set to <code class="docutils literal n
 individual and grid plots are saved.</p>
 <p>The plots are displayed in a grid format, as indicated by the <code class="docutils literal notranslate"><span class="pre">show_plot=&quot;grid&quot;</span></code>
 parameter. The <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;boxplot&quot;</span></code>, so the function will generate
-boxplots for each metric in the list. Additionally, the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels are rotated
+boxplots for each metric in the list. Additionally, the <code class="docutils literal notranslate"><span class="pre">`x-axis`</span></code> labels are rotated
 by 90 degrees (<code class="docutils literal notranslate"><span class="pre">xlabel_rot=90</span></code>) to ensure that the labels are legible. The legend is
 hidden by setting <code class="docutils literal notranslate"><span class="pre">show_legend=False</span></code>, keeping the plots clean and focused on the data.
 This configuration provides a comprehensive visual comparison of the specified
@@ -2131,7 +2137,7 @@ metrics across different age groups, with all plots saved for future reference o
 </div><div style="height: 50px;"></div></section>
 <section id="violin-plots-grid-example">
 <h2>Violin Plots Grid Example<a class="headerlink" href="#violin-plots-grid-example" title="Permalink to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id17" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id18" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
 <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>. This adjustment will generate violin plots instead
 of boxplots while maintaining all other settings.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
@@ -2158,8 +2164,8 @@ of boxplots while maintaining all other settings.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="pivoted-violin-plots-grid-example">
 <h2>Pivoted Violin Plots Grid Example<a class="headerlink" href="#pivoted-violin-plots-grid-example" title="Permalink to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id17" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
-to pivot the plot, changing the orientation of the axes while keeping the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels upright.
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id18" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
+to pivot the plot, changing the orientation of the axes while keeping the <code class="docutils literal notranslate"><span class="pre">`x-axis`</span></code> labels upright.
 This adjustment flips the axes, providing a different perspective on the data distribution.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="n">impor</span> <span class="n">box_violin_plot</span>
 
@@ -2183,16 +2189,153 @@ This adjustment flips the axes, providing a different perspective on the data di
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/all_plots_comparisons_violinplot_pivoted.svg"><img alt="Violin Plot Comparisons (Pivoted)" class="align-center" src="_images/all_plots_comparisons_violinplot_pivoted.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div></section>
+</section>
+<section id="scatter-plots-and-best-fit-lines">
+<h1>Scatter Plots and Best Fit Lines<a class="headerlink" href="#scatter-plots-and-best-fit-lines" title="Permalink to this heading"></a></h1>
+<p><strong>Create and save scatter plots or a grid of scatter plots for given x_vars
+and y_vars, with an optional best fit line and customizable point color,
+size, and markers.</strong></p>
+<p><strong>Create and Save Scatter Plots or a Grid of Scatter Plots</strong></p>
+<p>This function, <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code>, is designed to generate scatter plots for
+one or more pairs of variables (<code class="docutils literal notranslate"><span class="pre">x_vars</span></code> and <code class="docutils literal notranslate"><span class="pre">y_vars</span></code>) from a given DataFrame.
+The function can produce either individual scatter plots or organize multiple
+scatter plots into a grid layout, making it easy to visualize relationships between
+different pairs of variables in one cohesive view.</p>
+<p><strong>Optional Best Fit Line</strong></p>
+<p>An optional feature of this function is the ability to add a best fit line to the
+scatter plots. This line, often called a regression line, is calculated using a
+linear regression model and represents the trend in the data. By adding this line,
+you can visually assess the linear relationship between the variables, and the
+function can also display the equation of this line in the plot’s legend.s</p>
+<p><strong>Customizable Plot Aesthetics</strong></p>
+<p>The function offers a wide range of customization options to tailor the appearance
+of the scatter plots:</p>
+<ul class="simple">
+<li><p><strong>Point Color</strong>: You can specify a default color for the scatter points or use a <code class="docutils literal notranslate"><span class="pre">hue</span></code> parameter to color the points based on a categorical variable. This allows for easy comparison across different groups within the data.</p></li>
+<li><p><strong>Point Size</strong>: The size of the scatter points can be controlled and scaled based on another variable, which can help highlight differences or patterns related to that variable.</p></li>
+<li><p><strong>Markers</strong>: The shape or style of the scatter points can also be customized. Whether you prefer circles, squares, or other marker types, the function allows you to choose the best representation for your data.</p></li>
+</ul>
+<p><strong>Axis and Label Configuration</strong></p>
+<p>The function also provides flexibility in setting axis labels, tick marks, and grid sizes. You can rotate axis labels for better readability, adjust font sizes, and even specify limits for the x and y axes to focus on particular data ranges.</p>
+<p><strong>Plot Display and Saving Options</strong></p>
+<p>The function allows you to display plots individually, as a grid, or both. Additionally, you can save the generated plots as PNG or SVG files, making it easy to include them in reports or presentations.</p>
+<p><strong>Correlation Coefficient Display</strong></p>
+<p>For users interested in understanding the strength of the relationship between variables, the function can also display the Pearson correlation coefficient directly in the plot title. This numeric value provides a quick reference to the linear correlation between the variables, offering further insight into their relationship.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scatter_fit_plot">
+<span class="sig-name descname"><span class="pre">scatter_fit_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel_rot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotate_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">individual_figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_best_fit_line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scatter_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_fit_linecolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'red'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_fit_linestyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hue_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_correlation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scatter_fit_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Create and save scatter plots or a grid of scatter plots for given x_vars
+and y_vars, with an optional best fit line and customizable point color,
+size, and markers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing the data.</p></li>
+<li><p><strong>x_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – List of variable names to plot on the <cite>x-axis</cite>.</p></li>
+<li><p><strong>y_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – List of variable names to plot on the <cite>y-axis</cite>.</p></li>
+<li><p><strong>n_rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of rows in the subplot grid.</p></li>
+<li><p><strong>n_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of columns in the subplot grid.</p></li>
+<li><p><strong>image_path_png</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save PNG images of the scatter plots.</p></li>
+<li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save SVG images of the scatter plots.</p></li>
+<li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Controls which plots to save: <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>.</p></li>
+<li><p><strong>show_legend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to display the legend on the plots. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>xlabel_rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Rotation angle for <cite>x-axis</cite> labels. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>show_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Controls plot display: <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p><strong>rotate_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to rotate (pivot) the plots. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>individual_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Width and height of the figure for individual plots. Default is <code class="docutils literal notranslate"><span class="pre">(6,</span> <span class="pre">4)</span></code>.</p></li>
+<li><p><strong>grid_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Width and height of the figure for grid plots.</p></li>
+<li><p><strong>label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for axis labels. Default is <code class="docutils literal notranslate"><span class="pre">12</span></code>.</p></li>
+<li><p><strong>tick_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for axis tick labels. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
+<li><p><strong>add_best_fit_line</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to add a best fit line to the scatter plots. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>scatter_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color code for the scattered points. Default is <code class="docutils literal notranslate"><span class="pre">&quot;C0&quot;</span></code>.</p></li>
+<li><p><strong>best_fit_linecolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color code for the best fit line. Default is <code class="docutils literal notranslate"><span class="pre">&quot;red&quot;</span></code>.</p></li>
+<li><p><strong>best_fit_linestyle</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Linestyle for the best fit line. Default is <code class="docutils literal notranslate"><span class="pre">&quot;-&quot;</span></code>.</p></li>
+<li><p><strong>hue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column name for the grouping variable that will produce points with different colors.</p></li>
+<li><p><strong>hue_palette</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette.</p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column name for the grouping variable that will produce points with different sizes.</p></li>
+<li><p><strong>sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary mapping sizes (smallest and largest) to min and max values.</p></li>
+<li><p><strong>marker</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Marker style used for the scatter points. Default is <code class="docutils literal notranslate"><span class="pre">&quot;o&quot;</span></code>.</p></li>
+<li><p><strong>show_correlation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to display the Pearson correlation coefficient in the plot title. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>x-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <cite>y-axis</cite> as a tuple or list of (<cite>min, max</cite>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – <ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">show_plot</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> is set but no image paths are provided.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">rotate_plot</span></code> is not a boolean value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">individual_figsize</span></code> or <code class="docutils literal notranslate"><span class="pre">grid_figsize</span></code> are not tuples/lists with two numeric values.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>
+This function does not return any value but generates and optionally saves scatter plots for the specified <cite>x_vars</cite> and <cite>y_vars</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="regression-centric-scatter-plots-example">
+<h2>Regression-Centric Scatter Plots Example<a class="headerlink" href="#regression-centric-scatter-plots-example" title="Permalink to this heading"></a></h2>
+<p>In this US census data <a class="footnote-reference brackets" href="#id18" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function is
+configured to display the Pearson correlation coefficient and a best fit line
+on each scatter plot. The correlation coefficient is shown in the plot title,
+controlled by the <code class="docutils literal notranslate"><span class="pre">show_correlation=True</span></code> parameter, which provides a measure
+of the strength and direction of the linear relationship between the variables.
+Additionally, the <code class="docutils literal notranslate"><span class="pre">add_best_fit_line=True</span></code> parameter adds a best fit line to
+each plot, with the equation for the line displayed in the legend. This equation,
+along with the best fit line, helps to visually assess the relationship between
+the variables, making it easier to identify trends and patterns in the data. The
+combination of the correlation coefficient and the best fit line offers both
+a quantitative and visual representation of the relationships, enhancing the
+interpretability of the scatter plots.</p>
+<div class="no-click"><a class="reference internal image-reference" href="_images/scatter_plots_grid.svg"><img alt="Scatter Plot Comparisons (with Best Fit Lines)" class="align-center" src="_images/scatter_plots_grid.svg" width="900px" /></a>
+</div><div style="height: 50px;"></div></section>
+<section id="scatter-plots-grouped-by-category-example">
+<h2>Scatter Plots Grouped by Category Example<a class="headerlink" href="#scatter-plots-grouped-by-category-example" title="Permalink to this heading"></a></h2>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function is used to generate a grid of
+scatter plots that examine the relationships between <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">hours-per-week</span></code>
+as well as <code class="docutils literal notranslate"><span class="pre">education-num</span></code> and <code class="docutils literal notranslate"><span class="pre">hours-per-week</span></code>. Compared to the previous
+example, a few key inputs have been changed to adjust the appearance and functionality
+of the plots:</p>
+<ol class="arabic simple">
+<li><p><strong>Hue and Hue Palette</strong>: The <code class="docutils literal notranslate"><span class="pre">hue</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code>, meaning that the
+data points in the scatter plots are colored according to the values in the <code class="docutils literal notranslate"><span class="pre">income</span></code>
+column. A custom color mapping is provided via the <code class="docutils literal notranslate"><span class="pre">hue_palette</span></code> parameter, where the
+income categories <code class="docutils literal notranslate"><span class="pre">&quot;&lt;=50K&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;&gt;50K&quot;</span></code> are assigned the colors <code class="docutils literal notranslate"><span class="pre">&quot;brown&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&quot;green&quot;</span></code>, respectively. This change visually distinguishes the data points based on
+income levels.</p></li>
+<li><p><strong>Scatter Color</strong>: The <code class="docutils literal notranslate"><span class="pre">scatter_color</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">&quot;#808080&quot;</span></code>, which applies
+a grey color to the scatter points when no <code class="docutils literal notranslate"><span class="pre">hue</span></code> is provided. However, since a <code class="docutils literal notranslate"><span class="pre">hue</span></code>
+is specified in this example, the <code class="docutils literal notranslate"><span class="pre">hue_palette</span></code> takes precedence and overrides this color setting.</p></li>
+<li><p><strong>Best Fit Line</strong>: The <code class="docutils literal notranslate"><span class="pre">add_best_fit_line</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, meaning that
+no best fit line is added to the scatter plots. This differs from the previous example where
+a best fit line was included.</p></li>
+<li><p><strong>Correlation Coefficient</strong>: The <code class="docutils literal notranslate"><span class="pre">show_correlation</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, so the
+Pearson correlation coefficient will not be displayed in the plot titles. This is another
+change from the previous example where the correlation coefficient was included.</p></li>
+<li><p><strong>Hue Legend</strong>: The <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> parameter remains set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, ensuring that the
+legend displaying the hue categories (<code class="docutils literal notranslate"><span class="pre">&quot;&lt;=50K&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;&gt;50K&quot;</span></code>) appears on the plots,
+helping to interpret the color coding of the data points.</p></li>
+</ol>
+<p>These changes allow for the creation of scatter plots that highlight the income levels
+of individuals, with custom color coding and without additional elements like a best
+fit line or correlation coefficient. The resulting grid of plots is then saved as
+images in the specified paths.</p>
+<div class="no-click"><a class="reference internal image-reference" href="_images/scatter_plots_grid_grouped.svg"><img alt="Scatter Plot Comparisons (Grouped)" class="align-center" src="_images/scatter_plots_grid_grouped.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id17" role="note">
+<aside class="footnote brackets" id="id18" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id18" role="note">
+<aside class="footnote brackets" id="id19" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">2</a><span class="fn-bracket">]</span></span>
 <p>Michael Waskom (2021). Seaborn: statistical data visualization. <em>Journal of Open Source Software</em>, 6(60), 3021, <a class="reference external" href="https://doi.org/10.21105/joss.03021">https://doi.org/10.21105/joss.03021</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id19" role="note">
+<aside class="footnote brackets" id="id20" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">3</a><span class="fn-bracket">]</span></span>
 <p>Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. <em>Computing in Science &amp; Engineering</em>, 9(3), 90-95. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a></p>
 </aside>

@@ -1380,7 +1380,7 @@ statistical graphics.
     :param single_var_image_filename: Filename to use when saving the separate distribution plots.
             The variable name will be appended to this filename.
     :type single_var_image_filename: str, optional
-    :param y_axis_label: The label to display on the `y-axis`, default is ``'Density'``.
+    :param y_axis_label: The label to display on the ``y-axis``, default is ``'Density'``.
     :type y_axis_label: str, optional
     :param plot_type: The type of plot to generate, options are ``'hist'``, ``'kde'``, or ``'both'``. Default is ``'both'``.
     :type plot_type: str, optional
@@ -1397,9 +1397,9 @@ statistical graphics.
     :param stat: Aggregate statistic to compute in each bin (e.g., ``'count'``, ``'frequency'``,
             ``'probability'``, ``'percent'``, ``'density'``), default is ``'density'``.
     :type stat: str, optional
-    :param xlim: Limits for the `x-axis` as a tuple or list of (`min, max`).
+    :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the `y-axis` as a tuple or list of (`min, max`).
+    :param ylim: Limits for the ``y-axis`` as a tuple or list of (`min, max`).
     :type ylim: tuple or list, optional
     
     :raises ValueError: 
@@ -1448,7 +1448,7 @@ whitespace around the edges. The variables specified in ``vars_of_interest`` are
 passed directly to the function for visualization.
 
 Each plot is saved individually with filenames that are prefixed by 
-``"kde_density_single_distribution"``, followed by the variable name. The ``y-axis``
+``"kde_density_single_distribution"``, followed by the variable name. The ```y-axis```
 for all plots is labeled as "Density" (``y_axis_label="Density"``), reflecting that 
 the height of the bars or KDE line represents the data's density. The histograms 
 are divided into `10 bins` (``bins=10``), offering a clear view of the distribution 
@@ -1517,7 +1517,7 @@ the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with
 ``kde=False``, meaning no KDE plots are included—only histograms are displayed. 
 The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
 with a grid size of `14x4 inches` (``grid_figsize=(14, 4)``). The histograms are 
-divided into `10 bins` (``bins=10``), and the `y-axis` is labeled "Density" (``y_axis_label="Density"``).
+divided into `10 bins` (``bins=10``), and the ``y-axis`` is labeled "Density" (``y_axis_label="Density"``).
 Font sizes for the axis labels and tick labels are set to `16` and `14` points, 
 respectively, ensuring clarity in the visualizations. This setup focuses on the 
 histogram representation without the KDE overlay.
@@ -1577,7 +1577,7 @@ Histogram Example (Count)
 
 In this example, the kde_distributions function is modified to generate histograms 
 with a few key changes. The ``hist_color`` is set to `"orange"`, changing the color of the 
-histogram bars. The ``y-axis`` label is updated to "Count" (``y_axis_label="Count"``), 
+histogram bars. The ```y-axis``` label is updated to "Count" (``y_axis_label="Count"``), 
 reflecting that the histograms display the count of observations within each bin. 
 Additionally, the stat parameter is set to `"Count"` to show the actual counts instead of 
 densities. The rest of the parameters remain the same as in the previous example, 
@@ -1667,7 +1667,7 @@ The function also supports generating both regular and normalized stacked bar pl
     :type kind: str, optional
     :param width: The width of the bars in the bar plot, default is ``0.9``.
     :type width: float, optional
-    :param rot: The rotation angle of the `x-axis` labels, default is ``0``.
+    :param rot: The rotation angle of the ``x-axis`` labels, default is ``0``.
     :type rot: int, optional
     :param custom_order: Specifies a custom order for the categories in the ``col``.
     :type custom_order: list, optional
@@ -1691,7 +1691,7 @@ The function also supports generating both regular and normalized stacked bar pl
     :type p: int, optional
     :param file_prefix: Prefix for the filename when output includes plots.
     :type file_prefix: str, optional
-    :param logscale: Apply log scale to the `y-axis`, default is ``False``.
+    :param logscale: Apply log scale to the ``y-axis``, default is ``False``.
     :type logscale: bool, optional
     :param plot_type: Specify the type of plot to generate: ``"both"``, ``"regular"``, ``"normalized"``. Default is ``"both"``.
     :type plot_type: str, optional
@@ -1703,9 +1703,9 @@ The function also supports generating both regular and normalized stacked bar pl
     :type tick_fontsize: int, optional
     :param remove_stacks: If ``True``, removes stacks and creates a regular bar plot using only the ``col`` parameter. Only works when ``plot_type`` is set to ``'regular'``. Default is ``False``.
     :type remove_stacks: bool, optional
-    :param xlim: Limits for the `x-axis` as a tuple or list of (`min, max`).
+    :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the `y-axis` as a tuple or list of (`min, max`).
+    :param ylim: Limits for the ``y-axis`` as a tuple or list of (`min, max`).
     :type ylim: tuple or list, optional
 
     :raises ValueError:
@@ -2105,7 +2105,7 @@ Pivoted Stacked Bar Plots Example
 Using the census dataset [1]_, to create horizontal stacked bar plots, set the ``kind`` parameter to 
 ``"barh"`` in the ``stacked_crosstab_plot function``. This option pivots the 
 standard vertical stacked bar plot into a horizontal orientation, making it easier 
-to compare categories when there are many labels on the `y-axis`.
+to compare categories when there are many labels on the ``y-axis``.
 
 .. raw:: html
 
@@ -2240,7 +2240,7 @@ clear visual analysis of how these metrics vary within the dataset.
     :type show_legend: bool, optional
     :param plot_type: Specify the type of plot, either ``"boxplot"`` or ``"violinplot"``. Default is ``"boxplot"``.
     :type plot_type: str, optional
-    :param xlabel_rot: Rotation angle for `x-axis` labels. Default is ``0``.
+    :param xlabel_rot: Rotation angle for ``x-axis`` labels. Default is ``0``.
     :type xlabel_rot: int, optional
     :param show_plot: Specify the plot display mode: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
     :type show_plot: str, optional
@@ -2250,9 +2250,9 @@ clear visual analysis of how these metrics vary within the dataset.
     :type individual_figsize: tuple or list, optional
     :param grid_figsize: Width and height of the figure for grid plots.
     :type grid_figsize: tuple or list, optional
-    :param xlim: Limits for the `x-axis` as a tuple or list of (`min, max`).
+    :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the `y-axis` as a tuple or list of (`min, max`).
+    :param ylim: Limits for the ``y-axis`` as a tuple or list of (`min, max`).
     :type ylim: tuple or list, optional
 
     :raises ValueError:
@@ -2283,7 +2283,7 @@ individual and grid plots are saved.
 
 The plots are displayed in a grid format, as indicated by the ``show_plot="grid"`` 
 parameter. The ``plot_type`` is set to ``"boxplot"``, so the function will generate 
-boxplots for each metric in the list. Additionally, the ``x-axis`` labels are rotated 
+boxplots for each metric in the list. Additionally, the ```x-axis``` labels are rotated 
 by 90 degrees (``xlabel_rot=90``) to ensure that the labels are legible. The legend is 
 hidden by setting ``show_legend=False``, keeping the plots clean and focused on the data. 
 This configuration provides a comprehensive visual comparison of the specified 
@@ -2389,7 +2389,7 @@ Pivoted Violin Plots Grid Example
 ------------------------------------
 
 In this example with the US census data [1]_, we set ``xlabel_rot=0`` and ``rotate_plot=True`` 
-to pivot the plot, changing the orientation of the axes while keeping the ``x-axis`` labels upright. 
+to pivot the plot, changing the orientation of the axes while keeping the ```x-axis``` labels upright. 
 This adjustment flips the axes, providing a different perspective on the data distribution.
 
 .. code-block:: python
@@ -2430,6 +2430,246 @@ This adjustment flips the axes, providing a different perspective on the data di
 .. raw:: html
    
    <div style="height: 50px;"></div>
+
+
+Scatter Plots and Best Fit Lines
+==================================
+
+**Create and save scatter plots or a grid of scatter plots for given x_vars
+and y_vars, with an optional best fit line and customizable point color,
+size, and markers.**
+
+**Create and Save Scatter Plots or a Grid of Scatter Plots**
+
+This function, ``scatter_fit_plot``, is designed to generate scatter plots for 
+one or more pairs of variables (``x_vars`` and ``y_vars``) from a given DataFrame. 
+The function can produce either individual scatter plots or organize multiple 
+scatter plots into a grid layout, making it easy to visualize relationships between 
+different pairs of variables in one cohesive view.
+
+**Optional Best Fit Line**
+
+An optional feature of this function is the ability to add a best fit line to the 
+scatter plots. This line, often called a regression line, is calculated using a 
+linear regression model and represents the trend in the data. By adding this line, 
+you can visually assess the linear relationship between the variables, and the 
+function can also display the equation of this line in the plot’s legend.s
+
+**Customizable Plot Aesthetics**
+
+The function offers a wide range of customization options to tailor the appearance 
+of the scatter plots:
+
+- **Point Color**: You can specify a default color for the scatter points or use a ``hue`` parameter to color the points based on a categorical variable. This allows for easy comparison across different groups within the data.
+
+- **Point Size**: The size of the scatter points can be controlled and scaled based on another variable, which can help highlight differences or patterns related to that variable.
+
+- **Markers**: The shape or style of the scatter points can also be customized. Whether you prefer circles, squares, or other marker types, the function allows you to choose the best representation for your data.
+
+**Axis and Label Configuration**
+
+The function also provides flexibility in setting axis labels, tick marks, and grid sizes. You can rotate axis labels for better readability, adjust font sizes, and even specify limits for the x and y axes to focus on particular data ranges.
+
+**Plot Display and Saving Options**
+
+The function allows you to display plots individually, as a grid, or both. Additionally, you can save the generated plots as PNG or SVG files, making it easy to include them in reports or presentations.
+
+**Correlation Coefficient Display**
+
+For users interested in understanding the strength of the relationship between variables, the function can also display the Pearson correlation coefficient directly in the plot title. This numeric value provides a quick reference to the linear correlation between the variables, offering further insight into their relationship.
+
+
+.. function:: scatter_fit_plot(df, x_vars, y_vars, n_rows, n_cols, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None)
+
+    Create and save scatter plots or a grid of scatter plots for given x_vars
+    and y_vars, with an optional best fit line and customizable point color,
+    size, and markers.
+
+    :param df: The DataFrame containing the data.
+    :type df: pandas.DataFrame
+
+    :param x_vars: List of variable names to plot on the `x-axis`.
+    :type x_vars: list of str
+
+    :param y_vars: List of variable names to plot on the `y-axis`.
+    :type y_vars: list of str
+
+    :param n_rows: Number of rows in the subplot grid.
+    :type n_rows: int
+
+    :param n_cols: Number of columns in the subplot grid.
+    :type n_cols: int
+
+    :param image_path_png: Directory path to save PNG images of the scatter plots.
+    :type image_path_png: str, optional
+
+    :param image_path_svg: Directory path to save SVG images of the scatter plots.
+    :type image_path_svg: str, optional
+
+    :param save_plots: Controls which plots to save: ``"all"``, ``"individual"``, or ``"grid"``.
+    :type save_plots: str, optional
+
+    :param show_legend: Whether to display the legend on the plots. Default is ``True``.
+    :type show_legend: bool, optional
+
+    :param xlabel_rot: Rotation angle for `x-axis` labels. Default is ``0``.
+    :type xlabel_rot: int, optional
+
+    :param show_plot: Controls plot display: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
+    :type show_plot: str, optional
+
+    :param rotate_plot: Whether to rotate (pivot) the plots. Default is ``False``.
+    :type rotate_plot: bool, optional
+
+    :param individual_figsize: Width and height of the figure for individual plots. Default is ``(6, 4)``.
+    :type individual_figsize: tuple or list, optional
+
+    :param grid_figsize: Width and height of the figure for grid plots.
+    :type grid_figsize: tuple or list, optional
+
+    :param label_fontsize: Font size for axis labels. Default is ``12``.
+    :type label_fontsize: int, optional
+
+    :param tick_fontsize: Font size for axis tick labels. Default is ``10``.
+    :type tick_fontsize: int, optional
+
+    :param add_best_fit_line: Whether to add a best fit line to the scatter plots. Default is ``False``.
+    :type add_best_fit_line: bool, optional
+
+    :param scatter_color: Color code for the scattered points. Default is ``"C0"``.
+    :type scatter_color: str, optional
+
+    :param best_fit_linecolor: Color code for the best fit line. Default is ``"red"``.
+    :type best_fit_linecolor: str, optional
+
+    :param best_fit_linestyle: Linestyle for the best fit line. Default is ``"-"``.
+    :type best_fit_linestyle: str, optional
+
+    :param hue: Column name for the grouping variable that will produce points with different colors.
+    :type hue: str, optional
+
+    :param hue_palette: Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette.
+    :type hue_palette: dict, list, or str, optional
+
+    :param size: Column name for the grouping variable that will produce points with different sizes.
+    :type size: str, optional
+
+    :param sizes: Dictionary mapping sizes (smallest and largest) to min and max values.
+    :type sizes: dict, optional
+
+    :param marker: Marker style used for the scatter points. Default is ``"o"``.
+    :type marker: str, optional
+
+    :param show_correlation: Whether to display the Pearson correlation coefficient in the plot title. Default is ``True``.
+    :type show_correlation: bool, optional
+
+    :param xlim: Limits for the `x-axis` as a tuple or list of (`min, max`).
+    :type xlim: tuple or list, optional
+
+    :param ylim: Limits for the `y-axis` as a tuple or list of (`min, max`).
+    :type ylim: tuple or list, optional
+
+    :raises ValueError: 
+        - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
+        - If ``save_plots`` is not one of ``None``, ``"all"``, ``"individual"``, or ``"grid"``.
+        - If ``save_plots`` is set but no image paths are provided.
+        - If ``rotate_plot`` is not a boolean value.
+        - If ``individual_figsize`` or ``grid_figsize`` are not tuples/lists with two numeric values.
+
+    :returns: ``None``
+        This function does not return any value but generates and optionally saves scatter plots for the specified `x_vars` and `y_vars`.
+
+
+Regression-Centric Scatter Plots Example
+-----------------------------------------
+
+In this US census data [1]_ example, the ``scatter_fit_plot`` function is 
+configured to display the Pearson correlation coefficient and a best fit line 
+on each scatter plot. The correlation coefficient is shown in the plot title, 
+controlled by the ``show_correlation=True`` parameter, which provides a measure 
+of the strength and direction of the linear relationship between the variables. 
+Additionally, the ``add_best_fit_line=True`` parameter adds a best fit line to 
+each plot, with the equation for the line displayed in the legend. This equation, 
+along with the best fit line, helps to visually assess the relationship between 
+the variables, making it easier to identify trends and patterns in the data. The 
+combination of the correlation coefficient and the best fit line offers both 
+a quantitative and visual representation of the relationships, enhancing the 
+interpretability of the scatter plots.
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/scatter_plots_grid.svg
+   :alt: Scatter Plot Comparisons (with Best Fit Lines)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+Scatter Plots Grouped by Category Example
+-------------------------------------------
+
+In this example, the ``scatter_fit_plot`` function is used to generate a grid of 
+scatter plots that examine the relationships between ``age`` and ``hours-per-week`` 
+as well as ``education-num`` and ``hours-per-week``. Compared to the previous 
+example, a few key inputs have been changed to adjust the appearance and functionality 
+of the plots:
+
+1. **Hue and Hue Palette**: The ``hue`` parameter is set to ``"income"``, meaning that the 
+   data points in the scatter plots are colored according to the values in the ``income`` 
+   column. A custom color mapping is provided via the ``hue_palette`` parameter, where the 
+   income categories ``"<=50K"`` and ``">50K"`` are assigned the colors ``"brown"`` and 
+   ``"green"``, respectively. This change visually distinguishes the data points based on 
+   income levels.
+
+2. **Scatter Color**: The ``scatter_color`` parameter is set to ``"#808080"``, which applies 
+   a grey color to the scatter points when no ``hue`` is provided. However, since a ``hue`` 
+   is specified in this example, the ``hue_palette`` takes precedence and overrides this color setting.
+
+3. **Best Fit Line**: The ``add_best_fit_line`` parameter is set to ``False``, meaning that 
+   no best fit line is added to the scatter plots. This differs from the previous example where 
+   a best fit line was included.
+
+4. **Correlation Coefficient**: The ``show_correlation`` parameter is set to ``False``, so the 
+   Pearson correlation coefficient will not be displayed in the plot titles. This is another 
+   change from the previous example where the correlation coefficient was included.
+
+5. **Hue Legend**: The ``show_legend`` parameter remains set to ``True``, ensuring that the 
+   legend displaying the hue categories (``"<=50K"`` and ``">50K"``) appears on the plots, 
+   helping to interpret the color coding of the data points.
+
+These changes allow for the creation of scatter plots that highlight the income levels 
+of individuals, with custom color coding and without additional elements like a best 
+fit line or correlation coefficient. The resulting grid of plots is then saved as 
+images in the specified paths.
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/scatter_plots_grid_grouped.svg
+   :alt: Scatter Plot Comparisons (Grouped)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
 
 .. [#] Kohavi, Ron. (1996). Census Income. UCI Machine Learning Repository. https://doi.org/10.24432/C5GP7S.
 
