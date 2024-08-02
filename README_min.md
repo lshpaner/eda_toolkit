@@ -37,10 +37,30 @@ https://www.oscargildata.com
 
 `eda_toolkit` is distributed under the MIT License. See [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/readme/LICENSE.md) for more information.
 
-
 ## Support
 
 If you have any questions or issues with `eda_toolkit`, please open an issue on this GitHub repository.
+
+
+## 📚 Citing `eda_toolkit`
+
+If you use `eda_toolkit` in your research or projects, please consider citing it.
+
+```bibtex
+
+@software{shpaner_2024_13162633,
+  author       = {Shpaner, Leonid and
+                  Gil, Oscar},
+  title        = {lshpaner/eda\_toolkit: eda\_toolkit 0.0.1c},
+  month        = aug,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {0.0.1c},
+  doi          = {10.5281/zenodo.13162633},
+  url          = {https://doi.org/10.5281/zenodo.13162633}
+}
+
+```
 
 
 
