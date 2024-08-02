@@ -1380,7 +1380,7 @@ statistical graphics.
     :param single_var_image_filename: Filename to use when saving the separate distribution plots.
             The variable name will be appended to this filename.
     :type single_var_image_filename: str, optional
-    :param y_axis_label: The label to display on the y-axis, default is ``'Density'``.
+    :param y_axis_label: The label to display on the `y-axis`, default is ``'Density'``.
     :type y_axis_label: str, optional
     :param plot_type: The type of plot to generate, options are ``'hist'``, ``'kde'``, or ``'both'``. Default is ``'both'``.
     :type plot_type: str, optional
@@ -1397,7 +1397,10 @@ statistical graphics.
     :param stat: Aggregate statistic to compute in each bin (e.g., ``'count'``, ``'frequency'``,
             ``'probability'``, ``'percent'``, ``'density'``), default is ``'density'``.
     :type stat: str, optional
-
+    :param xlim: Limits for the `x-axis` as a tuple or list of (`min, max`).
+    :type xlim: tuple or list, optional
+    :param ylim: Limits for the `y-axis` as a tuple or list of (`min, max`).
+    :type ylim: tuple or list, optional
     
     :raises ValueError: 
         - If ``plot_type`` is not one of ``'hist'``, ``'kde'``, or ``'both'``.
@@ -1445,7 +1448,7 @@ whitespace around the edges. The variables specified in ``vars_of_interest`` are
 passed directly to the function for visualization.
 
 Each plot is saved individually with filenames that are prefixed by 
-``"kde_density_single_distribution"``, followed by the variable name. The `y-axis`
+``"kde_density_single_distribution"``, followed by the variable name. The ``y-axis``
 for all plots is labeled as "Density" (``y_axis_label="Density"``), reflecting that 
 the height of the bars or KDE line represents the data's density. The histograms 
 are divided into `10 bins` (``bins=10``), offering a clear view of the distribution 
@@ -1514,7 +1517,7 @@ the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with
 ``kde=False``, meaning no KDE plots are included—only histograms are displayed. 
 The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
 with a grid size of `14x4 inches` (``grid_figsize=(14, 4)``). The histograms are 
-divided into `10 bins` (``bins=10``), and the y-axis is labeled "Density" (``y_axis_label="Density"``).
+divided into `10 bins` (``bins=10``), and the `y-axis` is labeled "Density" (``y_axis_label="Density"``).
 Font sizes for the axis labels and tick labels are set to `16` and `14` points, 
 respectively, ensuring clarity in the visualizations. This setup focuses on the 
 histogram representation without the KDE overlay.
@@ -1574,7 +1577,7 @@ Histogram Example (Count)
 
 In this example, the kde_distributions function is modified to generate histograms 
 with a few key changes. The ``hist_color`` is set to `"orange"`, changing the color of the 
-histogram bars. The `y-axis` label is updated to "Count" (``y_axis_label="Count"``), 
+histogram bars. The ``y-axis`` label is updated to "Count" (``y_axis_label="Count"``), 
 reflecting that the histograms display the count of observations within each bin. 
 Additionally, the stat parameter is set to `"Count"` to show the actual counts instead of 
 densities. The rest of the parameters remain the same as in the previous example, 
@@ -1664,7 +1667,7 @@ The function also supports generating both regular and normalized stacked bar pl
     :type kind: str, optional
     :param width: The width of the bars in the bar plot, default is ``0.9``.
     :type width: float, optional
-    :param rot: The rotation angle of the x-axis labels, default is ``0``.
+    :param rot: The rotation angle of the `x-axis` labels, default is ``0``.
     :type rot: int, optional
     :param custom_order: Specifies a custom order for the categories in the ``col``.
     :type custom_order: list, optional
@@ -1688,7 +1691,7 @@ The function also supports generating both regular and normalized stacked bar pl
     :type p: int, optional
     :param file_prefix: Prefix for the filename when output includes plots.
     :type file_prefix: str, optional
-    :param logscale: Apply log scale to the y-axis, default is ``False``.
+    :param logscale: Apply log scale to the `y-axis`, default is ``False``.
     :type logscale: bool, optional
     :param plot_type: Specify the type of plot to generate: ``"both"``, ``"regular"``, ``"normalized"``. Default is ``"both"``.
     :type plot_type: str, optional
@@ -1700,6 +1703,10 @@ The function also supports generating both regular and normalized stacked bar pl
     :type tick_fontsize: int, optional
     :param remove_stacks: If ``True``, removes stacks and creates a regular bar plot using only the ``col`` parameter. Only works when ``plot_type`` is set to ``'regular'``. Default is ``False``.
     :type remove_stacks: bool, optional
+    :param xlim: Limits for the `x-axis` as a tuple or list of (`min, max`).
+    :type xlim: tuple or list, optional
+    :param ylim: Limits for the `y-axis` as a tuple or list of (`min, max`).
+    :type ylim: tuple or list, optional
 
     :raises ValueError:
         - If ``output`` is not one of ``"both"``, ``"plots_only"``, or ``"crosstabs_only"``.
@@ -2098,7 +2105,7 @@ Pivoted Stacked Bar Plots Example
 Using the census dataset [1]_, to create horizontal stacked bar plots, set the ``kind`` parameter to 
 ``"barh"`` in the ``stacked_crosstab_plot function``. This option pivots the 
 standard vertical stacked bar plot into a horizontal orientation, making it easier 
-to compare categories when there are many labels on the y-axis.
+to compare categories when there are many labels on the `y-axis`.
 
 .. raw:: html
 
@@ -2233,7 +2240,7 @@ clear visual analysis of how these metrics vary within the dataset.
     :type show_legend: bool, optional
     :param plot_type: Specify the type of plot, either ``"boxplot"`` or ``"violinplot"``. Default is ``"boxplot"``.
     :type plot_type: str, optional
-    :param xlabel_rot: Rotation angle for x-axis labels. Default is ``0``.
+    :param xlabel_rot: Rotation angle for `x-axis` labels. Default is ``0``.
     :type xlabel_rot: int, optional
     :param show_plot: Specify the plot display mode: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
     :type show_plot: str, optional
@@ -2243,6 +2250,10 @@ clear visual analysis of how these metrics vary within the dataset.
     :type individual_figsize: tuple or list, optional
     :param grid_figsize: Width and height of the figure for grid plots.
     :type grid_figsize: tuple or list, optional
+    :param xlim: Limits for the `x-axis` as a tuple or list of (`min, max`).
+    :type xlim: tuple or list, optional
+    :param ylim: Limits for the `y-axis` as a tuple or list of (`min, max`).
+    :type ylim: tuple or list, optional
 
     :raises ValueError:
         - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
@@ -2272,7 +2283,7 @@ individual and grid plots are saved.
 
 The plots are displayed in a grid format, as indicated by the ``show_plot="grid"`` 
 parameter. The ``plot_type`` is set to ``"boxplot"``, so the function will generate 
-boxplots for each metric in the list. Additionally, the `x-axis` labels are rotated 
+boxplots for each metric in the list. Additionally, the ``x-axis`` labels are rotated 
 by 90 degrees (``xlabel_rot=90``) to ensure that the labels are legible. The legend is 
 hidden by setting ``show_legend=False``, keeping the plots clean and focused on the data. 
 This configuration provides a comprehensive visual comparison of the specified 
@@ -2378,7 +2389,7 @@ Pivoted Violin Plots Grid Example
 ------------------------------------
 
 In this example with the US census data [1]_, we set ``xlabel_rot=0`` and ``rotate_plot=True`` 
-to pivot the plot, changing the orientation of the axes while keeping the `x-axis` labels upright. 
+to pivot the plot, changing the orientation of the axes while keeping the ``x-axis`` labels upright. 
 This adjustment flips the axes, providing a different perspective on the data distribution.
 
 .. code-block:: python
