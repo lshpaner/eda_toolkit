@@ -12,7 +12,7 @@
 .. image:: ../assets/eda_toolkit_logo.svg
    :alt: EDA Toolkit Logo
    :align: left
-   :width: 200px
+   :width: 300px
 
 .. raw:: html
 
