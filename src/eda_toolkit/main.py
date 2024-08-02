@@ -613,7 +613,11 @@ def contingency_table(df, cols=None, sort_by=0):
 ################################################################################
 
 
-def highlight_columns(df, columns, color="yellow"):
+def highlight_columns(
+    df,
+    columns,
+    color="yellow",
+):
     """
     Highlight specific columns in a DataFrame with a specified background color.
 
@@ -678,6 +682,8 @@ def kde_distributions(
     tick_fontsize=10,  # Fontsize control for tick labels
     disable_sci_notation=False,  # Toggle for scientific notation
     stat="density",  # Control the aggregate statistic for histograms
+    xlim=None,
+    ylim=None,
 ):
     """
     Generate KDE and/or histogram distribution plots for columns in a DataFrame.
@@ -922,6 +928,12 @@ def kde_distributions(
                 axis="both", labelsize=tick_fontsize
             )  # Control tick fontsize separately
 
+            # Set axis limits if specified
+            if xlim:
+                ax.set_xlim(xlim)
+            if ylim:
+                ax.set_ylim(ylim)
+
             # Disable scientific notation if requested
             if disable_sci_notation:
                 ax.xaxis.set_major_formatter(
@@ -1035,6 +1047,12 @@ def kde_distributions(
                 ax.tick_params(
                     axis="both", labelsize=tick_fontsize
                 )  # Control tick fontsize separately
+
+                # Set axis limits if specified
+                if xlim:
+                    ax.set_xlim(xlim)
+                if ylim:
+                    ax.set_ylim(ylim)
 
                 # Disable scientific notation if requested
                 if disable_sci_notation:
