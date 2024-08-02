@@ -1490,21 +1490,22 @@ def box_violin_plot(
     n_cols,
     image_path_png=None,  # Make image paths optional
     image_path_svg=None,  # Make image paths optional
-    save_plots=None,  # New parameter to control saving plots
+    save_plots=None,  # Parameter to control saving plots
     show_legend=True,  # Parameter to toggle legend
     plot_type="boxplot",  # Parameter to specify plot type
     xlabel_rot=0,  # Parameter to rotate x-axis labels
     show_plot="both",  # Parameter to control plot display
-    rotate_plot=False,  # New parameter to rotate (pivot) plots
-    individual_figsize=(
-        6,
-        4,
-    ),
-    grid_figsize=None,  # New parameter to specify figure size for grid plots
+    rotate_plot=False,  # Parameter to rotate (pivot) plots
+    individual_figsize=(6, 4),
+    grid_figsize=None,  # Parameter to specify figure size for grid plots
+    label_fontsize=12,  # Parameter to control axis label fontsize
+    tick_fontsize=10,  # Parameter to control tick label fontsize
+    xlim=None,  # New parameter for setting x-axis limits
+    ylim=None,  # New parameter for setting y-axis limits
 ):
     """
     Create and save individual boxplots or violin plots, an entire grid of plots,
-    or both for given metrics and comparisons.
+    or both for given metrics and comparisons, with optional axis limits.
 
     Parameters:
     - df: DataFrame containing the data.
@@ -1523,7 +1524,12 @@ def box_violin_plot(
     - individual_figsize: Tuple or list, width and height of the figure for
       individual plots.
     - grid_figsize: Tuple or list, width and height of the figure for grid plots.
+    - label_fontsize: Integer, fontsize for axis labels.
+    - tick_fontsize: Integer, fontsize for axis tick labels.
+    - xlim: Tuple, specifying the limits of the x-axis.
+    - ylim: Tuple, specifying the limits of the y-axis.
     """
+
     # Check for valid show_plot values
     if show_plot not in ["individual", "grid", "both"]:
         raise ValueError(
@@ -1541,7 +1547,7 @@ def box_violin_plot(
     # Check if save_plots is set without image paths
     if save_plots and not (image_path_png or image_path_svg):
         raise ValueError(
-            "To save plots, specify 'image_path_png' or 'image_path_svg'.",
+            "To save plots, specify 'image_path_png' or " "'image_path_svg'."
         )
 
     # Check for valid rotate_plot values
@@ -1602,9 +1608,22 @@ def box_violin_plot(
                     dodge=False,
                 )
                 plt.title(f"Distribution of {met_list} by {met_comp}")
-                plt.xlabel(met_list if rotate_plot else met_comp)
-                plt.ylabel(met_comp if rotate_plot else met_list)
+                plt.xlabel(
+                    met_list if rotate_plot else met_comp,
+                    fontsize=label_fontsize,
+                )
+                plt.ylabel(
+                    met_comp if rotate_plot else met_list,
+                    fontsize=label_fontsize,
+                )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                # Set x and y limits if specified
+                if xlim:
+                    ax.set_xlim(xlim)
+                if ylim:
+                    ax.set_ylim(ylim)
 
                 # Toggle legend
                 if not show_legend and ax.legend_:
@@ -1659,9 +1678,22 @@ def box_violin_plot(
                     dodge=False,
                 )
                 ax.set_title(f"Distribution of {met_list} by {met_comp}")
-                ax.set_xlabel(met_list if rotate_plot else met_comp)
-                ax.set_ylabel(met_comp if rotate_plot else met_list)
+                ax.set_xlabel(
+                    met_list if rotate_plot else met_comp,
+                    fontsize=label_fontsize,
+                )
+                ax.set_ylabel(
+                    met_comp if rotate_plot else met_list,
+                    fontsize=label_fontsize,
+                )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                # Set x and y limits if specified
+                if xlim:
+                    ax.set_xlim(xlim)
+                if ylim:
+                    ax.set_ylim(ylim)
 
                 # Toggle legend
                 if not show_legend and ax.legend_:
@@ -1674,14 +1706,16 @@ def box_violin_plot(
             if image_path_png:
                 fig.savefig(
                     os.path.join(
-                        image_path_png, f"all_plots_comparisons_{plot_type}.png"
+                        image_path_png,
+                        f"all_plots_comparisons_{plot_type}.png",
                     ),
                     bbox_inches="tight",
                 )
             if image_path_svg:
                 fig.savefig(
                     os.path.join(
-                        image_path_svg, f"all_plots_comparisons_{plot_type}.svg"
+                        image_path_svg,
+                        f"all_plots_comparisons_{plot_type}.svg",
                     ),
                     bbox_inches="tight",
                 )
