@@ -1100,6 +1100,8 @@ def stacked_crosstab_plot(
     label_fontsize=12,
     tick_fontsize=10,
     remove_stacks=False,
+    xlim=None,
+    ylim=None,
 ):
     """
     Generates stacked or regular bar plots and crosstabs for specified columns.
@@ -1313,6 +1315,12 @@ def stacked_crosstab_plot(
                     ax0.set_xlabel(xlabel1, fontsize=label_fontsize)
                     ax0.set_ylabel(ylabel1, fontsize=label_fontsize)
 
+                # Set axis limits if specified
+                if xlim:
+                    ax0.set_xlim(xlim)
+                if ylim:
+                    ax0.set_ylim(ylim)
+
                 ax0.set_title(title1, fontsize=label_fontsize)
                 ax0.tick_params(axis="both", labelsize=tick_fontsize)
 
@@ -1361,6 +1369,12 @@ def stacked_crosstab_plot(
                         ax0.set_xlabel(xlabel1, fontsize=label_fontsize)
                         ax0.set_ylabel(ylabel1, fontsize=label_fontsize)
 
+                    # Set axis limits if specified
+                    if xlim:
+                        ax0.set_xlim(xlim)
+                    if ylim:
+                        ax0.set_ylim(ylim)
+
                     # Set tick fontsize
                     ax0.tick_params(axis="both", labelsize=tick_fontsize)
 
@@ -1401,6 +1415,12 @@ def stacked_crosstab_plot(
                     else:
                         ax1.set_xlabel(xlabel2, fontsize=label_fontsize)
                         ax1.set_ylabel(ylabel2, fontsize=label_fontsize)
+
+                    # Set axis limits if specified
+                    if xlim:
+                        ax1.set_xlim(xlim)
+                    if ylim:
+                        ax1.set_ylim(ylim)
 
                     # Set tick fontsize
                     ax1.tick_params(axis="both", labelsize=tick_fontsize)
