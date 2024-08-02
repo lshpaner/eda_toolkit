@@ -1,7 +1,9 @@
 # EDA Toolkit
-Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently handle various aspects of data manipulation and analysis.
+
+Welcome to EDA Toolkit, a comprehensive collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository provides tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently manage various aspects of data manipulation and analysis.
 
 ---
+
 ## Table of Contents
 
 1. [Installation](#installation)
@@ -19,8 +21,8 @@ Welcome to EDA Toolkit, a collection of utility functions designed to streamline
     j. [Highlight DataFrame Tables](#highlight-dataframe-tables)  
     k. [KDE Distribution Plots](#kde-distribution-plots)  
     l. [Stacked Bar Plots with Crosstab Options](#stacked-bar-plots-with-crosstab-options)  
-    m. [Filtered DataFrame Plots](#filtered-dataframe-plots)  
-    n. [Metrics Box and Violin Plots](#metrics-box-and-violin-plots)  
+    m. [Box and Violin Plots](#box-and-violin-plots)  
+    n. [Multi-Purpose Scatter Plots](#multi-purpose-scatter-plots)
 4. [Usage](#usage)
 5. [Contributors/Maintainers](#contributorsmaintainers)
 6. [Contributing](#contributing)
@@ -29,6 +31,7 @@ Welcome to EDA Toolkit, a collection of utility functions designed to streamline
 ---
 
 ## Installation
+
 Clone the repository and install the necessary dependencies:
 
 ```bash
@@ -38,49 +41,57 @@ pip install -r requirements.txt
 ```
 
 ## Overview
-EDA Toolkit is a comprehensive toolkit for data analysts and data scientists alike. It provides a suite of functions to handle common EDA tasks, making your workflow more efficient and organized. The toolkit covers everything from directory management and ID generation to complex visualizations and data reporting.
+
+EDA Toolkit is designed to be a comprehensive toolkit for data analysts and data scientists alike. It offers a suite of functions to handle common EDA tasks, making your workflow more efficient and organized. The toolkit covers everything from directory management and ID generation to complex visualizations and data reporting.
 
 ## Functions
 ### Path Directories
-`ensure_directory(path)`: ensures that the specified directory exists; if not, it creates it.
+
+- `ensure_directory(path)`: Ensures that the specified directory exists; if not, it creates it.
 
 ### Generate Random IDs
-`add_ids(df, column_name="Patient_ID", seed=None)`: adds a column of unique, 9-digit IDs to a DataFrame.
+- `add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=False)`: Adds a column of unique, 9-digit IDs to a DataFrame.
 
 ### Trailing Periods
-`strip_trailing_period(df, column_name)`: strips trailing periods from floats in a specified column of a DataFrame.
+- `strip_trailing_period(df, column_name)`: Strips trailing periods from floats in a specified column of a DataFrame.
 
 ### Standardized Dates
-`parse_date_with_rule(date_str)`: parses and standardizes date strings to the ISO 8601 format (YYYY-MM-DD).
+- `parse_date_with_rule(date_str)`: Parses and standardizes date strings to the `ISO 8601` format (`YYYY-MM-DD`).
 
 ### Data Types Reports
-`data_types(df)`: provides a report on every column in the DataFrame, showing column names, data types, number of nulls, and percentage of nulls.
+- `data_types(df)`: Provides a report on every column in the DataFrame, showing column names, data types, number of nulls, and percentage of nulls.
 
 ### DataFrame Columns Analysis
-`dataframe_columns(df)`: analyzes DataFrame columns for dtype, null counts, max unique values, and their percentages.
+`dataframe_columns(df)`: Analyzes DataFrame columns for `dtype`, `null` counts, `max` unique values, and their percentages.
 
 ### Summarize All Combinations
-`summarize_all_combinations(df, variables, data_path, data_name, min_length=2)`: generates summary tables for all possible combinations of specified variables in the DataFrame and saves them to an Excel file.
+- `summarize_all_combinations(df, variables, data_path, data_name, min_length=2)`: Generates summary tables for all possible combinations of specified variables in the DataFrame and saves them to an Excel file.
 
 ### Save DataFrames to Excel
-`save_dataframes_to_excel(file_path, df_dict, decimal_places=2)`: saves multiple DataFrames to separate sheets in an Excel file with customized formatting.
+- `save_dataframes_to_excel(file_path, df_dict, decimal_places=0)`: Saves multiple DataFrames to separate sheets in an Excel file with customized formatting.
 
 ### Contingency Table
-`contingency_table(df, col1, col2, SortBy)`: creates a contingency table from one or two columns in a DataFrame, with sorting options.
+- `contingency_table(df, cols=None, sort_by=0)`: Creates a contingency table from one or more columns in a DataFrame, with sorting options.
 
 ### Highlight DataFrame Tables
-`highlight_columns(df, columns, color="yellow")`: highlights specific columns in a DataFrame with a specified background color.
+- `highlight_columns(df, columns, color="yellow")`: Highlights specific columns in a DataFrame with a specified background color.
 
-### KDE Distribution Plots
+## KDE Distribution Plots
 
 ```python
 
 kde_distributions(
     df,
-    dist_list,
-    x,
-    y,
+    vars_of_interest=None,
+    grid_figsize=(10, 8),
+    single_figsize=(6, 4),
     kde=True,
+    hist_color="#0000FF",
+    kde_color="#FF0000",
+    hist_edgecolor="#000000",
+    hue=None,
+    fill=True,
+    fill_alpha=1,
     n_rows=1,
     n_cols=1,
     w_pad=1.0,
@@ -90,18 +101,27 @@ kde_distributions(
     image_path_svg=None,
     image_filename=None,
     bbox_inches=None,
-    vars_of_interest=None,
     single_var_image_path_png=None,
     single_var_image_path_svg=None,
     single_var_image_filename=None,
-    y_axis="count",
+    y_axis_label="Density",
     plot_type="both",
+    log_scale_vars=None,
+    bins="auto",
+    binwidth=None,
+    label_fontsize=10,
+    tick_fontsize=10,
+    disable_sci_notation=False,
+    stat="density",
+    xlim=None,
+    ylim=None,
 )
 
 ```
-Generates KDE or histogram distribution plots for specified columns in a DataFrame.
 
-### Stacked Bar Plots with Crosstab Options
+Generates KDE and/or histogram distribution plots for specified columns in a DataFrame.
+
+## Stacked Bar Plots with Crosstab Options
 
 ```python
 stacked_crosstab_plot(
@@ -127,79 +147,102 @@ stacked_crosstab_plot(
     logscale=False,
     plot_type="both",
     show_legend=True,
+    label_fontsize=12,
+    tick_fontsize=10,
+    remove_stacks=False,
+    xlim=None,
+    ylim=None,
 )
 ```
 
-Generates stacked bar plots and crosstabs for specified columns.
+Generates stacked or regular bar plots and crosstabs for specified columns.
 
-### Filtered DataFrame Plots
-```python
-
-plot_filtered_dataframes(
-    df,
-    col,
-    func_col,
-    legend_labels_list,
-    title,
-    file_prefix,
-    condition_col=None,
-    condition_val=1,
-    x=12,
-    y=8,
-    p=10,
-    kind="bar",
-    width=0.9,
-    rot=0,
-    image_path_png=None,
-    image_path_svg=None,
-    save_formats=["png", "svg"],
-    color=None,
-    output="both",
-    return_dict=True,
-    logscale=True,
-    plot_type="both",
-    show_legend=True,
-)
-
-```
-Filters the DataFrame based on a specified condition and generates plots and crosstabs.
-
-### Metrics Box and Violin Plots
+## Box and Violin Plots
 
 ```python
-metrics_box_violin(
+
+box_violin_plot(
     df,
     metrics_list,
     metrics_boxplot_comp,
     n_rows,
     n_cols,
-    image_path_png,
-    image_path_svg,
-    save_individual=True,
-    save_grid=True,
-    save_both=False,
+    image_path_png=None,
+    image_path_svg=None,
+    save_plots=None,
     show_legend=True,
     plot_type="boxplot",
+    xlabel_rot=0,
+    show_plot="both",
+    rotate_plot=False,
+    individual_figsize=(6, 4),
+    grid_figsize=None,
+    label_fontsize=12,
+    tick_fontsize=10,
+    xlim=None,
+    ylim=None,
 )
+
 ```
-Creates and saves individual boxplots or violin plots, or an entire grid of plots for given metrics and comparisons.
+
+Creates and saves individual boxplots or violin plots, or an entire grid of plots 
+for given metrics and comparisons, with optional axis limits.
+
+## Multi-Purpose Scatter Plots
+
+```python
+
+scatter_fit_plot(
+    df,
+    x_vars=["age", "education-num"],
+    y_vars=["hours-per-week"],
+    n_rows=3,
+    n_cols=4,
+    image_path_png=None,
+    image_path_svg=None,
+    save_plots=None,
+    show_legend=True,
+    xlabel_rot=0,
+    show_plot="both",
+    rotate_plot=False,
+    individual_figsize=(6, 4),
+    grid_figsize=None,
+    label_fontsize=12,
+    tick_fontsize=10,
+    add_best_fit_line=False,
+    scatter_color="#808080",
+    best_fit_linecolor="red",
+    best_fit_linestyle="-",
+    hue="income",
+    hue_palette={"<=50K": "brown", ">50K": "green"},
+    show_correlation=False,
+    xlim=None,
+    ylim=None,
+)
+
+```
+
+Creates and saves scatter plots or a grid of scatter plots for given `x_vars` and `y_vars`, with an optional best fit line and customizable point `color`, `size`, and `markers`.
 
 ## Usage
 
-### Import the module and functions
+### Import the Module and Functions
 
 ```python
+
 import pandas as pd
 import numpy as np
 import random
 from itertools import combinations
-import datetime
 from IPython.display import display
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 import seaborn as sns
 import textwrap
 import os
+import sys
 import warnings
+
 # Import the utility functions from EDA Toolkit
 from eda_toolkit import (
     ensure_directory,
@@ -215,25 +258,45 @@ from eda_toolkit import (
     kde_distributions,
     stacked_crosstab_plot,
     plot_filtered_dataframes,
-    metrics_box_violin,
+    box_violin_plot,
+    scatter_fit_plot,
 )
+
+
 ```
 
-### Use the functions as needed in your data analysis workflow
-
+## Use the Functions as Needed in Your Data Analysis Workflow
 
 ```python
+
 # Example usage of ensure_directory function
-ensure_directory('path/to/your/directory')
-```
+directory_path = "path/to/save/directory"
+ensure_directory(directory_path)
 
-
-### Example usage of add_ids function
-```python
-df = pd.DataFrame({'data': range(10)})
+# Example usage of add_ids function
+df = pd.DataFrame({"Name": ["Alice", "Bob", "Charlie"]})
 df_with_ids = add_ids(df)
-print(df_with_ids)
+
+# Example usage of kde_distributions function
+kde_distributions(
+    df,
+    vars_of_interest=["Age", "Income"],
+    grid_figsize=(10, 8),
+    single_figsize=(6, 4),
+    kde=True,
+    hist_color="#0000FF",
+    kde_color="#FF0000",
+    hist_edgecolor="#000000",
+    fill=True,
+    fill_alpha=0.6,
+    n_rows=2,
+    n_cols=1,
+    y_axis_label="Density",
+)
+
+
 ```
+
 ## Contributors/Maintainers
 
 <img align="left" width="150" height="150" src="https://www.leonshpaner.com/author/leon-shpaner/avatar_hu48de79c369d5f7d4ff8056a297b2c4c5_1681850_270x270_fill_q90_lanczos_center.jpg">
