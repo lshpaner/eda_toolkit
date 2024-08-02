@@ -23,7 +23,7 @@
    <div style="height: 106px;"></div>
 
 Table of Contents
-==================
+=====================
 
 .. toctree::
    :maxdepth: 3
@@ -40,7 +40,7 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 3
-   :caption: About KFRE
+   :caption: About EDA Toolkit
 
    acknowledgements
    citations
