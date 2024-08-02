@@ -19,6 +19,7 @@ else:
 
 ################################################################################
 ############################# Path Directories #################################
+################################################################################
 
 
 def ensure_directory(path):
@@ -185,50 +186,7 @@ def parse_date_with_rule(date_str):
 
 
 ################################################################################
-############################## Data Types Reports ##############################
-################################################################################
-
-
-def data_types(df):
-    """
-    This function provides a data types report on every column in the dataframe,
-    showing column names, column data types, number of nulls, and percentage
-    of nulls, respectively.
-    Inputs:
-        df: dataframe to run the datatypes report on
-    Outputs:
-        dat_type: report saved out to a dataframe showing column name,
-                  data type, count of null values in the dataframe, and
-                  percentage of null values in the dataframe
-    """
-    # Features' Data Types and Their Respective Null Counts
-    dat_type = df.dtypes
-
-    # create a new dataframe to inspect data types
-    dat_type = pd.DataFrame(dat_type)
-
-    # sum the number of nulls per column in df
-    dat_type["Null_Values"] = df.isnull().sum()
-
-    # reset index w/ inplace = True for more efficient memory usage
-    dat_type.reset_index(inplace=True)
-
-    # percentage of null values is produced and cast to new variable
-    dat_type["perc_null"] = round(dat_type["Null_Values"] / len(df) * 100, 0)
-
-    # columns are renamed for a cleaner appearance
-    dat_type = dat_type.rename(
-        columns={
-            0: "Data Type",
-            "index": "Column/Variable",
-            "Null_Values": "# of Nulls",
-            "perc_null": "Percent Null",
-        }
-    )
-
-    return dat_type
-
-
+############################### DataFrame Columns ##############################
 ################################################################################
 
 
@@ -344,7 +302,9 @@ def summarize_all_combinations(
     descriptions = [
         "Summary for " + ", ".join(combination) for combination in summary_tables.keys()
     ]
-    legend_df = pd.DataFrame({"Sheet Name": sheet_names, "Description": descriptions})
+    legend_df = pd.DataFrame(
+        {"Sheet Name": sheet_names, "Description": descriptions},
+    )
 
     file_path = f"{data_path}/{data_name}"
     with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
@@ -523,7 +483,11 @@ def save_dataframes_to_excel(
 ################################################################################
 
 
-def contingency_table(df, cols=None, sort_by=0):
+def contingency_table(
+    df,
+    cols=None,
+    sort_by=0,
+):
     """
     Function to create a contingency table from one or more columns in a
     dataframe, with sorting options.
@@ -1755,6 +1719,366 @@ def box_violin_plot(
                         image_path_svg,
                         f"all_plots_comparisons_{plot_type}.svg",
                     ),
+                    bbox_inches="tight",
+                )
+
+        if show_plot in ["grid", "both"]:
+            plt.show()  # Display the plot
+        plt.close(fig)
+
+
+################################################################################
+########################## multi-Purpose Scatter Plots #########################
+################################################################################
+
+
+def scatter_fit_plot(
+    df,
+    x_vars,
+    y_vars,
+    n_rows,
+    n_cols,
+    image_path_png=None,  # Make image paths optional
+    image_path_svg=None,  # Make image paths optional
+    save_plots=None,  # Parameter to control saving plots
+    show_legend=True,  # Parameter to toggle legend
+    xlabel_rot=0,  # Parameter to rotate x-axis labels
+    show_plot="both",  # Parameter to control plot display
+    rotate_plot=False,  # Parameter to rotate (pivot) plots
+    individual_figsize=(6, 4),
+    grid_figsize=None,  # Parameter to specify figure size for grid plots
+    label_fontsize=12,  # Parameter to control axis label fontsize
+    tick_fontsize=10,  # Parameter to control tick label fontsize
+    add_best_fit_line=False,  # Parameter to add best fit line
+    scatter_color="C0",  # Parameter to control the color of scattered points
+    best_fit_linecolor="red",  # Parameter to control color of best fit line
+    best_fit_linestyle="-",  # Parameter to control linestyle of best fit line
+    hue=None,  # Parameter to add hue to scatterplot
+    hue_palette=None,  # Parameter to specify colors for each hue level
+    size=None,  # Parameter to control the size of scatter points
+    sizes=None,  # Parameter to define a range of sizes for scatter points
+    marker="o",  # Parameter to control the marker style
+    show_correlation=True,  # Parameter to toggle showing correlation in title
+    xlim=None,  # Parameter to set x-axis limits
+    ylim=None,  # Parameter to set y-axis limits
+):
+    """
+    Create and save scatter plots or a grid of scatter plots for given x_vars
+    and y_vars, with an optional best fit line and customizable point color,
+    size, and markers.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame containing the data.
+
+    x_vars : list of str
+        List of variable names to plot on the x-axis.
+
+    y_vars : list of str
+        List of variable names to plot on the y-axis.
+
+    n_rows : int
+        Number of rows in the subplot grid.
+
+    n_cols : int
+        Number of columns in the subplot grid.
+
+    image_path_png : str, optional
+        Directory path to save PNG images of the scatter plots.
+
+    image_path_svg : str, optional
+        Directory path to save SVG images of the scatter plots.
+
+    save_plots : str, optional
+        Controls which plots to save: "all", "individual", or "grid".
+
+    show_legend : bool, optional (default=True)
+        Whether to display the legend on the plots.
+
+    xlabel_rot : int, optional (default=0)
+        Rotation angle for x-axis labels.
+
+    show_plot : str, optional (default="both")
+        Controls plot display: "individual", "grid", or "both".
+
+    rotate_plot : bool, optional (default=False)
+        Whether to rotate (pivot) the plots.
+
+    individual_figsize : tuple or list, optional (default=(6, 4))
+        Width and height of the figure for individual plots.
+
+    grid_figsize : tuple or list, optional
+        Width and height of the figure for grid plots.
+
+    label_fontsize : int, optional (default=12)
+        Font size for axis labels.
+
+    tick_fontsize : int, optional (default=10)
+        Font size for axis tick labels.
+
+    add_best_fit_line : bool, optional (default=False)
+        Whether to add a best fit line to the scatter plots.
+
+    scatter_color : str, optional (default="C0")
+        Color code for the scattered points.
+
+    best_fit_linecolor : str, optional (default="red")
+        Color code for the best fit line.
+
+    best_fit_linestyle : str, optional (default="--")
+        Linestyle for the best fit line.
+
+    hue : str, optional
+        Column name for the grouping variable that will produce points with
+        different colors.
+
+    hue_palette : dict, list, or str, optional
+        Specifies colors for each hue level. Can be a dictionary mapping hue
+        levels to colors, a list of colors, or the name of a seaborn color
+        palette.
+
+    size : str, optional
+        Column name for the grouping variable that will produce points with
+        different sizes.
+
+    sizes : dict, optional
+        Dictionary mapping sizes (smallest and largest) to min and max values.
+
+    marker : str, optional (default="o")
+        Marker style used for the scatter points.
+
+    show_correlation : bool, optional (default=True)
+        Whether to display the Pearson correlation coefficient in the plot title.
+
+    xlim : tuple or list, optional
+        Limits for the x-axis as a tuple or list of (min, max).
+
+    ylim : tuple or list, optional
+        Limits for the y-axis as a tuple or list of (min, max).
+
+    Returns:
+    --------
+    None
+        This function does not return any value but generates and optionally
+        saves scatter plots for the specified x_vars and y_vars.
+    """
+
+    # Validate the show_plot input
+    if show_plot not in ["individual", "grid", "both"]:
+        raise ValueError("Invalid show_plot. Choose 'individual', 'grid', or 'both'.")
+
+    # Validate the save_plots input
+    if save_plots not in [None, "all", "individual", "grid"]:
+        raise ValueError(
+            "Invalid save_plots value. Choose from 'all', "
+            "'individual', 'grid', or None."
+        )
+
+    # Check if save_plots is set without image paths
+    if save_plots and not (image_path_png or image_path_svg):
+        raise ValueError(
+            "To save plots, specify 'image_path_png' or " "'image_path_svg'."
+        )
+
+    # Validate the rotate_plot input
+    if not isinstance(rotate_plot, bool):
+        raise ValueError("Invalid rotate_plot. Choose 'True' or 'False'.")
+
+    # Validate the individual_figsize input
+    if not (
+        isinstance(individual_figsize, (tuple, list))
+        and len(individual_figsize) == 2
+        and all(isinstance(x, (int, float)) for x in individual_figsize)
+    ):
+        raise ValueError(
+            "Invalid individual_figsize value. It should be a tuple or list "
+            "of two numbers (width, height)."
+        )
+
+    # Validate the grid_figsize input if specified
+    if grid_figsize is not None and not (
+        isinstance(grid_figsize, (tuple, list))
+        and len(grid_figsize) == 2
+        and all(isinstance(x, (int, float)) for x in grid_figsize)
+    ):
+        raise ValueError(
+            "Invalid grid_figsize value. It should be a tuple or list of two "
+            "numbers (width, height)."
+        )
+
+    # Set default grid figure size if not specified
+    if grid_figsize is None:
+        grid_figsize = (5 * n_cols, 5 * n_rows)
+
+    # Determine saving options based on save_plots value
+    save_individual = save_plots in ["all", "individual"]
+    save_grid = save_plots in ["all", "grid"]
+
+    def add_best_fit(ax, x, y, linestyle, linecolor):
+        """Add a best fit line to the plot and display the equation."""
+        m, b = np.polyfit(x, y, 1)
+        ax.plot(
+            x,
+            m * x + b,
+            color=linecolor,
+            linestyle=linestyle,
+            label=f"y = {m:.2f}x + {b:.2f}",
+        )
+        ax.legend(loc="best")
+
+    # Save and/or show individual plots if required
+    if save_individual or show_plot in ["individual", "both"]:
+        for x_var in x_vars:
+            for y_var in y_vars:
+                plt.figure(figsize=individual_figsize)  # Adjust size as needed
+                ax = sns.scatterplot(
+                    x=y_var if rotate_plot else x_var,
+                    y=x_var if rotate_plot else y_var,
+                    data=df,
+                    # Set the color for scatter points
+                    color=scatter_color if hue is None else None,
+                    hue=hue,  # Set the hue for grouping
+                    palette=hue_palette,  # Set the palette for hue colors
+                    size=size,  # Set the size of scatter points
+                    sizes=sizes,  # Set the size range for scatter points
+                    marker=marker,  # Set the marker type
+                )
+                if add_best_fit_line:
+                    x_data = df[y_var] if rotate_plot else df[x_var]
+                    y_data = df[x_var] if rotate_plot else df[y_var]
+                    add_best_fit(
+                        ax,
+                        x_data,
+                        y_data,
+                        best_fit_linestyle,
+                        best_fit_linecolor,
+                    )
+                r_value = df[x_var].corr(df[y_var])
+                title = f"{y_var} vs {x_var}"
+                if show_correlation:
+                    title += f" ($r$ = {r_value:.2f})"
+                plt.title(title)
+                plt.xlabel(
+                    y_var if rotate_plot else x_var,
+                    fontsize=label_fontsize,
+                )
+                plt.ylabel(
+                    x_var if rotate_plot else y_var,
+                    fontsize=label_fontsize,
+                )
+                ax.tick_params(axis="x", rotation=xlabel_rot)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                # Set x and y limits if specified
+                if xlim:
+                    ax.set_xlim(xlim)
+                if ylim:
+                    ax.set_ylim(ylim)
+
+                # Toggle legend
+                if not show_legend and ax.legend_:
+                    ax.legend().remove()
+
+                if save_individual:
+                    safe_x_var = (
+                        x_var.replace(" ", "_")
+                        .replace("(", "")
+                        .replace(")", "")
+                        .replace("/", "_per_")
+                    )
+                    safe_y_var = (
+                        y_var.replace(" ", "_")
+                        .replace("(", "")
+                        .replace(")", "")
+                        .replace("/", "_per_")
+                    )
+                    if image_path_png:
+                        filename_png = f"scatter_{safe_x_var}_vs_{safe_y_var}.png"
+                        plt.savefig(
+                            os.path.join(image_path_png, filename_png),
+                            bbox_inches="tight",
+                        )
+                    if image_path_svg:
+                        filename_svg = f"scatter_{safe_x_var}_vs_{safe_y_var}.svg"
+                        plt.savefig(
+                            os.path.join(image_path_svg, filename_svg),
+                            bbox_inches="tight",
+                        )
+
+                if show_plot in ["individual", "both"]:
+                    plt.show()  # Display the plot
+                plt.close()
+
+    # Save and/or show the entire grid if required
+    if save_grid or show_plot in ["grid", "both"]:
+        fig, axs = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
+        axs = axs.flatten()
+
+        for i, ax in enumerate(axs):
+            if i < len(x_vars) * len(y_vars):
+                x_var = x_vars[i // len(y_vars)]
+                y_var = y_vars[i % len(y_vars)]
+                sns.scatterplot(
+                    x=y_var if rotate_plot else x_var,
+                    y=x_var if rotate_plot else y_var,
+                    data=df,
+                    color=scatter_color,  # Set the color for scatter points
+                    hue=hue,  # Set the hue for grouping
+                    size=size,  # Set the size of scatter points
+                    sizes=sizes,  # Set the size range for scatter points
+                    marker=marker,  # Set the marker type
+                    ax=ax,
+                    palette=hue_palette,  # Apply custom hue palette
+                )
+                if add_best_fit_line:
+                    x_data = df[y_var] if rotate_plot else df[x_var]
+                    y_data = df[x_var] if rotate_plot else df[y_var]
+                    add_best_fit(
+                        ax,
+                        x_data,
+                        y_data,
+                        best_fit_linestyle,
+                        best_fit_linecolor,
+                    )
+                r_value = df[x_var].corr(df[y_var])
+                title = f"{y_var} vs {x_var}"
+                if show_correlation:
+                    title += f" ($r$ = {r_value:.2f})"
+                ax.set_title(title)
+                ax.set_xlabel(
+                    y_var if rotate_plot else x_var,
+                    fontsize=label_fontsize,
+                )
+                ax.set_ylabel(
+                    x_var if rotate_plot else y_var,
+                    fontsize=label_fontsize,
+                )
+                ax.tick_params(axis="x", rotation=xlabel_rot)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                # Set x and y limits if specified
+                if xlim:
+                    ax.set_xlim(xlim)
+                if ylim:
+                    ax.set_ylim(ylim)
+
+                # Toggle legend
+                if not show_legend and ax.legend_:
+                    ax.legend().remove()
+            else:
+                ax.set_visible(False)
+
+        plt.tight_layout()
+        if save_grid:
+            if image_path_png:
+                fig.savefig(
+                    os.path.join(image_path_png, "scatter_plots_grid.png"),
+                    bbox_inches="tight",
+                )
+            if image_path_svg:
+                fig.savefig(
+                    os.path.join(image_path_svg, "scatter_plots_grid.svg"),
                     bbox_inches="tight",
                 )
 
