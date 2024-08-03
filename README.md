@@ -67,6 +67,9 @@ EDA Toolkit is designed to be a comprehensive toolkit for data analysts and data
 ### Summarize All Combinations
 - `summarize_all_combinations(df, variables, data_path, data_name, min_length=2)`: Generates summary tables for all possible combinations of specified variables in the DataFrame and saves them to an Excel file.
 
+![](https://github.com/lshpaner/eda_toolkit/blob/45934cff5e0c5aaac3e21520fd9446cbae482505/assets/summarize_combos.gif)
+
+
 ### Save DataFrames to Excel
 - `save_dataframes_to_excel(file_path, df_dict, decimal_places=0)`: Saves multiple DataFrames to separate sheets in an Excel file with customized formatting.
 
@@ -121,6 +124,8 @@ kde_distributions(
 
 Generates KDE and/or histogram distribution plots for specified columns in a DataFrame.
 
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/kde_density_distributions.svg)
+
 ## Stacked Bar Plots with Crosstab Options
 
 ```python
@@ -157,10 +162,47 @@ stacked_crosstab_plot(
 
 Generates stacked or regular bar plots and crosstabs for specified columns.
 
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/Stacked_Bar_Age_sex.svg)
+
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/Stacked_Bar_Age_income.svg)
+
+**Crosstab for sex**
+
+| sex         | Female | Male  | Total | Female_% | Male_% |
+|-------------|--------|-------|-------|----------|--------|
+| **age_group** |        |       |       |          |        |
+| < 18        | 295    | 300   | 595   | 49.58    | 50.42  |
+| 18-29       | 5707   | 8213  | 13920 | 41       | 59     |
+| 30-39       | 3853   | 9076  | 12929 | 29.8     | 70.2   |
+| 40-49       | 3188   | 7536  | 10724 | 29.73    | 70.27  |
+| 50-59       | 1873   | 4746  | 6619  | 28.3     | 71.7   |
+| 60-69       | 939    | 2115  | 3054  | 30.75    | 69.25  |
+| 70-79       | 280    | 535   | 815   | 34.36    | 65.64  |
+| 80-89       | 40     | 91    | 131   | 30.53    | 69.47  |
+| 90-99       | 17     | 38    | 55    | 30.91    | 69.09  |
+| **Total**   | 16192  | 32650 | 48842 | 33.15    | 66.85  |
+
+**Crosstab for income**
+
+| income      | <=50K  | >50K  | Total | <=50K_%  | >50K_% |
+|-------------|--------|-------|-------|----------|--------|
+| **age_group** |        |       |       |          |        |
+| < 18        | 595    | 0     | 595   | 100      | 0      |
+| 18-29       | 13174  | 746   | 13920 | 94.64    | 5.36   |
+| 30-39       | 9468   | 3461  | 12929 | 73.23    | 26.77  |
+| 40-49       | 6738   | 3986  | 10724 | 62.83    | 37.17  |
+| 50-59       | 4110   | 2509  | 6619  | 62.09    | 37.91  |
+| 60-69       | 2245   | 809   | 3054  | 73.51    | 26.49  |
+| 70-79       | 668    | 147   | 815   | 81.96    | 18.04  |
+| 80-89       | 115    | 16    | 131   | 87.79    | 12.21  |
+| 90-99       | 42     | 13    | 55    | 76.36    | 23.64  |
+| **Total**   | 37155  | 11687 | 48842 | 76.07    | 23.93  |
+
+
+
+
 ## Box and Violin Plots
-
 ```python
-
 box_violin_plot(
     df,
     metrics_list,
@@ -173,7 +215,7 @@ box_violin_plot(
     show_legend=True,
     plot_type="boxplot",
     xlabel_rot=0,
-    show_plot="both",
+    show_plot="grid",
     rotate_plot=False,
     individual_figsize=(6, 4),
     grid_figsize=None,
@@ -182,16 +224,42 @@ box_violin_plot(
     xlim=None,
     ylim=None,
 )
-
 ```
 
 Creates and saves individual boxplots or violin plots, or an entire grid of plots 
 for given metrics and comparisons, with optional axis limits.
 
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_boxplot.svg)
+
+```python
+box_violin_plot(
+    df,
+    metrics_list,
+    metrics_boxplot_comp,
+    n_rows,
+    n_cols,
+    image_path_png=None,
+    image_path_svg=None,
+    save_plots=None,
+    show_legend=True,
+    plot_type="violinplot",
+    xlabel_rot=0,
+    show_plot="grid",
+    rotate_plot=False,
+    individual_figsize=(6, 4),
+    grid_figsize=None,
+    label_fontsize=12,
+    tick_fontsize=10,
+    xlim=None,
+    ylim=None,
+)
+```
+
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_violinplot.svg)
+
 ## Multi-Purpose Scatter Plots
 
 ```python
-
 scatter_fit_plot(
     df,
     x_vars=["age", "education-num"],
@@ -219,8 +287,9 @@ scatter_fit_plot(
     xlim=None,
     ylim=None,
 )
-
 ```
+
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid.svg)
 
 Creates and saves scatter plots or a grid of scatter plots for given `x_vars` and `y_vars`, with an optional best fit line and customizable point `color`, `size`, and `markers`.
 
