@@ -16,13 +16,15 @@
    :align: left
    :width: 300px
 
-.. raw:: htmlN
+.. raw:: html
 
    </div>
 
 .. raw:: html
    
    <div style="height: 100px;"></div>
+
+\
 
 
 Welcome to the EDA Toolkit Python Library Documentation!
@@ -38,6 +40,8 @@ utilities that facilitate the initial investigation of datasets, enabling users
 to quickly gain insights, identify patterns, and uncover underlying structures 
 in their data.
 
+
+
 What is EDA?
 -------------
 
@@ -48,15 +52,35 @@ anomalies, discovering patterns, and forming hypotheses. This process is essenti
 before applying any machine learning models, as it ensures the quality and relevance 
 of the data.
 
+Project Links
+---------------
+
+1. `PyPI Page <https://pypi.org/project/eda_toolkit/>`_  
+
+2. `GitHub Repository <https://github.com/lshpaner/eda_toolkit>`_
+
+
 Purpose of EDA Toolkit
 -----------------------
-The ``eda_toolkit`` library is designed to simplify and automate many of the 
-repetitive and time-consuming tasks associated with EDA. It provides a wide 
-range of functionalities, including:
+The ``eda_toolkit`` library is a comprehensive suite of tools designed to 
+streamline and automate many of the tasks associated with Exploratory Data 
+Analysis (EDA). It offers a broad range of functionalities, including:
 
-- **Data Cleaning:** Functions to handle missing values, outliers, and data type conversions.  
-- **Data Visualization:** Tools to create various types of plots and charts that help in visualizing the data distributions, relationships, and trends.  
-- **Descriptive Statistics:** Methods to compute summary statistics, such as mean, median, standard deviation, and quantiles.  
+- **Data Management:** Tools for managing directories, generating unique IDs, 
+  standardizing dates, and handling common DataFrame manipulations.
+- **Data Cleaning:** Functions to address missing values, remove outliers, and 
+  correct formatting issues, ensuring data is ready for analysis.
+- **Data Visualization:** A variety of plotting functions, including KDE 
+  distribution plots, stacked bar plots, scatter plots with optional best fit 
+  lines, and box/violin plots, to visually explore data distributions, 
+  relationships, and trends.
+- **Descriptive and Summary Statistics:** Methods to generate comprehensive 
+  reports on data types, summary statistics (mean, median, standard deviation, 
+  etc.), and to summarize all possible combinations of specified variables.
+- **Reporting and Export:** Features to save DataFrames to Excel with 
+  customizable formatting, create contingency tables, and export generated 
+  plots in multiple formats.
+ 
 
 
 Key Features
@@ -75,7 +99,7 @@ Before you install ``eda_toolkit``, ensure your system meets the following requi
 
 - **Python**: version ``3.7.4`` or higher is required to run ``eda_toolkit``.
 
-Additionally, ``kfre`` depends on the following packages, which will be automatically installed when you install ``eda_toolkit``:
+Additionally, ``eda_toolkit`` depends on the following packages, which will be automatically installed when you install ``eda_toolkit``:
 
 - ``numpy``: version ``1.21.6`` or higher
 - ``pandas``: version ``1.3.5`` or higher
