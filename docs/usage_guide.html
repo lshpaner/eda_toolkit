@@ -2300,6 +2300,30 @@ the variables, making it easier to identify trends and patterns in the data. The
 combination of the correlation coefficient and the best fit line offers both
 a quantitative and visual representation of the relationships, enhancing the
 interpretability of the scatter plots.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">scatter_fit_plot</span>
+
+<span class="n">scatter_fit_plot</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">x_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;education-num&quot;</span><span class="p">],</span>
+    <span class="n">y_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hours-per-week&quot;</span><span class="p">],</span>
+    <span class="n">n_rows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
+    <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
+    <span class="n">save_plots</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+    <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">xlabel_rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+    <span class="n">rotate_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+     <span class="n">grid_figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">add_best_fit_line</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">scatter_color</span><span class="o">=</span><span class="s2">&quot;#808080&quot;</span><span class="p">,</span>
+    <span class="n">show_correlation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/scatter_plots_grid.svg"><img alt="Scatter Plot Comparisons (with Best Fit Lines)" class="align-center" src="_images/scatter_plots_grid.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="scatter-plots-grouped-by-category-example">
@@ -2333,6 +2357,34 @@ helping to interpret the color coding of the data points.</p></li>
 of individuals, with custom color coding and without additional elements like a best
 fit line or correlation coefficient. The resulting grid of plots is then saved as
 images in the specified paths.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">scatter_fit_plot</span>
+
+<span class="n">hue_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;&lt;=50K&quot;</span><span class="p">:</span> <span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;50K&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">}</span>
+
+<span class="n">scatter_fit_plot</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">x_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;education-num&quot;</span><span class="p">],</span>
+    <span class="n">y_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hours-per-week&quot;</span><span class="p">],</span>
+    <span class="n">n_rows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
+    <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
+    <span class="n">save_plots</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+    <span class="n">show_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">xlabel_rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+    <span class="n">rotate_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">add_best_fit_line</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">scatter_color</span><span class="o">=</span><span class="s2">&quot;#808080&quot;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;income&quot;</span><span class="p">,</span>
+    <span class="n">hue_palette</span><span class="o">=</span><span class="n">hue_dict</span><span class="p">,</span>
+    <span class="n">show_correlation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/scatter_plots_grid_grouped.svg"><img alt="Scatter Plot Comparisons (Grouped)" class="align-center" src="_images/scatter_plots_grid_grouped.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id18" role="note">
