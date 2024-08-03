@@ -67,7 +67,7 @@ EDA Toolkit is designed to be a comprehensive toolkit for data analysts and data
 ### Summarize All Combinations
 - `summarize_all_combinations(df, variables, data_path, data_name, min_length=2)`: Generates summary tables for all possible combinations of specified variables in the DataFrame and saves them to an Excel file.
 
-![](https://github.com/lshpaner/eda_toolkit/blob/45934cff5e0c5aaac3e21520fd9446cbae482505/assets/summarize_combos.gif)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/summarize_combos.gif)
 
 
 ### Save DataFrames to Excel
@@ -82,6 +82,7 @@ EDA Toolkit is designed to be a comprehensive toolkit for data analysts and data
 ## KDE Distribution Plots
 
 ```python
+from eda_toolkit import kde_distributions
 
 kde_distributions(
     df,
@@ -129,6 +130,8 @@ Generates KDE and/or histogram distribution plots for specified columns in a Dat
 ## Stacked Bar Plots with Crosstab Options
 
 ```python
+from eda_toolkit import stacked_crosstab_plot
+
 stacked_crosstab_plot(
     df,
     col,
@@ -203,6 +206,8 @@ Generates stacked or regular bar plots and crosstabs for specified columns.
 
 ## Box and Violin Plots
 ```python
+from eda_toolkit import box_violin_plot
+
 box_violin_plot(
     df,
     metrics_list,
@@ -232,6 +237,8 @@ for given metrics and comparisons, with optional axis limits.
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_boxplot.svg)
 
 ```python
+from eda_toolkit import box_violin_plot
+
 box_violin_plot(
     df,
     metrics_list,
@@ -260,32 +267,27 @@ box_violin_plot(
 ## Multi-Purpose Scatter Plots
 
 ```python
+from eda_toolkit import scatter_fit_plot
+
 scatter_fit_plot(
-    df,
+    df=df,
     x_vars=["age", "education-num"],
     y_vars=["hours-per-week"],
     n_rows=3,
     n_cols=4,
-    image_path_png=None,
-    image_path_svg=None,
-    save_plots=None,
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
+    save_plots="grid",
     show_legend=True,
     xlabel_rot=0,
-    show_plot="both",
+    show_plot="grid",
     rotate_plot=False,
-    individual_figsize=(6, 4),
-    grid_figsize=None,
-    label_fontsize=12,
-    tick_fontsize=10,
-    add_best_fit_line=False,
+     grid_figsize=None,
+    label_fontsize=14,
+    tick_fontsize=12,
+    add_best_fit_line=True,
     scatter_color="#808080",
-    best_fit_linecolor="red",
-    best_fit_linestyle="-",
-    hue="income",
-    hue_palette={"<=50K": "brown", ">50K": "green"},
-    show_correlation=False,
-    xlim=None,
-    ylim=None,
+    show_correlation=True,
 )
 ```
 
@@ -293,12 +295,42 @@ scatter_fit_plot(
 
 Creates and saves scatter plots or a grid of scatter plots for given `x_vars` and `y_vars`, with an optional best fit line and customizable point `color`, `size`, and `markers`.
 
+```python
+from eda_toolkit import scatter_fit_plot
+
+hue_dict = {"<=50K": "brown", ">50K": "green"}
+
+scatter_fit_plot(
+    df=df,
+    x_vars=["age", "education-num"],
+    y_vars=["hours-per-week"],
+    n_rows=3,
+    n_cols=4,
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
+    save_plots="grid",
+    show_legend=True,
+    xlabel_rot=0,
+    show_plot="grid",
+    rotate_plot=False,
+    grid_figsize=None,
+    label_fontsize=14,
+    tick_fontsize=12,
+    add_best_fit_line=False,
+    scatter_color="#808080",
+    hue="income",
+    hue_palette=hue_dict,
+    show_correlation=False,
+)
+```
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid_grouped.svg)
+
+
 ## Usage
 
 ### Import the Module and Functions
 
 ```python
-
 import pandas as pd
 import numpy as np
 import random
@@ -330,14 +362,11 @@ from eda_toolkit import (
     box_violin_plot,
     scatter_fit_plot,
 )
-
-
 ```
 
 ## Use the Functions as Needed in Your Data Analysis Workflow
 
 ```python
-
 # Example usage of ensure_directory function
 directory_path = "path/to/save/directory"
 ensure_directory(directory_path)
@@ -362,8 +391,6 @@ kde_distributions(
     n_cols=1,
     y_axis_label="Density",
 )
-
-
 ```
 
 ## Contributors/Maintainers
