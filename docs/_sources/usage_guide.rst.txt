@@ -2596,6 +2596,31 @@ combination of the correlation coefficient and the best fit line offers both
 a quantitative and visual representation of the relationships, enhancing the 
 interpretability of the scatter plots.
 
+.. code-block:: python
+
+    from eda_toolkit import scatter_fit_plot
+
+    scatter_fit_plot(
+        df=df,
+        x_vars=["age", "education-num"],
+        y_vars=["hours-per-week"],
+        n_rows=3,
+        n_cols=4,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        save_plots="grid",
+        show_legend=True,
+        xlabel_rot=0,
+        show_plot="grid",
+        rotate_plot=False,
+         grid_figsize=None,
+        label_fontsize=14,
+        tick_fontsize=12,
+        add_best_fit_line=True,
+        scatter_color="#808080",
+        show_correlation=True,
+    )
+
 
 .. raw:: html
 
@@ -2651,6 +2676,35 @@ of individuals, with custom color coding and without additional elements like a 
 fit line or correlation coefficient. The resulting grid of plots is then saved as 
 images in the specified paths.
 
+
+.. code-block:: python
+
+    from eda_toolkit import scatter_fit_plot
+
+    hue_dict = {"<=50K": "brown", ">50K": "green"}
+
+    scatter_fit_plot(
+        df=df,
+        x_vars=["age", "education-num"],
+        y_vars=["hours-per-week"],
+        n_rows=3,
+        n_cols=4,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        save_plots="grid",
+        show_legend=True,
+        xlabel_rot=0,
+        show_plot="grid",
+        rotate_plot=False,
+        grid_figsize=None,
+        label_fontsize=14,
+        tick_fontsize=12,
+        add_best_fit_line=False,
+        scatter_color="#808080",
+        hue="income",
+        hue_palette=hue_dict,
+        show_correlation=False,
+    )
 
 .. raw:: html
 
