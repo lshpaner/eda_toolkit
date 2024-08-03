@@ -40,6 +40,12 @@ utilities that facilitate the initial investigation of datasets, enabling users
 to quickly gain insights, identify patterns, and uncover underlying structures 
 in their data.
 
+Project Links
+---------------
+
+1. `PyPI Page <https://pypi.org/project/eda_toolkit/>`_  
+
+2. `GitHub Repository <https://github.com/lshpaner/eda_toolkit>`_
 
 
 What is EDA?
@@ -51,13 +57,6 @@ often with visual methods. EDA helps in understanding the data better, identifyi
 anomalies, discovering patterns, and forming hypotheses. This process is essential 
 before applying any machine learning models, as it ensures the quality and relevance 
 of the data.
-
-Project Links
----------------
-
-1. `PyPI Page <https://pypi.org/project/eda_toolkit/>`_  
-
-2. `GitHub Repository <https://github.com/lshpaner/eda_toolkit>`_
 
 
 Purpose of EDA Toolkit
