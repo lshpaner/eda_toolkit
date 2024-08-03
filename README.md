@@ -22,11 +22,20 @@ Welcome to EDA Toolkit, a comprehensive collection of utility functions designed
     k. [KDE Distribution Plots](#kde-distribution-plots)  
     l. [Stacked Bar Plots with Crosstab Options](#stacked-bar-plots-with-crosstab-options)  
     m. [Box and Violin Plots](#box-and-violin-plots)  
-    n. [Multi-Purpose Scatter Plots](#multi-purpose-scatter-plots)
-4. [Usage](#usage)
-5. [Contributors/Maintainers](#contributorsmaintainers)
-6. [Contributing](#contributing)
-7. [License](#license)
+    n. [Multi-Purpose Scatter Plots](#multi-purpose-scatter-plots)  
+    
+4. [Usage Examples](#usage-examples)  
+    - [KDE Distribution Plots](#kde-distribution-plots)  
+    - [Stacked Bar Plots with Crosstab Options](#stacked-bar-plots-with-crosstab-options)  
+    - [Box and Violin Plots](#box-and-violin-plots)  
+    - [Multi-Purpose Scatter Plots](#multi-purpose-scatter-plots)  
+5. [Overall Usage](#usage)    
+    - [Use the functions as needed](#use-the-functions-as-needed-in-your-data-analysis-workflow)  
+    - [Import the module and functions](#import-the-module-and-functions)  
+6. [Contributors/Maintainers](#contributorsmaintainers)
+7. [Contributing](#contributing)
+8. [License](#license)
+9. [References](#references)
 
 ---
 
@@ -43,6 +52,7 @@ pip install -r requirements.txt
 ## Overview
 
 EDA Toolkit is designed to be a comprehensive toolkit for data analysts and data scientists alike. It offers a suite of functions to handle common EDA tasks, making your workflow more efficient and organized. The toolkit covers everything from directory management and ID generation to complex visualizations and data reporting.
+
 
 ## Functions
 ### Path Directories
@@ -79,7 +89,12 @@ EDA Toolkit is designed to be a comprehensive toolkit for data analysts and data
 ### Highlight DataFrame Tables
 - `highlight_columns(df, columns, color="yellow")`: Highlights specific columns in a DataFrame with a specified background color.
 
-## KDE Distribution Plots
+## Usage Examples
+
+The following examples utilize the Census Income Data (1994) from the UCI Machine Learning Repository [2]. This dataset provides a rich source of information for demonstrating the functionalities of the eda_toolkit.
+
+
+### KDE Distribution Plots
 
 ```python
 from eda_toolkit import kde_distributions
@@ -127,7 +142,7 @@ Generates KDE and/or histogram distribution plots for specified columns in a Dat
 
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/kde_density_distributions.svg)
 
-## Stacked Bar Plots with Crosstab Options
+### Stacked Bar Plots with Crosstab Options
 
 ```python
 from eda_toolkit import stacked_crosstab_plot
@@ -203,8 +218,7 @@ Generates stacked or regular bar plots and crosstabs for specified columns.
 
 
 
-
-## Box and Violin Plots
+### Box and Violin Plots
 ```python
 from eda_toolkit import box_violin_plot
 
@@ -264,7 +278,7 @@ box_violin_plot(
 
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_violinplot.svg)
 
-## Multi-Purpose Scatter Plots
+### Multi-Purpose Scatter Plots
 
 ```python
 from eda_toolkit import scatter_fit_plot
@@ -326,7 +340,7 @@ scatter_fit_plot(
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid_grouped.svg)
 
 
-## Usage
+## Overall Usage
 
 ### Import the Module and Functions
 
@@ -364,7 +378,7 @@ from eda_toolkit import (
 )
 ```
 
-## Use the Functions as Needed in Your Data Analysis Workflow
+### Use the Functions as Needed in Your Data Analysis Workflow
 
 ```python
 # Example usage of ensure_directory function
@@ -418,3 +432,14 @@ We welcome contributions! If you have suggestions or improvements, please submit
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/readme/LICENSE.md) file for details.
 
 For more detailed documentation, refer to the docstrings within each function.
+
+## References
+
+1. Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science & Engineering*, 9(3), 90-95. [https://doi.org/10.1109/MCSE.2007.55](https://doi.org/10.1109/MCSE.2007.55)
+
+2. Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. [https://doi.org/10.24432/C5GP7S](https://doi.org/10.24432/C5GP7S).
+
+3. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. [https://doi.org/10.21105/joss.03021](https://doi.org/10.21105/joss.03021).
+
+
+
