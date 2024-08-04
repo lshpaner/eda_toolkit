@@ -629,7 +629,6 @@ def kde_distributions(
     n_cols=1,
     w_pad=1.0,
     h_pad=1.0,
-    text_wrap=50,
     image_path_png=None,
     image_path_svg=None,
     image_filename=None,
@@ -644,6 +643,7 @@ def kde_distributions(
     binwidth=None,  # Parameter to control the width of bins
     label_fontsize=10,  # Fontsize control for labels
     tick_fontsize=10,  # Fontsize control for tick labels
+    text_wrap=50,
     disable_sci_notation=False,  # Toggle for scientific notation
     stat="density",  # Control the aggregate statistic for histograms
     xlim=None,
@@ -705,9 +705,6 @@ def kde_distributions(
     h_pad : float, optional (default=1.0)
         Height padding between subplots.
 
-    text_wrap : int, optional (default=50)
-        Maximum width of the title text before wrapping.
-
     image_path_png : str, optional
         Directory path to save the PNG image of the overall distribution plots.
 
@@ -747,6 +744,12 @@ def kde_distributions(
 
     label_fontsize : int, optional (default=10)
         Font size for axis labels, including xlabel, ylabel, and tick marks.
+
+    tick_fontsize : int, optional (default=10)
+        Font size for tick labels on the axes.
+
+    text_wrap : int, optional (default=50)
+        Maximum width of the title text before wrapping.
 
     disable_sci_notation : bool, optional (default=False)
         Toggle to disable scientific notation on axes.
@@ -1521,9 +1524,9 @@ def box_violin_plot(
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
     grid_figsize=None,  # Parameter to specify figure size for grid plots
-    text_wrap=50,  # Add text_wrap parameter
     label_fontsize=12,  # Parameter to control axis label fontsize
     tick_fontsize=10,  # Parameter to control tick label fontsize
+    text_wrap=50,  # Add text_wrap parameter
     xlim=None,  # New parameter for setting x-axis limits
     ylim=None,  # New parameter for setting y-axis limits
 ):
