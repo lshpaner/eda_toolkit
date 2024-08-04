@@ -1308,7 +1308,7 @@ and labels as needed for your specific data.
 KDE and Histogram Distribution Plots
 =======================================
 
-Generate KDE or histogram distribution plots for specified columns in a DataFrame.
+**Generate KDE or histogram distribution plots for specified columns in a DataFrame.**
 
 The ``kde_distributions`` function is a versatile tool designed for generating 
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for 
@@ -1328,9 +1328,7 @@ statistical graphics.
 - **Log Scaling**: The function includes an option to apply logarithmic scaling to specific variables, which is useful when dealing with data that spans several orders of magnitude.
 - **Output Options**: The function supports saving plots as PNG or SVG files, with customizable filenames and output directories, making it easy to integrate the plots into reports or presentations.
 
-.. function:: kde_distributions(df, vars_of_interest=None, grid_figsize=(10, 8), single_figsize=(6, 4), kde=True, hist_color="#0000FF", kde_color="#FF0000", hist_edgecolor="#000000", hue=None, fill=True, n_rows=1, n_cols=1, w_pad=1.0, h_pad=1.0, text_wrap=50, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_path_png=None, single_var_image_path_svg=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=8, disable_sci_notation=False, stat="density")
-
-    Generate KDE or histogram distribution plots for specified columns in a DataFrame.
+.. function:: kde_distributions(df, vars_of_interest=None, grid_figsize=(10, 8), single_figsize=(6, 4), kde=True, hist_color="#0000FF", kde_color="#FF0000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=1, n_cols=1, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_path_png=None, single_var_image_path_svg=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -1363,8 +1361,6 @@ statistical graphics.
     :type w_pad: float, optional
     :param h_pad: Height padding between subplots, default is ``1.0``.
     :type h_pad: float, optional
-    :param text_wrap: Maximum width of the title text before wrapping, default is ``50``.
-    :type text_wrap: int, optional
     :param image_path_png: Directory path to save the PNG image of the overall distribution plots.
     :type image_path_png: str, optional
     :param image_path_svg: Directory path to save the SVG image of the overall distribution plots.
@@ -1392,6 +1388,10 @@ statistical graphics.
     :type binwidth: number or pair of numbers, optional
     :param label_fontsize: Font size for axis labels, including xlabel, ylabel, and tick marks, default is ``10``.
     :type label_fontsize: int, optional
+    :param tick_fontsize: Font size for axis tick labels, default is ``10``.
+    :type tick_fontsize: int, optional
+    :param text_wrap: Maximum width of the title text before wrapping, default is ``50``.
+    :type text_wrap: int, optional
     :param disable_sci_notation: Toggle to disable scientific notation on axes, default is ``False``.
     :type disable_sci_notation: bool, optional
     :param stat: Aggregate statistic to compute in each bin (e.g., ``'count'``, ``'frequency'``,
@@ -1413,6 +1413,7 @@ statistical graphics.
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
 
     :returns: ``None``
+
 
 \
 
@@ -1643,15 +1644,15 @@ The ``stacked_crosstab_plot`` function is a versatile tool for generating stacke
 
 The function also supports generating both regular and normalized stacked bar plots, with the option to return the generated crosstabs as a dictionary for further analysis. 
 
-.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, label_fontsize=12, tick_fontsize=10, remove_stacks=False)
+.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, label_fontsize=12, tick_fontsize=10, text_wrap=50, remove_stacks=False)
 
     Generates stacked or regular bar plots and crosstabs for specified columns.
 
     This function allows users to create stacked bar plots (or regular bar plots
     if stacks are removed) and corresponding crosstabs for specific columns
     in a DataFrame. It provides options to customize the appearance, including
-    font sizes for axis labels and tick labels, and to choose between regular
-    or normalized plots.
+    font sizes for axis labels, tick labels, and title text wrapping, and to 
+    choose between regular or normalized plots.
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -1701,6 +1702,8 @@ The function also supports generating both regular and normalized stacked bar pl
     :type label_fontsize: int, optional
     :param tick_fontsize: Font size for tick labels on the axes, default is ``10``.
     :type tick_fontsize: int, optional
+    :param text_wrap: The maximum width of the title text before wrapping, default is ``50``.
+    :type text_wrap: int, optional
     :param remove_stacks: If ``True``, removes stacks and creates a regular bar plot using only the ``col`` parameter. Only works when ``plot_type`` is set to ``'regular'``. Default is ``False``.
     :type remove_stacks: bool, optional
     :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
@@ -1717,6 +1720,7 @@ The function also supports generating both regular and normalized stacked bar pl
 
     :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is ``True``. Otherwise, returns ``None``.
     :rtype: ``dict`` or ``None``
+
 
 
 Stacked Bar Plots With Crosstabs Example
@@ -2217,8 +2221,7 @@ The function is particularly useful in scenarios where the user needs to compare
 the distribution of multiple metrics across different categories, enabling a 
 clear visual analysis of how these metrics vary within the dataset.
 
-
-.. function:: box_violin_plot(df, metrics_list, metrics_boxplot_comp, n_rows, n_cols, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None)
+.. function:: box_violin_plot(df, metrics_list, metrics_boxplot_comp, n_rows, n_cols, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -2250,6 +2253,12 @@ clear visual analysis of how these metrics vary within the dataset.
     :type individual_figsize: tuple or list, optional
     :param grid_figsize: Width and height of the figure for grid plots.
     :type grid_figsize: tuple or list, optional
+    :param label_fontsize: Font size for axis labels. Default is ``12``.
+    :type label_fontsize: int, optional
+    :param tick_fontsize: Font size for axis tick labels. Default is ``10``.
+    :type tick_fontsize: int, optional
+    :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
+    :type text_wrap: int, optional
     :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
     :type xlim: tuple or list, optional
     :param ylim: Limits for the ``y-axis`` as a tuple or list of (`min, max`).
@@ -2265,7 +2274,10 @@ clear visual analysis of how these metrics vary within the dataset.
 
     :returns: ``None``
 
-    This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, a grid of plots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.
+
+
+
+This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, a grid of plots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.
 
 Box Plots Grid Example
 -----------------------
@@ -2478,8 +2490,7 @@ The function allows you to display plots individually, as a grid, or both. Addit
 
 For users interested in understanding the strength of the relationship between variables, the function can also display the Pearson correlation coefficient directly in the plot title. This numeric value provides a quick reference to the linear correlation between the variables, offering further insight into their relationship.
 
-
-.. function:: scatter_fit_plot(df, x_vars, y_vars, n_rows, n_cols, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None)
+.. function:: scatter_fit_plot(df, x_vars, y_vars, n_rows, n_cols, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None)
 
     Create and save scatter plots or a grid of scatter plots for given x_vars
     and y_vars, with an optional best fit line and customizable point color,
@@ -2532,6 +2543,9 @@ For users interested in understanding the strength of the relationship between v
 
     :param tick_fontsize: Font size for axis tick labels. Default is ``10``.
     :type tick_fontsize: int, optional
+
+    :param text_wrap: The maximum width of the title text before wrapping, default is ``50``.
+    :type text_wrap: int, optional
 
     :param add_best_fit_line: Whether to add a best fit line to the scatter plots. Default is ``False``.
     :type add_best_fit_line: bool, optional
