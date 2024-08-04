@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.4 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -68,6 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-5">Version 0.0.5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-4">Version 0.0.4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-3">Version 0.0.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
@@ -108,6 +109,24 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-5">
+<h2>Version 0.0.5<a class="headerlink" href="#version-0-0-5" title="Permalink to this heading"></a></h2>
+<p><strong>Ensure Consistent Font Size and Text Wrapping Across Plot Elements</strong></p>
+<p>This PR addresses inconsistencies in font sizes and text wrapping across various plot elements in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function. The following updates have been implemented to ensure uniformity and improve the readability of plots:</p>
+<ol class="arabic simple">
+<li><p><strong>Title Font Size and Text Wrapping:</strong>
+- Added a <code class="docutils literal notranslate"><span class="pre">text_wrap</span></code> parameter to control the wrapping of plot titles.
+- Ensured that title font sizes are consistent with axis label font sizes by explicitly setting the font size using <code class="docutils literal notranslate"><span class="pre">ax.set_title()</span></code> after plot generation.</p></li>
+<li><p><strong>Legend Font Size Consistency:</strong>
+- Incorporated <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code> into the legend font size by directly setting the font size of the legend text using <code class="docutils literal notranslate"><span class="pre">plt.setp(legend.get_texts(),</span> <span class="pre">fontsize=label_fontsize)</span></code>.
+- This ensures that the legend labels are consistent with the title and axis labels.</p></li>
+</ol>
+<p><strong>Testing</strong></p>
+<ul class="simple">
+<li><p>Verified that titles now wrap correctly and match the specified <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code>.</p></li>
+<li><p>Confirmed that legend text scales according to <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code>, ensuring consistent font sizes across all plot elements.</p></li>
+</ul>
+</section>
 <section id="version-0-0-4">
 <h2>Version 0.0.4<a class="headerlink" href="#version-0-0-4" title="Permalink to this heading"></a></h2>
 <ul class="simple">

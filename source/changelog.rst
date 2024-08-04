@@ -24,6 +24,27 @@
 Changelog
 =========
 
+Version 0.0.5 
+---------------------------
+
+**Ensure Consistent Font Size and Text Wrapping Across Plot Elements**
+
+This PR addresses inconsistencies in font sizes and text wrapping across various plot elements in the ``stacked_crosstab_plot`` function. The following updates have been implemented to ensure uniformity and improve the readability of plots:
+
+1. **Title Font Size and Text Wrapping:**
+   - Added a ``text_wrap`` parameter to control the wrapping of plot titles.
+   - Ensured that title font sizes are consistent with axis label font sizes by explicitly setting the font size using ``ax.set_title()`` after plot generation.
+
+2. **Legend Font Size Consistency:**
+   - Incorporated ``label_fontsize`` into the legend font size by directly setting the font size of the legend text using ``plt.setp(legend.get_texts(), fontsize=label_fontsize)``.
+   - This ensures that the legend labels are consistent with the title and axis labels.
+
+**Testing**
+
+- Verified that titles now wrap correctly and match the specified ``label_fontsize``.
+- Confirmed that legend text scales according to ``label_fontsize``, ensuring consistent font sizes across all plot elements.
+
+
 Version 0.0.4 
 ---------------------------
 
