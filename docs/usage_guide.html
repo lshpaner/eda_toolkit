@@ -1700,10 +1700,16 @@ which will be displayed on top of each respective plot.</p>
 <span class="p">]</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you assign the function to a variable, the dictionary returned when
+<code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code> will be suppressed in the output. However, the dictionary
+is still available within the assigned variable for further use.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">stacked_crosstab_plot</span>
 
 <span class="c1"># Call the stacked_crosstab_plot function</span>
-<span class="n">stacked_crosstab_plot</span><span class="p">(</span>
+<span class="n">stacked_crosstabs</span> <span class="o">=</span> <span class="n">stacked_crosstab_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">col</span><span class="o">=</span><span class="s2">&quot;age_group&quot;</span><span class="p">,</span>
     <span class="n">func_col</span><span class="o">=</span><span class="n">func_col</span><span class="p">,</span>
@@ -1731,21 +1737,23 @@ which will be displayed on top of each respective plot.</p>
 grouped by <code class="docutils literal notranslate"><span class="pre">&quot;education&quot;</span></code>. The plots are executed with legends, labels, and
 tick sizes customized for clarity. The function returns a dictionary of
 crosstabs for further analysis or export.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
 <p><strong>Importance of Correctly Aligning Labels</strong></p>
 <p>It is crucial to properly align the elements in the <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>,
 <code class="docutils literal notranslate"><span class="pre">title</span></code>, and <code class="docutils literal notranslate"><span class="pre">func_col</span></code> parameters when using the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function. Each of these lists must be ordered consistently because the function
 relies on their alignment to correctly assign labels and titles to the
 corresponding plots and legends.</p>
-<p>For instance, in the example above:</p>
+<p><strong>For instance, in the example above:</strong></p>
 <ul class="simple">
 <li><p>The first element in <code class="docutils literal notranslate"><span class="pre">func_col</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;sex&quot;</span></code>, and it is aligned with the first set of labels <code class="docutils literal notranslate"><span class="pre">[&quot;Male&quot;,</span> <span class="pre">&quot;Female&quot;]</span></code> in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> and the first title <code class="docutils literal notranslate"><span class="pre">&quot;Sex&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">title</span></code> list.</p></li>
 <li><p>Similarly, the second element in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code>, aligns with the labels <code class="docutils literal notranslate"><span class="pre">[&quot;&lt;=50K&quot;,</span> <span class="pre">&quot;&gt;50K&quot;]</span></code> and the title <code class="docutils literal notranslate"><span class="pre">&quot;Income&quot;</span></code>.</p></li>
 </ul>
-<p>Misalignment between these lists would result in incorrect labels or titles being
+<p><strong>Misalignment between these lists would result in incorrect labels or titles being
 applied to the plots, potentially leading to confusion or misinterpretation of the data.
 Therefore, it’s important to ensure that each list is ordered appropriately and
-consistently to accurately reflect the data being visualized.</p>
+consistently to accurately reflect the data being visualized.</strong></p>
 <p><strong>Proper Setup of Lists</strong></p>
 <p>When setting up the <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, and <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, ensure
 that each element in the lists corresponds to the correct variable in the DataFrame.
@@ -1756,6 +1764,7 @@ This involves:</p>
 </ul>
 <p>By adhering to these guidelines, you can ensure that the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function produces accurate and meaningful visualizations that are easy to interpret and analyze.</p>
+</div>
 <p><strong>Output</strong></p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_sex.svg"><img alt="KDE Distributions" class="align-center" src="_images/Stacked_Bar_Age_sex.svg" width="900px" /></a>
 </div><div style="height: 50px;"></div><div class="no-click"><a class="reference internal image-reference" href="_images/Stacked_Bar_Age_income.svg"><img alt="Stacked Bar Plot Age vs. Income" class="align-center" src="_images/Stacked_Bar_Age_income.svg" width="900px" /></a>

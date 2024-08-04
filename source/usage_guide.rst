@@ -1759,12 +1759,19 @@ which will be displayed on top of each respective plot.
         "Income",
     ]
 
+.. note::
+
+    If you assign the function to a variable, the dictionary returned when 
+    ``return_dict=True`` will be suppressed in the output. However, the dictionary 
+    is still available within the assigned variable for further use.
+
+
 .. code-block:: python
 
     from eda_toolkit import stacked_crosstab_plot
 
     # Call the stacked_crosstab_plot function
-    stacked_crosstab_plot(
+    stacked_crosstabs = stacked_crosstab_plot(
         df=df,
         col="age_group",
         func_col=func_col,
@@ -1792,35 +1799,37 @@ grouped by ``"education"``. The plots are executed with legends, labels, and
 tick sizes customized for clarity. The function returns a dictionary of 
 crosstabs for further analysis or export.
 
-**Importance of Correctly Aligning Labels**
+.. important:: 
+    
+    **Importance of Correctly Aligning Labels**
 
-It is crucial to properly align the elements in the ``legend_labels_list``, 
-``title``, and ``func_col`` parameters when using the ``stacked_crosstab_plot`` 
-function. Each of these lists must be ordered consistently because the function 
-relies on their alignment to correctly assign labels and titles to the 
-corresponding plots and legends. 
+    It is crucial to properly align the elements in the ``legend_labels_list``, 
+    ``title``, and ``func_col`` parameters when using the ``stacked_crosstab_plot`` 
+    function. Each of these lists must be ordered consistently because the function 
+    relies on their alignment to correctly assign labels and titles to the 
+    corresponding plots and legends. 
 
-For instance, in the example above:  
+    **For instance, in the example above:** 
 
-- The first element in ``func_col`` is ``"sex"``, and it is aligned with the first set of labels ``["Male", "Female"]`` in ``legend_labels_list`` and the first title ``"Sex"`` in the ``title`` list.
-- Similarly, the second element in ``func_col``, ``"income"``, aligns with the labels ``["<=50K", ">50K"]`` and the title ``"Income"``.
+    - The first element in ``func_col`` is ``"sex"``, and it is aligned with the first set of labels ``["Male", "Female"]`` in ``legend_labels_list`` and the first title ``"Sex"`` in the ``title`` list.
+    - Similarly, the second element in ``func_col``, ``"income"``, aligns with the labels ``["<=50K", ">50K"]`` and the title ``"Income"``.
 
-Misalignment between these lists would result in incorrect labels or titles being 
-applied to the plots, potentially leading to confusion or misinterpretation of the data. 
-Therefore, it's important to ensure that each list is ordered appropriately and 
-consistently to accurately reflect the data being visualized.
+    **Misalignment between these lists would result in incorrect labels or titles being 
+    applied to the plots, potentially leading to confusion or misinterpretation of the data. 
+    Therefore, it's important to ensure that each list is ordered appropriately and 
+    consistently to accurately reflect the data being visualized.**
 
-**Proper Setup of Lists**
+    **Proper Setup of Lists**
 
-When setting up the ``legend_labels_list``, ``title``, and ``func_col``, ensure 
-that each element in the lists corresponds to the correct variable in the DataFrame. 
-This involves:
+    When setting up the ``legend_labels_list``, ``title``, and ``func_col``, ensure 
+    that each element in the lists corresponds to the correct variable in the DataFrame. 
+    This involves:
 
-- **Ordering**: Maintaining the same order across all three lists to ensure that labels and titles correspond correctly to the data being plotted.
-- **Consistency**: Double-checking that each label in ``legend_labels_list`` matches the categories present in the corresponding ``func_col``, and that the ``title`` accurately describes the plot.
+    - **Ordering**: Maintaining the same order across all three lists to ensure that labels and titles correspond correctly to the data being plotted.
+    - **Consistency**: Double-checking that each label in ``legend_labels_list`` matches the categories present in the corresponding ``func_col``, and that the ``title`` accurately describes the plot.
 
-By adhering to these guidelines, you can ensure that the ``stacked_crosstab_plot`` 
-function produces accurate and meaningful visualizations that are easy to interpret and analyze.
+    By adhering to these guidelines, you can ensure that the ``stacked_crosstab_plot`` 
+    function produces accurate and meaningful visualizations that are easy to interpret and analyze.
 
 **Output**
 
