@@ -2626,7 +2626,7 @@ interpretability of the scatter plots.
 
    <div class="no-click">
 
-.. image:: ../assets/scatter_plots_grid.svg
+.. image:: ../assets/scatter_plots_grid.png
    :alt: Scatter Plot Comparisons (with Best Fit Lines)
    :align: center
    :width: 900px
@@ -2710,7 +2710,7 @@ images in the specified paths.
 
    <div class="no-click">
 
-.. image:: ../assets/scatter_plots_grid_grouped.svg
+.. image:: ../assets/scatter_plots_grid_grouped.png
    :alt: Scatter Plot Comparisons (Grouped)
    :align: center
    :width: 900px
