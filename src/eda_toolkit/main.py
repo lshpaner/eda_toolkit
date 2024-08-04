@@ -1749,6 +1749,7 @@ def scatter_fit_plot(
     grid_figsize=None,  # Parameter to specify figure size for grid plots
     label_fontsize=12,  # Parameter to control axis label fontsize
     tick_fontsize=10,  # Parameter to control tick label fontsize
+    text_wrap=50,  # Parameter to control wrapping of text in title
     add_best_fit_line=False,  # Parameter to add best fit line
     scatter_color="C0",  # Parameter to control the color of scattered points
     best_fit_linecolor="red",  # Parameter to control color of best fit line
@@ -1958,7 +1959,11 @@ def scatter_fit_plot(
                 title = f"{y_var} vs {x_var}"
                 if show_correlation:
                     title += f" ($r$ = {r_value:.2f})"
-                plt.title(title)
+                # Use label_fontsize for title
+                plt.title(
+                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
                 plt.xlabel(
                     y_var if rotate_plot else x_var,
                     fontsize=label_fontsize,
@@ -2045,7 +2050,11 @@ def scatter_fit_plot(
                 title = f"{y_var} vs {x_var}"
                 if show_correlation:
                     title += f" ($r$ = {r_value:.2f})"
-                ax.set_title(title)
+                # Use label_fontsize for title
+                ax.set_title(
+                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
                 ax.set_xlabel(
                     y_var if rotate_plot else x_var,
                     fontsize=label_fontsize,
@@ -2085,3 +2094,6 @@ def scatter_fit_plot(
         if show_plot in ["grid", "both"]:
             plt.show()  # Display the plot
         plt.close(fig)
+
+
+################################################################################
