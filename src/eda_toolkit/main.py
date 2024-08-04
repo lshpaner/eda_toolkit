@@ -1500,6 +1500,7 @@ def box_violin_plot(
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
     grid_figsize=None,  # Parameter to specify figure size for grid plots
+    text_wrap=50,  # Add text_wrap parameter
     label_fontsize=12,  # Parameter to control axis label fontsize
     tick_fontsize=10,  # Parameter to control tick label fontsize
     xlim=None,  # New parameter for setting x-axis limits
@@ -1609,7 +1610,11 @@ def box_violin_plot(
                     palette=palette,
                     dodge=False,
                 )
-                plt.title(f"Distribution of {met_list} by {met_comp}")
+                title = f"Distribution of {met_list} by {met_comp}"
+                plt.title(
+                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
                 plt.xlabel(
                     met_list if rotate_plot else met_comp,
                     fontsize=label_fontsize,
@@ -1679,7 +1684,11 @@ def box_violin_plot(
                     palette=palette,
                     dodge=False,
                 )
-                ax.set_title(f"Distribution of {met_list} by {met_comp}")
+                title = f"Distribution of {met_list} by {met_comp}"
+                ax.set_title(
+                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
                 ax.set_xlabel(
                     met_list if rotate_plot else met_comp,
                     fontsize=label_fontsize,
