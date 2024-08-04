@@ -1092,8 +1092,8 @@ def stacked_crosstab_plot(
     This function allows users to create stacked bar plots (or regular bar plots
     if stacks are removed) and corresponding crosstabs for specific columns
     in a DataFrame. It provides options to customize the appearance, including
-    font sizes for axis labels and tick labels, and to choose between regular
-    or normalized plots.
+    font sizes for axis labels, tick labels, and title text wrapping, and to
+    choose between regular or normalized plots.
 
     Parameters:
     -----------
@@ -1169,6 +1169,9 @@ def stacked_crosstab_plot(
 
     tick_fontsize : int, optional (default=10)
         Font size for tick labels on the axes.
+
+    text_wrap : int, optional (default=50)
+        The maximum width of the title text before wrapping.
 
     remove_stacks : bool, optional (default=False)
         If True, removes stacks and creates a regular bar plot using only
@@ -1525,30 +1528,71 @@ def box_violin_plot(
     ylim=None,  # New parameter for setting y-axis limits
 ):
     """
-    Create and save individual boxplots or violin plots, an entire grid of plots,
-    or both for given metrics and comparisons, with optional axis limits.
+    Create and save individual boxplots or violin plots, an entire grid
+    of plots, or both for given metrics and comparisons, with optional
+    axis limits.
 
     Parameters:
-    - df: DataFrame containing the data.
-    - metrics_list: List of metric names (columns in df) to plot.
-    - metrics_boxplot_comp: List of comparison categories (columns in df).
-    - n_rows: Number of rows in the subplot grid.
-    - n_cols: Number of columns in the subplot grid.
-    - image_path_png: Optional directory path to save .png images.
-    - image_path_svg: Optional directory path to save .svg images.
-    - save_plots: String, "all", "individual", or "grid" to control saving plots.
-    - show_legend: Boolean, True if showing the legend in the plots.
-    - plot_type: String, "boxplot" or "violinplot" to specify the type of plot.
-    - xlabel_rot: Integer, rotation angle for x-axis labels.
-    - show_plot: String, "individual", "grid", or "both" to control plot display.
-    - rotate_plot: Boolean, True if rotating (pivoting) the plots.
-    - individual_figsize: Tuple or list, width and height of the figure for
-      individual plots.
-    - grid_figsize: Tuple or list, width and height of the figure for grid plots.
-    - label_fontsize: Integer, fontsize for axis labels.
-    - tick_fontsize: Integer, fontsize for axis tick labels.
-    - xlim: Tuple, specifying the limits of the x-axis.
-    - ylim: Tuple, specifying the limits of the y-axis.
+    -----------
+    df : pandas.DataFrame
+        The DataFrame containing the data.
+
+    metrics_list : list
+        List of metric names (columns in df) to plot.
+
+    metrics_boxplot_comp : list
+        List of comparison categories (columns in df).
+
+    n_rows : int
+        Number of rows in the subplot grid.
+
+    n_cols : int
+        Number of columns in the subplot grid.
+
+    image_path_png : str, optional
+        Directory path to save .png images.
+
+    image_path_svg : str, optional
+        Directory path to save .svg images.
+
+    save_plots : str, optional
+        String, "all", "individual", or "grid" to control saving plots.
+
+    show_legend : bool, optional (default=True)
+        True if showing the legend in the plots.
+
+    plot_type : str, optional (default='boxplot')
+        String, "boxplot" or "violinplot" to specify the type of plot.
+
+    xlabel_rot : int, optional (default=0)
+        Rotation angle for x-axis labels.
+
+    show_plot : str, optional (default='both')
+        String, "individual", "grid", or "both" to control plot display.
+
+    rotate_plot : bool, optional (default=False)
+        True if rotating (pivoting) the plots.
+
+    individual_figsize : tuple or list, optional
+        Width and height of the figure for individual plots.
+
+    grid_figsize : tuple or list, optional
+        Width and height of the figure for grid plots.
+
+    label_fontsize : int, optional (default=12)
+        Font size for axis labels.
+
+    tick_fontsize : int, optional (default=10)
+        Font size for axis tick labels.
+
+    text_wrap : int, optional (default=50)
+        The maximum width of the title text before wrapping.
+
+    xlim : tuple, optional
+        Tuple specifying the limits of the x-axis.
+
+    ylim : tuple, optional
+        Tuple specifying the limits of the y-axis.
     """
 
     # Check for valid show_plot values
@@ -1791,9 +1835,9 @@ def scatter_fit_plot(
     ylim=None,  # Parameter to set y-axis limits
 ):
     """
-    Create and save scatter plots or a grid of scatter plots for given x_vars
-    and y_vars, with an optional best fit line and customizable point color,
-    size, and markers.
+    Create and save scatter plots or a grid of scatter plots for given
+    x_vars and y_vars, with an optional best fit line and customizable
+    point color, size, and markers.
 
     Parameters:
     -----------
@@ -1844,6 +1888,9 @@ def scatter_fit_plot(
 
     tick_fontsize : int, optional (default=10)
         Font size for axis tick labels.
+
+    text_wrap : int, optional (default=50)
+        The maximum width of the title text before wrapping.
 
     add_best_fit_line : bool, optional (default=False)
         Whether to add a best fit line to the scatter plots.
