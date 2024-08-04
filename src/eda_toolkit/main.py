@@ -1081,6 +1081,7 @@ def stacked_crosstab_plot(
     show_legend=True,
     label_fontsize=12,
     tick_fontsize=10,
+    text_wrap=50,
     remove_stacks=False,
     xlim=None,
     ylim=None,
@@ -1303,7 +1304,10 @@ def stacked_crosstab_plot(
                 if ylim:
                     ax0.set_ylim(ylim)
 
-                ax0.set_title(title1, fontsize=label_fontsize)
+                ax0.set_title(
+                    "\n".join(textwrap.wrap(title1, width=text_wrap)),
+                    fontsize=label_fontsize,  # Ensure label_fontsize is applied
+                )
                 ax0.tick_params(axis="both", labelsize=tick_fontsize)
 
                 if show_legend:
@@ -1334,15 +1338,20 @@ def stacked_crosstab_plot(
                     crosstabdest.plot(
                         kind=kind,
                         stacked=True,
-                        title=title1,
                         ax=axes[0] if plot_type == "both" else axes,
                         color=color,
                         width=width,
                         rot=rot,
-                        fontsize=12,
-                        logy=logscale,  # Apply log scale if logscale is True
+                        fontsize=label_fontsize,  # Apply label_fontsize here
                     )
+
+                    # Explicitly set the title with the desired font size
                     ax0 = axes[0] if plot_type == "both" else axes
+                    ax0.set_title(
+                        "\n".join(textwrap.wrap(title1, width=text_wrap)),
+                        # Ensure the title font size is consistent
+                        fontsize=label_fontsize,
+                    )
 
                     if kind == "barh":
                         ax0.set_xlabel(ylabel1, fontsize=label_fontsize)
@@ -1360,8 +1369,9 @@ def stacked_crosstab_plot(
                     # Set tick fontsize
                     ax0.tick_params(axis="both", labelsize=tick_fontsize)
 
+                    # Set legend font size to match label_fontsize
                     if show_legend:
-                        ax0.legend(legend, fontsize=12)
+                        ax0.legend(legend, fontsize=label_fontsize)
                     else:
                         ax0.legend().remove()
 
@@ -1380,16 +1390,23 @@ def stacked_crosstab_plot(
                     crosstabdestnorm.plot(
                         kind=kind,
                         stacked=True,
-                        title=title2,
                         ylabel="Percentage",
                         ax=axes[1] if plot_type == "both" else axes,
                         color=color,
                         width=width,
                         rot=rot,
-                        fontsize=12,
-                        logy=logscale,  # Apply log scale if logscale is True
+                        # This controls axis labels and ticks
+                        fontsize=label_fontsize,
+                        logy=logscale,
                     )
+
+                    # Explicitly set the title with the desired font size
                     ax1 = axes[1] if plot_type == "both" else axes
+                    ax1.set_title(
+                        "\n".join(textwrap.wrap(title2, width=text_wrap)),
+                        # This should now control the title font size
+                        fontsize=label_fontsize,
+                    )
 
                     if kind == "barh":
                         ax1.set_xlabel(ylabel2, fontsize=label_fontsize)
@@ -1407,8 +1424,9 @@ def stacked_crosstab_plot(
                     # Set tick fontsize
                     ax1.tick_params(axis="both", labelsize=tick_fontsize)
 
+                    # Set legend font size to match label_fontsize
                     if show_legend:
-                        ax1.legend(legend, fontsize=12)
+                        ax1.legend(legend, fontsize=label_fontsize)
                     else:
                         ax1.legend().remove()
 
