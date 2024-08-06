@@ -769,6 +769,14 @@ def kde_distributions(
         print("Error: No variables of interest provided.")
         return
 
+    # Validate plot_type parameter
+    valid_plot_types = ["hist", "kde", "both"]
+    if plot_type.lower() not in valid_plot_types:
+        raise ValueError(
+            f"Invalid plot_type value. Expected one of {valid_plot_types}, "
+            f"got '{plot_type}' instead."
+        )
+
     # Validate stat parameter
     valid_stats = [
         "count",
@@ -886,7 +894,10 @@ def kde_distributions(
                     )
 
             ax.set_xlabel(col, fontsize=label_fontsize)
-            ax.set_ylabel(y_axis_label.capitalize(), fontsize=label_fontsize)
+            ax.set_ylabel(
+                y_axis_label.capitalize(),
+                fontsize=label_fontsize,
+            )
             ax.set_title(
                 "\n".join(textwrap.wrap(title, width=text_wrap)),
                 fontsize=label_fontsize,
@@ -1006,7 +1017,10 @@ def kde_distributions(
                         )
 
                 ax.set_xlabel(var, fontsize=label_fontsize)
-                ax.set_ylabel(y_axis_label.capitalize(), fontsize=label_fontsize)
+                ax.set_ylabel(
+                    y_axis_label.capitalize(),
+                    fontsize=label_fontsize,
+                )
                 ax.set_title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
                     fontsize=label_fontsize,
