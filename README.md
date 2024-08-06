@@ -305,7 +305,7 @@ scatter_fit_plot(
 )
 ```
 
-![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid.svg)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid.png)
 
 Creates and saves scatter plots or a grid of scatter plots for given `x_vars` and `y_vars`, with an optional best fit line and customizable point `color`, `size`, and `markers`.
 
@@ -337,7 +337,7 @@ scatter_fit_plot(
     show_correlation=False,
 )
 ```
-![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid_grouped.svg)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid_grouped.png)
 
 
 ## Overall Usage
