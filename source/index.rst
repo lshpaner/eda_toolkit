@@ -43,6 +43,7 @@ Table of Contents
    :caption: About EDA Toolkit
 
    acknowledgements
+   contributors
    citations
    changelog
    references
