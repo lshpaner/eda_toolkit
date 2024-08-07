@@ -35,7 +35,7 @@ Shpaner, L., & Gil, O. (2024). EDA Toolkit (0.0.4). Zenodo. https://doi.org/10.5
     month        = aug,
     year         = 2024,
     publisher    = {Zenodo},
-    version      = {0.0.4},W
+    version      = {0.0.6},W
     doi          = {10.5281/zenodo.13162633},
     url          = {https://doi.org/10.5281/zenodo.13162633}
     }
