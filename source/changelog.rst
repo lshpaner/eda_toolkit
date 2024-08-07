@@ -24,6 +24,23 @@
 Changelog
 =========
 
+Version 0.0.6
+---------------------------
+
+**Added validation for Plot Type Parameter in KDE Distributions Function**
+
+This release adds a validation step for the ``plot_type`` parameter in the ``kde_distributions`` function. The allowed values for ``plot_type`` are ``"hist"``, ``"kde"``, and ``"both"``. If an invalid value is provided, the function will now raise a ``ValueError`` with a clear message indicating the accepted values. This change improves the robustness of the function and helps prevent potential errors due to incorrect parameter values.
+
+.. code-block:: python 
+   
+    # Validate plot_type parameter
+    valid_plot_types = ["hist", "kde", "both"]
+    if plot_type.lower() not in valid_plot_types:
+        raise ValueError(
+            f"Invalid plot_type value. Expected one of {valid_plot_types}, "
+            f"got '{plot_type}' instead."
+        )
+
 Version 0.0.5 
 ---------------------------
 
