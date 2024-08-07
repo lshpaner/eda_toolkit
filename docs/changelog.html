@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.5 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -68,6 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-6">Version 0.0.6</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-5">Version 0.0.5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-4">Version 0.0.4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-3">Version 0.0.3</a></li>
@@ -109,6 +110,20 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-6">
+<h2>Version 0.0.6<a class="headerlink" href="#version-0-0-6" title="Permalink to this heading"></a></h2>
+<p><strong>Added validation for Plot Type Parameter in KDE Distributions Function</strong></p>
+<p>This release adds a validation step for the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> function. The allowed values for <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> are <code class="docutils literal notranslate"><span class="pre">&quot;hist&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kde&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>. If an invalid value is provided, the function will now raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> with a clear message indicating the accepted values. This change improves the robustness of the function and helps prevent potential errors due to incorrect parameter values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Validate plot_type parameter</span>
+<span class="n">valid_plot_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span> <span class="s2">&quot;kde&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">plot_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_plot_types</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Invalid plot_type value. Expected one of </span><span class="si">{</span><span class="n">valid_plot_types</span><span class="si">}</span><span class="s2">, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;got &#39;</span><span class="si">{</span><span class="n">plot_type</span><span class="si">}</span><span class="s2">&#39; instead.&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="version-0-0-5">
 <h2>Version 0.0.5<a class="headerlink" href="#version-0-0-5" title="Permalink to this heading"></a></h2>
 <p><strong>Ensure Consistent Font Size and Text Wrapping Across Plot Elements</strong></p>
