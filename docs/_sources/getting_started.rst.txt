@@ -30,7 +30,7 @@
 Welcome to the EDA Toolkit Python Library Documentation!
 ========================================================
 .. note::
-   This documentation is for ``eda_toolkit`` version ``0.0.5``.
+   This documentation is for ``eda_toolkit`` version ``0.0.6``.
 
 
 The ``eda_toolkit`` is a comprehensive library designed to streamline and 
