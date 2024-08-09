@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="eda_toolkit",
-    version="0.0.1b",
+    version="0.0.6",
     author="Leonid Shpaner, Oscar Gil",
     author_email="lshpaner@ucla.edu",
-    description="A Python library for EDA (directory management, some data preprocessing, reporting, visualizations, and more)",
+    description="A Python library for EDA, including visualizations, directory management, data preprocessing, reporting, and more.",
     long_description=open("README_min.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",  # Type of the long description
     package_dir={"": "src"},  # Directory where your package files are located
@@ -14,7 +14,9 @@ setup(
     project_urls={  # Optional
         "Leonid Shpaner's Website": "https://www.leonshpaner.com",
         "Oscar Gil's Website": "https://www.oscargildata.com",
-        "Source Code": "https://github.com/lshpaner/eda_kit/",
+        "Documentation": "https://lshpaner.github.io/eda_toolkit/",
+        "Zenodo Archive": "https://zenodo.org/records/13162633",
+        "Source Code": "https://github.com/lshpaner/eda_toolkit/",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
