@@ -24,6 +24,50 @@
 Changelog
 =========
 
+Version 0.0.7
+---------------------------
+
+**Added Function for Customizable Correlation Matrix Visualization**
+
+This release introduces a new function, ``flex_corr_matrix``, which allows users to 
+generate both full and upper triangular correlation heatmaps with a high degree 
+of customization. The function includes options to annotate the heatmap, save the 
+plots, and pass additional parameters to ``seaborn.heatmap()``.
+
+**Summary of Changes**
+
+- **New Function**: ``flex_corr_matrix``.
+
+  - **Functionality**:
+    - Generates a correlation heatmap for a given DataFrame.
+    - Supports both full and upper triangular correlation matrices based on the ``triangular`` parameter.
+    - Allows users to customize various aspects of the plot, including colormap, figure size, axis label rotation, and more.
+    - Accepts additional keyword arguments via ``**kwargs`` to pass directly to ``seaborn.heatmap()``.
+    - Includes validation to ensure the ``triangular``, ``annot``, and ``save_plots`` parameters are boolean values.
+    - Raises an exception if ``save_plots=True`` but neither ``image_path_png`` nor ``image_path_svg`` is specified.
+
+**Usage**
+
+.. code-block:: python
+
+   # Full correlation matrix example
+   flex_corr_matrix(df=my_dataframe, triangular=False, cmap="coolwarm", annot=True)
+
+   # Upper triangular correlation matrix example
+   flex_corr_matrix(df=my_dataframe, triangular=True, cmap="coolwarm", annot=True)
+
+
+**Contingency table df to object type**
+
+Convert all columns in the DataFrame to object type to prevent issues with numerical columns.
+
+This change looks good:
+
+.. code-block:: python
+
+   df = df.astype(str).fillna("")
+
+
 Version 0.0.6
 ---------------------------
 
