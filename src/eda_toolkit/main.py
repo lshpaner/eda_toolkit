@@ -2203,8 +2203,8 @@ def flex_corr_matrix(
     image_path_svg=None,
     figsize=(10, 10),
     title="Cervical Cancer Data: Correlation Matrix",
-    title_fontsize=16,
-    label_fontsize=10,
+    label_fontsize=12,
+    tick_fontsize=10,
     xlabel_rot=45,
     ylabel_rot=0,
     xlabel_alignment="right",
@@ -2352,20 +2352,20 @@ def flex_corr_matrix(
 
     # Set the font size for the colorbar label
     cbar = heatmap.collections[0].colorbar
-    cbar.ax.tick_params(labelsize=label_fontsize)
+    cbar.ax.tick_params(labelsize=tick_fontsize)  # Updated to use tick_fontsize
     cbar.set_label(cbar_label, fontsize=label_fontsize)
 
     # Set the title if provided
     if title:
         plt.title(
             "\n".join(textwrap.wrap(title, width=text_wrap)),
-            fontsize=title_fontsize,
+            fontsize=label_fontsize,  # Now using label_fontsize instead
         )
 
     # Rotate x-axis labels, adjust alignment, and apply padding
     plt.xticks(
         rotation=xlabel_rot,
-        fontsize=label_fontsize,
+        fontsize=tick_fontsize,  # Updated to use tick_fontsize
         ha=xlabel_alignment,
         rotation_mode="anchor",
     )
@@ -2373,7 +2373,7 @@ def flex_corr_matrix(
     # Rotate y-axis labels and adjust alignment
     plt.yticks(
         rotation=ylabel_rot,
-        fontsize=label_fontsize,
+        fontsize=tick_fontsize,  # Updated to use tick_fontsize
         va=ylabel_alignment,
     )
 
