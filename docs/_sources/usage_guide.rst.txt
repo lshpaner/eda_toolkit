@@ -2747,6 +2747,237 @@ images in the specified paths.
    <div style="height: 50px;"></div>
 
 
+Correlation Matrices
+=====================
+
+**Generate and Save Customizable Correlation Heatmaps**
+
+The ``flex_corr_matrix`` function is designed to create highly customizable correlation heatmaps for visualizing the relationships between variables in a DataFrame. This function allows users to generate either a full or triangular correlation matrix, with options for annotation, color mapping, and saving the plot in multiple formats.
+
+**Customizable Plot Appearance**
+
+The function provides extensive customization options for the heatmap's appearance:
+
+- **Colormap Selection**: Choose from a variety of colormaps to represent the strength of correlations. The default is ``"coolwarm"``, but this can be adjusted to fit the needs of the analysis.
+
+- **Annotation**: Optionally annotate the heatmap with correlation coefficients, making it easier to interpret the strength of relationships at a glance.
+
+- **Figure Size and Layout**: Customize the dimensions of the heatmap to ensure it fits well within reports, presentations, or dashboards.
+
+**Triangular vs. Full Correlation Matrix**
+
+
+A key feature of the ``flex_corr_matrix`` function is the ability to generate either a full correlation matrix or only the upper triangle. This option is particularly useful when the matrix is large, as it reduces visual clutter and focuses attention on the unique correlations.
+
+**Label and Axis Configuration**
+
+
+The function offers flexibility in configuring axis labels and titles:
+
+- **Label Rotation**: Rotate x-axis and y-axis labels for better readability, especially when working with long variable names.
+- **Font Sizes**: Adjust the font sizes of labels and tick marks to ensure the plot is clear and readable.
+- **Title Wrapping**: Control the wrapping of long titles to fit within the plot without overlapping other elements.
+
+**Plot Display and Saving Options**
+
+
+The ``flex_corr_matrix`` function allows you to display the heatmap directly or save it as PNG or SVG files for use in reports or presentations. If saving is enabled, you can specify file paths and names for the images.
+
+.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, figsize=(10, 10), title="Cervical Cancer Data: Correlation Matrix", label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, **kwargs)
+
+    Create a customizable correlation heatmap with options for annotation, color mapping, figure size, and saving the plot.
+
+    :param df: The DataFrame containing the data.
+    :type df: pandas.DataFrame
+
+    :param cols: List of column names to include in the correlation matrix. If None, all columns are included.
+    :type cols: list of str, optional
+
+    :param annot: Whether to annotate the heatmap with correlation coefficients. Default is ``True``.
+    :type annot: bool, optional
+
+    :param cmap: The colormap to use for the heatmap. Default is ``"coolwarm"``.
+    :type cmap: str, optional
+
+    :param save_plots: Controls whether to save the plots. Default is ``False``.
+    :type save_plots: bool, optional
+
+    :param image_path_png: Directory path to save PNG images of the heatmap.
+    :type image_path_png: str, optional
+
+    :param image_path_svg: Directory path to save SVG images of the heatmap.
+    :type image_path_svg: str, optional
+
+    :param figsize: Width and height of the figure for the heatmap. Default is ``(10, 10)``.
+    :type figsize: tuple, optional
+
+    :param title: Title of the heatmap. Default is ``"Cervical Cancer Data: Correlation Matrix"``.
+    :type title: str, optional
+
+    :param label_fontsize: Font size for tick labels and colorbar label. Default is ``12``.
+    :type label_fontsize: int, optional
+
+    :param tick_fontsize: Font size for axis tick labels. Default is ``10``.
+    :type tick_fontsize: int, optional
+
+    :param xlabel_rot: Rotation angle for x-axis labels. Default is ``45``.
+    :type xlabel_rot: int, optional
+
+    :param ylabel_rot: Rotation angle for y-axis labels. Default is ``0``.
+    :type ylabel_rot: int, optional
+
+    :param xlabel_alignment: Horizontal alignment for x-axis labels. Default is ``"right"``.
+    :type xlabel_alignment: str, optional
+
+    :param ylabel_alignment: Vertical alignment for y-axis labels. Default is ``"center_baseline"``.
+    :type ylabel_alignment: str, optional
+
+    :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
+    :type text_wrap: int, optional
+
+    :param vmin: Minimum value for the heatmap color scale. Default is ``-1``.
+    :type vmin: float, optional
+
+    :param vmax: Maximum value for the heatmap color scale. Default is ``1``.
+    :type vmax: float, optional
+
+    :param cbar_label: Label for the colorbar. Default is ``"Correlation Index"``.
+    :type cbar_label: str, optional
+
+    :param triangular: Whether to show only the upper triangle of the correlation matrix. Default is ``True``.
+    :type triangular: bool, optional
+
+    :param kwargs: Additional keyword arguments to pass to ``seaborn.heatmap()``.
+    :type kwargs: dict, optional
+
+    :raises ValueError: 
+        - If ``annot`` is not a boolean.
+        - If ``cols`` is not a list.
+        - If ``save_plots`` is not a boolean.
+        - If ``triangular`` is not a boolean.
+        - If ``save_plots`` is True but no image paths are provided.
+
+    :returns: ``None``
+        This function does not return any value but generates and optionally saves a correlation heatmap.
+
+Triangular Correlation Matrix Example
+--------------------------------------
+
+
+The provided code filters the census [1]_ DataFrame ``df`` to include only numeric columns using 
+``select_dtypes(np.number)``. It then utilizes the ``flex_corr_matrix()`` function 
+to generate a right triangular correlation matrix, which only displays the 
+upper half of the correlation matrix. The heatmap is customized with specific 
+colormap settings, title, label sizes, axis label rotations, and other formatting 
+options. 
+
+.. note:: 
+    
+    This triangular matrix format is particularly useful for avoiding 
+    redundancy in correlation matrices, as it excludes the lower half, 
+    making it easier to focus on unique pairwise correlations. 
+    
+The function also includes a labeled color bar, helping users quickly interpret 
+the strength and direction of the correlations.
+
+.. code-block:: python
+
+    # Select only numeric data to pass into the function
+    df_num = df.select_dtypes(np.number)
+
+.. code-block:: python
+
+    from eda_toolkit import flex_corr_matrix
+
+    flex_corr_matrix(
+        df=df,
+        cols=df_num.columns.to_list(),
+        annot=True,
+        cmap="coolwarm",
+        figsize=(10, 8),
+        title="US Census Correlation Matrix",
+        xlabel_alignment="right",
+        label_fontsize=14,
+        tick_fontsize=12,
+        xlabel_rot=45,
+        ylabel_rot=0,
+        text_wrap=50,
+        vmin=-1,
+        vmax=1,
+        cbar_label="Correlation Index",
+        triangular=True,
+    )
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/us_census_correlation_matrix.svg
+   :alt: Scatter Plot Comparisons (Grouped)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+Full Correlation Matrix Example
+----------------------------------
+
+In this modified census [1]_ example, the key changes are the use of the viridis colormap 
+and the decision to plot the full correlation matrix instead of just the upper 
+triangle. By setting ``cmap="viridis"``, the heatmap will use a different color 
+scheme, which can provide better visual contrast or align with specific aesthetic 
+preferences. Additionally, by setting ``triangular=False``, the full correlation 
+matrix is displayed, allowing users to view all pairwise correlations, including 
+both upper and lower halves of the matrix. This approach is beneficial when you 
+want a comprehensive view of all correlations in the dataset.
+
+.. code-block:: python
+
+    from eda_toolkit import flex_corr_matrix
+
+    flex_corr_matrix(
+        df=df,
+        cols=df_num.columns.to_list(),
+        annot=True,
+        cmap="viridis",
+        figsize=(10, 8),
+        title="US Census Correlation Matrix",
+        xlabel_alignment="right",
+        label_fontsize=14,
+        tick_fontsize=12,
+        xlabel_rot=45,
+        ylabel_rot=0,
+        text_wrap=50,
+        vmin=-1,
+        vmax=1,
+        cbar_label="Correlation Index",
+        triangular=False,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/us_census_correlation_matrix_full.svg
+   :alt: Scatter Plot Comparisons (Grouped)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
 
 .. [#] Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. `https://doi.org/10.24432/C5GP7S <https://doi.org/10.24432/C5GP7S>`_.
 
