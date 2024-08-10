@@ -61,8 +61,6 @@ plots, and pass additional parameters to ``seaborn.heatmap()``.
 
 Convert all columns in the DataFrame to object type to prevent issues with numerical columns.
 
-This change looks good:
-
 .. code-block:: python
 
    df = df.astype(str).fillna("")
