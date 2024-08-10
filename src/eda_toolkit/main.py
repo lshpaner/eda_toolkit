@@ -525,7 +525,7 @@ def contingency_table(
         if df[col].dtype.name == "category":
             df[col] = df[col].astype(str)
 
-    # Convert all values in dataframe to object 
+    # Convert all values in dataframe to object
     # then fill NA values in the dataframe with empty spaces
     df = df.astype(str).fillna("")
 
@@ -1817,7 +1817,7 @@ def box_violin_plot(
 
 
 ################################################################################
-########################## multi-Purpose Scatter Plots #########################
+########################## Multi-Purpose Scatter Plots #########################
 ################################################################################
 
 
@@ -2186,6 +2186,218 @@ def scatter_fit_plot(
         if show_plot in ["grid", "both"]:
             plt.show()  # Display the plot
         plt.close(fig)
+
+
+################################################################################
+######################### Correlation Matrices #################################
+################################################################################
+
+
+def flex_corr_matrix(
+    df,
+    cols=None,
+    annot=True,
+    cmap="coolwarm",
+    save_plots=False,
+    image_path_png=None,
+    image_path_svg=None,
+    figsize=(20, 20),
+    title="Cervical Cancer Data: Correlation Matrix",
+    title_fontsize=16,
+    label_fontsize=10,
+    xlabel_rot=45,
+    ylabel_rot=0,
+    xlabel_alignment="right",
+    ylabel_alignment="center_baseline",
+    text_wrap=50,
+    vmin=-1,
+    vmax=1,
+    cbar_label="Correlation Index",
+    triangular=True,  # New parameter to control triangular vs full matrix
+    **kwargs,
+):
+    """
+    Creates a correlation heatmap with enhanced customization and options to
+    save the plots in specified formats.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame containing the data.
+
+    cols : list of str, optional
+        List of column names to include in the correlation matrix.
+        If None, all columns are included.
+
+    annot : bool, optional (default=True)
+        Whether to annotate the heatmap with correlation coefficients.
+
+    cmap : str, optional (default='coolwarm')
+        The colormap to use for the heatmap.
+
+    save_plots : bool, optional (default=False)
+        Controls whether to save the plots.
+
+    image_path_png : str, optional
+        Directory path to save PNG image of the heatmap.
+
+    image_path_svg : str, optional
+        Directory path to save SVG image of the heatmap.
+
+    figsize : tuple, optional (default=(20, 20))
+        Width and height of the figure for the heatmap.
+
+    title : str, optional
+        Title of the heatmap.
+
+    title_fontsize : int, optional (default=16)
+        Font size for the title.
+
+    label_fontsize : int, optional (default=10)
+        Font size for tick labels (variable names) and colorbar label.
+
+    xlabel_rot : int, optional (default=45)
+        Rotation angle for x-axis labels.
+
+    ylabel_rot : int, optional (default=0)
+        Rotation angle for y-axis labels.
+
+    xlabel_alignment : str, optional (default="right")
+        Horizontal alignment for x-axis labels (e.g., "center", "right").
+
+    ylabel_alignment : str, optional (default="center_baseline")
+        Vertical alignment for y-axis labels (e.g., "center", "top").
+
+    text_wrap : int, optional (default=50)
+        The maximum width of the title text before wrapping.
+
+    vmin : float, optional
+        Minimum value for the heatmap color scale.
+
+    vmax : float, optional
+        Maximum value for the heatmap color scale.
+
+    cbar_label : str, optional (default='Correlation Index')
+        Label for the colorbar.
+
+    triangular : bool, optional (default=True)
+        Whether to show only the upper triangle of the correlation matrix.
+
+    **kwargs : dict, optional
+        Additional keyword arguments to pass to seaborn.heatmap().
+
+    Returns:
+    --------
+    None
+        This function does not return any value but generates and optionally
+        saves a correlation heatmap.
+    """
+
+    # Validation: Ensure annot is a boolean
+    if not isinstance(annot, bool):
+        raise ValueError(
+            "Invalid value for 'annot'. Please enter either True or False."
+        )
+
+    # Validation: Ensure cols is a list if provided
+    if cols is not None and not isinstance(cols, list):
+        raise ValueError("The 'cols' parameter must be a list of column names.")
+
+    # Validation: Ensure save_plots is a boolean
+    if not isinstance(save_plots, bool):
+        raise ValueError("Invalid 'save_plots' value. Enter True or False.")
+
+    # Validation: Ensure triangular is a boolean
+    if not isinstance(triangular, bool):
+        raise ValueError(
+            "Invalid 'triangular' value. Please enter either True or False."
+        )
+
+    # Validate paths are specified if save_plots is True
+    if save_plots and not (image_path_png or image_path_svg):
+        raise ValueError(
+            "You must specify 'image_path_png' or 'image_path_svg' "
+            "when 'save_plots' is True."
+        )
+
+    # Filter DataFrame if cols are specified
+    if cols is not None:
+        df = df[cols]
+
+    # Calculate the correlation matrix
+    corr_matrix = df.corr()
+
+    # Generate a mask for the upper triangle, excluding the diagonal
+    mask = None
+    if triangular:
+        mask = np.triu(np.ones_like(corr_matrix, dtype=bool), k=1)
+
+    # Set up the matplotlib figure
+    plt.figure(figsize=figsize)
+
+    # Draw the heatmap with the mask and correct aspect ratio
+    heatmap = sns.heatmap(
+        corr_matrix,
+        mask=mask,
+        cmap=cmap,
+        annot=annot,
+        fmt=".2f",
+        square=True,
+        linewidths=0.5,
+        cbar_kws={"label": cbar_label},
+        vmin=vmin,
+        vmax=vmax,
+        **kwargs,
+    )
+
+    # Set the font size for the colorbar label
+    cbar = heatmap.collections[0].colorbar
+    cbar.ax.tick_params(labelsize=label_fontsize)
+    cbar.set_label(cbar_label, fontsize=label_fontsize)
+
+    # Set the title if provided
+    if title:
+        plt.title(
+            "\n".join(textwrap.wrap(title, width=text_wrap)),
+            fontsize=title_fontsize,
+        )
+
+    # Rotate x-axis labels, adjust alignment, and apply padding
+    plt.xticks(
+        rotation=xlabel_rot,
+        fontsize=label_fontsize,
+        ha=xlabel_alignment,
+        rotation_mode="anchor",
+    )
+
+    # Rotate y-axis labels and adjust alignment
+    plt.yticks(
+        rotation=ylabel_rot,
+        fontsize=label_fontsize,
+        va=ylabel_alignment,
+    )
+
+    # Adjust layout to prevent overlap
+    plt.tight_layout()
+
+    # Save the plot if save_plots is True
+    if save_plots:
+        safe_title = title.replace(" ", "_").replace(":", "").lower()
+
+        if image_path_png:
+            filename_png = f"{safe_title}.png"
+            plt.savefig(
+                os.path.join(image_path_png, filename_png),
+                bbox_inches="tight",
+            )
+        if image_path_svg:
+            filename_svg = f"{safe_title}.svg"
+            plt.savefig(
+                os.path.join(image_path_svg, filename_svg),
+                bbox_inches="tight",
+            )
+
+    plt.show()
 
 
 ################################################################################
