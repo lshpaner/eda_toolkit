@@ -2201,7 +2201,7 @@ def flex_corr_matrix(
     save_plots=False,
     image_path_png=None,
     image_path_svg=None,
-    figsize=(20, 20),
+    figsize=(10, 10),
     title="Cervical Cancer Data: Correlation Matrix",
     title_fontsize=16,
     label_fontsize=10,
