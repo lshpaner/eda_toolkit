@@ -21,11 +21,8 @@
 
 \
 
-
-The ``eda_toolkit`` library
-
 References
-==========
+===========
 
 1. Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science & Engineering*, 9(3), 90-95. `https://doi.org/10.1109/MCSE.2007.55 <https://doi.org/10.1109/MCSE.2007.55>`_.
 
