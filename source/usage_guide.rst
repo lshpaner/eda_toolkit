@@ -2346,7 +2346,7 @@ metrics across different age groups, with all plots saved for future reference o
 
    <div class="no-click">
 
-.. image:: ../assets/all_plots_comparisons_boxplot.svg
+.. image:: ../assets/all_plots_comparisons_boxplot.png
    :alt: Box Plot Comparisons
    :align: center
    :width: 900px
@@ -2392,7 +2392,7 @@ of boxplots while maintaining all other settings.
 
    <div class="no-click">
 
-.. image:: ../assets/all_plots_comparisons_violinplot.svg
+.. image:: ../assets/all_plots_comparisons_violinplot.png
    :alt: Violin Plot Comparisons
    :align: center
    :width: 900px
@@ -2415,7 +2415,7 @@ This adjustment flips the axes, providing a different perspective on the data di
 
 .. code-block:: python
 
-    from eda_toolkit impor box_violin_plot
+    from eda_toolkit import box_violin_plot
 
     metrics_boxplot_comp = ["age_group"]
 
@@ -2439,7 +2439,7 @@ This adjustment flips the axes, providing a different perspective on the data di
 
    <div class="no-click">
 
-.. image:: ../assets/all_plots_comparisons_violinplot_pivoted.svg
+.. image:: ../assets/all_plots_comparisons_violinplot_pivoted.png
    :alt: Violin Plot Comparisons (Pivoted)
    :align: center
    :width: 900px
@@ -2636,7 +2636,7 @@ interpretability of the scatter plots.
         xlabel_rot=0,
         show_plot="grid",
         rotate_plot=False,
-         grid_figsize=None,
+        grid_figsize=None,
         label_fontsize=14,
         tick_fontsize=12,
         add_best_fit_line=True,
