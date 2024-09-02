@@ -1249,60 +1249,110 @@ HTML file using the ``.render()`` method of the Styler object.
     </tr>
     </tbody></table></div>
 
-
 \
 
 Binning Numerical Columns
 ---------------------------
 
-If your DataFrame (e.g., the census data [1]_) 
-does not have age or any other numerical column of interest binned, you can 
-apply the following binning logic to categorize the data. Below, we use the age 
-column from the UCI Machine Learning Repository as an example:
+Binning numerical columns is a technique used to convert continuous numerical 
+data into discrete categories or "bins." This is especially useful for simplifying 
+analysis, creating categorical features from numerical data, or visualizing the 
+distribution of data within specific ranges. The process of binning involves 
+dividing a continuous range of values into a series of intervals, or "bins," and 
+then assigning each value to one of these intervals.
 
-.. code-block:: python
+.. note::
 
-    # Create age bins so that the ages can be categorized
-    bin_ages = [
-        0,
-        18,
-        30,
-        40,
-        50,
-        60,
-        70,
-        80,
-        90,
-        100,
-        float("inf"),
-    ]
+    The code snippets below create age bins and assign a corresponding age group 
+    label to each age in the DataFrame. The ``pd.cut`` function from pandas is used to 
+    categorize the ages and assign them to a new column, ``age_group``. Adjust the bins 
+    and labels as needed for your specific data.
 
-    # Create labels for the bins
-    label_ages = [
-        "< 18",
-        "18-29",
-        "30-39",
-        "40-49",
-        "50-59",
-        "60-69",
-        "70-79",
-        "80-89",
-        "90-99",
-        "100 +",
-    ]
 
-    # Categorize the ages and assign to a new variable
-    df["age_group"] = pd.cut(
-        df["age"],
-        bins=bin_ages,
-        labels=label_ages,
-        right=False,
-    )
+Below, we use the ``age`` column of the census data [1]_ from the UCI Machine Learning Repository as an example:
 
-`Note:` This code snippet creates age bins and assigns a corresponding age group 
-label to each age in the DataFrame. The ``pd.cut`` function from pandas is used to 
-categorize the ages and assign them to a new column, ``age_group``. Adjust the bins 
-and labels as needed for your specific data.
+1. **Bins Definition**:
+   The bins are defined by specifying the boundaries of each interval. For example, 
+   in the code snippet below, the ``bin_ages`` list specifies the boundaries for age groups:
+
+   .. code-block:: python
+
+        bin_ages = [
+            0,
+            18,
+            30,
+            40,
+            50,
+            60,
+            70,
+            80,
+            90,
+            100,
+            float("inf"),
+        ]
+
+
+   Each pair of consecutive elements in ``bin_ages`` defines a bin. For example:
+   
+   - The first bin is ``[0, 18)``,
+   - The second bin is ``[18, 30)``,
+   - and so on.  
+
+\
+
+2. **Labels for Bins**:
+   The `label_ages` list provides labels corresponding to each bin:
+
+   .. code-block:: python
+
+        label_ages = [
+            "< 18",
+            "18-29",
+            "30-39",
+            "40-49",
+            "50-59",
+            "60-69",
+            "70-79",
+            "80-89",
+            "90-99",
+            "100 +",
+        ]
+
+   These labels are used to categorize the numerical values into meaningful groups.
+
+3. **Applying the Binning**:
+   The `pd.cut <https://pandas.pydata.org/docs/reference/api/pandas.cut.html>`_ function 
+   from Pandas is used to apply the binning process. For each value in the ``age`` 
+   column of the DataFrame, it assigns a corresponding label based on which bin the 
+   value falls into. Here, ``right=False`` indicates that each bin includes the 
+   left endpoint but excludes the right endpoint. For example, if ``bin_ages = 
+   [0, 10, 20, 30]``, then a value of ``10`` will fall into the bin ``[10, 20)`` and 
+   be labeled accordingly.
+
+   .. code-block:: python
+
+       df["age_group"] = pd.cut(
+           df["age"],
+           bins=bin_ages,
+           labels=label_ages,
+           right=False,
+       )
+
+   **Mathematically**, for a given value `x` in the ``age`` column:
+
+   .. math::
+
+       \text{age_group} = 
+       \begin{cases} 
+        < 18 & \text{if } 0 \leq x < 18 \\
+        18-29 & \text{if } 18 \leq x < 30 \\
+        \vdots \\
+        100 + & \text{if } x \geq 100 
+       \end{cases}
+
+   The parameter `right=False` in `pd.cut` means that the bins are left-inclusive 
+   and right-exclusive, except for the last bin, which is always right-inclusive 
+   when the upper bound is infinity (`float("inf")`).
 
 
 KDE and Histogram Distribution Plots
