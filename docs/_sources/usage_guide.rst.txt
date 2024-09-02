@@ -1378,6 +1378,24 @@ In a normally distributed dataset:
 - 95% within :math:`\mu \pm 2\sigma`
 - 99.7% within :math:`\mu \pm 3\sigma`
 
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/normal_distribution.png
+   :alt: KDE Distributions - KDE (+) Histograms (Density)
+   :align: center
+   :width: 950px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
 Histograms and KDE
 ^^^^^^^^^^^^^^^^^^^^^^
 
