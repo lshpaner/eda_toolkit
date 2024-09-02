@@ -1419,6 +1419,42 @@ when the upper bound is infinity (<cite>float(“inf”)</cite>).</p>
 </section>
 <section id="kde-and-histogram-distribution-plots">
 <h1>KDE and Histogram Distribution Plots<a class="headerlink" href="#kde-and-histogram-distribution-plots" title="Link to this heading"></a></h1>
+<p>The Gaussian (normal) distribution is a key assumption in many statistical methods. It is mathematically represented by the probability density function (PDF):</p>
+<div class="math notranslate nohighlight">
+\[f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mu\)</span> is the mean</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma^2\)</span> is the variance</p></li>
+</ul>
+<p>In a normally distributed dataset:</p>
+<ul class="simple">
+<li><p>68% of data falls within <span class="math notranslate nohighlight">\(\mu \pm \sigma\)</span></p></li>
+<li><p>95% within <span class="math notranslate nohighlight">\(\mu \pm 2\sigma\)</span></p></li>
+<li><p>99.7% within <span class="math notranslate nohighlight">\(\mu \pm 3\sigma\)</span></p></li>
+</ul>
+<p><strong>Histograms</strong>:</p>
+<ul class="simple">
+<li><p>Visualize data distribution by binning values and counting frequencies.</p></li>
+<li><p>If data is Gaussian, the histogram approximates a bell curve.</p></li>
+</ul>
+<p><strong>Kernel Density Estimation (KDE)</strong>:</p>
+<ul class="simple">
+<li><p>A non-parametric way to estimate the PDF by smoothing individual data points with a kernel function.</p></li>
+<li><p>The KDE for a dataset <span class="math notranslate nohighlight">\(X = \{x_1, x_2, \ldots, x_n\}\)</span> is given by:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\hat{f}(x) = \frac{1}{nh} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(K\)</span> is the kernel function (often Gaussian)</p></li>
+<li><p><span class="math notranslate nohighlight">\(h\)</span> is the bandwidth (smoothing parameter)</p></li>
+</ul>
+<ul class="simple">
+<li><p><strong>Histograms</strong> offer a discrete, binned view of the data.</p></li>
+<li><p><strong>KDE</strong> provides a smooth, continuous estimate of the underlying distribution.</p></li>
+<li><p>Together, they effectively illustrate how well the data aligns with the Gaussian assumption, highlighting any deviations from normality.</p></li>
+</ul>
 <p><strong>Generate KDE or histogram distribution plots for specified columns in a DataFrame.</strong></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> function is a versatile tool designed for generating
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for
