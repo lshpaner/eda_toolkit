@@ -416,11 +416,11 @@ Standardized Dates
 .. function:: parse_date_with_rule(date_str)
 
     This function takes a date string and standardizes it to the ``ISO 8601`` format
-    (``YYYY-MM-DD``). It assumes dates are provided in either day/month/year or
-    month/day/year format. The function first checks if the first part of the
+    (``YYYY-MM-DD``). It assumes dates are provided in either `day/month/year` or
+    `month/day/year` format. The function first checks if the first part of the
     date string (day or month) is greater than 12, which unambiguously indicates
-    a day/month/year format. If the first part is 12 or less, the function
-    attempts to parse the date as month/day/year, falling back to day/month/year
+    a `day/month/year` format. If the first part is 12 or less, the function
+    attempts to parse the date as `month/day/year`, falling back to `day/month/year`
     if the former raises a ``ValueError`` due to an impossible date (e.g., month
     being greater than 12).
 
