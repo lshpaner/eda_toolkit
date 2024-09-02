@@ -531,11 +531,11 @@ We then use the <code class="docutils literal notranslate"><span class="pre">str
 <dt class="sig sig-object py" id="parse_date_with_rule">
 <span class="sig-name descname"><span class="pre">parse_date_with_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse_date_with_rule" title="Link to this definition"></a></dt>
 <dd><p>This function takes a date string and standardizes it to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format
-(<code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>). It assumes dates are provided in either day/month/year or
-month/day/year format. The function first checks if the first part of the
+(<code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>). It assumes dates are provided in either <cite>day/month/year</cite> or
+<cite>month/day/year</cite> format. The function first checks if the first part of the
 date string (day or month) is greater than 12, which unambiguously indicates
-a day/month/year format. If the first part is 12 or less, the function
-attempts to parse the date as month/day/year, falling back to day/month/year
+a <cite>day/month/year</cite> format. If the first part is 12 or less, the function
+attempts to parse the date as <cite>month/day/year</cite>, falling back to <cite>day/month/year</cite>
 if the former raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> due to an impossible date (e.g., month
 being greater than 12).</p>
 <dl class="field-list simple">
