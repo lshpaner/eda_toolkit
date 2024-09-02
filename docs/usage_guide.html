@@ -1690,13 +1690,23 @@ These labels will be used to annotate the legends of the plots.</p>
 <p>Next, the <code class="docutils literal notranslate"><span class="pre">title</span></code> list is defined, providing titles for each plot corresponding
 to the columns in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>. The titles are set to <code class="docutils literal notranslate"><span class="pre">[&quot;Sex&quot;,</span> <span class="pre">&quot;Income&quot;]</span></code>,
 which will be displayed on top of each respective plot.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> parameter should be a list of lists, where each
+inner list corresponds to the ground truth labels for the respective item in
+the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list. Each element in the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list represents a
+column in your DataFrame that you wish to analyze, and the corresponding
+inner list in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> should contain the labels that will be
+used in the legend of your plots.</p>
+</div>
+<p>For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the func_col to use in the loop in order of usage</span>
 <span class="n">func_col</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;income&quot;</span><span class="p">]</span>
 
 <span class="c1"># Define the legend_labels to use in the loop</span>
 <span class="n">legend_labels_list</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">[</span><span class="s2">&quot;Male&quot;</span><span class="p">,</span> <span class="s2">&quot;Female&quot;</span><span class="p">],</span>
-    <span class="p">[</span><span class="s2">&quot;&lt;=50K&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;50K&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;Male&quot;</span><span class="p">,</span> <span class="s2">&quot;Female&quot;</span><span class="p">],</span>  <span class="c1"># Corresponds to &quot;sex&quot;</span>
+    <span class="p">[</span><span class="s2">&quot;&lt;=50K&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;50K&quot;</span><span class="p">],</span>   <span class="c1"># Corresponds to &quot;income&quot;</span>
 <span class="p">]</span>
 
 <span class="c1"># Define titles for the plots</span>
@@ -1706,6 +1716,27 @@ which will be displayed on top of each respective plot.</p>
 <span class="p">]</span>
 </pre></div>
 </div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Ensure that the number of elements in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">title</span></code> are the same. Each item in <code class="docutils literal notranslate"><span class="pre">func_col</span></code> must have a corresponding
+list of labels in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> and a title in <code class="docutils literal notranslate"><span class="pre">title</span></code>. This
+consistency is essential for the function to correctly generate the plots
+with the appropriate labels and titles.</p>
+</div>
+<p>In this example:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">func_col</span></code> contains two elements: <code class="docutils literal notranslate"><span class="pre">&quot;sex&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code>. Each corresponds to a specific column in your DataFrame.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> is a nested list containing two inner lists:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The first inner list, <code class="docutils literal notranslate"><span class="pre">[&quot;Male&quot;,</span> <span class="pre">&quot;Female&quot;]</span></code>, corresponds to the <code class="docutils literal notranslate"><span class="pre">&quot;sex&quot;</span></code> column in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>.</p></li>
+<li><p>The second inner list, <code class="docutils literal notranslate"><span class="pre">[&quot;&lt;=50K&quot;,</span> <span class="pre">&quot;&gt;50K&quot;]</span></code>, corresponds to the <code class="docutils literal notranslate"><span class="pre">&quot;income&quot;</span></code> column in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">title</span></code> contains two elements: <code class="docutils literal notranslate"><span class="pre">&quot;Sex&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;Income&quot;</span></code>, which will be used as the titles for the respective plots.</p></li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you assign the function to a variable, the dictionary returned when

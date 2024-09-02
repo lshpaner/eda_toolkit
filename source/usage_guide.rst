@@ -1742,6 +1742,17 @@ Next, the ``title`` list is defined, providing titles for each plot correspondin
 to the columns in ``func_col``. The titles are set to ``["Sex", "Income"]``, 
 which will be displayed on top of each respective plot.
 
+.. note::
+
+    The ``legend_labels_list`` parameter should be a list of lists, where each 
+    inner list corresponds to the ground truth labels for the respective item in 
+    the ``func_col`` list. Each element in the ``func_col`` list represents a 
+    column in your DataFrame that you wish to analyze, and the corresponding 
+    inner list in ``legend_labels_list`` should contain the labels that will be 
+    used in the legend of your plots.
+
+For example:
+
 .. code-block:: python
 
     # Define the func_col to use in the loop in order of usage
@@ -1749,8 +1760,8 @@ which will be displayed on top of each respective plot.
 
     # Define the legend_labels to use in the loop
     legend_labels_list = [
-        ["Male", "Female"],
-        ["<=50K", ">50K"],
+        ["Male", "Female"],  # Corresponds to "sex"
+        ["<=50K", ">50K"],   # Corresponds to "income"
     ]
 
     # Define titles for the plots
@@ -1758,6 +1769,25 @@ which will be displayed on top of each respective plot.
         "Sex",
         "Income",
     ]
+
+.. important::
+    
+    Ensure that the number of elements in ``func_col``, ``legend_labels_list``, 
+    and ``title`` are the same. Each item in ``func_col`` must have a corresponding 
+    list of labels in ``legend_labels_list`` and a title in ``title``. This 
+    consistency is essential for the function to correctly generate the plots 
+    with the appropriate labels and titles.
+
+
+In this example:
+
+- ``func_col`` contains two elements: ``"sex"`` and ``"income"``. Each corresponds to a specific column in your DataFrame.  
+- ``legend_labels_list`` is a nested list containing two inner lists: 
+
+    - The first inner list, ``["Male", "Female"]``, corresponds to the ``"sex"`` column in ``func_col``.
+    - The second inner list, ``["<=50K", ">50K"]``, corresponds to the ``"income"`` column in ``func_col``.
+
+- ``title`` contains two elements: ``"Sex"`` and ``"Income"``, which will be used as the titles for the respective plots.
 
 .. note::
 
