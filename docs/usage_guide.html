@@ -23,6 +23,7 @@
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
         <script src="_static/copybutton.js?v=a0ccc04e"></script>
         <script src="_static/custom.js?v=fecc5f50"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -1323,12 +1324,25 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
 </section>
 <section id="binning-numerical-columns">
 <h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Link to this heading"></a></h2>
-<p>If your DataFrame (e.g., the census data <a class="footnote-reference brackets" href="#id20" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)
-does not have age or any other numerical column of interest binned, you can
-apply the following binning logic to categorize the data. Below, we use the age
-column from the UCI Machine Learning Repository as an example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create age bins so that the ages can be categorized</span>
-<span class="n">bin_ages</span> <span class="o">=</span> <span class="p">[</span>
+<p>Binning numerical columns is a technique used to convert continuous numerical
+data into discrete categories or “bins.” This is especially useful for simplifying
+analysis, creating categorical features from numerical data, or visualizing the
+distribution of data within specific ranges. The process of binning involves
+dividing a continuous range of values into a series of intervals, or “bins,” and
+then assigning each value to one of these intervals.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The code snippets below create age bins and assign a corresponding age group
+label to each age in the DataFrame. The <code class="docutils literal notranslate"><span class="pre">pd.cut</span></code> function from pandas is used to
+categorize the ages and assign them to a new column, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>. Adjust the bins
+and labels as needed for your specific data.</p>
+</div>
+<p>Below, we use the <code class="docutils literal notranslate"><span class="pre">age</span></code> column of the census data <a class="footnote-reference brackets" href="#id20" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> from the UCI Machine Learning Repository as an example:</p>
+<ol class="arabic">
+<li><p><strong>Bins Definition</strong>:
+The bins are defined by specifying the boundaries of each interval. For example,
+in the code snippet below, the <code class="docutils literal notranslate"><span class="pre">bin_ages</span></code> list specifies the boundaries for age groups:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bin_ages</span> <span class="o">=</span> <span class="p">[</span>
     <span class="mi">0</span><span class="p">,</span>
     <span class="mi">18</span><span class="p">,</span>
     <span class="mi">30</span><span class="p">,</span>
@@ -1341,9 +1355,21 @@ column from the UCI Machine Learning Repository as an example:</p>
     <span class="mi">100</span><span class="p">,</span>
     <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
 <span class="p">]</span>
-
-<span class="c1"># Create labels for the bins</span>
-<span class="n">label_ages</span> <span class="o">=</span> <span class="p">[</span>
+</pre></div>
+</div>
+<p>Each pair of consecutive elements in <code class="docutils literal notranslate"><span class="pre">bin_ages</span></code> defines a bin. For example:</p>
+<ul class="simple">
+<li><p>The first bin is <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">18)</span></code>,</p></li>
+<li><p>The second bin is <code class="docutils literal notranslate"><span class="pre">[18,</span> <span class="pre">30)</span></code>,</p></li>
+<li><p>and so on.</p></li>
+</ul>
+</li>
+</ol>
+<p></p>
+<ol class="arabic" start="2">
+<li><p><strong>Labels for Bins</strong>:
+The <cite>label_ages</cite> list provides labels corresponding to each bin:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">label_ages</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;&lt; 18&quot;</span><span class="p">,</span>
     <span class="s2">&quot;18-29&quot;</span><span class="p">,</span>
     <span class="s2">&quot;30-39&quot;</span><span class="p">,</span>
@@ -1355,9 +1381,19 @@ column from the UCI Machine Learning Repository as an example:</p>
     <span class="s2">&quot;90-99&quot;</span><span class="p">,</span>
     <span class="s2">&quot;100 +&quot;</span><span class="p">,</span>
 <span class="p">]</span>
-
-<span class="c1"># Categorize the ages and assign to a new variable</span>
-<span class="n">df</span><span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
+</pre></div>
+</div>
+<p>These labels are used to categorize the numerical values into meaningful groups.</p>
+</li>
+<li><p><strong>Applying the Binning</strong>:
+The <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.cut.html">pd.cut</a> function
+from Pandas is used to apply the binning process. For each value in the <code class="docutils literal notranslate"><span class="pre">age</span></code>
+column of the DataFrame, it assigns a corresponding label based on which bin the
+value falls into. Here, <code class="docutils literal notranslate"><span class="pre">right=False</span></code> indicates that each bin includes the
+left endpoint but excludes the right endpoint. For example, if <code class="docutils literal notranslate"><span class="pre">bin_ages</span> <span class="pre">=</span>
+<span class="pre">[0,</span> <span class="pre">10,</span> <span class="pre">20,</span> <span class="pre">30]</span></code>, then a value of <code class="docutils literal notranslate"><span class="pre">10</span></code> will fall into the bin <code class="docutils literal notranslate"><span class="pre">[10,</span> <span class="pre">20)</span></code> and
+be labeled accordingly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span>
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">],</span>
     <span class="n">bins</span><span class="o">=</span><span class="n">bin_ages</span><span class="p">,</span>
     <span class="n">labels</span><span class="o">=</span><span class="n">label_ages</span><span class="p">,</span>
@@ -1365,10 +1401,20 @@ column from the UCI Machine Learning Repository as an example:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p><cite>Note:</cite> This code snippet creates age bins and assigns a corresponding age group
-label to each age in the DataFrame. The <code class="docutils literal notranslate"><span class="pre">pd.cut</span></code> function from pandas is used to
-categorize the ages and assign them to a new column, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>. Adjust the bins
-and labels as needed for your specific data.</p>
+<p><strong>Mathematically</strong>, for a given value <cite>x</cite> in the <code class="docutils literal notranslate"><span class="pre">age</span></code> column:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\text{age_group} =
+\begin{cases}
+ &lt; 18 &amp; \text{if } 0 \leq x &lt; 18 \\
+ 18-29 &amp; \text{if } 18 \leq x &lt; 30 \\
+ \vdots \\
+ 100 + &amp; \text{if } x \geq 100
+\end{cases}\end{split}\]</div>
+<p>The parameter <cite>right=False</cite> in <cite>pd.cut</cite> means that the bins are left-inclusive
+and right-exclusive, except for the last bin, which is always right-inclusive
+when the upper bound is infinity (<cite>float(“inf”)</cite>).</p>
+</li>
+</ol>
 </section>
 </section>
 <section id="kde-and-histogram-distribution-plots">
