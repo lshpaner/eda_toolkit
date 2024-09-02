@@ -24,6 +24,10 @@
 Contributors/Maintainers
 =========================
 
+.. raw:: html
+
+   <div class="no-click">
+
 .. image:: https://www.leonshpaner.com/author/leon-shpaner/avatar_hu48de79c369d5f7d4ff8056a297b2c4c5_1681850_270x270_fill_q90_lanczos_center.jpg
    :align: left
    :width: 150
@@ -34,6 +38,10 @@ Contributors/Maintainers
 .. raw:: html
 
    <br><br><br>
+
+.. raw:: html
+
+   <div class="no-click">
 
 .. image:: https://oscargildata.com/portfolio_content/images/Oscar_LinkedIn_Pic.jpeg
    :align: left
