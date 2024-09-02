@@ -1358,6 +1358,56 @@ Below, we use the ``age`` column of the census data [1]_ from the UCI Machine Le
 KDE and Histogram Distribution Plots
 =======================================
 
+Gaussian Assumption for Normality
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Gaussian (normal) distribution is a key assumption in many statistical methods. It is mathematically represented by the probability density function (PDF):
+
+.. math::
+
+    f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+
+where:
+
+- :math:`\mu` is the mean
+- :math:`\sigma^2` is the variance
+
+In a normally distributed dataset:
+
+- 68% of data falls within :math:`\mu \pm \sigma`
+- 95% within :math:`\mu \pm 2\sigma`
+- 99.7% within :math:`\mu \pm 3\sigma`
+
+Histograms and KDE
+^^^^^^^^^^^^^^^^^^^^^^
+
+**Histograms**:
+
+- Visualize data distribution by binning values and counting frequencies.
+- If data is Gaussian, the histogram approximates a bell curve.
+
+**Kernel Density Estimation (KDE)**:
+
+- A non-parametric way to estimate the PDF by smoothing individual data points with a kernel function.
+- The KDE for a dataset :math:`X = \{x_1, x_2, \ldots, x_n\}` is given by:
+
+.. math::
+
+    \hat{f}(x) = \frac{1}{nh} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)
+
+where:
+
+- :math:`K` is the kernel function (often Gaussian)
+- :math:`h` is the bandwidth (smoothing parameter)
+
+Combined Use of Histograms and KDE
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Histograms** offer a discrete, binned view of the data.
+- **KDE** provides a smooth, continuous estimate of the underlying distribution.
+- Together, they effectively illustrate how well the data aligns with the Gaussian assumption, highlighting any deviations from normality.
+
+
 **Generate KDE or histogram distribution plots for specified columns in a DataFrame.**
 
 The ``kde_distributions`` function is a versatile tool designed for generating 
