@@ -1359,7 +1359,7 @@ KDE and Histogram Distribution Plots
 =======================================
 
 Gaussian Assumption for Normality
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------
 
 The Gaussian (normal) distribution is a key assumption in many statistical methods. It is mathematically represented by the probability density function (PDF):
 
@@ -1418,13 +1418,14 @@ where:
 - :math:`K` is the kernel function (often Gaussian)
 - :math:`h` is the bandwidth (smoothing parameter)
 
-Combined Use of Histograms and KDE
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Combined Use of Histograms and KDE**
 
 - **Histograms** offer a discrete, binned view of the data.
 - **KDE** provides a smooth, continuous estimate of the underlying distribution.
 - Together, they effectively illustrate how well the data aligns with the Gaussian assumption, highlighting any deviations from normality.
 
+KDE Distribution Function
+-----------------------------
 
 **Generate KDE or histogram distribution plots for specified columns in a DataFrame.**
 
@@ -1542,7 +1543,7 @@ statistical graphics.
 
 
 KDE and Histograms Example
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the below example, the ``kde_distributions`` function is used to generate 
 histograms for several variables of interest: ``"age"``, ``"education-num"``, and
@@ -1629,7 +1630,7 @@ respectively, ensuring that all text within the plots is legible and well-format
 
 
 Histogram Example (Density)
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this example, the kde_distributions function is used to generate histograms for 
 the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with 
@@ -1692,7 +1693,7 @@ histogram representation without the KDE overlay.
 
 
 Histogram Example (Count)
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this example, the kde_distributions function is modified to generate histograms 
 with a few key changes. The ``hist_color`` is set to `"orange"`, changing the color of the 

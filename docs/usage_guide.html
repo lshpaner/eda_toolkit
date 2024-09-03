@@ -98,10 +98,17 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#kde_distributions"><code class="docutils literal notranslate"><span class="pre">kde_distributions()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#kde-and-histograms-example">KDE and Histograms Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#histogram-example-density">Histogram Example (Density)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#histogram-example-count">Histogram Example (Count)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gaussian-assumption-for-normality">Gaussian Assumption for Normality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#histograms-and-kde">Histograms and KDE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#kde-distribution-function">KDE Distribution Function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kde_distributions"><code class="docutils literal notranslate"><span class="pre">kde_distributions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kde-and-histograms-example">KDE and Histograms Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#histogram-example-density">Histogram Example (Density)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#histogram-example-count">Histogram Example (Count)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
@@ -1423,6 +1430,8 @@ when the upper bound is infinity (<cite>float(“inf”)</cite>).</p>
 </section>
 <section id="kde-and-histogram-distribution-plots">
 <h1>KDE and Histogram Distribution Plots<a class="headerlink" href="#kde-and-histogram-distribution-plots" title="Link to this heading"></a></h1>
+<section id="gaussian-assumption-for-normality">
+<h2>Gaussian Assumption for Normality<a class="headerlink" href="#gaussian-assumption-for-normality" title="Link to this heading"></a></h2>
 <p>The Gaussian (normal) distribution is a key assumption in many statistical methods. It is mathematically represented by the probability density function (PDF):</p>
 <div class="math notranslate nohighlight">
 \[f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]</div>
@@ -1438,7 +1447,9 @@ when the upper bound is infinity (<cite>float(“inf”)</cite>).</p>
 <li><p>99.7% within <span class="math notranslate nohighlight">\(\mu \pm 3\sigma\)</span></p></li>
 </ul>
 <div class="no-click"><a class="reference internal image-reference" href="_images/normal_distribution.png"><img alt="KDE Distributions - KDE (+) Histograms (Density)" class="align-center" src="_images/normal_distribution.png" style="width: 950px;" /></a>
-</div><div style="height: 50px;"></div><p><strong>Histograms</strong>:</p>
+</div><div style="height: 50px;"></div><section id="histograms-and-kde">
+<h3>Histograms and KDE<a class="headerlink" href="#histograms-and-kde" title="Link to this heading"></a></h3>
+<p><strong>Histograms</strong>:</p>
 <ul class="simple">
 <li><p>Visualize data distribution by binning values and counting frequencies.</p></li>
 <li><p>If data is Gaussian, the histogram approximates a bell curve.</p></li>
@@ -1455,11 +1466,16 @@ when the upper bound is infinity (<cite>float(“inf”)</cite>).</p>
 <li><p><span class="math notranslate nohighlight">\(K\)</span> is the kernel function (often Gaussian)</p></li>
 <li><p><span class="math notranslate nohighlight">\(h\)</span> is the bandwidth (smoothing parameter)</p></li>
 </ul>
+<p><strong>Combined Use of Histograms and KDE</strong></p>
 <ul class="simple">
 <li><p><strong>Histograms</strong> offer a discrete, binned view of the data.</p></li>
 <li><p><strong>KDE</strong> provides a smooth, continuous estimate of the underlying distribution.</p></li>
 <li><p>Together, they effectively illustrate how well the data aligns with the Gaussian assumption, highlighting any deviations from normality.</p></li>
 </ul>
+</section>
+</section>
+<section id="kde-distribution-function">
+<h2>KDE Distribution Function<a class="headerlink" href="#kde-distribution-function" title="Link to this heading"></a></h2>
 <p><strong>Generate KDE or histogram distribution plots for specified columns in a DataFrame.</strong></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> function is a versatile tool designed for generating
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for
@@ -1546,7 +1562,7 @@ The variable name will be appended to this filename.</p></li>
 
 <p></p>
 <br><section id="kde-and-histograms-example">
-<h2>KDE and Histograms Example<a class="headerlink" href="#kde-and-histograms-example" title="Link to this heading"></a></h2>
+<h3>KDE and Histograms Example<a class="headerlink" href="#kde-and-histograms-example" title="Link to this heading"></a></h3>
 <p>In the below example, the <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> function is used to generate
 histograms for several variables of interest: <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;education-num&quot;</span></code>, and
 <code class="docutils literal notranslate"><span class="pre">&quot;hours-per-week&quot;</span></code>. These variables represent different demographic and
@@ -1609,7 +1625,7 @@ respectively, ensuring that all text within the plots is legible and well-format
 <div class="no-click"><a class="reference internal image-reference" href="_images/kde_density_distributions.svg"><img alt="KDE Distributions - KDE (+) Histograms (Density)" class="align-center" src="_images/kde_density_distributions.svg" style="width: 950px;" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="histogram-example-density">
-<h2>Histogram Example (Density)<a class="headerlink" href="#histogram-example-density" title="Link to this heading"></a></h2>
+<h3>Histogram Example (Density)<a class="headerlink" href="#histogram-example-density" title="Link to this heading"></a></h3>
 <p>In this example, the kde_distributions function is used to generate histograms for
 the variables <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;education-num&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;hours-per-week&quot;</span></code> but with
 <code class="docutils literal notranslate"><span class="pre">kde=False</span></code>, meaning no KDE plots are included—only histograms are displayed.
@@ -1651,7 +1667,7 @@ histogram representation without the KDE overlay.</p>
 <div class="no-click"><a class="reference internal image-reference" href="_images/hist_density_distributions.svg"><img alt="KDE Distributions - Histograms (Density)" class="align-center" src="_images/hist_density_distributions.svg" style="width: 900px;" /></a>
 </div><div style="height: 50px;"></div></section>
 <section id="histogram-example-count">
-<h2>Histogram Example (Count)<a class="headerlink" href="#histogram-example-count" title="Link to this heading"></a></h2>
+<h3>Histogram Example (Count)<a class="headerlink" href="#histogram-example-count" title="Link to this heading"></a></h3>
 <p>In this example, the kde_distributions function is modified to generate histograms
 with a few key changes. The <code class="docutils literal notranslate"><span class="pre">hist_color</span></code> is set to <cite>“orange”</cite>, changing the color of the
 histogram bars. The <code class="docutils literal notranslate"><span class="pre">`y-axis`</span></code> label is updated to “Count” (<code class="docutils literal notranslate"><span class="pre">y_axis_label=&quot;Count&quot;</span></code>),
@@ -1693,6 +1709,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/count_hist_distributions.svg"><img alt="KDE Distributions - Histograms (Count)" class="align-center" src="_images/count_hist_distributions.svg" style="width: 900px;" /></a>
 </div><div style="height: 50px;"></div></section>
+</section>
 </section>
 <section id="stacked-crosstab-plots">
 <h1>Stacked Crosstab Plots<a class="headerlink" href="#stacked-crosstab-plots" title="Link to this heading"></a></h1>
