@@ -26,20 +26,20 @@ Table of Contents
 ===================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
    :caption: Getting Started
 
    getting_started
 
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
    :caption: Usage Guide
 
    usage_guide
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
    :caption: About EDA Toolkit
 
    acknowledgements
