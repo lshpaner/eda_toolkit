@@ -2604,9 +2604,65 @@ This adjustment flips the axes, providing a different perspective on the data di
 Scatter Plots and Best Fit Lines
 ==================================
 
-**Create and save scatter plots or a grid of scatter plots for given x_vars
-and y_vars, with an optional best fit line and customizable point color,
-size, and markers.**
+Pearson Correlation Coefficient
+--------------------------------
+
+The Pearson correlation coefficient, often denoted as :math:`r`, is a measure of 
+the linear relationship between two variables. It quantifies the degree to which 
+a change in one variable is associated with a change in another variable. The 
+Pearson correlation ranges from :math:`-1` to :math:`1`, where:
+
+- :math:`r = 1` indicates a perfect positive linear relationship.
+- :math:`r = -1` indicates a perfect negative linear relationship.
+- :math:`r = 0` indicates no linear relationship.
+
+The Pearson correlation coefficient between two variables :math:`X` and :math:`Y` is defined as:
+
+.. math::
+
+    r_{XY} = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y}
+
+where:
+
+- :math:`\text{Cov}(X, Y)` is the covariance of :math:`X` and :math:`Y`.
+- :math:`\sigma_X` is the standard deviation of :math:`X`.
+- :math:`\sigma_Y` is the standard deviation of :math:`Y`.
+
+Covariance measures how much two variables change together. It is defined as:
+
+.. math::
+
+    \text{Cov}(X, Y) = \frac{1}{n} \sum_{i=1}^{n} (X_i - \mu_X)(Y_i - \mu_Y)
+
+where:
+
+- :math:`n` is the number of data points.
+- :math:`X_i` and :math:`Y_i` are the individual data points.
+- :math:`\mu_X` and :math:`\mu_Y` are the means of :math:`X` and :math:`Y`.
+
+The standard deviation measures the dispersion or spread of a set of values. For 
+a variable :math:`X`, the standard deviation :math:`\sigma_X` is:
+
+.. math::
+
+    \sigma_X = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (X_i - \mu_X)^2}
+
+Substituting the covariance and standard deviation into the Pearson correlation formula:
+
+.. math::
+
+    r_{XY} = \frac{\sum_{i=1}^{n} (X_i - \mu_X)(Y_i - \mu_Y)}{\sqrt{\sum_{i=1}^{n} (X_i - \mu_X)^2} \sqrt{\sum_{i=1}^{n} (Y_i - \mu_Y)^2}}
+
+This formula normalizes the covariance by the product of the standard deviations of the two variables, resulting in a dimensionless coefficient that indicates the strength and direction of the linear relationship between :math:`X` and :math:`Y`.
+
+- :math:`r > 0`: Positive correlation. As :math:`X` increases, :math:`Y` tends to increase.
+- :math:`r < 0`: Negative correlation. As :math:`X` increases, :math:`Y` tends to decrease.
+- :math:`r = 0`: No linear correlation. There is no consistent linear relationship between :math:`X` and :math:`Y`.
+
+The closer the value of :math:`r` is to :math:`\pm 1`, the stronger the linear relationship between the two variables.
+
+Scatter Fit Plot
+------------------
 
 **Create and Save Scatter Plots or a Grid of Scatter Plots**
 
@@ -2752,7 +2808,7 @@ For users interested in understanding the strength of the relationship between v
 
 
 Regression-Centric Scatter Plots Example
------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this US census data [1]_ example, the ``scatter_fit_plot`` function is 
 configured to display the Pearson correlation coefficient and a best fit line 
@@ -2811,7 +2867,7 @@ interpretability of the scatter plots.
    <div style="height: 50px;"></div>
 
 Scatter Plots Grouped by Category Example
--------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this example, the ``scatter_fit_plot`` function is used to generate a grid of 
 scatter plots that examine the relationships between ``age`` and ``hours-per-week`` 
@@ -3010,7 +3066,6 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
 
 Triangular Correlation Matrix Example
 --------------------------------------
-
 
 The provided code filters the census [1]_ DataFrame ``df`` to include only numeric columns using 
 ``select_dtypes(np.number)``. It then utilizes the ``flex_corr_matrix()`` function 
