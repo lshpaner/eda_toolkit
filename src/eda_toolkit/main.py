@@ -1257,9 +1257,7 @@ def stacked_crosstab_plot(
     # Generate plots if output is "both" or "plots_only"
     if output in ["both", "plots_only"]:
         if file_prefix is None:
-            raise ValueError(
-                "file_prefix must be provided when output " "includes plots"
-            )
+            file_prefix = f"{col}_{'_'.join(func_col)}"
 
         # Set default values for x, y, and p if not provided
         if x is None:
