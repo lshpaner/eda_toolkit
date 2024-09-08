@@ -21,11 +21,14 @@ Before you install `eda_toolkit`, ensure your system meets the following require
 
 Additionally, `eda_toolkit` depends on the following packages, which will be automatically installed when you install `eda_toolkit`:
 
+- `jinja2`: version `3.1.4` or higher
+- `matplotlib`: version `3.5.3` or higher
+- `nbformat`: version `4.2.0` or higher
 - `numpy`: version `1.21.6` or higher
 - `pandas`: version `1.3.5` or higher
-- `matplotlib`: version `3.5.3` or higher
+- `plotly`: version `5.18.0` or higher
+- `scikit-learn`: version `1.0.2` or higher
 - `seaborn`: version `0.12.2` or higher
-- `jinja2`: version `3.1.4` or higher
 - `xlsxwriter`: version `3.2.0` or higher
 
 
@@ -78,7 +81,7 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
   month        = aug,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {0.0.7},
+  version      = {0.0.8a},
   doi          = {10.5281/zenodo.13162633},
   url          = {https://doi.org/10.5281/zenodo.13162633}
 }
@@ -92,7 +95,11 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
 
 2. Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. [https://doi.org/10.24432/C5GP7S](https://doi.org/10.24432/C5GP7S).
 
-3. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. [https://doi.org/10.21105/joss.03021](https://doi.org/10.21105/joss.03021).
+3. Pace, R. Kelley, & Barry, R. (1997). *Sparse Spatial Autoregressions*. *Statistics & Probability Letters*, 33(3), 291-297. [https://doi.org/10.1016/S0167-7152(96)00140-X](https://doi.org/10.1016/S0167-7152(96)00140-X).
+
+4. Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., & Duchesnay, E. (2011). *Scikit-learn: Machine Learning in Python*. *Journal of Machine Learning Research*, 12, 2825-2830. [http://jmlr.org/papers/v12/pedregosa11a.html](http://jmlr.org/papers/v12/pedregosa11a.html).
+
+5. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. [https://doi.org/10.21105/joss.03021](https://doi.org/10.21105/joss.03021).
 
 
 

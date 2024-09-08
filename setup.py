@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="eda_toolkit",
-    version="0.0.7",
+    version="0.0.8a",
     author="Leonid Shpaner, Oscar Gil",
     author_email="lshpaner@ucla.edu",
     description="A Python library for EDA, including visualizations, directory management, data preprocessing, reporting, and more.",
@@ -26,12 +26,12 @@ setup(
     python_requires=">=3.7.4",  # Minimum version of Python required
     install_requires=[
         "jinja2>=3.1.4",  # Minimum version of jinja2 required
-        "nbformat>=4.2.0"  # Minimum version of nbformat required
+        "matplotlib>=3.5.3",  # Minimum version of matplotlib required
+        "nbformat>=4.2.0",  # Minimum version of nbformat required
         "numpy>=1.21.6",  # Minimum version of numpy required
         "pandas>=1.3.5",  # Minimum version of pandas required
-        "plotly>=5.18.0"  # Minimum version of plotly required
-        "matplotlib>=3.5.3",  # Minimum version of matplotlib required
-        "scikit-learn>=1.0.2"  # Minimum version of scikit-learn required
+        "plotly>=5.18.0",  # Minimum version of plotly required
+        "scikit-learn>=1.0.2",  # Minimum version of scikit-learn required
         "seaborn>=0.12.2",  # Minimum version of seaborn required
         "xlsxwriter>=3.2.0",  # Minimum version of xlsxwriter required
     ],
