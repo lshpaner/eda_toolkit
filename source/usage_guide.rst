@@ -3754,7 +3754,7 @@ Interactive Plot
 
 .. raw:: html
 
-    <iframe src="../assets/3d_pdp.html" style="border:none; width:100%; height:650px; margin-left: -2; padding: 0; overflow: hidden;" scrolling="no"></iframe>
+    <iframe src="../docs/3d_pdp.html" style="border:none; width:100%; height:650px; margin-left: -2; padding: 0; overflow: hidden;" scrolling="no"></iframe>
 
     <div style="height: 50px;"></div>
 
