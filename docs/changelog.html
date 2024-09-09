@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.7 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.8c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=bbaf98b3"></script>
+        <script src="_static/documentation_options.js?v=eb59ce81"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,6 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage_guide.html#box-and-violin-plots">Box and Violin Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_guide.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_guide.html#correlation-matrices">Correlation Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_guide.html#partial-dependence-plots">Partial Dependence Plots</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul class="current">
@@ -69,6 +70,9 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8c">Version 0.0.8c</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8b">Version 0.0.8b</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8a">Version 0.0.8a</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-7">Version 0.0.7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-6">Version 0.0.6</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-5">Version 0.0.5</a></li>
@@ -112,6 +116,140 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-8c">
+<h2>Version 0.0.8c<a class="headerlink" href="#version-0-0-8c" title="Link to this heading"></a></h2>
+<p>Version 0.0.8c is a follow-up release to version 0.0.8b. This update includes minor enhancements and refinements based on feedback and additional testing. It serves as an incremental step towards improving the stability and functionality of the toolkit.</p>
+<p><strong>Key Updates in 0.0.8c:</strong></p>
+<ul class="simple">
+<li><p><strong>Bug Fixes:</strong> Addressed minor issues identified in version <code class="docutils literal notranslate"><span class="pre">0.0.8b</span></code> to ensure smoother performance and better user experience.</p></li>
+<li><p><strong>Additional Testing:</strong> Incorporated further tests to validate the changes introduced in previous versions and to prepare for future stable releases.</p></li>
+<li><p><strong>Refinements:</strong> Made small enhancements to existing features based on user feedback and internal testing results.</p></li>
+</ul>
+<p><strong>Summary of Changes</strong></p>
+<ol class="arabic simple">
+<li><p>New Features &amp; Enhancements</p></li>
+</ol>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> Function:</p>
+<ul>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">show_modebar</span></code> Parameter: Introduced a new boolean parameter, <code class="docutils literal notranslate"><span class="pre">show_modebar</span></code>, to allow users to toggle the visibility of the mode bar in Plotly interactive plots.</p></li>
+<li><p>Custom Margins and Layout Adjustments:</p>
+<ul>
+<li><p>Added parameters for <code class="docutils literal notranslate"><span class="pre">left_margin</span></code>, <code class="docutils literal notranslate"><span class="pre">right_margin</span></code>, and <code class="docutils literal notranslate"><span class="pre">top_margin</span></code> to provide users with more control over the plot layout in Plotly.</p></li>
+<li><p>Adjusted default values and added options for better customization of the Plotly color bar (<code class="docutils literal notranslate"><span class="pre">cbar_x</span></code>, <code class="docutils literal notranslate"><span class="pre">cbar_thickness</span></code>) and title positioning (<code class="docutils literal notranslate"><span class="pre">title_x</span></code>, <code class="docutils literal notranslate"><span class="pre">title_y</span></code>).</p></li>
+</ul>
+</li>
+<li><p>Plotly Configuration:</p>
+<ul>
+<li><p>Enhanced the configuration options to allow users to enable or disable zoom functionality (<code class="docutils literal notranslate"><span class="pre">enable_zoom</span></code>) in the interactive Plotly plots.</p></li>
+<li><p>Updated the code to reflect these new parameters, allowing for greater flexibility in the appearance and interaction with the Plotly plots.</p></li>
+</ul>
+</li>
+<li><p>Error Handling:</p>
+<ul>
+<li><p>Added input validation for <code class="docutils literal notranslate"><span class="pre">html_file_path</span></code> and <code class="docutils literal notranslate"><span class="pre">html_file_name</span></code> to ensure these are provided when necessary based on the selected <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code> Function:</p>
+<ul>
+<li><p>Introduced <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> Parameter:</p>
+<ul>
+<li><p>Added a new <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> parameter to allow users to specify a prefix for filenames when saving grid plots. This change streamlines the naming process for saved plots and improves file organization.</p></li>
+</ul>
+</li>
+<li><p>Enhanced Plot Type Flexibility:</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter now includes an option to generate both grid and individual plots (<code class="docutils literal notranslate"><span class="pre">both</span></code>). This feature allows users to create a combination of both layout styles in one function call.</p></li>
+<li><p>Updated input validation and logic to handle this new option effectively.</p></li>
+</ul>
+</li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> Parameter:</p>
+<ul>
+<li><p>Introduced a new parameter, <code class="docutils literal notranslate"><span class="pre">save_plots</span></code>, to control the saving of plots. Users can specify whether to save all plots, only individual plots, only grid plots, or none.</p></li>
+</ul>
+</li>
+<li><p>Custom Margins and Layout Adjustments:</p>
+<ul>
+<li><p>Included the <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> parameter in the validation process to ensure paths are provided when needed for saving the plots.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Documentation Updates</p></li>
+</ol>
+<ul class="simple">
+<li><p>Docstrings:</p>
+<ul>
+<li><p>Updated docstrings for both functions to reflect the new parameters and enhancements, providing clearer and more comprehensive guidance for users.</p></li>
+<li><p>Detailed the use of new parameters such as <code class="docutils literal notranslate"><span class="pre">show_modebar</span></code>, <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">save_plots</span></code>, and others, ensuring that the function documentation is up-to-date with the latest changes.</p></li>
+</ul>
+</li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p>Refactoring &amp; Code Cleanup</p></li>
+</ol>
+<ul class="simple">
+<li><p>Code Structure:</p>
+<ul>
+<li><p>Improved the code structure to maintain clarity and readability, particularly around the new functionality.</p></li>
+<li><p>Consolidated the layout configuration settings for the Plotly plots into a more flexible and user-friendly format, making it easier for users to customize their plots.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="version-0-0-8b">
+<h2>Version 0.0.8b<a class="headerlink" href="#version-0-0-8b" title="Link to this heading"></a></h2>
+<p>Version 0.0.8b is an exact replica of version <code class="docutils literal notranslate"><span class="pre">0.0.8a</span></code>. The purpose of this
+beta release was to test whether releasing it as the latest version would update
+its status on PyPI to reflect it as the latest release. However, it continues to
+be identified as a pre-release on PyPI.</p>
+</section>
+<section id="version-0-0-8a">
+<h2>Version 0.0.8a<a class="headerlink" href="#version-0-0-8a" title="Link to this heading"></a></h2>
+<p>Version 0.0.8a introduces significant enhancements and new features to improve
+the usability and functionality of the EDA Toolkit.</p>
+<p><strong>New Features:</strong></p>
+<ol class="arabic simple">
+<li><p>Optional <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> Function</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function has been updated to make the <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> argument optional. If the user does not provide a <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code>, the function will now automatically generate a default prefix based on the <code class="docutils literal notranslate"><span class="pre">col</span></code> and <code class="docutils literal notranslate"><span class="pre">func_col</span></code> parameters. This change streamlines the process of generating plots by reducing the number of required arguments.</p></li>
+<li><p><strong>Key Improvement:</strong></p>
+<ul>
+<li><p>Users can now omit the <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> argument, and the function will still produce appropriately named plot files, enhancing ease of use.</p></li>
+<li><p>Backward compatibility is maintained, allowing users who prefer to specify a custom <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> to continue doing so without any issues.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Introduction of 3D and 2D Partial Dependence Plot Functions</strong></p>
+<ul class="simple">
+<li><p>Two new functions, <code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code>, have been added to the toolkit, expanding the visualization capabilities for machine learning models.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code>: Generates 3D partial dependence plots for two features, supporting both static visualizations (using Matplotlib) and interactive plots (using Plotly). The function offers extensive customization options, including labels, color maps, and saving formats.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code>: Creates 2D partial dependence plots for specified features with flexible layout options (grid or individual plots) and customization of figure size, font size, and saving formats.</p></li>
+</ul>
+</li>
+<li><p><strong>Key Features:</strong></p>
+<ul>
+<li><p><strong>Compatibility:</strong> Both functions are compatible with various versions of scikit-learn, ensuring broad usability.</p></li>
+<li><p><strong>Customization:</strong> Extensive options for customizing visual elements, including figure size, font size, and color maps.</p></li>
+<li><p><strong>Interactive 3D Plots:</strong> The <code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> function supports interactive visualizations, providing an enhanced user experience for exploring model predictions in 3D space.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Impact:</strong></p>
+<ul class="simple">
+<li><p>These updates improve the user experience by reducing the complexity of function calls and introducing powerful new tools for model interpretation.</p></li>
+<li><p>The optional <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> enhancement simplifies plot generation while maintaining the flexibility to define custom filenames.</p></li>
+<li><p>The new partial dependence plot functions offer robust visualization options, making it easier to analyze and interpret the influence of specific features in machine learning models.</p></li>
+</ul>
+</section>
 <section id="version-0-0-7">
 <h2>Version 0.0.7<a class="headerlink" href="#version-0-0-7" title="Link to this heading"></a></h2>
 <p><strong>Added Function for Customizable Correlation Matrix Visualization</strong></p>
