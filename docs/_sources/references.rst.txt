@@ -30,4 +30,4 @@ References
 
 3. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. `https://doi.org/10.21105/joss.03021 <https://doi.org/10.21105/joss.03021>`_.
 
-
+4. Pace, R. K., & Barry, R. (1997). *Sparse Spatial Autoregressions*. *Statistics & Probability Letters*, 33(3), 291-297. `https://doi.org/10.1016/S0167-7152(96)00140-X <https://doi.org/10.1016/S0167-7152(96)00140-X>`_.

@@ -3341,7 +3341,7 @@ The ``plot_2d_pdp`` function generates 2D partial dependence plots for individua
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Consider a scenario where you have a machine learning model predicting median 
-house values in California. Suppose you want to understand how non-location 
+house values in California [4]_. Suppose you want to understand how non-location 
 features like the average number of occupants per household (``AveOccup``) and the 
 age of the house (``HouseAge``) jointly influence house values. A 2D partial 
 dependence plot allows you to visualize this relationship in two ways: either as 
@@ -3437,7 +3437,7 @@ the California housing dataset:
 
    <div class="no-click">
 
-.. image:: ../assets/2d_pdp_grid.png
+.. image:: ../assets/2d_pdp_grid.svg
    :alt: Scatter Plot Comparisons (Grouped)
    :align: center
    :width: 900px
@@ -3602,7 +3602,7 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Consider a scenario where you have a machine learning model predicting median 
-house values in California. Suppose you want to understand how non-location 
+house values in California [4]_. Suppose you want to understand how non-location 
 features like the average number of occupants per household (``AveOccup``) and the 
 age of the house (``HouseAge``) jointly influence house values. A 3D partial 
 dependence plot allows you to visualize this relationship in a more comprehensive 
@@ -3792,3 +3792,5 @@ By adjusting these parameters, you can customize the behavior and appearance of 
 .. [2] Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. `https://doi.org/10.21105/joss.03021 <https://doi.org/10.21105/joss.03021>`_.
 
 .. [3] Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science & Engineering*, 9(3), 90-95. `https://doi.org/10.1109/MCSE.2007.55 <https://doi.org/10.1109/MCSE.2007.55>`_.
+
+.. [4] Pace, R. K., & Barry, R. (1997). *Sparse Spatial Autoregressions*. *Statistics & Probability Letters*, 33(3), 291-297. `https://doi.org/10.1016/S0167-7152(96)00140-X <https://doi.org/10.1016/S0167-7152(96)00140-X>`_.
