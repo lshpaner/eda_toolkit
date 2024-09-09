@@ -3213,10 +3213,12 @@ in :math:`\mathbf{X}_S` on the model's predictions, while averaging out the
 influence of the features in :math:`\mathbf{X}_C`. This is mathematically defined as:
 
 .. math::
+   \begin{align*}
+   \text{PD}_{\mathbf{X}_S}(x_S) &= \mathbb{E}_{\mathbf{X}_C} \left[ f(x_S, \mathbf{X}_C) \right] \\
+   &= \int f(x_S, x_C) \, p(x_C) \, dx_C \\
+   &= \int \left( \int f(x_S, x_C) \, p(x_C \mid x_S) \, dx_C \right) p(x_S) \, dx_S
+   \end{align*}
 
-   \text{PD}_{\mathbf{X}_S}(x_S) = \mathbb{E}_{\mathbf{X}_C} \left[ f(x_S, \mathbf{X}_C) \right] 
-   = \int f(x_S, x_C) \, p(x_C) \, dx_C \\
-   = \int \left( \int f(x_S, x_C) \, p(x_C \mid x_S) \, dx_C \right) p(x_S) \, dx_S
 
 where:
 
@@ -3341,7 +3343,7 @@ The ``plot_2d_pdp`` function generates 2D partial dependence plots for individua
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Consider a scenario where you have a machine learning model predicting median 
-house values in California [4]_. Suppose you want to understand how non-location 
+house values in California. [4]_ Suppose you want to understand how non-location 
 features like the average number of occupants per household (``AveOccup``) and the 
 age of the house (``HouseAge``) jointly influence house values. A 2D partial 
 dependence plot allows you to visualize this relationship in two ways: either as 
@@ -3602,7 +3604,7 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Consider a scenario where you have a machine learning model predicting median 
-house values in California [4]_. Suppose you want to understand how non-location 
+house values in California.[4]_ Suppose you want to understand how non-location 
 features like the average number of occupants per household (``AveOccup``) and the 
 age of the house (``HouseAge``) jointly influence house values. A 3D partial 
 dependence plot allows you to visualize this relationship in a more comprehensive 
