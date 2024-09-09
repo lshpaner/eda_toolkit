@@ -24,6 +24,129 @@
 Changelog
 =========
 
+Version 0.0.8c
+------------------------
+
+Version 0.0.8c is a follow-up release to version 0.0.8b. This update includes minor enhancements and refinements based on feedback and additional testing. It serves as an incremental step towards improving the stability and functionality of the toolkit.
+
+**Key Updates in 0.0.8c:**
+
+- **Bug Fixes:** Addressed minor issues identified in version ``0.0.8b`` to ensure smoother performance and better user experience.
+- **Additional Testing:** Incorporated further tests to validate the changes introduced in previous versions and to prepare for future stable releases.
+- **Refinements:** Made small enhancements to existing features based on user feedback and internal testing results.
+
+**Summary of Changes**
+
+1. New Features & Enhancements
+
+- ``plot_3d_pdp`` Function:
+  
+  - Added ``show_modebar`` Parameter: Introduced a new boolean parameter, ``show_modebar``, to allow users to toggle the visibility of the mode bar in Plotly interactive plots.
+  
+  - Custom Margins and Layout Adjustments:
+    
+    - Added parameters for ``left_margin``, ``right_margin``, and ``top_margin`` to provide users with more control over the plot layout in Plotly.
+    
+    - Adjusted default values and added options for better customization of the Plotly color bar (``cbar_x``, ``cbar_thickness``) and title positioning (``title_x``, ``title_y``).
+  
+  - Plotly Configuration:
+    
+    - Enhanced the configuration options to allow users to enable or disable zoom functionality (``enable_zoom``) in the interactive Plotly plots.
+    
+    - Updated the code to reflect these new parameters, allowing for greater flexibility in the appearance and interaction with the Plotly plots.
+  
+  - Error Handling:
+    
+    - Added input validation for ``html_file_path`` and ``html_file_name`` to ensure these are provided when necessary based on the selected ``plot_type``.
+
+- ``plot_2d_pdp`` Function:
+  
+  - Introduced ``file_prefix`` Parameter:
+    
+    - Added a new ``file_prefix`` parameter to allow users to specify a prefix for filenames when saving grid plots. This change streamlines the naming process for saved plots and improves file organization.
+  
+  - Enhanced Plot Type Flexibility:
+    
+    - The ``plot_type`` parameter now includes an option to generate both grid and individual plots (``both``). This feature allows users to create a combination of both layout styles in one function call.
+    
+    - Updated input validation and logic to handle this new option effectively.
+  
+  - Added ``save_plots`` Parameter:
+    
+    - Introduced a new parameter, ``save_plots``, to control the saving of plots. Users can specify whether to save all plots, only individual plots, only grid plots, or none.
+  
+  - Custom Margins and Layout Adjustments:
+    
+    - Included the ``save_plots`` parameter in the validation process to ensure paths are provided when needed for saving the plots.
+
+2. Documentation Updates
+
+- Docstrings:
+  
+  - Updated docstrings for both functions to reflect the new parameters and enhancements, providing clearer and more comprehensive guidance for users.
+  
+  - Detailed the use of new parameters such as ``show_modebar``, ``file_prefix``, ``save_plots``, and others, ensuring that the function documentation is up-to-date with the latest changes.
+
+3. Refactoring & Code Cleanup
+
+- Code Structure:
+  
+  - Improved the code structure to maintain clarity and readability, particularly around the new functionality.
+  
+  - Consolidated the layout configuration settings for the Plotly plots into a more flexible and user-friendly format, making it easier for users to customize their plots.
+
+
+Version 0.0.8b
+--------------------------------
+
+Version 0.0.8b is an exact replica of version ``0.0.8a``. The purpose of this 
+beta release was to test whether releasing it as the latest version would update 
+its status on PyPI to reflect it as the latest release. However, it continues to 
+be identified as a pre-release on PyPI.
+
+
+Version 0.0.8a
+--------------------------------
+
+Version 0.0.8a introduces significant enhancements and new features to improve 
+the usability and functionality of the EDA Toolkit.
+
+**New Features:**
+
+1. Optional ``file_prefix`` in ``stacked_crosstab_plot`` Function
+   
+   - The ``stacked_crosstab_plot`` function has been updated to make the ``file_prefix`` argument optional. If the user does not provide a ``file_prefix``, the function will now automatically generate a default prefix based on the ``col`` and ``func_col`` parameters. This change streamlines the process of generating plots by reducing the number of required arguments.
+   
+   - **Key Improvement:**
+     
+     - Users can now omit the ``file_prefix`` argument, and the function will still produce appropriately named plot files, enhancing ease of use.
+     
+     - Backward compatibility is maintained, allowing users who prefer to specify a custom ``file_prefix`` to continue doing so without any issues.
+
+2. **Introduction of 3D and 2D Partial Dependence Plot Functions**
+   
+   - Two new functions, ``plot_3d_pdp`` and ``plot_2d_pdp``, have been added to the toolkit, expanding the visualization capabilities for machine learning models.
+     
+     - ``plot_3d_pdp``: Generates 3D partial dependence plots for two features, supporting both static visualizations (using Matplotlib) and interactive plots (using Plotly). The function offers extensive customization options, including labels, color maps, and saving formats.
+     
+     - ``plot_2d_pdp``: Creates 2D partial dependence plots for specified features with flexible layout options (grid or individual plots) and customization of figure size, font size, and saving formats.
+   
+   - **Key Features:**
+     
+     - **Compatibility:** Both functions are compatible with various versions of scikit-learn, ensuring broad usability.
+     
+     - **Customization:** Extensive options for customizing visual elements, including figure size, font size, and color maps.
+     
+     - **Interactive 3D Plots:** The ``plot_3d_pdp`` function supports interactive visualizations, providing an enhanced user experience for exploring model predictions in 3D space.
+
+**Impact:**
+
+- These updates improve the user experience by reducing the complexity of function calls and introducing powerful new tools for model interpretation.
+- The optional ``file_prefix`` enhancement simplifies plot generation while maintaining the flexibility to define custom filenames.
+- The new partial dependence plot functions offer robust visualization options, making it easier to analyze and interpret the influence of specific features in machine learning models.
+
+
+
 Version 0.0.7
 ---------------------------
 
