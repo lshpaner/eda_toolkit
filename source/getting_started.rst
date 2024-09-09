@@ -30,7 +30,7 @@
 Welcome to the EDA Toolkit Python Library Documentation!
 ========================================================
 .. note::
-   This documentation is for ``eda_toolkit`` version ``0.0.7``.
+   This documentation is for ``eda_toolkit`` version ``0.0.8c``.
 
 
 The ``eda_toolkit`` is a comprehensive library designed to streamline and 
@@ -100,11 +100,14 @@ Before you install ``eda_toolkit``, ensure your system meets the following requi
 
 Additionally, ``eda_toolkit`` depends on the following packages, which will be automatically installed when you install ``eda_toolkit``:
 
+- ``jinja2``: version ``3.1.4`` or higher
+- ``matplotlib``: version ``3.5.3`` or higher
+- ``nbformat``: version ``4.2.0`` or higher
 - ``numpy``: version ``1.21.6`` or higher
 - ``pandas``: version ``1.3.5`` or higher
-- ``matplotlib``: version ``3.5.3`` or higher
+- ``plotly``: version ``5.18.0`` or higher
+- ``scikit-learn``: version ``1.0.2`` or higher
 - ``seaborn``: version ``0.12.2`` or higher
-- ``jinja2``: version ``3.1.4`` or higher
 - ``xlsxwriter``: version ``3.2.0`` or higher
 
 .. _installation:
