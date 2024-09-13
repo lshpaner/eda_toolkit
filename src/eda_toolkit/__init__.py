@@ -7,7 +7,7 @@ Version: 0.0.8d
 
 __version__ = "0.0.8d"
 __author__ = "Leonid Shpaner, Oscar Gil"
-__email__ = "lshpaner@ucla.edu; info@oscargildata.com"
+__email__ = "lshpaner@ucla.edu; gil.oscar@gmail.com"
 
 
 from .main import *
