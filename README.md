@@ -1,14 +1,26 @@
+[![PyPI](https://img.shields.io/pypi/v/eda_toolkit.svg)](https://pypi.org/project/eda_toolkit/)
+[![Downloads](https://pepy.tech/badge/eda_toolkit)](https://pepy.tech/project/eda_toolkit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lshpaner/eda_toolkit/blob/main/LICENSE.md)
+[![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.13162633.svg)](https://doi.org/10.5281/zenodo.13162633)
+
+<br>
+
+<img src="https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/eda_toolkit_logo.svg" width="300" style="border: none; outline: none; box-shadow: none;" oncontextmenu="return false;">
+
+<br> 
+
 # EDA Toolkit
 
-Welcome to EDA Toolkit, a comprehensive collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository provides tools for directory management, data preprocessing, reporting, visualization, and more, helping you efficiently manage various aspects of data manipulation and analysis.
+Welcome to EDA Toolkit, a collection of utility functions designed to streamline your exploratory data analysis (EDA) tasks. This repository offers tools for directory management, some data preprocessing, reporting, visualizations, and more, helping you efficiently handle various aspects of data manipulation and analysis.
 
 ---
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Overview](#overview)
-3. [Functions](#functions)  
+1. [Documentation](#documentation)
+2. [Installation](#installation)
+3. [Overview](#overview)
+4. [Functions](#functions)  
     a. [Path Directories](#path-directories)  
     b. [Generate Random IDs](#generate-random-ids)  
     c. [Trailing Periods](#trailing-periods)  
@@ -24,29 +36,32 @@ Welcome to EDA Toolkit, a comprehensive collection of utility functions designed
     m. [Box and Violin Plots](#box-and-violin-plots)  
     n. [Multi-Purpose Scatter Plots](#multi-purpose-scatter-plots)  
     
-4. [Usage Examples](#usage-examples)  
+5. [Usage Examples](#usage-examples)  
     - [KDE Distribution Plots](#kde-distribution-plots)  
     - [Stacked Bar Plots with Crosstab Options](#stacked-bar-plots-with-crosstab-options)  
     - [Box and Violin Plots](#box-and-violin-plots)  
     - [Multi-Purpose Scatter Plots](#multi-purpose-scatter-plots)  
-5. [Overall Usage](#usage)    
+6. [Overall Usage](#usage)    
     - [Use the functions as needed](#use-the-functions-as-needed-in-your-data-analysis-workflow)  
     - [Import the module and functions](#import-the-module-and-functions)  
-6. [Contributors/Maintainers](#contributorsmaintainers)
-7. [Contributing](#contributing)
-8. [License](#license)
-9. [References](#references)
+7. [Contributors/Maintainers](#contributorsmaintainers)
+8. [Contributing](#contributing)
+9. [License](#license)
+10. [Citing EDA Toolkit](#citing-eda_toolkit)
+11. [References](#references)
 
 ---
+
+## Documentation
+
+https://lshpaner.github.io/eda_toolkit  
 
 ## Installation
 
 Clone the repository and install the necessary dependencies:
 
 ```bash
-git clone https://github.com/lshpaner/eda_toolkit.git
-cd eda_toolkit
-pip install -r requirements.txt
+pip install eda_toolkit
 ```
 
 ## Overview
@@ -55,6 +70,9 @@ EDA Toolkit is designed to be a comprehensive toolkit for data analysts and data
 
 
 ## Functions
+
+Use the Functions as Needed in Your Data Analysis Workflow
+
 ### Path Directories
 
 - `ensure_directory(path)`: Ensures that the specified directory exists; if not, it creates it.
@@ -96,87 +114,9 @@ The following examples utilize the Census Income Data (1994) from the UCI Machin
 
 ### KDE Distribution Plots
 
-```python
-from eda_toolkit import kde_distributions
-
-kde_distributions(
-    df,
-    vars_of_interest=None,
-    grid_figsize=(10, 8),
-    single_figsize=(6, 4),
-    kde=True,
-    hist_color="#0000FF",
-    kde_color="#FF0000",
-    hist_edgecolor="#000000",
-    hue=None,
-    fill=True,
-    fill_alpha=1,
-    n_rows=1,
-    n_cols=1,
-    w_pad=1.0,
-    h_pad=1.0,
-    text_wrap=50,
-    image_path_png=None,
-    image_path_svg=None,
-    image_filename=None,
-    bbox_inches=None,
-    single_var_image_path_png=None,
-    single_var_image_path_svg=None,
-    single_var_image_filename=None,
-    y_axis_label="Density",
-    plot_type="both",
-    log_scale_vars=None,
-    bins="auto",
-    binwidth=None,
-    label_fontsize=10,
-    tick_fontsize=10,
-    disable_sci_notation=False,
-    stat="density",
-    xlim=None,
-    ylim=None,
-)
-
-```
-
-Generates KDE and/or histogram distribution plots for specified columns in a DataFrame.
-
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/kde_density_distributions.svg)
 
 ### Stacked Bar Plots with Crosstab Options
-
-```python
-from eda_toolkit import stacked_crosstab_plot
-
-stacked_crosstab_plot(
-    df,
-    col,
-    func_col,
-    legend_labels_list,
-    title,
-    kind="bar",
-    width=0.9,
-    rot=0,
-    custom_order=None,
-    image_path_png=None,
-    image_path_svg=None,
-    save_formats=None,
-    color=None,
-    output="both",
-    return_dict=False,
-    x=None,
-    y=None,
-    p=None,
-    file_prefix=None,
-    logscale=False,
-    plot_type="both",
-    show_legend=True,
-    label_fontsize=12,
-    tick_fontsize=10,
-    remove_stacks=False,
-    xlim=None,
-    ylim=None,
-)
-```
 
 Generates stacked or regular bar plots and crosstabs for specified columns.
 
@@ -217,126 +157,22 @@ Generates stacked or regular bar plots and crosstabs for specified columns.
 | **Total**   | 37155  | 11687 | 48842 | 76.07    | 23.93  |
 
 
-
 ### Box and Violin Plots
-```python
-from eda_toolkit import box_violin_plot
-
-box_violin_plot(
-    df,
-    metrics_list,
-    metrics_boxplot_comp,
-    n_rows,
-    n_cols,
-    image_path_png=None,
-    image_path_svg=None,
-    save_plots=None,
-    show_legend=True,
-    plot_type="boxplot",
-    xlabel_rot=0,
-    show_plot="grid",
-    rotate_plot=False,
-    individual_figsize=(6, 4),
-    grid_figsize=None,
-    label_fontsize=12,
-    tick_fontsize=10,
-    xlim=None,
-    ylim=None,
-)
-```
 
 Creates and saves individual boxplots or violin plots, or an entire grid of plots 
 for given metrics and comparisons, with optional axis limits.
 
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_boxplot.svg)
 
-```python
-from eda_toolkit import box_violin_plot
-
-box_violin_plot(
-    df,
-    metrics_list,
-    metrics_boxplot_comp,
-    n_rows,
-    n_cols,
-    image_path_png=None,
-    image_path_svg=None,
-    save_plots=None,
-    show_legend=True,
-    plot_type="violinplot",
-    xlabel_rot=0,
-    show_plot="grid",
-    rotate_plot=False,
-    individual_figsize=(6, 4),
-    grid_figsize=None,
-    label_fontsize=12,
-    tick_fontsize=10,
-    xlim=None,
-    ylim=None,
-)
-```
-
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_violinplot.svg)
 
+
 ### Multi-Purpose Scatter Plots
-
-```python
-from eda_toolkit import scatter_fit_plot
-
-scatter_fit_plot(
-    df=df,
-    x_vars=["age", "education-num"],
-    y_vars=["hours-per-week"],
-    n_rows=3,
-    n_cols=4,
-    image_path_png=image_path_png,
-    image_path_svg=image_path_svg,
-    save_plots="grid",
-    show_legend=True,
-    xlabel_rot=0,
-    show_plot="grid",
-    rotate_plot=False,
-     grid_figsize=None,
-    label_fontsize=14,
-    tick_fontsize=12,
-    add_best_fit_line=True,
-    scatter_color="#808080",
-    show_correlation=True,
-)
-```
 
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid.png)
 
 Creates and saves scatter plots or a grid of scatter plots for given `x_vars` and `y_vars`, with an optional best fit line and customizable point `color`, `size`, and `markers`.
 
-```python
-from eda_toolkit import scatter_fit_plot
-
-hue_dict = {"<=50K": "brown", ">50K": "green"}
-
-scatter_fit_plot(
-    df=df,
-    x_vars=["age", "education-num"],
-    y_vars=["hours-per-week"],
-    n_rows=3,
-    n_cols=4,
-    image_path_png=image_path_png,
-    image_path_svg=image_path_svg,
-    save_plots="grid",
-    show_legend=True,
-    xlabel_rot=0,
-    show_plot="grid",
-    rotate_plot=False,
-    grid_figsize=None,
-    label_fontsize=14,
-    tick_fontsize=12,
-    add_best_fit_line=False,
-    scatter_color="#808080",
-    hue="income",
-    hue_palette=hue_dict,
-    show_correlation=False,
-)
-```
 ![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/scatter_plots_grid_grouped.png)
 
 
@@ -378,41 +214,14 @@ from eda_toolkit import (
 )
 ```
 
-### Use the Functions as Needed in Your Data Analysis Workflow
-
-```python
-# Example usage of ensure_directory function
-directory_path = "path/to/save/directory"
-ensure_directory(directory_path)
-
-# Example usage of add_ids function
-df = pd.DataFrame({"Name": ["Alice", "Bob", "Charlie"]})
-df_with_ids = add_ids(df)
-
-# Example usage of kde_distributions function
-kde_distributions(
-    df,
-    vars_of_interest=["Age", "Income"],
-    grid_figsize=(10, 8),
-    single_figsize=(6, 4),
-    kde=True,
-    hist_color="#0000FF",
-    kde_color="#FF0000",
-    hist_edgecolor="#000000",
-    fill=True,
-    fill_alpha=0.6,
-    n_rows=2,
-    n_cols=1,
-    y_axis_label="Density",
-)
-```
-
 ## Contributors/Maintainers
 
 <img align="left" width="150" height="150" src="https://www.leonshpaner.com/author/leon-shpaner/avatar_hu48de79c369d5f7d4ff8056a297b2c4c5_1681850_270x270_fill_q90_lanczos_center.jpg">
 
 [Leonid Shpaner](https://github.com/lshpaner) is a Data Scientist at UCLA Health. With over a decade experience in analytics and teaching, he has collaborated on a wide variety of projects within financial services, education, personal development, and healthcare. He serves as a course facilitator for Data Analytics and Applied Statistics at Cornell University and is a lecturer of Statistics in Python for the University of San Diego's M.S. Applied Artificial Intelligence program.  
 
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -423,15 +232,36 @@ kde_distributions(
 
 <br>
 <br>
+<br>
+<br>
 
 ## Contributing
 We welcome contributions! If you have suggestions or improvements, please submit an issue or pull request. Follow the standard GitHub flow for contributing.
-
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/readme/LICENSE.md) file for details.
 
 For more detailed documentation, refer to the docstrings within each function.
+
+## Citing `eda_toolkit`
+
+If you use `eda_toolkit` in your research or projects, please consider citing it.
+
+```bibtex
+
+@software{shpaner_2024_13162633,
+  author       = {Shpaner, Leonid and
+                  Gil, Oscar},
+  title        = {EDA Toolkit},
+  month        = aug,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {0.0.8d},
+  doi          = {10.5281/zenodo.13162633},
+  url          = {https://doi.org/10.5281/zenodo.13162633}
+}
+
+```
 
 ## References
 
@@ -439,7 +269,11 @@ For more detailed documentation, refer to the docstrings within each function.
 
 2. Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. [https://doi.org/10.24432/C5GP7S](https://doi.org/10.24432/C5GP7S).
 
-3. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. [https://doi.org/10.21105/joss.03021](https://doi.org/10.21105/joss.03021).
+3. Pace, R. Kelley, & Barry, R. (1997). *Sparse Spatial Autoregressions*. *Statistics & Probability Letters*, 33(3), 291-297. [https://doi.org/10.1016/S0167-7152(96)00140-X](https://doi.org/10.1016/S0167-7152(96)00140-X).
+
+4. Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., & Duchesnay, E. (2011). *Scikit-learn: Machine Learning in Python*. *Journal of Machine Learning Research*, 12, 2825-2830. [http://jmlr.org/papers/v12/pedregosa11a.html](http://jmlr.org/papers/v12/pedregosa11a.html).
+
+5. Waskom, M. (2021). *Seaborn: Statistical Data Visualization*. *Journal of Open Source Software*, 6(60), 3021. [https://doi.org/10.21105/joss.03021](https://doi.org/10.21105/joss.03021).
 
 
 

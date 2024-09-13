@@ -584,7 +584,10 @@ def plot_3d_pdp(
         plt.subplots_adjust(left=0.2, right=0.80, top=0.9, bottom=-0.8)
 
         plt.title(
-            textwrap.fill(title, text_wrap), fontsize=label_fontsize, y=0.95, pad=10
+            textwrap.fill(title, text_wrap),
+            fontsize=label_fontsize,
+            y=0.95,
+            pad=10,
         )
         plt.tight_layout()
 

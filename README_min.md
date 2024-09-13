@@ -32,7 +32,7 @@ Additionally, `eda_toolkit` depends on the following packages, which will be aut
 - `xlsxwriter`: version `3.2.0` or higher
 
 
-## Installation
+## 💾 Installation
 
 To install `eda_toolkit`, simply run the following command in your terminal:
 
