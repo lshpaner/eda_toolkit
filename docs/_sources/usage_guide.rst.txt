@@ -3462,7 +3462,7 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
 - **Colormap and Layout Customization**: Customize the colormaps for both Matplotlib and Plotly plots. Adjust figure size, camera angles, and zoom levels to create plots that fit perfectly within your presentation or report.
 - **Axis and Title Configuration**: Customize axis labels for both Matplotlib and Plotly plots. Adjust font sizes and control the wrapping of long titles to maintain readability.
 
-.. function:: plot_3d_pdp(model, dataframe, feature_names_list, x_label, y_label, z_label, title, html_file_path=None, html_file_name=None, image_filename=None, x_label_plotly=None, y_label_plotly=None, z_label_plotly=None, plot_type="both", matplotlib_colormap=None, plotly_colormap="Viridis", zoom_out_factor=None, wireframe_color=None, view_angle=(22, 70), figsize=(7, 4.5), text_wrap=50, horizontal=3, depth=5, vertical=0.8, cbar_x=1.05, cbar_thickness=25, title_x=0.5, title_y=0.95, top_margin=100, image_path_png=None, image_path_svg=None, show_cbar=True, grid_resolution=20, left_margin=20, right_margin=65, label_fontsize=12, tick_fontsize=10, enable_zoom=True, show_modebar=True)
+.. function:: plot_3d_pdp(model, dataframe, feature_names_list, x_label=None, y_label=None, z_label=None, title, html_file_path=None, html_file_name=None, image_filename=None, plot_type="both", matplotlib_colormap=None, plotly_colormap="Viridis", zoom_out_factor=None, wireframe_color=None, view_angle=(22, 70), figsize=(7, 4.5), text_wrap=50, horizontal=-1.25, depth=1.25, vertical=1.25, cbar_x=1.05, cbar_thickness=25, title_x=0.5, title_y=0.95, top_margin=100, image_path_png=None, image_path_svg=None, show_cbar=True, grid_resolution=20, left_margin=20, right_margin=65, label_fontsize=8, tick_fontsize=6, enable_zoom=True, show_modebar=True)
 
     Generate 3D partial dependence plots for two features of a machine learning model.
 
@@ -3477,14 +3477,14 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
     :param feature_names_list: A list of two feature names or indices corresponding to the features for which partial dependence plots are generated.
     :type feature_names_list: list of str
 
-    :param x_label: Label for the x-axis in the plots.
-    :type x_label: str
+    :param x_label: Label for the x-axis in the plots. Default is ``None``.
+    :type x_label: str, optional
 
-    :param y_label: Label for the y-axis in the plots.
-    :type y_label: str
+    :param y_label: Label for the y-axis in the plots. Default is ``None``.
+    :type y_label: str, optional
 
-    :param z_label: Label for the z-axis in the plots.
-    :type z_label: str
+    :param z_label: Label for the z-axis in the plots. Default is ``None``.
+    :type z_label: str, optional
 
     :param title: The title for the plots.
     :type title: str
@@ -3497,15 +3497,6 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
 
     :param image_filename: Base filename for saving static Matplotlib plots as PNG and/or SVG. Default is ``None``.
     :type image_filename: str, optional
-
-    :param x_label_plotly: Custom x-axis label for the interactive Plotly plot. Defaults to ``x_label``.
-    :type x_label_plotly: str, optional
-
-    :param y_label_plotly: Custom y-axis label for the interactive Plotly plot. Defaults to ``y_label``.
-    :type y_label_plotly: str, optional
-
-    :param z_label_plotly: Custom z-axis label for the interactive Plotly plot. Defaults to ``z_label``.
-    :type z_label_plotly: str, optional
 
     :param plot_type: The type of plots to generate. Options are:
                       - ``"static"``: Generate only static Matplotlib plots.
@@ -3534,13 +3525,13 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
     :param text_wrap: Maximum width of the title text before wrapping. Useful for managing long titles. Default is ``50``.
     :type text_wrap: int, optional
 
-    :param horizontal: Horizontal camera position for the Plotly plot. Default is ``3``.
+    :param horizontal: Horizontal camera position for the Plotly plot. Default is ``-1.25``.
     :type horizontal: float, optional
 
-    :param depth: Depth camera position for the Plotly plot. Default is ``5``.
+    :param depth: Depth camera position for the Plotly plot. Default is ``1.25``.
     :type depth: float, optional
 
-    :param vertical: Vertical camera position for the Plotly plot. Default is ``0.8``.
+    :param vertical: Vertical camera position for the Plotly plot. Default is ``1.25``.
     :type vertical: float, optional
 
     :param cbar_x: Position of the color bar along the x-axis in the Plotly plot. Default is ``1.05``.
@@ -3590,7 +3581,7 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
 
     :raises ValueError: 
         - If `plot_type` is not one of ``"static"``, ``"interactive"``, or ``"both"``. 
-        - If `plot_type` is ``"interactive"`` or ``"both"`` and ``html_file_path`` or ``html_file_name`` are not provided.`
+        - If `plot_type` is ``"interactive"`` or ``"both"`` and ``html_file_path`` or ``html_file_name`` are not provided.
 
     :returns: ``None`` 
         This function generates 3D partial dependence plots and displays or saves them. It does not return any values.
@@ -3756,7 +3747,7 @@ Interactive Plot
 
 .. raw:: html
 
-    <iframe src="3d_pdp.html" style="border:none; width:100%; height:650px; margin-left: -2; padding: 0; overflow: hidden;" scrolling="no"></iframe>
+    <iframe src="3d_pdp.html" style="border:none; width:100%; height:650px; margin-left: 0; padding: 0; overflow: auto;" scrolling="no"></iframe>
 
     <div style="height: 50px;"></div>
 

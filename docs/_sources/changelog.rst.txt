@@ -24,6 +24,86 @@
 Changelog
 =========
 
+Version 0.0.8d
+--------------------
+
+This update introduces several key changes to the `plot_3d_pdp` function, simplifying the function's interface and improving usability, while maintaining the flexibility needed for diverse visualization needs.
+
+**1. Parameter Changes**
+
+
+- **Removed Parameters:**
+  
+  - The parameters ``x_label_plotly``, ``y_label_plotly``, and ``z_label_plotly`` have been removed. These parameters previously allowed custom axis labels specifically for the Plotly plot, defaulting to the general ``x_label``, ``y_label``, and ``z_label``. Removing these parameters simplifies the function signature while maintaining flexibility.
+
+- **Default Values for Labels:**
+
+  - The parameters ``x_label``, ``y_label``, and ``z_label`` are now optional, with ``None`` as the default. If not provided, these labels will automatically default to the names of the features in the ``feature_names_list``. This change makes the function more user-friendly, particularly for cases where default labels are sufficient.
+
+- **Changes in Default Values for View Angles:**
+
+  - The default values for camera positioning parameters have been updated: ``horizontal`` is now ``-1.25``, ``depth`` is now ``1.25``, and ``vertical`` is now ``1.25``. These adjustments refine the default 3D view perspective for the Plotly plot, providing a more intuitive starting view.
+
+**2. Plot Generation Logic**
+
+- **Conditionally Checking Labels:**
+
+  - The function now checks whether ``x_label``, ``y_label``, and ``z_label`` are provided. If these are ``None``, the function will automatically assign default labels based on the ``feature_names_list``. This enhancement reduces the need for users to manually specify labels, making the function more adaptive.
+
+- **Camera Position Adjustments:**
+
+  - The camera positions for the Plotly plot are now adjusted by multiplying ``horizontal``, ``depth``, and ``vertical`` by ``zoom_out_factor``. This change allows for more granular control over the 3D view, enhancing the interactivity and flexibility of the Plotly visualizations.
+
+- **Surface Plot Coordinates Adjustments:**
+
+  - The order of the coordinates for the Plotly plot’s surface has been changed from ``ZZ, XX, YY[::-1]`` to ``ZZ, XX, YY``. This adjustment ensures the proper alignment of axes and grids, resulting in more accurate visual representations.
+
+**3. Code Simplifications**
+
+- **Removed Complexity:**
+
+  - By removing the ``x_label_plotly``, ``y_label_plotly``, and ``z_label_plotly`` parameters, the code is now simpler and easier to maintain. This change reduces potential confusion and streamlines the function for users who do not need distinct labels for Matplotlib and Plotly plots.
+
+- **Fallback Mechanism for Grid Values:**
+
+  - The function continues to implement a fallback mechanism when extracting grid values, ensuring compatibility with various versions of scikit-learn. This makes the function robust across different environments.
+
+**4. Style Adjustments**
+
+- **Label Formatting:**
+
+  - The new version consistently uses ``y_label``, ``x_label``, and ``z_label`` for axis labels in the Matplotlib plot, aligning the formatting across different plot types.
+
+- **Color Bar Adjustments:**
+
+  - The color bar configuration in the Matplotlib plot has been slightly adjusted with a shrink value of ``0.6`` and a pad value of ``0.02``. These adjustments result in a more refined visual appearance, particularly in cases where space is limited.
+
+**5. Potential Use Case Differences**
+
+- **Simplified Interface:**
+
+  - The updated function is more streamlined for users who prefer a simplified interface without the need for separate label customizations for Plotly and Matplotlib plots. This makes it easier to use in common scenarios.
+
+- **Less Granular Control:**
+
+  - Users who need more granular control, particularly for presentations or specific formatting, may find the older version more suitable. The removal of the ``*_plotly`` label parameters means that all plots now use the same labels across Matplotlib and Plotly.
+
+**6. Matplotlib Plot Adjustments**
+
+- **Wireframe and Surface Plot Enhancements:**
+
+  - The logic for plotting wireframes and surface plots in Matplotlib remains consistent with previous versions, with subtle enhancements to color and layout management to improve overall aesthetics.
+
+**Summary**
+
+- Version ``0.0.8d`` of the `plot_3d_pdp` function introduces simplifications that reduce the number of parameters and streamline the plotting process. While some customizability has been removed, the function remains flexible enough for most use cases and is easier to use.
+- Key updates include adjusted default camera views for 3D plots, removal of Plotly-specific label parameters, and improved automatic labeling and plotting logic.
+
+**Decision Point**
+
+- This update may be especially useful for users who prefer a cleaner and more straightforward interface. However, those requiring detailed customizations may want to continue using the older version, depending on their specific needs.
+
+
 Version 0.0.8c
 ------------------------
 

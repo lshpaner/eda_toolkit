@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.8c documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.8d documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=eb59ce81"></script>
+        <script src="_static/documentation_options.js?v=20d05e4c"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -70,6 +70,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8d">Version 0.0.8d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8c">Version 0.0.8c</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8b">Version 0.0.8b</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8a">Version 0.0.8a</a></li>
@@ -116,6 +117,102 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-8d">
+<h2>Version 0.0.8d<a class="headerlink" href="#version-0-0-8d" title="Link to this heading"></a></h2>
+<p>This update introduces several key changes to the <cite>plot_3d_pdp</cite> function, simplifying the function’s interface and improving usability, while maintaining the flexibility needed for diverse visualization needs.</p>
+<p><strong>1. Parameter Changes</strong></p>
+<ul class="simple">
+<li><p><strong>Removed Parameters:</strong></p>
+<ul>
+<li><p>The parameters <code class="docutils literal notranslate"><span class="pre">x_label_plotly</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label_plotly</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label_plotly</span></code> have been removed. These parameters previously allowed custom axis labels specifically for the Plotly plot, defaulting to the general <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code>. Removing these parameters simplifies the function signature while maintaining flexibility.</p></li>
+</ul>
+</li>
+<li><p><strong>Default Values for Labels:</strong></p>
+<ul>
+<li><p>The parameters <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code> are now optional, with <code class="docutils literal notranslate"><span class="pre">None</span></code> as the default. If not provided, these labels will automatically default to the names of the features in the <code class="docutils literal notranslate"><span class="pre">feature_names_list</span></code>. This change makes the function more user-friendly, particularly for cases where default labels are sufficient.</p></li>
+</ul>
+</li>
+<li><p><strong>Changes in Default Values for View Angles:</strong></p>
+<ul>
+<li><p>The default values for camera positioning parameters have been updated: <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> is now <code class="docutils literal notranslate"><span class="pre">-1.25</span></code>, <code class="docutils literal notranslate"><span class="pre">depth</span></code> is now <code class="docutils literal notranslate"><span class="pre">1.25</span></code>, and <code class="docutils literal notranslate"><span class="pre">vertical</span></code> is now <code class="docutils literal notranslate"><span class="pre">1.25</span></code>. These adjustments refine the default 3D view perspective for the Plotly plot, providing a more intuitive starting view.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>2. Plot Generation Logic</strong></p>
+<ul class="simple">
+<li><p><strong>Conditionally Checking Labels:</strong></p>
+<ul>
+<li><p>The function now checks whether <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code> are provided. If these are <code class="docutils literal notranslate"><span class="pre">None</span></code>, the function will automatically assign default labels based on the <code class="docutils literal notranslate"><span class="pre">feature_names_list</span></code>. This enhancement reduces the need for users to manually specify labels, making the function more adaptive.</p></li>
+</ul>
+</li>
+<li><p><strong>Camera Position Adjustments:</strong></p>
+<ul>
+<li><p>The camera positions for the Plotly plot are now adjusted by multiplying <code class="docutils literal notranslate"><span class="pre">horizontal</span></code>, <code class="docutils literal notranslate"><span class="pre">depth</span></code>, and <code class="docutils literal notranslate"><span class="pre">vertical</span></code> by <code class="docutils literal notranslate"><span class="pre">zoom_out_factor</span></code>. This change allows for more granular control over the 3D view, enhancing the interactivity and flexibility of the Plotly visualizations.</p></li>
+</ul>
+</li>
+<li><p><strong>Surface Plot Coordinates Adjustments:</strong></p>
+<ul>
+<li><p>The order of the coordinates for the Plotly plot’s surface has been changed from <code class="docutils literal notranslate"><span class="pre">ZZ,</span> <span class="pre">XX,</span> <span class="pre">YY[::-1]</span></code> to <code class="docutils literal notranslate"><span class="pre">ZZ,</span> <span class="pre">XX,</span> <span class="pre">YY</span></code>. This adjustment ensures the proper alignment of axes and grids, resulting in more accurate visual representations.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>3. Code Simplifications</strong></p>
+<ul class="simple">
+<li><p><strong>Removed Complexity:</strong></p>
+<ul>
+<li><p>By removing the <code class="docutils literal notranslate"><span class="pre">x_label_plotly</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label_plotly</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label_plotly</span></code> parameters, the code is now simpler and easier to maintain. This change reduces potential confusion and streamlines the function for users who do not need distinct labels for Matplotlib and Plotly plots.</p></li>
+</ul>
+</li>
+<li><p><strong>Fallback Mechanism for Grid Values:</strong></p>
+<ul>
+<li><p>The function continues to implement a fallback mechanism when extracting grid values, ensuring compatibility with various versions of scikit-learn. This makes the function robust across different environments.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>4. Style Adjustments</strong></p>
+<ul class="simple">
+<li><p><strong>Label Formatting:</strong></p>
+<ul>
+<li><p>The new version consistently uses <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code> for axis labels in the Matplotlib plot, aligning the formatting across different plot types.</p></li>
+</ul>
+</li>
+<li><p><strong>Color Bar Adjustments:</strong></p>
+<ul>
+<li><p>The color bar configuration in the Matplotlib plot has been slightly adjusted with a shrink value of <code class="docutils literal notranslate"><span class="pre">0.6</span></code> and a pad value of <code class="docutils literal notranslate"><span class="pre">0.02</span></code>. These adjustments result in a more refined visual appearance, particularly in cases where space is limited.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>5. Potential Use Case Differences</strong></p>
+<ul class="simple">
+<li><p><strong>Simplified Interface:</strong></p>
+<ul>
+<li><p>The updated function is more streamlined for users who prefer a simplified interface without the need for separate label customizations for Plotly and Matplotlib plots. This makes it easier to use in common scenarios.</p></li>
+</ul>
+</li>
+<li><p><strong>Less Granular Control:</strong></p>
+<ul>
+<li><p>Users who need more granular control, particularly for presentations or specific formatting, may find the older version more suitable. The removal of the <code class="docutils literal notranslate"><span class="pre">*_plotly</span></code> label parameters means that all plots now use the same labels across Matplotlib and Plotly.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>6. Matplotlib Plot Adjustments</strong></p>
+<ul class="simple">
+<li><p><strong>Wireframe and Surface Plot Enhancements:</strong></p>
+<ul>
+<li><p>The logic for plotting wireframes and surface plots in Matplotlib remains consistent with previous versions, with subtle enhancements to color and layout management to improve overall aesthetics.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Summary</strong></p>
+<ul class="simple">
+<li><p>Version <code class="docutils literal notranslate"><span class="pre">0.0.8d</span></code> of the <cite>plot_3d_pdp</cite> function introduces simplifications that reduce the number of parameters and streamline the plotting process. While some customizability has been removed, the function remains flexible enough for most use cases and is easier to use.</p></li>
+<li><p>Key updates include adjusted default camera views for 3D plots, removal of Plotly-specific label parameters, and improved automatic labeling and plotting logic.</p></li>
+</ul>
+<p><strong>Decision Point</strong></p>
+<ul class="simple">
+<li><p>This update may be especially useful for users who prefer a cleaner and more straightforward interface. However, those requiring detailed customizations may want to continue using the older version, depending on their specific needs.</p></li>
+</ul>
+</section>
 <section id="version-0-0-8c">
 <h2>Version 0.0.8c<a class="headerlink" href="#version-0-0-8c" title="Link to this heading"></a></h2>
 <p>Version 0.0.8c is a follow-up release to version 0.0.8b. This update includes minor enhancements and refinements based on feedback and additional testing. It serves as an incremental step towards improving the stability and functionality of the toolkit.</p>
