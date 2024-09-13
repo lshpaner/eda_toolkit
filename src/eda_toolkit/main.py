@@ -1283,19 +1283,19 @@ def stacked_crosstab_plot(
 
         # Loop through each condition and create the plots
         for truth, legend, tit in zip(func_col, legend_labels_list, title):
-            if image_path_png and image_path_svg:
+            image_path = {}
+
+            if image_path_png:
                 func_col_filename_png = os.path.join(
                     image_path_png, f"{file_prefix}_{truth}.png"
                 )
+                image_path["png"] = func_col_filename_png
+
+            if image_path_svg:
                 func_col_filename_svg = os.path.join(
                     image_path_svg, f"{file_prefix}_{truth}.svg"
                 )
-                image_path = {
-                    "png": func_col_filename_png,
-                    "svg": func_col_filename_svg,
-                }
-            else:
-                image_path = {}
+                image_path["svg"] = func_col_filename_svg
 
             # Verify the DataFrame state before creating plots
             fig, axes = plt.subplots(nrows=nrows, ncols=1, figsize=(x, y))
@@ -1458,11 +1458,37 @@ def stacked_crosstab_plot(
                         ax1.legend().remove()
 
             fig.align_ylabels()
+
+            # Ensure save_formats is a list even if a string or tuple is passed
+            if isinstance(save_formats, str):
+                save_formats = [save_formats]
+            elif isinstance(save_formats, tuple):
+                save_formats = list(save_formats)
+
+            # Check for invalid save formats
+            valid_formats = []
+            if image_path_png:
+                valid_formats.append("png")
+            if image_path_svg:
+                valid_formats.append("svg")
+
+            # Throw an error if an invalid format is specified
+            for save_format in save_formats:
+                if save_format not in valid_formats:
+                    missing_path = f"image_path_{save_format}"
+                    raise ValueError(
+                        f"Invalid save format '{save_format}'. To save in this "
+                        f"format, you must first pass input for '{missing_path}'. "
+                        f"Valid options are: {valid_formats}"
+                    )
+
             if save_formats and isinstance(image_path, dict):
                 for save_format in save_formats:
                     if save_format in image_path:
                         full_path = image_path[save_format]
                         plt.savefig(full_path, bbox_inches="tight")
+                        print(f"Plot saved as {full_path}")
+
             plt.show()
             plt.close(fig)  # Ensure plot is closed after showing
 
