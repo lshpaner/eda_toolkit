@@ -114,15 +114,15 @@ The following examples utilize the Census Income Data (1994) from the UCI Machin
 
 ### KDE Distribution Plots
 
-![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/kde_density_distributions.svg)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/kde_density_distributions.png)
 
 ### Stacked Bar Plots with Crosstab Options
 
 Generates stacked or regular bar plots and crosstabs for specified columns.
 
-![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/Stacked_Bar_Age_sex.svg)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/Stacked_Bar_Age_sex.png)
 
-![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/Stacked_Bar_Age_income.svg)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/Stacked_Bar_Age_income.png)
 
 **Crosstab for sex**
 
@@ -162,9 +162,9 @@ Generates stacked or regular bar plots and crosstabs for specified columns.
 Creates and saves individual boxplots or violin plots, or an entire grid of plots 
 for given metrics and comparisons, with optional axis limits.
 
-![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_boxplot.svg)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_boxplot.png)
 
-![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_violinplot.svg)
+![](https://raw.githubusercontent.com/lshpaner/eda_toolkit/main/assets/all_plots_comparisons_violinplot.png)
 
 
 ### Multi-Purpose Scatter Plots
