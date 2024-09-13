@@ -185,16 +185,13 @@ def plot_3d_pdp(
     model,
     dataframe,
     feature_names_list,
-    x_label,
-    y_label,
-    z_label,
-    title,
+    x_label=None,
+    y_label=None,
+    z_label=None,
+    title=None,
     html_file_path=None,
     html_file_name=None,
     image_filename=None,
-    x_label_plotly=None,
-    y_label_plotly=None,
-    z_label_plotly=None,
     plot_type="both",
     matplotlib_colormap=None,
     plotly_colormap="Viridis",
@@ -203,9 +200,9 @@ def plot_3d_pdp(
     view_angle=(22, 70),
     figsize=(7, 4.5),
     text_wrap=50,
-    horizontal=3,
-    depth=5,
-    vertical=0.8,
+    horizontal=-1.25,
+    depth=1.25,
+    vertical=1.25,
     cbar_x=1.05,
     cbar_thickness=25,
     title_x=0.5,
@@ -220,7 +217,7 @@ def plot_3d_pdp(
     label_fontsize=8,
     tick_fontsize=6,
     enable_zoom=True,
-    show_modebar=True,  # New input to toggle mode bar
+    show_modebar=True,
 ):
     """
     Generate 3D partial dependence plots for two features of a machine learning
@@ -246,16 +243,16 @@ def plot_3d_pdp(
         A list of two feature names or indices corresponding to the features for
         which partial dependence plots are generated.
 
-    x_label : str
+    x_label : str, optional
         Label for the x-axis in the plots.
 
-    y_label : str
+    y_label : str, optional
         Label for the y-axis in the plots.
 
-    z_label : str
+    z_label : str, optional
         Label for the z-axis in the plots.
 
-    title : str
+    title : str, optional
         Title for the plots.
 
     html_file_path : str, optional
@@ -268,15 +265,6 @@ def plot_3d_pdp(
 
     image_filename : str, optional
         Base filename for saving static Matplotlib plots as PNG and/or SVG.
-
-    x_label_plotly : str, optional
-        Custom x-axis label for interactive Plotly plot. Defaults to `x_label`.
-
-    y_label_plotly : str, optional
-        Custom y-axis label for interactive Plotly plot. Defaults to `y_label`.
-
-    z_label_plotly : str, optional
-        Custom z-axis label for interactive Plotly plot. Defaults to `z_label`.
 
     plot_type : str, optional, default="both"
         Type of plots to generate. Options are:
@@ -307,13 +295,13 @@ def plot_3d_pdp(
     text_wrap : int, optional, default=50
         Maximum width of the title text before wrapping.
 
-    horizontal : float, optional, default=3
+    horizontal : float, optional, default=-1.25
         Horizontal camera position for the Plotly plot.
 
-    depth : float, optional, default=5
+    depth : float, optional, default=1.25
         Depth camera position for the Plotly plot.
 
-    vertical : float, optional, default=0.8
+    vertical : float, optional, default=1.25
         Vertical camera position for the Plotly plot.
 
     cbar_x : float, optional, default=1.05
@@ -446,11 +434,26 @@ def plot_3d_pdp(
             pdp_results["grid_values"][0], pdp_results["grid_values"][1]
         )
 
-    ZZ = pdp_results["average"].reshape(XX.shape)
+    ZZ = pdp_results["average"][0].T
+
+    if not x_label:
+        x_label = feature_names_list[0]
+    if not y_label:
+        y_label = feature_names_list[1]
+    if not z_label:
+        z_label = "Partial Dependence"
 
     if plot_type in ["both", "interactive"]:
+
         # Manually wrap the title text
         wrapped_title = "<br>".join(textwrap.wrap(title, width=text_wrap))
+
+        hover_template = (
+            f"<b>{x_label}</b>: %{{x:.2f}}<br>"
+            f"<b>{y_label}</b>: %{{y:.2f}}<br>"
+            f"<b>{z_label}</b>: %{{z:.2f}}<br>"
+            "<extra></extra>"
+        )
 
         # Plotly Interactive Plot
         plotly_fig = go.Figure(
@@ -458,8 +461,9 @@ def plot_3d_pdp(
                 go.Surface(
                     z=ZZ,
                     x=XX,
-                    y=YY[::-1],
+                    y=YY,
                     colorscale=plotly_colormap,
+                    hovertemplate=hover_template,
                     colorbar=dict(
                         len=0.65,
                         thickness=cbar_thickness,
@@ -473,7 +477,6 @@ def plot_3d_pdp(
 
         plotly_fig.update_layout(
             title={
-                # "text": textwrap.fill(title, text_wrap),
                 "text": wrapped_title,
                 "y": title_y,
                 "x": title_x,
@@ -481,9 +484,9 @@ def plot_3d_pdp(
                 "yanchor": "top",
             },
             scene=dict(
-                xaxis_title=x_label_plotly or x_label,
-                yaxis_title=y_label_plotly or y_label,
-                zaxis_title=z_label_plotly or z_label,
+                xaxis_title=x_label,
+                yaxis_title=y_label,
+                zaxis_title=z_label,
                 camera=dict(
                     eye=dict(
                         x=horizontal * zoom_out_factor,
@@ -495,19 +498,19 @@ def plot_3d_pdp(
                     showgrid=True,
                     gridcolor="darkgrey",
                     gridwidth=2,
-                    title=dict(text=x_label_plotly or x_label),
+                    title=dict(text=x_label),
                 ),
                 yaxis=dict(
                     showgrid=True,
                     gridcolor="darkgrey",
                     gridwidth=2,
-                    title=dict(text=y_label_plotly or y_label),
+                    title=dict(text=y_label),
                 ),
                 zaxis=dict(
                     showgrid=True,
                     gridcolor="darkgrey",
                     gridwidth=2,
-                    title=dict(text=z_label_plotly or z_label),
+                    title=dict(text=z_label),
                 ),
             ),
             autosize=False,
@@ -556,33 +559,34 @@ def plot_3d_pdp(
         ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
-        ax.set_xlabel(x_label, fontsize=label_fontsize, labelpad=-1)
-        ax.set_ylabel(y_label, fontsize=label_fontsize, labelpad=1)
+        ax.set_xlabel(y_label, fontsize=label_fontsize, labelpad=-1)
+        ax.set_ylabel(x_label, fontsize=label_fontsize, labelpad=1)
         ax.set_zlabel(z_label, fontsize=label_fontsize, labelpad=-1)
         ax.xaxis.line.set_color("gray")
         ax.yaxis.line.set_color("gray")
         ax.zaxis.line.set_color("gray")
         ax.view_init(*view_angle)
 
-        ax.set_ylim(YY.max(), YY.min())
+        ax.set_ylim(XX.max(), XX.min())
 
         for e in ax.get_yticklabels() + ax.get_xticklabels() + ax.get_zticklabels():
             e.set_fontsize(tick_fontsize)
 
-        surf = ax.plot_surface(XX, YY, ZZ, cmap=matplotlib_colormap, shade=False)
+        surf = ax.plot_surface(YY, XX, ZZ, cmap=matplotlib_colormap, shade=False)
 
         if wireframe_color:
-            ax.plot_wireframe(XX, YY, ZZ, color=wireframe_color, linewidth=0.5)
+            ax.plot_wireframe(YY, XX, ZZ, color=wireframe_color, linewidth=0.5)
 
         if show_cbar:
-            cbar = fig.colorbar(surf, shrink=0.3, aspect=20, pad=0.05)
+            cbar = fig.colorbar(surf, shrink=0.6, aspect=20, pad=0.02)
             cbar.ax.tick_params(labelsize=tick_fontsize)
 
-        plt.subplots_adjust(left=0.2, right=0.85, top=0.9, bottom=-0.8)
+        plt.subplots_adjust(left=0.2, right=0.80, top=0.9, bottom=-0.8)
 
         plt.title(
             textwrap.fill(title, text_wrap), fontsize=label_fontsize, y=0.95, pad=10
         )
+        plt.tight_layout()
 
         if image_path_png and image_filename:
             plt.savefig(
