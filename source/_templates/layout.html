@@ -1,0 +1,22 @@
+{% extends "!layout.html" %}
+
+{% block sidebar1 %}
+{{ super() }}
+<div class="rst-versions" style="padding-top: 10px;">
+    <span class="rst-current-version">v: stable</span>
+    <div class="rst-other-versions">
+        <strong>Versions</strong>
+        <ul>
+            <li><a href="/latest/">latest</a></li>
+            <li><a href="/stable/">stable</a></li>
+            <li><a href="/release_2.1.0/">release_2.1.0</a></li>
+            <li><a href="/release_2.0.0/">release_2.0.0</a></li>
+            <!-- Add more versions as needed -->
+        </ul>
+        <strong>Downloads</strong>
+        <ul>
+            <li><a href="/_downloads/pdf/">PDF</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
