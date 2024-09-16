@@ -247,7 +247,7 @@ the usability and functionality of the EDA Toolkit.
 `Version 0.0.7`_
 ----------------------
 
-.. _Version 0.0.7: file:///C:/Users/lshpaner/Documents/Python_Projects/eda_toolkit/docs/v0.0.7/index.html
+.. _Version 0.0.7: ./v0.0.7/index.html
 
 **Added Function for Customizable Correlation Matrix Visualization**
 
@@ -291,7 +291,7 @@ Convert all columns in the DataFrame to object type to prevent issues with numer
 `Version 0.0.6`_
 ----------------------
 
-.. _Version 0.0.6: file:///C:/Users/lshpaner/Documents/Python_Projects/eda_toolkit/docs/v0.0.6/index.html
+.. _Version 0.0.6: ./v0.0.6/index.html
 
 **Added validation for Plot Type Parameter in KDE Distributions Function**
 
@@ -310,7 +310,7 @@ This release adds a validation step for the ``plot_type`` parameter in the ``kde
 `Version 0.0.5`_
 ----------------------
 
-.. _Version 0.0.5: file:///C:/Users/lshpaner/Documents/Python_Projects/eda_toolkit/docs/v0.0.5/index.html
+.. _Version 0.0.5: ./v0.0.5/index.html
 
 
 **Ensure Consistent Font Size and Text Wrapping Across Plot Elements**
