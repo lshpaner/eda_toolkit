@@ -744,6 +744,7 @@ def kde_distributions(
     std_dev_levels=None,  # Parameter to control how many stdev to plot
     std_color="#808080",
     label_names=None,
+    **kwargs,  # To capture additional keyword arguments
 ):
     """
     Generate KDE and/or histogram distribution plots for columns in a DataFrame.
@@ -878,6 +879,9 @@ def kde_distributions(
     label_names : dict, optional
         Custom labels for the variables of interest. Keys should be column
         names, and values should be the corresponding labels to display.
+
+    **kwargs : additional keyword arguments
+        Additional keyword arguments passed to the Seaborn plotting function.
 
     Returns:
     --------
@@ -1054,6 +1058,7 @@ def kde_distributions(
                     log_scale=log_scale,
                     bins=bins,
                     binwidth=binwidth,
+                    **kwargs,
                 )
             elif plot_type == "kde":
                 sns.kdeplot(
@@ -1064,6 +1069,7 @@ def kde_distributions(
                     color=kde_color,
                     fill=True,
                     log_scale=log_scale,
+                    **kwargs,
                 )
             elif plot_type == "both":
                 sns.histplot(
@@ -1080,6 +1086,7 @@ def kde_distributions(
                     log_scale=log_scale,
                     bins=bins,
                     binwidth=binwidth,
+                    **kwargs,
                 )
                 sns.kdeplot(
                     data=data,
@@ -1089,6 +1096,7 @@ def kde_distributions(
                     color=kde_color if hue is None else None,
                     log_scale=log_scale,
                     label="KDE",
+                    **kwargs,
                 )
 
             # Plot mean as a vertical dotted line if plot_mean is True
@@ -1208,6 +1216,7 @@ def kde_distributions(
                         log_scale=log_scale,
                         bins=bins,
                         binwidth=binwidth,
+                        **kwargs,
                     )
                 elif plot_type == "kde":
                     sns.kdeplot(
@@ -1218,6 +1227,7 @@ def kde_distributions(
                         color=kde_color,
                         fill=True,
                         log_scale=log_scale,
+                        **kwargs,
                     )
                 elif plot_type == "both":
                     sns.histplot(
@@ -1234,6 +1244,7 @@ def kde_distributions(
                         log_scale=log_scale,
                         bins=bins,
                         binwidth=binwidth,
+                        **kwargs,
                     )
                     sns.kdeplot(
                         data=data,
@@ -1243,6 +1254,7 @@ def kde_distributions(
                         color=kde_color if hue is None else None,
                         log_scale=log_scale,
                         label="KDE",
+                        **kwargs,
                     )
 
                 # Add "(Log)" to the label if log_scale is applied
