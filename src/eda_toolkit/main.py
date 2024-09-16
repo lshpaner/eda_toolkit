@@ -221,34 +221,19 @@ def parse_date_with_rule(date_str):
 ################################################################################
 
 
-def dataframe_columns(df):
+def dataframe_columns(df, background_color):
     """
-    Analyze the columns of a DataFrame, including their data types,
-    number of null values, unique values, and the most frequent value.
-
-    Parameters:
-    -----------
-    df : pandas.DataFrame
-        The DataFrame to analyze.
-
+    Function to analyze dataframe columns, such as dtype, null,
+    and max unique value and percentages.
+    Args:
+        df (dataframe): the dataframe to analyze
+        background_color (str): color hex value or color name accepted by Pandas
+    Raises:
+        No Raises
+        Null and empty string pre-processing
     Returns:
-    --------
-    pandas.DataFrame
-        A DataFrame where each row corresponds to a column from the input
-        DataFrame, with the following information:
-        - 'column': The column name.
-        - 'dtype': The data type of the column.
-        - 'null_total': The total number of null values in the column.
-        - 'null_pct': The percentage of null values in the column.
-        - 'unique_values_total': The number of unique values in the column.
-        - 'max_unique_value': The most frequent value in the column.
-        - 'max_unique_value_total': The count of the most frequent value.
-        - 'max_unique_value_pct': The percentage of the most frequent value.
-
-    Notes:
-    ------
-    - The function prints the shape of the DataFrame and total processing time.
-    - It also handles null values & empty strings, converting them to pandas' NA.
+        str:       Prints the shape of the dataframe at top
+        dataframe: column_value_counts list in DataFrame format
     """
 
     print("Shape: ", df.shape, "\n")
@@ -294,7 +279,39 @@ def dataframe_columns(df):
         "Total seconds of processing time:",
         (stop_time - start_time).total_seconds(),
     )
-    return pd.DataFrame(columns_value_counts)
+   
+    # Output, try/except, accounting for the potential of Python version with the styler
+    # as hide_index() is deprecated since Pandas 1.4, in such cases, hide() is used instead
+    try:
+        return (
+            pd.DataFrame(columns_value_counts)
+            .style.hide()
+            .format(precision=2)
+            .set_properties(
+                subset=[
+                    "unique_values_total",
+                    "max_unique_value",
+                    "max_unique_value_total",
+                    "max_unique_value_pct",
+                ],
+                **{"background-color": background_color}
+            )
+        )
+    except:
+        return (
+            pd.DataFrame(columns_value_counts)
+            .style.hide_index()
+            .format(precision=2)
+            .set_properties(
+                subset=[
+                    "unique_values_total",
+                    "max_unique_value",
+                    "max_unique_value_total",
+                    "max_unique_value_pct",
+                ],
+                **{"background-color": background_color}
+            )
+        )
 
 
 ################################################################################
