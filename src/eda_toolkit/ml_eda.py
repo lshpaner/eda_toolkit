@@ -26,33 +26,63 @@ def plot_2d_pdp(
     file_prefix="partial_dependence",  # Prefix for saved grid plots
 ):
     """
-    Generate partial dependence plots for the specified features using the
-    given model.
+    Generate 2D partial dependence plots (PDP) for the specified features using
+    a trained model.
 
     Parameters:
-    - model: Trained machine learning model to use for generating partial
-      dependence plots.
-    - X_train: Training data (features) used to generate partial dependence.
-    - feature_names: List of feature names corresponding to columns in X_train.
-    - features: List of feature indices or tuples of feature indices for which to
-      generate partial dependence plots.
-    - title: Title for the entire plot.
-    - grid_resolution: Resolution of the grid for partial dependence plots
-      (default is 50).
-    - plot_type: Choose between "grid" for all plots in a grid layout,
-      "individual" for separate plots, or "both" for both layouts.
-    - grid_figsize: Tuple specifying the figure size for the grid layout
-      (default is (12, 8)).
-    - individual_figsize: Tuple specifying the figure size for individual plots
-      (default is (6, 4)).
-    - label_fontsize: Font size for the axis labels and titles (default is 12).
-    - tick_fontsize: Font size for the tick labels (default is 10).
-    - text_wrap: Maximum width of the title text before wrapping (default is 50).
-    - image_path_png: Directory to save PNG files.
-    - image_path_svg: Directory to save SVG files.
-    - save_plots: String, "all", "individual", "grid", or None to control
-      saving plots.
-    - file_prefix: Prefix for the filenames of the saved grid plots.
+    -----------
+    model : estimator object
+        A fitted machine learning model that supports the `predict` method.
+    X_train : pandas.DataFrame or numpy.ndarray
+        The training data (features) used to generate partial dependence plots.
+    feature_names : list of str
+        A list of feature names corresponding to columns in X_train.
+    features : list of int or tuple of int
+        A list of feature indices or tuples of feature indices for which to
+        generate partial dependence plots.
+    title : str, optional
+        Title for the entire plot. Default is "Partial dependence plot".
+    grid_resolution : int, optional
+        The resolution of the grid used to compute the partial dependence.
+        Default is 50.
+    plot_type : str, optional
+        Choose between "grid" for all plots in a grid layout, "individual" for
+        separate plots, or "both" for both layouts. Default is "grid".
+    grid_figsize : tuple, optional
+        Figure size for the grid layout. Default is (12, 8).
+    individual_figsize : tuple, optional
+        Figure size for individual plots. Default is (6, 4).
+    label_fontsize : int, optional
+        Font size for axis labels and titles. Default is 12.
+    tick_fontsize : int, optional
+        Font size for tick labels. Default is 10.
+    text_wrap : int, optional
+        Maximum width of the title text before wrapping. Default is 50.
+    image_path_png : str, optional
+        Directory to save PNG files. If not specified, PNG files are not saved.
+    image_path_svg : str, optional
+        Directory to save SVG files. If not specified, SVG files are not saved.
+    save_plots : str, optional
+        Controls which plots to save: "all", "individual", "grid", or None to
+        save no plots. Default is None.
+    file_prefix : str, optional
+        Prefix for the filenames of the saved grid plots.
+        Default is "partial_dependence".
+
+    Raises:
+    -------
+    ValueError
+        If `save_plots` is not one of [None, "all", "individual", "grid"].
+    ValueError
+        If `plot_type` is not one of ["grid", "individual", "both"].
+    ValueError
+        If `save_plots` is specified without providing `image_path_png` or
+        `image_path_svg`.
+
+    Returns:
+    --------
+    None
+        This function generates and optionally saves 2D partial dependence plots.
     """
 
     # Validate save_plots input
@@ -64,13 +94,16 @@ def plot_2d_pdp(
 
     # Check if save_plots is set without image paths
     if save_plots and not (image_path_png or image_path_svg):
-        raise ValueError("To save plots, specify 'image_path_png' or 'image_path_svg'.")
+        raise ValueError(
+            f"To save plots, specify 'image_path_png' or " f"'image_path_svg'."
+        )
 
     n_features = len(features)
 
     if plot_type not in ["grid", "individual", "both"]:
         raise ValueError(
-            f"Invalid plot_type '{plot_type}'. Choose 'grid', 'individual', or 'both'."
+            f"Invalid plot_type '{plot_type}'. Choose 'grid', 'individual', "
+            f"or 'both'."
         )
 
     # Determine saving options based on save_plots value
@@ -220,12 +253,12 @@ def plot_3d_pdp(
     show_modebar=True,
 ):
     """
-    Generate 3D partial dependence plots for two features of a machine learning
-    model.
+    Generate 3D partial dependence plots (PDP) for two features of a trained
+    machine learning model.
 
-    This function supports both static (Matplotlib) and interactive (Plotly)
-    visualizations. It is compatible with both older and newer versions of
-    scikit-learn, making it versatile for various environments.
+    This function creates 3D partial dependence plots using both static
+    (Matplotlib) and interactive (Plotly) visualizations. It is compatible with
+    various versions of scikit-learn, supporting both newer and older versions.
 
     Parameters
     ----------
@@ -235,29 +268,31 @@ def plot_3d_pdp(
 
     dataframe : pandas.DataFrame or numpy.ndarray
         The dataset on which the model was trained or a representative sample.
-        If a DataFrame is provided, the `feature_names_list` should correspond
-        to the column names. If a numpy array is provided, `feature_names_list`
+        If a DataFrame is provided, `feature_names_list` should correspond to
+        the column names. If a numpy array is provided, `feature_names_list`
         should correspond to the indices of the columns.
 
     feature_names_list : list of str
-        A list of two feature names or indices corresponding to the features for
-        which partial dependence plots are generated.
+        A list of two feature names or indices for which partial dependence
+        plots are generated.
 
     x_label : str, optional
-        Label for the x-axis in the plots.
+        Label for the x-axis in the plots. Defaults to the first feature in
+        `feature_names_list`.
 
     y_label : str, optional
-        Label for the y-axis in the plots.
+        Label for the y-axis in the plots. Defaults to the second feature in
+        `feature_names_list`.
 
     z_label : str, optional
-        Label for the z-axis in the plots.
+        Label for the z-axis in the plots. Defaults to "Partial Dependence".
 
     title : str, optional
-        Title for the plots.
+        Title for the plots. If not provided, no title is displayed.
 
     html_file_path : str, optional
-        Path to save interactive Plotly HTML file. Required if `plot_type` is
-        "interactive" or "both".
+        Path to save the interactive Plotly HTML file. Required if `plot_type`
+        is "interactive" or "both".
 
     html_file_name : str, optional
         Name of the HTML file to save the interactive Plotly plot. Required if
@@ -273,8 +308,8 @@ def plot_3d_pdp(
         - "both": Generate both static and interactive plots.
 
     matplotlib_colormap : matplotlib.colors.Colormap, optional
-        Custom colormap for the Matplotlib plot. If not provided, a default
-        colormap is used.
+        Custom colormap for the Matplotlib plot. If not provided, a
+        default colormap is used.
 
     plotly_colormap : str, optional, default="Viridis"
         Colormap for the Plotly plot.
@@ -283,8 +318,8 @@ def plot_3d_pdp(
         Factor to adjust the zoom level of the Plotly plot.
 
     wireframe_color : str, optional
-        Color for the wireframe in the Matplotlib plot. If `None`, no wireframe
-        is plotted.
+        Color for the wireframe in the Matplotlib plot. If `None`, no
+        wireframe is plotted.
 
     view_angle : tuple, optional, default=(22, 70)
         Elevation and azimuthal angles for the Matplotlib plot view.
@@ -589,7 +624,8 @@ def plot_3d_pdp(
             y=0.95,
             pad=10,
         )
-        plt.tight_layout()
+
+        plt.subplots_adjust(left=0.2, right=0.80, top=0.9, bottom=0.1)
 
         if image_path_png and image_filename:
             plt.savefig(
