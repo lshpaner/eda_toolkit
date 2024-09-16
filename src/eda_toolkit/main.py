@@ -3,7 +3,9 @@
 
 import pandas as pd
 import numpy as np
+import math
 import random
+import itertools  # Import itertools for combinations
 from itertools import combinations
 from IPython.display import display
 from mpl_toolkits.mplot3d import Axes3D
@@ -31,7 +33,10 @@ else:
 
 
 def ensure_directory(path):
-    """Ensure that the directory exists. If not, create it."""
+    """
+    Ensure that the directory exists. If not, create it.
+    """
+
     if not os.path.exists(path):
         os.makedirs(path)
         print(f"Created directory: {path}")
@@ -52,25 +57,43 @@ def add_ids(
     set_as_index=False,
 ):
     """
-    Add a column of unique IDs with a specified number of digits to the dataframe.
+    Add a column of unique IDs with specified number of digits to the dataframe.
 
-    This function sets a random seed and then generates a unique ID with the
-    specified number of digits for each row in the dataframe. The new IDs are
-    added as a new column with the specified column name, which can be placed as
-    the first column in the dataframe if set_as_index is True.
+    This function generates a unique ID with the specified number of digits for
+    each row in the dataframe. The new IDs are added as a new column with the
+    specified column name. Optionally, the new ID column can be set as the index
+    or placed as the first column in the dataframe.
 
-    Args:
-        df (pd.DataFrame): The dataframe to add IDs to.
-        id_colname (str): The name of the new column for the IDs.
-        num_digits (int): The number of digits for the unique IDs.
-        seed (int, optional): The seed for the random number generator.
-        Defaults to None.
-        set_as_index (bool, optional): Whether to set the new ID column as the
-        index. Defaults to True.
+    Parameters:
+    -----------
+    df : pd.DataFrame
+        The dataframe to add IDs to.
+
+    id_colname : str, optional (default="ID")
+        The name of the new column for the IDs.
+
+    num_digits : int, optional (default=9)
+        The number of digits for the unique IDs.
+
+    seed : int, optional
+        The seed for the random number generator. Defaults to None.
+
+    set_as_index : bool, optional (default=False)
+        Whether to set the new ID column as the index. Defaults to False.
 
     Returns:
-        pd.DataFrame: The updated dataframe with the new ID column.
+    --------
+    pd.DataFrame
+        The updated dataframe with the new ID column.
+
+    Notes:
+    ------
+    - If the dataframe index is not unique, a warning is printed.
+    - The function does not check if the number of rows exceeds the number of
+      unique IDs that can be generated with the specified number of digits.
+    - The first digit of the generated IDs is ensured to be non-zero.
     """
+
     # Check for unique indices
     if df.index.duplicated().any():
         print("Warning: DataFrame index is not unique.")
@@ -200,16 +223,32 @@ def parse_date_with_rule(date_str):
 
 def dataframe_columns(df):
     """
-    Function to analyze dataframe columns, such as dtype, null,
-    and max unique value and percentages.
-    Args:
-        df (dataframe): the dataframe to analyze
-    Raises:
-        No Raises
-        Null and empty string pre-processing
+    Analyze the columns of a DataFrame, including their data types,
+    number of null values, unique values, and the most frequent value.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame to analyze.
+
     Returns:
-        str:       Prints the shape of the dataframe at top
-        dataframe: column_value_counts list in DataFrame format
+    --------
+    pandas.DataFrame
+        A DataFrame where each row corresponds to a column from the input
+        DataFrame, with the following information:
+        - 'column': The column name.
+        - 'dtype': The data type of the column.
+        - 'null_total': The total number of null values in the column.
+        - 'null_pct': The percentage of null values in the column.
+        - 'unique_values_total': The number of unique values in the column.
+        - 'max_unique_value': The most frequent value in the column.
+        - 'max_unique_value_total': The count of the most frequent value.
+        - 'max_unique_value_pct': The percentage of the most frequent value.
+
+    Notes:
+    ------
+    - The function prints the shape of the DataFrame and total processing time.
+    - It also handles null values & empty strings, converting them to pandas' NA.
     """
 
     print("Shape: ", df.shape, "\n")
@@ -272,19 +311,38 @@ def summarize_all_combinations(
 ):
     """
     Generates summary tables for all possible combinations of the specified
-    variables in the dataframe and saves them to an Excel file.
+    variables in the DataFrame and saves them to an Excel file.
 
     Parameters:
-    - df (DataFrame): The pandas DataFrame containing the data.
-    - variables (list): List of unique variables to generate combinations.
-    - data_path (str): Path where the output Excel file will be saved.
-    - data_name (str): Name of the output Excel file.
-    - min_length (int): Minimum length of combinations to generate. Defaults to 2.
+    -----------
+    df : pandas.DataFrame
+        The DataFrame containing the data.
+    variables : list of str
+        List of column names from the DataFrame to generate combinations.
+    data_path : str
+        Path where the output Excel file will be saved.
+    data_name : str
+        Name of the output Excel file.
+    min_length : int, optional (default=2)
+        Minimum size of the combinations to generate.
 
     Returns:
-    - summary_tables (dict): Dictionary of summary tables.
-    - all_combinations (list): List of all generated combinations.
+    --------
+    summary_tables : dict
+        A dictionary where keys are tuples of column names (combinations) and
+        values are the corresponding summary DataFrames.
+    all_combinations : list of tuple
+        A list of all generated combinations, where each combination is
+        represented as a tuple of column names.
+
+    Notes:
+    ------
+    - The function will create an Excel file with a sheet for each combination
+      of the specified variables, as well as a "Table of Contents" sheet with
+      hyperlinks to each summary table.
+    - The sheet names are limited to 31 characters due to Excel's constraints.
     """
+
     summary_tables = {}
     grand_total = len(df)
     all_combinations = []
@@ -399,22 +457,35 @@ def save_dataframes_to_excel(
 ):
     """
     Save multiple DataFrames to separate sheets in an Excel file with customized
-    formatting.
+    formatting, including column autofit and numeric formatting.
 
     Parameters:
-    ----------
+    -----------
     file_path : str
         Full path to the output Excel file.
+
     df_dict : dict
-        Dictionary where keys are sheet names and values are DataFrames to save.
-    decimal_places : int, optional
-        Number of decimal places to round numeric columns. Default is 2.
+        Dictionary where keys are sheet names and values are DataFrames to save
+        to those sheets.
+
+    decimal_places : int, optional (default=0)
+        Number of decimal places to round numeric columns. If set to 0, numeric
+        columns will be saved as integers.
 
     Notes:
-    -----
-    - The function will autofit columns and left-align text.
-    - Numeric columns will be formatted with the specified number of decimal places.
-    - Headers will be bold and left-aligned without borders.
+    ------
+    - Columns will be autofitted to content and left-aligned.
+    - Numeric columns will be formatted with the specified number of decimal
+      places.
+    - Headers will be bold, left-aligned, and have no borders.
+    - This function requires the 'xlsxwriter' library for Excel writing.
+
+    Example:
+    --------
+    df1 = pd.DataFrame({"A": [1, 2], "B": [3.14159, 2.71828]})
+    df2 = pd.DataFrame({"X": ["foo", "bar"], "Y": ["baz", "qux"]})
+    df_dict = {"Sheet1": df1, "Sheet2": df2}
+    save_dataframes_to_excel("output.xlsx", df_dict, decimal_places=2)
     """
 
     with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
@@ -497,25 +568,37 @@ def contingency_table(
     sort_by=0,
 ):
     """
-    Function to create a contingency table from one or more columns in a
-    dataframe, with sorting options.
+    Create a contingency table from one or more columns in a DataFrame, with
+    options to sort the results.
 
-    Args:
-        df (dataframe): the dataframe to analyze
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame containing the data to analyze.
 
-        cols (str or list, optional): name of the column (as a string) for a
-        single column or list of column names for multiple columns. Must provide
-        at least one column.
+    cols : str or list of str, optional
+        The name of a single column (as a string) or a list of column names
+        for multiple columns. At least one column must be provided.
 
-        sort_by (int): enter 0 to sort results by cols group enter 1 to sort
-        results by totals descending
-
-    Raises:
-        ValueError: if no columns are specified or if sort_by is not 0 or 1
+    sort_by : int, optional (default=0)
+        Sorting option for the results. Enter 0 to sort the results by the
+        column group(s) specified in `cols`, or enter 1 to sort the results
+        by the 'Total' column in descending order.
 
     Returns:
-        dataframe: dataframe with specified columns, 'Total', and 'Percentage'
+    --------
+    pandas.DataFrame
+        A DataFrame containing the contingency table with the specified columns,
+        a 'Total' column representing the count of occurrences, and a
+        'Percentage' column representing the percentage of the total count.
+
+    Raises:
+    -------
+    ValueError
+        If no columns are specified in `cols`, or if `sort_by` is not 0 or 1.
+
     """
+
     # Ensure at least one column is specified
     if not cols or (isinstance(cols, list) and not cols):
         raise ValueError("At least one DataFrame column must be specified.")
@@ -625,29 +708,28 @@ def highlight_columns(
 def kde_distributions(
     df,
     vars_of_interest=None,
-    grid_figsize=(10, 8),  # Size of the overall grid figure
-    single_figsize=(6, 4),  # Size of individual figures
-    kde=True,
+    figsize=(5, 5),  # Unified figsize parameter
+    grid_figsize=None,  # Size of the overall grid
     hist_color="#0000FF",  # Default color blue as hex code
     kde_color="#FF0000",  # Default color red as hex code
+    mean_color="#000000",
+    median_color="#000000",
     hist_edgecolor="#000000",  # Default edge color black as hex code
     hue=None,  # Added hue parameter
     fill=True,  # Added fill parameter
     fill_alpha=1,  # Transparency level for the fill
-    n_rows=1,
-    n_cols=1,
+    n_rows=None,
+    n_cols=None,
     w_pad=1.0,
     h_pad=1.0,
     image_path_png=None,
     image_path_svg=None,
     image_filename=None,
     bbox_inches=None,
-    single_var_image_path_png=None,
-    single_var_image_path_svg=None,
     single_var_image_filename=None,
     y_axis_label="Density",  # Parameter to control y-axis label
-    plot_type="both",  # Parameter to control plot type ('hist', 'kde', or 'both')
-    log_scale_vars=None,  # Parameter to specify which variables to apply log scale
+    plot_type="both",  # To control plot type ('hist', 'kde', or 'both')
+    log_scale_vars=None,  # To specify which variables to apply log scale
     bins="auto",  # Default to 'auto' as per sns
     binwidth=None,  # Parameter to control the width of bins
     label_fontsize=10,  # Fontsize control for labels
@@ -657,6 +739,11 @@ def kde_distributions(
     stat="density",  # Control the aggregate statistic for histograms
     xlim=None,
     ylim=None,
+    plot_mean=False,
+    plot_median=False,
+    std_dev_levels=None,  # Parameter to control how many stdev to plot
+    std_color="#808080",
+    label_names=None,
 ):
     """
     Generate KDE and/or histogram distribution plots for columns in a DataFrame.
@@ -664,7 +751,8 @@ def kde_distributions(
     This function provides a flexible way to visualize the distribution of
     data for specified columns in a DataFrame. It supports both kernel density
     estimation (KDE) and histograms, with options to customize various aspects
-    of the plots, including colors, labels, binning, and scaling.
+    of the plots, including colors, labels, binning, scaling, and statistical
+    overlays.
 
     Parameters:
     -----------
@@ -672,22 +760,27 @@ def kde_distributions(
         The DataFrame containing the data to plot.
 
     vars_of_interest : list of str, optional
-        List of column names for which to generate distribution plots.
+        List of column names for which to generate distribution plots. If
+        'all', plots will be generated for all numeric columns.
 
-    grid_figsize : tuple, optional (default=(10, 8))
-        Size of the overall grid figure.
+    figsize : tuple of int, optional (default=(5, 5))
+        Size of each individual plot.
 
-    single_figsize : tuple, optional (default=(6, 4))
-        Size of individual figures for each variable.
-
-    kde : bool, optional (default=True)
-        Whether to include KDE plots on the histograms.
+    grid_figsize : tuple of int, optional
+        Size of the overall grid of plots. If not specified, it is calculated
+        based on `figsize`, `n_rows`, and `n_cols`.
 
     hist_color : str, optional (default='#0000FF')
         Color of the histogram bars.
 
     kde_color : str, optional (default='#FF0000')
         Color of the KDE plot.
+
+    mean_color : str, optional (default='#000000')
+        Color of the mean line if `plot_mean` is True.
+
+    median_color : str, optional (default='#000000')
+        Color of the median line if `plot_median` is True.
 
     hist_edgecolor : str, optional (default='#000000')
         Color of the histogram bar edges.
@@ -702,11 +795,13 @@ def kde_distributions(
         Alpha transparency for the fill color of the histogram bars, where
         0 is fully transparent and 1 is fully opaque.
 
-    n_rows : int, optional (default=1)
-        Number of rows in the subplot grid.
+    n_rows : int, optional
+        Number of rows in the subplot grid. If not provided, it will be
+        calculated automatically.
 
-    n_cols : int, optional (default=1)
-        Number of columns in the subplot grid.
+    n_cols : int, optional
+        Number of columns in the subplot grid. If not provided, it will be
+        calculated automatically.
 
     w_pad : float, optional (default=1.0)
         Width padding between subplots.
@@ -726,15 +821,9 @@ def kde_distributions(
     bbox_inches : str, optional
         Bounding box to use when saving the figure. For example, 'tight'.
 
-    single_var_image_path_png : str, optional
-        Directory path to save the PNG images of the separate distribution plots.
-
-    single_var_image_path_svg : str, optional
-        Directory path to save the SVG images of the separate distribution plots.
-
     single_var_image_filename : str, optional
-        Filename to use when saving the separate distribution plots.
-        The variable name will be appended to this filename.
+        Filename to use when saving the separate distribution plots. The
+        variable name will be appended to this filename.
 
     y_axis_label : str, optional (default='Density')
         The label to display on the y-axis.
@@ -742,13 +831,14 @@ def kde_distributions(
     plot_type : str, optional (default='both')
         The type of plot to generate ('hist', 'kde', or 'both').
 
-    log_scale_vars : list of str, optional
-        List of variable names to apply log scaling.
+    log_scale_vars : str or list of str, optional
+        Variable name(s) to apply log scaling. Can be a single string or a
+        list of strings.
 
     bins : int or sequence, optional (default='auto')
         Specification of histogram bins.
 
-    binwidth : number or pair of numbers, optional
+    binwidth : float, optional
         Width of each bin, overrides bins but can be used with binrange.
 
     label_fontsize : int, optional (default=10)
@@ -767,16 +857,102 @@ def kde_distributions(
         Aggregate statistic to compute in each bin (e.g., 'count', 'frequency',
         'probability', 'percent', 'density').
 
+    xlim : tuple of (float, float), optional
+        Limits for the x-axis.
+
+    ylim : tuple of (float, float), optional
+        Limits for the y-axis.
+
+    plot_mean : bool, optional (default=False)
+        Whether to plot the mean as a vertical line.
+
+    plot_median : bool, optional (default=False)
+        Whether to plot the median as a vertical line.
+
+    std_dev_levels : list of int, optional
+        Levels of standard deviation to plot around the mean.
+
+    std_color : str or list of str, optional (default='#808080')
+        Color(s) for the standard deviation lines.
+
+    label_names : dict, optional
+        Custom labels for the variables of interest. Keys should be column
+        names, and values should be the corresponding labels to display.
+
     Returns:
     --------
     None
         This function does not return any value but generates and optionally
         saves distribution plots for the specified columns in the DataFrame.
+
+    Raises:
+    -------
+    ValueError
+        If `plot_type` is not one of ['hist', 'kde', 'both'].
+
+    ValueError
+        If `stat` is not one of ['count', 'frequency', 'probability',
+        'percent', 'density'].
+
+    ValueError
+        If any variable specified in `log_scale_vars` is not in the DataFrame.
+
+    ValueError
+        If `fill` is set to False but `hist_edgecolor` or `fill_alpha` is
+        specified.
+
+    ValueError
+        If `bins` and `binwidth` are both set, which can affect performance.
+
+    Warnings:
+    ---------
+    UserWarning
+        If both `bins` and `binwidth` are set, a warning about performance
+        impacts is raised.
     """
+
+    # Handle the "all" option for vars_of_interest
+    if vars_of_interest == "all":
+        vars_of_interest = df.select_dtypes(include=np.number).columns.tolist()
 
     if vars_of_interest is None:
         print("Error: No variables of interest provided.")
         return
+
+    # Set defaults for optional parameters
+    if std_dev_levels is None:
+        std_dev_levels = []  # Empty list if not provided
+
+    # Dynamically calculate n_rows and n_cols if not provided
+    num_vars = len(vars_of_interest)
+    if n_rows is None or n_cols is None:
+        # Calculate columns based on square root
+        n_cols = int(np.ceil(np.sqrt(num_vars)))
+        # Calculate rows based on the number of columns
+        n_rows = int(np.ceil(num_vars / n_cols))
+
+    # Adjust figsize for grid if multiple plots
+    if num_vars > 1:
+        if grid_figsize is None:
+            figsize = (figsize[0] * n_cols, figsize[1] * n_rows)
+        else:
+            figsize = grid_figsize
+
+    # Convert log_scale_vars to list if it's a single string
+    if isinstance(log_scale_vars, str):
+        log_scale_vars = [log_scale_vars]
+
+    # Ensure std_dev_levels is a list if it's specified
+    if isinstance(std_dev_levels, int):
+        std_dev_levels = [std_dev_levels]
+
+    # Ensure std_color is a list with enough colors
+    if isinstance(std_color, str):
+        std_color = [std_color] * len(std_dev_levels)
+    elif isinstance(std_color, list) and len(std_color) < len(std_dev_levels):
+        std_color = std_color + [std_color[-1]] * (
+            len(std_dev_levels) - len(std_color),
+        )
 
     # Validate plot_type parameter
     valid_plot_types = ["hist", "kde", "both"]
@@ -823,17 +999,28 @@ def kde_distributions(
         )
 
     # Create subplots grid
-    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=grid_figsize)
+    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=figsize)
+
+    # Ensure axes is always treated as an array
+    if n_rows * n_cols == 1:
+        axes = np.array([axes])
 
     # Flatten the axes array to simplify iteration
-    axes = axes.flatten()
+    if n_rows * n_cols == 1:
+        axes = np.array([axes])
+    else:
+        axes = axes.flatten()
+
+    def get_label(var):
+        """
+        Helper function to get the custom label or original column name.
+        """
+        return label_names[var] if label_names and var in label_names else var
 
     # Iterate over the provided column list and corresponding axes
     for ax, col in zip(axes[: len(vars_of_interest)], vars_of_interest):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", UserWarning)
-            # Wrap the title if it's too long
-            title = f"Distribution of {col}"
 
             # Determine if log scale should be applied to this variable
             log_scale = col in log_scale_vars if log_scale_vars else False
@@ -841,42 +1028,18 @@ def kde_distributions(
             # Filter out non-positive values if log_scale is True
             data = df[df[col] > 0] if log_scale else df
 
+            # Add "(Log)" to the label if log_scale is applied
+            xlabel = f"{get_label(col)} (Log)" if log_scale else get_label(col)
+
+            # Modify the title to include "(Log Scaled)" if log_scale is applied
+            title = f"Distribution of {get_label(col)} {'(Log Scaled)' if log_scale else ''}"
+
+            # Calculate mean and median if needed
+            mean_value = data[col].mean() if plot_mean or std_dev_levels else None
+            median_value = data[col].median() if plot_median else None
+            std_value = data[col].std() if std_dev_levels else None
+
             if plot_type == "hist":
-                sns.histplot(
-                    data=data,
-                    x=col,
-                    kde=kde,
-                    ax=ax,
-                    hue=hue,
-                    color=hist_color if hue is None and fill else None,
-                    edgecolor=hist_edgecolor,
-                    stat=stat.lower(),
-                    fill=fill,
-                    alpha=fill_alpha,  # Apply the alpha value for transparency
-                    log_scale=log_scale,
-                    bins=bins,
-                    binwidth=binwidth,
-                )
-                if kde:
-                    sns.kdeplot(
-                        data=data,
-                        x=col,
-                        ax=ax,
-                        hue=hue,
-                        color=kde_color if hue is None else None,
-                        log_scale=log_scale,
-                    )
-            elif plot_type == "kde":
-                sns.kdeplot(
-                    data=data,
-                    x=col,
-                    ax=ax,
-                    hue=hue,
-                    color=kde_color,
-                    fill=True,
-                    log_scale=log_scale,
-                )
-            elif plot_type == "both":
                 sns.histplot(
                     data=data,
                     x=col,
@@ -892,17 +1055,82 @@ def kde_distributions(
                     bins=bins,
                     binwidth=binwidth,
                 )
-                if kde:
-                    sns.kdeplot(
-                        data=data,
-                        x=col,
-                        ax=ax,
-                        hue=hue,
-                        color=kde_color if hue is None else None,
-                        log_scale=log_scale,
+            elif plot_type == "kde":
+                sns.kdeplot(
+                    data=data,
+                    x=col,
+                    ax=ax,
+                    hue=hue,
+                    color=kde_color,
+                    fill=True,
+                    log_scale=log_scale,
+                )
+            elif plot_type == "both":
+                sns.histplot(
+                    data=data,
+                    x=col,
+                    kde=False,  # No need for kde since plot_type controls it
+                    ax=ax,
+                    hue=hue,
+                    color=hist_color if hue is None and fill else None,
+                    edgecolor=hist_edgecolor,
+                    stat=stat.lower(),
+                    fill=fill,
+                    alpha=fill_alpha,  # Apply the alpha value for transparency
+                    log_scale=log_scale,
+                    bins=bins,
+                    binwidth=binwidth,
+                )
+                sns.kdeplot(
+                    data=data,
+                    x=col,
+                    ax=ax,
+                    hue=hue,
+                    color=kde_color if hue is None else None,
+                    log_scale=log_scale,
+                    label="KDE",
+                )
+
+            # Plot mean as a vertical dotted line if plot_mean is True
+            if plot_mean and mean_value is not None:
+                ax.axvline(
+                    mean_value,
+                    color=kde_color,
+                    linestyle="--",
+                    label="Mean",
+                )
+
+            # Plot median as a vertical dotted line if plot_median is True
+            if plot_median and median_value is not None:
+                ax.axvline(
+                    median_value,
+                    color=median_color,
+                    linestyle="--",
+                    label="Median",
+                )
+
+            # Plot standard deviation bands if std_dev_levels is specified
+            if std_dev_levels and mean_value is not None and std_value is not None:
+                for level, color in zip(std_dev_levels, std_color):
+                    ax.axvline(
+                        mean_value + level * std_value,
+                        color=color,
+                        linestyle="--",
+                    )
+                    ax.axvline(
+                        mean_value - level * std_value,
+                        color=color,
+                        linestyle="--",
+                        label=f"±{level} Std Dev",
                     )
 
-            ax.set_xlabel(col, fontsize=label_fontsize)
+            ax.legend(loc="best")  # place the legend in the best location
+
+            ax.set_xlabel(
+                xlabel,
+                fontsize=label_fontsize,
+            )
+
             ax.set_ylabel(
                 y_axis_label.capitalize(),
                 fontsize=label_fontsize,
@@ -953,7 +1181,7 @@ def kde_distributions(
     # Generate separate plots for each variable of interest if provided
     if vars_of_interest:
         for var in vars_of_interest:
-            fig, ax = plt.subplots(figsize=single_figsize)
+            fig, ax = plt.subplots(figsize=figsize)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", UserWarning)
                 title = f"Distribution of {var}"
@@ -964,42 +1192,8 @@ def kde_distributions(
                 # Filter out non-positive values if log_scale is True
                 data = df[df[var] > 0] if log_scale else df
 
+                # Updated:
                 if plot_type == "hist":
-                    sns.histplot(
-                        data=data,
-                        x=var,
-                        kde=kde,
-                        ax=ax,
-                        hue=hue,
-                        color=hist_color if hue is None and fill else None,
-                        edgecolor=hist_edgecolor,
-                        stat=stat.lower(),
-                        fill=fill,
-                        alpha=fill_alpha,  # Apply alpha value for transparency
-                        log_scale=log_scale,
-                        bins=bins,
-                        binwidth=binwidth,
-                    )
-                    if kde:
-                        sns.kdeplot(
-                            data=data,
-                            x=var,
-                            ax=ax,
-                            hue=hue,
-                            color=kde_color if hue is None else None,
-                            log_scale=log_scale,
-                        )
-                elif plot_type == "kde":
-                    sns.kdeplot(
-                        data=data,
-                        x=var,
-                        ax=ax,
-                        hue=hue,
-                        color=kde_color,
-                        fill=True,
-                        log_scale=log_scale,
-                    )
-                elif plot_type == "both":
                     sns.histplot(
                         data=data,
                         x=var,
@@ -1015,17 +1209,91 @@ def kde_distributions(
                         bins=bins,
                         binwidth=binwidth,
                     )
-                    if kde:
-                        sns.kdeplot(
-                            data=data,
-                            x=var,
-                            ax=ax,
-                            hue=hue,
-                            color=kde_color if hue is None else None,
-                            log_scale=log_scale,
+                elif plot_type == "kde":
+                    sns.kdeplot(
+                        data=data,
+                        x=var,
+                        ax=ax,
+                        hue=hue,
+                        color=kde_color,
+                        fill=True,
+                        log_scale=log_scale,
+                    )
+                elif plot_type == "both":
+                    sns.histplot(
+                        data=data,
+                        x=var,
+                        kde=False,  # No need for kde since plot_type controls it
+                        ax=ax,
+                        hue=hue,
+                        color=hist_color if hue is None and fill else None,
+                        edgecolor=hist_edgecolor,
+                        stat=stat.lower(),
+                        fill=fill,
+                        alpha=fill_alpha,  # Apply alpha value for transparency
+                        log_scale=log_scale,
+                        bins=bins,
+                        binwidth=binwidth,
+                    )
+                    sns.kdeplot(
+                        data=data,
+                        x=var,
+                        ax=ax,
+                        hue=hue,
+                        color=kde_color if hue is None else None,
+                        log_scale=log_scale,
+                        label="KDE",
+                    )
+
+                # Add "(Log)" to the label if log_scale is applied
+                xlabel = f"{get_label(var)} (Log)" if log_scale else get_label(var)
+
+                # Modify the title to include "(Log Scaled)" if log_scale is applied
+                title = f"Distribution of {get_label(var)} {'(Log Scaled)' if log_scale else ''}"
+
+                # Add a vertical dotted line at the mean
+                # Plot mean as a vertical dotted line if plot_mean is True
+                if plot_mean:
+                    mean_value = data[var].mean()
+                    ax.axvline(
+                        mean_value,
+                        color=mean_color,
+                        linestyle="--",
+                        label="Mean",
+                    )
+
+                # Add a vertical dotted line at the median
+                # Plot median as a vertical dotted line if plot_median is True
+                if plot_median:
+                    # Calculate the median
+                    median_value = data[var].median()
+                    ax.axvline(
+                        median_value,
+                        color=median_color,
+                        linestyle="--",
+                        label="Median",
+                    )
+
+                # Plot standard deviation bands if std_dev_levels is specified
+                if std_dev_levels:
+                    std_value = data[var].std()
+                    for level, color in zip(std_dev_levels, std_color):
+                        ax.axvline(
+                            mean_value + level * std_value,
+                            color=color,
+                            linestyle="--",
+                        )
+                        ax.axvline(
+                            mean_value - level * std_value,
+                            color=color,
+                            linestyle="--",
+                            label=f"±{level} Std Dev",
                         )
 
-                ax.set_xlabel(var, fontsize=label_fontsize)
+                ax.legend(loc="best")  # place the legend in the best location
+
+                ax.set_xlabel(xlabel, fontsize=label_fontsize)
+
                 ax.set_ylabel(
                     y_axis_label.capitalize(),
                     fontsize=label_fontsize,
@@ -1056,18 +1324,18 @@ def kde_distributions(
             plt.tight_layout()
 
             # Save files for the variable of interest if paths are provided
-            if single_var_image_path_png and single_var_image_filename:
+            if image_path_png and single_var_image_filename:
                 plt.savefig(
                     os.path.join(
-                        single_var_image_path_png,
+                        image_path_png,
                         f"{single_var_image_filename}_{var}.png",
                     ),
                     bbox_inches=bbox_inches,
                 )
-            if single_var_image_path_svg and single_var_image_filename:
+            if image_path_svg and single_var_image_filename:
                 plt.savefig(
                     os.path.join(
-                        single_var_image_path_svg,
+                        image_path_svg,
                         f"{single_var_image_filename}_{var}.svg",
                     ),
                     bbox_inches=bbox_inches,
@@ -1129,14 +1397,15 @@ def stacked_crosstab_plot(
     col : str
         The name of the column in the DataFrame to be analyzed.
 
-    func_col : list
-        List of ground truth columns to be analyzed.
+    func_col : list of str
+        List of columns in the DataFrame that will be used to generate the
+        crosstabs and stack the bars in the plot.
 
-    legend_labels_list : list
-        List of legend labels for each ground truth column.
+    legend_labels_list : list of list of str
+        List of legend labels corresponding to each column in `func_col`.
 
-    title : list
-        List of titles for the plots.
+    title : list of str
+        List of titles for each plot generated.
 
     kind : str, optional (default='bar')
         The kind of plot to generate ('bar' or 'barh' for horizontal bars).
@@ -1148,7 +1417,7 @@ def stacked_crosstab_plot(
         The rotation angle of the x-axis labels.
 
     custom_order : list, optional
-        Specifies a custom order for the categories in the `col`.
+        Specifies a custom order for the categories in `col`.
 
     image_path_png : str, optional
         Directory path where generated PNG plot images will be saved.
@@ -1156,10 +1425,11 @@ def stacked_crosstab_plot(
     image_path_svg : str, optional
         Directory path where generated SVG plot images will be saved.
 
-    save_formats : list, optional
-        List of file formats to save the plot images in.
+    save_formats : list of str, optional
+        List of file formats to save the plot images in. Valid formats are
+        'png' and 'svg'.
 
-    color : list, optional
+    color : list of str, optional
         List of colors to use for the plots. If not provided, a default
         color scheme is used.
 
@@ -1185,7 +1455,7 @@ def stacked_crosstab_plot(
         Apply log scale to the y-axis.
 
     plot_type : str, optional (default='both')
-        Specify the type of plot to generate: "both", "regular", "normalized".
+        Specify the type of plot to generate: "both", "regular", or "normalized".
 
     show_legend : bool, optional (default=True)
         Specify whether to show the legend.
@@ -1203,6 +1473,12 @@ def stacked_crosstab_plot(
         If True, removes stacks and creates a regular bar plot using only
         the `col` parameter. Only works when `plot_type` is set to 'regular'.
 
+    xlim : tuple, optional
+        Tuple specifying the limits of the x-axis.
+
+    ylim : tuple, optional
+        Tuple specifying the limits of the y-axis.
+
     Returns:
     --------
     crosstabs_dict : dict
@@ -1210,6 +1486,28 @@ def stacked_crosstab_plot(
 
     None
         If `return_dict` is False.
+
+    Raises:
+    -------
+    ValueError
+        If `remove_stacks` is used when `plot_type` is not set to "regular".
+
+    ValueError
+        If `output` is not one of ["both", "plots_only", "crosstabs_only"].
+
+    ValueError
+        If `plot_type` is not one of ["both", "regular", "normalized"].
+
+    ValueError
+        If the lengths of `title`, `func_col`, and `legend_labels_list` are not
+        equal.
+
+    KeyError
+        If any columns in `col` or `func_col` are missing in the DataFrame.
+
+    ValueError
+        If an invalid save format is specified without providing the
+        corresponding image path.
     """
 
     # Check if remove_stacks is used correctly
@@ -1245,11 +1543,13 @@ def stacked_crosstab_plot(
     if missing_cols:
         raise KeyError(f"Columns missing in DataFrame: {missing_cols}")
 
-    # Check if the lengths of title, func_col, and legend_labels_list match
     if not (len(title) == len(func_col) == len(legend_labels_list)):
         raise ValueError(
-            "Length mismatch: Ensure that the lengths of title, func_col, "
-            "and legend_labels_list are equal. Check for missing items or commas."
+            f"Length mismatch: Ensure that the lengths of title, func_col, "
+            f"and legend_labels_list are equal. Current lengths are: "
+            f"title={len(title)}, func_col={len(func_col)}, "
+            f"legend_labels_list={len(legend_labels_list)}. "
+            "Check for missing items or commas."
         )
 
     # Work on a copy of the DataFrame to avoid modifying the original
@@ -1360,7 +1660,7 @@ def stacked_crosstab_plot(
                 if plot_type in ["both", "regular"]:
                     # Plot the first graph (absolute counts)
                     title1 = f"Prevalence of {tit} by {col.replace('_', ' ').title()}"
-                    xlabel1 = f"{col.replace('_', ' ')}"
+                    xlabel1 = f"{col.replace('_', ' ').title()}"
                     ylabel1 = "Count"
                     crosstabdest.plot(
                         kind=kind,
@@ -1408,7 +1708,7 @@ def stacked_crosstab_plot(
                         f"Prevalence of {tit} by {col.replace('_', ' ').title()} "
                         f"(Normalized)"
                     )
-                    xlabel2 = f"{col.replace('_', ' ')}"
+                    xlabel2 = f"{col.replace('_', ' ').title()}"
                     ylabel2 = "Percentage"
                     crosstabdestnorm = crosstabdest.div(
                         crosstabdest.sum(1),
@@ -1558,9 +1858,9 @@ def stacked_crosstab_plot(
 def box_violin_plot(
     df,
     metrics_list,
-    metrics_boxplot_comp,
-    n_rows,
-    n_cols,
+    metrics_comp,
+    n_rows=None,  # Allow users to define the number of rows
+    n_cols=None,  # Allow users to define the number of columns
     image_path_png=None,  # Make image paths optional
     image_path_svg=None,  # Make image paths optional
     save_plots=None,  # Parameter to control saving plots
@@ -1576,6 +1876,8 @@ def box_violin_plot(
     text_wrap=50,  # Add text_wrap parameter
     xlim=None,  # New parameter for setting x-axis limits
     ylim=None,  # New parameter for setting y-axis limits
+    label_names=None,
+    **kwargs,  # To allow passing additional parameters to Seaborn
 ):
     """
     Create and save individual boxplots or violin plots, an entire grid
@@ -1587,17 +1889,19 @@ def box_violin_plot(
     df : pandas.DataFrame
         The DataFrame containing the data.
 
-    metrics_list : list
+    metrics_list : list of str
         List of metric names (columns in df) to plot.
 
-    metrics_boxplot_comp : list
+    metrics_comp : list of str
         List of comparison categories (columns in df).
 
-    n_rows : int
-        Number of rows in the subplot grid.
+    n_rows : int, optional
+        Number of rows in the subplot grid. Calculated automatically
+        if not provided.
 
-    n_cols : int
-        Number of columns in the subplot grid.
+    n_cols : int, optional
+        Number of columns in the subplot grid. Calculated automatically
+        if not provided.
 
     image_path_png : str, optional
         Directory path to save .png images.
@@ -1623,7 +1927,7 @@ def box_violin_plot(
     rotate_plot : bool, optional (default=False)
         True if rotating (pivoting) the plots.
 
-    individual_figsize : tuple or list, optional
+    individual_figsize : tuple or list, optional (default=(6, 4))
         Width and height of the figure for individual plots.
 
     grid_figsize : tuple or list, optional
@@ -1643,6 +1947,48 @@ def box_violin_plot(
 
     ylim : tuple, optional
         Tuple specifying the limits of the y-axis.
+
+    label_names : dict, optional
+        Dictionary mapping original column names to custom labels.
+
+    **kwargs : additional keyword arguments
+        Additional keyword arguments passed to the Seaborn plotting function.
+
+    Returns:
+    --------
+    None
+        This function does not return any value but generates and optionally
+        saves boxplots or violin plots for the specified metrics and comparisons.
+
+    Raises:
+    -------
+    ValueError
+        If 'show_plot' is not one of "individual", "grid", or "both".
+
+    ValueError
+        If 'save_plots' is not one of None, "all", "individual", or "grid".
+
+    ValueError
+        If 'save_plots' is set without specifying 'image_path_png' or
+        'image_path_svg'.
+
+    ValueError
+        If 'rotate_plot' is not a boolean value.
+
+    ValueError
+        If 'individual_figsize' is not a tuple or list of two numbers
+        (width, height).
+
+    ValueError
+        If 'grid_figsize' is provided and is not a tuple or list of two numbers
+        (width, height).
+
+    Notes:
+    ------
+    - `n_rows` and `n_cols` are automatically calculated if not provided, based
+      on the number of plots.
+    - `label_names` allows you to map original column names to custom labels
+      used in plot titles and labels.
     """
 
     # Check for valid show_plot values
@@ -1693,6 +2039,12 @@ def box_violin_plot(
             "numbers (width, height)."
         )
 
+    # Calculate n_rows and n_cols dynamically if not provided
+    if n_rows is None or n_cols is None:
+        total_plots = len(metrics_list) * len(metrics_comp)
+        n_cols = int(np.ceil(np.sqrt(total_plots)))
+        n_rows = int(np.ceil(total_plots / n_cols))
+
     # Set default grid figure size if not specified
     if grid_figsize is None:
         grid_figsize = (5 * n_cols, 5 * n_rows)
@@ -1702,18 +2054,28 @@ def box_violin_plot(
     save_grid = save_plots in ["all", "grid"]
 
     def get_palette(n_colors):
+        """
+        Returns a 'tab10' color palette with the specified number of colors.
+        """
         return sns.color_palette("tab10", n_colors=n_colors)
+
+    def get_label(var):
+        """
+        Helper function to get the custom label or original column name.
+        """
+        return label_names[var] if label_names and var in label_names else var
 
     # Map plot_type to the corresponding seaborn function
     plot_function = getattr(sns, plot_type)
 
     # Save and/or show individual plots if required
     if save_individual or show_plot in ["individual", "both"]:
-        for met_comp in metrics_boxplot_comp:
+        for met_comp in metrics_comp:
             unique_vals = df[met_comp].value_counts().count()
             palette = get_palette(unique_vals)
             for met_list in metrics_list:
                 plt.figure(figsize=individual_figsize)  # Adjust size as needed
+                # Use original column names for plotting
                 ax = plot_function(
                     x=met_list if rotate_plot else met_comp,
                     y=met_comp if rotate_plot else met_list,
@@ -1721,18 +2083,23 @@ def box_violin_plot(
                     hue=met_comp,
                     palette=palette,
                     dodge=False,
+                    **kwargs,
                 )
-                title = f"Distribution of {met_list} by {met_comp}"
+
+                # Use custom labels only for display purposes
+                title = (
+                    f"Distribution of {get_label(met_list)} by {get_label(met_comp)}"
+                )
                 plt.title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
                     fontsize=label_fontsize,
                 )
                 plt.xlabel(
-                    met_list if rotate_plot else met_comp,
+                    get_label(met_list) if rotate_plot else get_label(met_comp),
                     fontsize=label_fontsize,
                 )
                 plt.ylabel(
-                    met_comp if rotate_plot else met_list,
+                    get_label(met_comp) if rotate_plot else get_label(met_list),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -1779,11 +2146,15 @@ def box_violin_plot(
     # Save and/or show the entire grid if required
     if save_grid or show_plot in ["grid", "both"]:
         fig, axs = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
-        axs = axs.flatten()
+        # Handle the case when axs is a single Axes object
+        if n_rows * n_cols == 1:
+            axs = [axs]
+        else:
+            axs = axs.flatten()
 
         for i, ax in enumerate(axs):
-            if i < len(metrics_list) * len(metrics_boxplot_comp):
-                met_comp = metrics_boxplot_comp[i // len(metrics_list)]
+            if i < len(metrics_list) * len(metrics_comp):
+                met_comp = metrics_comp[i // len(metrics_list)]
                 met_list = metrics_list[i % len(metrics_list)]
                 unique_vals = df[met_comp].value_counts().count()
                 palette = get_palette(unique_vals)
@@ -1795,18 +2166,22 @@ def box_violin_plot(
                     ax=ax,
                     palette=palette,
                     dodge=False,
+                    **kwargs,
                 )
-                title = f"Distribution of {met_list} by {met_comp}"
+                title = (
+                    f"Distribution of {get_label(met_list)} by {get_label(met_comp)}"
+                )
+
                 ax.set_title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
                     fontsize=label_fontsize,
                 )
                 ax.set_xlabel(
-                    met_list if rotate_plot else met_comp,
+                    get_label(met_list) if rotate_plot else get_label(met_comp),
                     fontsize=label_fontsize,
                 )
                 ax.set_ylabel(
-                    met_comp if rotate_plot else met_list,
+                    get_label(met_comp) if rotate_plot else get_label(met_list),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -1855,10 +2230,11 @@ def box_violin_plot(
 
 def scatter_fit_plot(
     df,
-    x_vars,
-    y_vars,
-    n_rows,
-    n_cols,
+    x_vars=None,
+    y_vars=None,
+    n_rows=None,
+    n_cols=None,
+    max_cols=4,
     image_path_png=None,  # Make image paths optional
     image_path_svg=None,  # Make image paths optional
     save_plots=None,  # Parameter to control saving plots
@@ -1883,6 +2259,9 @@ def scatter_fit_plot(
     show_correlation=True,  # Parameter to toggle showing correlation in title
     xlim=None,  # Parameter to set x-axis limits
     ylim=None,  # Parameter to set y-axis limits
+    all_vars=None,
+    label_names=None,  # New parameter for custom column renames
+    **kwargs,  # Additional keyword arguments to pass to sns.scatterplot
 ):
     """
     Create and save scatter plots or a grid of scatter plots for given
@@ -1894,17 +2273,24 @@ def scatter_fit_plot(
     df : pandas.DataFrame
         The DataFrame containing the data.
 
-    x_vars : list of str
-        List of variable names to plot on the x-axis.
+    x_vars : list of str or str, optional
+        List of variable names to plot on the x-axis. If a string is provided,
+        it will be converted into a list with one element.
 
-    y_vars : list of str
-        List of variable names to plot on the y-axis.
+    y_vars : list of str or str, optional
+        List of variable names to plot on the y-axis. If a string is provided,
+        it will be converted into a list with one element.
 
-    n_rows : int
-        Number of rows in the subplot grid.
+    n_rows : int, optional
+        Number of rows in the subplot grid. If not specified, it will be
+        calculated based on the number of plots and n_cols.
 
-    n_cols : int
-        Number of columns in the subplot grid.
+    n_cols : int, optional
+        Number of columns in the subplot grid. If not specified, it will be
+        calculated based on the number of plots and max_cols.
+
+    max_cols : int, optional (default=4)
+        Maximum number of columns in the subplot grid.
 
     image_path_png : str, optional
         Directory path to save PNG images of the scatter plots.
@@ -1914,6 +2300,7 @@ def scatter_fit_plot(
 
     save_plots : str, optional
         Controls which plots to save: "all", "individual", or "grid".
+        If None, plots will not be saved.
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
@@ -1932,6 +2319,8 @@ def scatter_fit_plot(
 
     grid_figsize : tuple or list, optional
         Width and height of the figure for grid plots.
+        If not specified, defaults to a calculated size based on the number of
+        rows and columns.
 
     label_fontsize : int, optional (default=12)
         Font size for axis labels.
@@ -1951,7 +2340,7 @@ def scatter_fit_plot(
     best_fit_linecolor : str, optional (default="red")
         Color code for the best fit line.
 
-    best_fit_linestyle : str, optional (default="--")
+    best_fit_linestyle : str, optional (default="-")
         Linestyle for the best fit line.
 
     hue : str, optional
@@ -1982,16 +2371,96 @@ def scatter_fit_plot(
     ylim : tuple or list, optional
         Limits for the y-axis as a tuple or list of (min, max).
 
+    all_vars : list of str, optional
+        If provided, automatically generates scatter plots for all combinations
+        of variables in this list, overriding x_vars and y_vars.
+
+    label_names : dict, optional
+        A dictionary to rename columns for display in the plot titles and labels.
+
+    **kwargs : dict, optional
+        Additional keyword arguments to pass to sns.scatterplot.
+
     Returns:
     --------
     None
         This function does not return any value but generates and optionally
         saves scatter plots for the specified x_vars and y_vars.
+
+    Raises:
+    -------
+    ValueError
+        If `all_vars` is provided and either `x_vars` or `y_vars` is also
+        provided.
+
+    ValueError
+        If neither `all_vars` nor both `x_vars` and `y_vars` are provided.
+
+    ValueError
+        If `show_plot` is not one of ["individual", "grid", "both"].
+
+    ValueError
+        If `save_plots` is not one of [None, "all", "individual", "grid"].
+
+    ValueError
+        If `save_plots` is set without specifying either `image_path_png` or
+        `image_path_svg`.
+
+    ValueError
+        If `rotate_plot` is not a boolean value.
+
+    ValueError
+        If `individual_figsize` is not a tuple or list of two numbers
+        (width, height).
+
+    ValueError
+        If `grid_figsize` is provided and is not a tuple or list of two numbers
+        (width, height).
+
     """
+
+    # Ensure x_vars and y_vars are lists
+    if isinstance(x_vars, str):
+        x_vars = [x_vars]
+    if isinstance(y_vars, str):
+        y_vars = [y_vars]
+
+    # Check for conflicting inputs of variable assignments
+    if all_vars is not None and (x_vars is not None or y_vars is not None):
+        raise ValueError(
+            f"Cannot pass `all_vars` and still choose `x_vars` "
+            f"and/or `y_vars`. Must choose either `x_vars` and "
+            f"`y_vars` as inputs or `all_vars`."
+        )
+
+    # Generate combinations of x_vars and y_vars or use all_vars
+    if all_vars:
+        combinations = list(itertools.combinations(all_vars, 2))
+    elif x_vars is not None and y_vars is not None:
+        combinations = [(x_var, y_var) for x_var in x_vars for y_var in y_vars]
+    else:
+        raise ValueError(
+            f"Either `all_vars` or both `x_vars` and `y_vars` must be provided."
+        )
+
+    # Calculate the number of plots
+    num_plots = len(combinations)
+
+    # Set a fixed number of columns and calculate rows
+    if n_cols is None:
+        n_cols = min(num_plots, max_cols)
+    if n_rows is None:
+        n_rows = math.ceil(num_plots / n_cols)
+
+    # Set default grid figure size if not specified
+    if grid_figsize is None:
+        grid_figsize = (5 * n_cols, 5 * n_rows)
 
     # Validate the show_plot input
     if show_plot not in ["individual", "grid", "both"]:
-        raise ValueError("Invalid show_plot. Choose 'individual', 'grid', or 'both'.")
+        raise ValueError(
+            f"Invalid show_plot. Choose 'individual', 'grid', " f"or 'both'."
+        )
 
     # Validate the save_plots input
     if save_plots not in [None, "all", "individual", "grid"]:
@@ -2032,16 +2501,15 @@ def scatter_fit_plot(
             "numbers (width, height)."
         )
 
-    # Set default grid figure size if not specified
-    if grid_figsize is None:
-        grid_figsize = (5 * n_cols, 5 * n_rows)
-
     # Determine saving options based on save_plots value
     save_individual = save_plots in ["all", "individual"]
     save_grid = save_plots in ["all", "grid"]
 
+    # Validation checks (already present)
+    def get_label(var):
+        return label_names.get(var, var) if label_names else var
+
     def add_best_fit(ax, x, y, linestyle, linecolor):
-        """Add a best fit line to the plot and display the equation."""
         m, b = np.polyfit(x, y, 1)
         ax.plot(
             x,
@@ -2054,115 +2522,117 @@ def scatter_fit_plot(
 
     # Save and/or show individual plots if required
     if save_individual or show_plot in ["individual", "both"]:
-        for x_var in x_vars:
-            for y_var in y_vars:
-                plt.figure(figsize=individual_figsize)  # Adjust size as needed
-                ax = sns.scatterplot(
-                    x=y_var if rotate_plot else x_var,
-                    y=x_var if rotate_plot else y_var,
-                    data=df,
-                    # Set the color for scatter points
-                    color=scatter_color if hue is None else None,
-                    hue=hue,  # Set the hue for grouping
-                    palette=hue_palette,  # Set the palette for hue colors
-                    size=size,  # Set the size of scatter points
-                    sizes=sizes,  # Set the size range for scatter points
-                    marker=marker,  # Set the marker type
+        for x_var, y_var in combinations:
+            plt.figure(figsize=individual_figsize)
+            ax = sns.scatterplot(
+                x=x_var if not rotate_plot else y_var,
+                y=y_var if not rotate_plot else x_var,
+                data=df,
+                color=scatter_color if hue is None else None,
+                hue=hue,
+                palette=hue_palette,
+                size=size,
+                sizes=sizes,
+                marker=marker,
+                **kwargs,
+            )
+            if add_best_fit_line:
+                x_data = df[x_var] if not rotate_plot else df[y_var]
+                y_data = df[y_var] if not rotate_plot else df[x_var]
+                add_best_fit(
+                    ax,
+                    x_data,
+                    y_data,
+                    best_fit_linestyle,
+                    best_fit_linecolor,
                 )
-                if add_best_fit_line:
-                    x_data = df[y_var] if rotate_plot else df[x_var]
-                    y_data = df[x_var] if rotate_plot else df[y_var]
-                    add_best_fit(
-                        ax,
-                        x_data,
-                        y_data,
-                        best_fit_linestyle,
-                        best_fit_linecolor,
+
+            r_value = df[x_var].corr(df[y_var])
+            title = f"{get_label(x_var)} vs. {get_label(y_var)}"
+            if show_correlation:
+                title += f" ($r$ = {r_value:.2f})"
+            plt.title(
+                "\n".join(textwrap.wrap(title, width=text_wrap)),
+                fontsize=label_fontsize,
+            )
+            plt.xlabel(
+                get_label(x_var) if not rotate_plot else get_label(y_var),
+                fontsize=label_fontsize,
+            )
+            plt.ylabel(
+                get_label(y_var) if not rotate_plot else get_label(x_var),
+                fontsize=label_fontsize,
+            )
+            ax.tick_params(axis="x", rotation=xlabel_rot)
+            ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+            if xlim:
+                ax.set_xlim(xlim)
+            if ylim:
+                ax.set_ylim(ylim)
+
+            if not show_legend and ax.legend_:
+                ax.legend().remove()
+
+            if save_individual:
+                safe_x_var = (
+                    x_var.replace(" ", "_")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("/", "_per_")
+                )
+                safe_y_var = (
+                    y_var.replace(" ", "_")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("/", "_per_")
+                )
+                if image_path_png:
+                    filename_png = f"scatter_{safe_x_var}_vs_{safe_y_var}.png"
+                    plt.savefig(
+                        os.path.join(image_path_png, filename_png),
+                        bbox_inches="tight",
                     )
-                r_value = df[x_var].corr(df[y_var])
-                title = f"{y_var} vs {x_var}"
-                if show_correlation:
-                    title += f" ($r$ = {r_value:.2f})"
-                # Use label_fontsize for title
-                plt.title(
-                    "\n".join(textwrap.wrap(title, width=text_wrap)),
-                    fontsize=label_fontsize,
-                )
-                plt.xlabel(
-                    y_var if rotate_plot else x_var,
-                    fontsize=label_fontsize,
-                )
-                plt.ylabel(
-                    x_var if rotate_plot else y_var,
-                    fontsize=label_fontsize,
-                )
-                ax.tick_params(axis="x", rotation=xlabel_rot)
-                ax.tick_params(axis="both", labelsize=tick_fontsize)
-
-                # Set x and y limits if specified
-                if xlim:
-                    ax.set_xlim(xlim)
-                if ylim:
-                    ax.set_ylim(ylim)
-
-                # Toggle legend
-                if not show_legend and ax.legend_:
-                    ax.legend().remove()
-
-                if save_individual:
-                    safe_x_var = (
-                        x_var.replace(" ", "_")
-                        .replace("(", "")
-                        .replace(")", "")
-                        .replace("/", "_per_")
+                if image_path_svg:
+                    filename_svg = f"scatter_{safe_x_var}_vs_{safe_y_var}.svg"
+                    plt.savefig(
+                        os.path.join(image_path_svg, filename_svg),
+                        bbox_inches="tight",
                     )
-                    safe_y_var = (
-                        y_var.replace(" ", "_")
-                        .replace("(", "")
-                        .replace(")", "")
-                        .replace("/", "_per_")
-                    )
-                    if image_path_png:
-                        filename_png = f"scatter_{safe_x_var}_vs_{safe_y_var}.png"
-                        plt.savefig(
-                            os.path.join(image_path_png, filename_png),
-                            bbox_inches="tight",
-                        )
-                    if image_path_svg:
-                        filename_svg = f"scatter_{safe_x_var}_vs_{safe_y_var}.svg"
-                        plt.savefig(
-                            os.path.join(image_path_svg, filename_svg),
-                            bbox_inches="tight",
-                        )
 
-                if show_plot in ["individual", "both"]:
-                    plt.show()  # Display the plot
-                plt.close()
+            if show_plot in ["individual", "both"]:
+                plt.show()
+            plt.close()
 
     # Save and/or show the entire grid if required
     if save_grid or show_plot in ["grid", "both"]:
-        fig, axs = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
-        axs = axs.flatten()
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
 
-        for i, ax in enumerate(axs):
-            if i < len(x_vars) * len(y_vars):
-                x_var = x_vars[i // len(y_vars)]
-                y_var = y_vars[i % len(y_vars)]
+        # Flatten the axes array to simplify iteration
+        if n_rows * n_cols == 1:
+            axes = np.array([axes])
+        else:
+            axes = axes.flatten()
+
+        for i, ax in enumerate(axes):
+            if i < num_plots:
+                x_var, y_var = combinations[i]
                 sns.scatterplot(
-                    x=y_var if rotate_plot else x_var,
-                    y=x_var if rotate_plot else y_var,
+                    x=x_var if not rotate_plot else y_var,
+                    y=y_var if not rotate_plot else x_var,
                     data=df,
-                    color=scatter_color,  # Set the color for scatter points
-                    hue=hue,  # Set the hue for grouping
-                    size=size,  # Set the size of scatter points
-                    sizes=sizes,  # Set the size range for scatter points
-                    marker=marker,  # Set the marker type
+                    color=scatter_color,
+                    hue=hue,
+                    size=size,
+                    sizes=sizes,
+                    marker=marker,
                     ax=ax,
-                    palette=hue_palette,  # Apply custom hue palette
+                    palette=hue_palette,
+                    **kwargs,
                 )
                 if add_best_fit_line:
-                    x_data = df[y_var] if rotate_plot else df[x_var]
-                    y_data = df[x_var] if rotate_plot else df[y_var]
+                    x_data = df[x_var] if not rotate_plot else df[y_var]
+                    y_data = df[y_var] if not rotate_plot else df[x_var]
                     add_best_fit(
                         ax,
                         x_data,
@@ -2170,33 +2640,31 @@ def scatter_fit_plot(
                         best_fit_linestyle,
                         best_fit_linecolor,
                     )
+
                 r_value = df[x_var].corr(df[y_var])
-                title = f"{y_var} vs {x_var}"
+                title = f"{get_label(x_var)} vs. {get_label(y_var)}"
                 if show_correlation:
                     title += f" ($r$ = {r_value:.2f})"
-                # Use label_fontsize for title
                 ax.set_title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
                     fontsize=label_fontsize,
                 )
                 ax.set_xlabel(
-                    y_var if rotate_plot else x_var,
+                    get_label(x_var) if not rotate_plot else get_label(y_var),
                     fontsize=label_fontsize,
                 )
                 ax.set_ylabel(
-                    x_var if rotate_plot else y_var,
+                    get_label(y_var) if not rotate_plot else get_label(x_var),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
 
-                # Set x and y limits if specified
                 if xlim:
                     ax.set_xlim(xlim)
                 if ylim:
                     ax.set_ylim(ylim)
 
-                # Toggle legend
                 if not show_legend and ax.legend_:
                     ax.legend().remove()
             else:
@@ -2216,7 +2684,7 @@ def scatter_fit_plot(
                 )
 
         if show_plot in ["grid", "both"]:
-            plt.show()  # Display the plot
+            plt.show()
         plt.close(fig)
 
 
@@ -2246,6 +2714,7 @@ def flex_corr_matrix(
     vmax=1,
     cbar_label="Correlation Index",
     triangular=True,  # New parameter to control triangular vs full matrix
+    label_names=None,
     **kwargs,
 ):
     """
@@ -2276,16 +2745,16 @@ def flex_corr_matrix(
     image_path_svg : str, optional
         Directory path to save SVG image of the heatmap.
 
-    figsize : tuple, optional (default=(20, 20))
+    figsize : tuple, optional (default=(10, 10))
         Width and height of the figure for the heatmap.
 
     title : str, optional
         Title of the heatmap.
 
-    title_fontsize : int, optional (default=16)
-        Font size for the title.
+    label_fontsize : int, optional (default=12)
+        Font size for the axis labels and title.
 
-    label_fontsize : int, optional (default=10)
+    tick_fontsize : int, optional (default=10)
         Font size for tick labels (variable names) and colorbar label.
 
     xlabel_rot : int, optional (default=45)
@@ -2315,6 +2784,9 @@ def flex_corr_matrix(
     triangular : bool, optional (default=True)
         Whether to show only the upper triangle of the correlation matrix.
 
+    label_names : dict, optional
+        Dictionary to map original column names to custom labels.
+
     **kwargs : dict, optional
         Additional keyword arguments to pass to seaborn.heatmap().
 
@@ -2323,6 +2795,24 @@ def flex_corr_matrix(
     None
         This function does not return any value but generates and optionally
         saves a correlation heatmap.
+
+    Raises:
+    -------
+    ValueError
+        If `annot` is not a boolean value.
+
+    ValueError
+        If `cols` is provided and is not a list of column names.
+
+    ValueError
+        If `save_plots` is not a boolean value.
+
+    ValueError
+        If `triangular` is not a boolean value.
+
+    ValueError
+        If `save_plots` is set to True without specifying either
+        `image_path_png` or `image_path_svg`.
     """
 
     # Validation: Ensure annot is a boolean
@@ -2394,20 +2884,42 @@ def flex_corr_matrix(
             fontsize=label_fontsize,  # Now using label_fontsize instead
         )
 
-    # Rotate x-axis labels, adjust alignment, and apply padding
-    plt.xticks(
-        rotation=xlabel_rot,
-        fontsize=tick_fontsize,  # Updated to use tick_fontsize
-        ha=xlabel_alignment,
-        rotation_mode="anchor",
-    )
+    # Apply custom labels if label_names is provided
+    if label_names:
+        heatmap.set_xticklabels(
+            [
+                label_names.get(label.get_text(), label.get_text())
+                for label in heatmap.get_xticklabels()
+            ],
+            rotation=xlabel_rot,
+            fontsize=tick_fontsize,
+            ha=xlabel_alignment,
+            rotation_mode="anchor",
+        )
+        heatmap.set_yticklabels(
+            [
+                label_names.get(label.get_text(), label.get_text())
+                for label in heatmap.get_yticklabels()
+            ],
+            rotation=ylabel_rot,
+            fontsize=tick_fontsize,
+            va=ylabel_alignment,
+        )
+    else:
+        # Rotate x-axis labels, adjust alignment, and apply padding
+        plt.xticks(
+            rotation=xlabel_rot,
+            fontsize=tick_fontsize,  # Updated to use tick_fontsize
+            ha=xlabel_alignment,
+            rotation_mode="anchor",
+        )
 
-    # Rotate y-axis labels and adjust alignment
-    plt.yticks(
-        rotation=ylabel_rot,
-        fontsize=tick_fontsize,  # Updated to use tick_fontsize
-        va=ylabel_alignment,
-    )
+        # Rotate y-axis labels and adjust alignment
+        plt.yticks(
+            rotation=ylabel_rot,
+            fontsize=tick_fontsize,  # Updated to use tick_fontsize
+            va=ylabel_alignment,
+        )
 
     # Adjust layout to prevent overlap
     plt.tight_layout()
