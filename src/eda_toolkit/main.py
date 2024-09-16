@@ -221,19 +221,37 @@ def parse_date_with_rule(date_str):
 ################################################################################
 
 
-def dataframe_columns(df, background_color):
+def dataframe_columns(
+    df,
+    background_color=None,
+    return_df=False,
+):
     """
-    Function to analyze dataframe columns, such as dtype, null,
-    and max unique value and percentages.
+    Analyze DataFrame columns to provide summary statistics such as data type,
+    null counts, unique values, and most frequent values.
+
     Args:
-        df (dataframe): the dataframe to analyze
-        background_color (str): color hex value or color name accepted by Pandas
+        df (pandas.DataFrame): The DataFrame to analyze.
+        background_color (str, optional): Hex color code or color name for
+                                          background styling in the output
+                                          DataFrame. Defaults to None.
+        return_df (bool, optional): If True, returns the plain DataFrame with
+                                    the summary statistics. If False, returns a
+                                    styled DataFrame for visual presentation.
+                                    Defaults to False.
+
     Raises:
-        No Raises
-        Null and empty string pre-processing
+        None.
+
     Returns:
-        str:       Prints the shape of the dataframe at top
-        dataframe: column_value_counts list in DataFrame format
+        pandas.DataFrame: If `return_df` is True, returns the plain DataFrame
+                          containing column summary statistics. If `return_df`
+                          is False, returns a styled DataFrame with optional
+                          background color for specific columns.
+
+    Example:
+        styled_df = dataframe_columns(df, background_color="#FFFF00")
+        plain_df = dataframe_columns(df, return_df=True)
     """
 
     print("Shape: ", df.shape, "\n")
@@ -249,12 +267,22 @@ def dataframe_columns(df, background_color):
     df = df.fillna(pd.NA)
     # Replace empty strings with Pandas NA
     df = df.apply(
-        lambda col: col.map(lambda x: pd.NA if isinstance(x, str) and x == "" else x)
+        lambda col: col.map(
+            lambda x: pd.NA if isinstance(x, str) and x == "" else x,
+        )
     )
     # Begin Process...
     columns_value_counts = []
     for col in df.columns:
-        col_str = df[col].astype(str).replace("<NA>", "null").replace("NaT", "null")
+        col_str = (
+            df[col]
+            .astype(str)
+            .replace("<NA>", "null")
+            .replace(
+                "NaT",
+                "null",
+            )
+        )
         value_counts = col_str.value_counts()
         max_unique_value = value_counts.index[0]
         max_unique_value_total = value_counts.iloc[0]
@@ -279,39 +307,48 @@ def dataframe_columns(df, background_color):
         "Total seconds of processing time:",
         (stop_time - start_time).total_seconds(),
     )
-   
-    # Output, try/except, accounting for the potential of Python version with the styler
-    # as hide_index() is deprecated since Pandas 1.4, in such cases, hide() is used instead
-    try:
-        return (
-            pd.DataFrame(columns_value_counts)
-            .style.hide()
-            .format(precision=2)
-            .set_properties(
-                subset=[
-                    "unique_values_total",
-                    "max_unique_value",
-                    "max_unique_value_total",
-                    "max_unique_value_pct",
-                ],
-                **{"background-color": background_color}
+
+    result_df = pd.DataFrame(columns_value_counts)
+
+    if return_df:
+        # Return the plain DataFrame
+        return result_df
+    else:
+        # Return the styled DataFrame
+
+        # Output, try/except, accounting for the potential of Python version with
+        # the styler as hide_index() is deprecated since Pandas 1.4, in such cases,
+        # hide() is used instead
+        try:
+            return (
+                pd.DataFrame(columns_value_counts)
+                .style.hide()
+                .format(precision=2)
+                .set_properties(
+                    subset=[
+                        "unique_values_total",
+                        "max_unique_value",
+                        "max_unique_value_total",
+                        "max_unique_value_pct",
+                    ],
+                    **{"background-color": background_color},
+                )
             )
-        )
-    except:
-        return (
-            pd.DataFrame(columns_value_counts)
-            .style.hide_index()
-            .format(precision=2)
-            .set_properties(
-                subset=[
-                    "unique_values_total",
-                    "max_unique_value",
-                    "max_unique_value_total",
-                    "max_unique_value_pct",
-                ],
-                **{"background-color": background_color}
+        except:
+            return (
+                pd.DataFrame(columns_value_counts)
+                .style.hide_index()
+                .format(precision=2)
+                .set_properties(
+                    subset=[
+                        "unique_values_total",
+                        "max_unique_value",
+                        "max_unique_value_total",
+                        "max_unique_value_pct",
+                    ],
+                    **{"background-color": background_color},
+                )
             )
-        )
 
 
 ################################################################################
