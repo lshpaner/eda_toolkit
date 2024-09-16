@@ -24,8 +24,14 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
+    "sphinx_multiversion",
     # "sphinxcontrib.bibtex",
 ]
+
+smv_tag_whitelist = (
+    r"^v\d+\.\d+.*$"  # Whitelist tags with versions like v1.0, v2.0, etc.
+)
+smv_branch_whitelist = r"^main$"  # Whitelist the main branch
 
 # Add this line to specify the bibliography file
 # bibtex_bibfiles = ["references.bib"]
@@ -54,6 +60,19 @@ html_theme = "sphinx_rtd_theme"
 html_show_sourcelink = False
 
 # html_static_path = ["_static"]
+
+html_context = {
+    "display_github": False,
+    "github_user": "your_username",
+    "github_repo": "your_repository",
+    "github_version": "main/docs/",
+    "current_version": "v1.0",
+    "versions": [
+        ("v1.0", "/en/v1.0/"),
+        ("v0.9", "/en/v0.9/"),
+        ("latest", "/en/latest/"),
+    ],
+}
 
 
 def setup(app):
