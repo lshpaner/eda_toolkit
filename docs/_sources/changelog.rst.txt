@@ -244,8 +244,10 @@ the usability and functionality of the EDA Toolkit.
 
 
 
-Version 0.0.7
----------------------------
+`Version 0.0.7`_
+----------------------
+
+.. _Version 0.0.7: file:///C:/Users/lshpaner/Documents/Python_Projects/eda_toolkit/_build/html/v0.0.7/index.html
 
 **Added Function for Customizable Correlation Matrix Visualization**
 
