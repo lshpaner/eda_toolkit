@@ -221,34 +221,37 @@ def parse_date_with_rule(date_str):
 ################################################################################
 
 
-def dataframe_columns(df):
+def dataframe_columns(
+    df,
+    background_color=None,
+    return_df=False,
+):
     """
-    Analyze the columns of a DataFrame, including their data types,
-    number of null values, unique values, and the most frequent value.
+    Analyze DataFrame columns to provide summary statistics such as data type,
+    null counts, unique values, and most frequent values.
 
-    Parameters:
-    -----------
-    df : pandas.DataFrame
-        The DataFrame to analyze.
+    Args:
+        df (pandas.DataFrame): The DataFrame to analyze.
+        background_color (str, optional): Hex color code or color name for
+                                          background styling in the output
+                                          DataFrame. Defaults to None.
+        return_df (bool, optional): If True, returns the plain DataFrame with
+                                    the summary statistics. If False, returns a
+                                    styled DataFrame for visual presentation.
+                                    Defaults to False.
+
+    Raises:
+        None.
 
     Returns:
-    --------
-    pandas.DataFrame
-        A DataFrame where each row corresponds to a column from the input
-        DataFrame, with the following information:
-        - 'column': The column name.
-        - 'dtype': The data type of the column.
-        - 'null_total': The total number of null values in the column.
-        - 'null_pct': The percentage of null values in the column.
-        - 'unique_values_total': The number of unique values in the column.
-        - 'max_unique_value': The most frequent value in the column.
-        - 'max_unique_value_total': The count of the most frequent value.
-        - 'max_unique_value_pct': The percentage of the most frequent value.
+        pandas.DataFrame: If `return_df` is True, returns the plain DataFrame
+                          containing column summary statistics. If `return_df`
+                          is False, returns a styled DataFrame with optional
+                          background color for specific columns.
 
-    Notes:
-    ------
-    - The function prints the shape of the DataFrame and total processing time.
-    - It also handles null values & empty strings, converting them to pandas' NA.
+    Example:
+        styled_df = dataframe_columns(df, background_color="#FFFF00")
+        plain_df = dataframe_columns(df, return_df=True)
     """
 
     print("Shape: ", df.shape, "\n")
@@ -264,12 +267,22 @@ def dataframe_columns(df):
     df = df.fillna(pd.NA)
     # Replace empty strings with Pandas NA
     df = df.apply(
-        lambda col: col.map(lambda x: pd.NA if isinstance(x, str) and x == "" else x)
+        lambda col: col.map(
+            lambda x: pd.NA if isinstance(x, str) and x == "" else x,
+        )
     )
     # Begin Process...
     columns_value_counts = []
     for col in df.columns:
-        col_str = df[col].astype(str).replace("<NA>", "null").replace("NaT", "null")
+        col_str = (
+            df[col]
+            .astype(str)
+            .replace("<NA>", "null")
+            .replace(
+                "NaT",
+                "null",
+            )
+        )
         value_counts = col_str.value_counts()
         max_unique_value = value_counts.index[0]
         max_unique_value_total = value_counts.iloc[0]
@@ -294,7 +307,48 @@ def dataframe_columns(df):
         "Total seconds of processing time:",
         (stop_time - start_time).total_seconds(),
     )
-    return pd.DataFrame(columns_value_counts)
+
+    result_df = pd.DataFrame(columns_value_counts)
+
+    if return_df:
+        # Return the plain DataFrame
+        return result_df
+    else:
+        # Return the styled DataFrame
+
+        # Output, try/except, accounting for the potential of Python version with
+        # the styler as hide_index() is deprecated since Pandas 1.4, in such cases,
+        # hide() is used instead
+        try:
+            return (
+                pd.DataFrame(columns_value_counts)
+                .style.hide()
+                .format(precision=2)
+                .set_properties(
+                    subset=[
+                        "unique_values_total",
+                        "max_unique_value",
+                        "max_unique_value_total",
+                        "max_unique_value_pct",
+                    ],
+                    **{"background-color": background_color},
+                )
+            )
+        except:
+            return (
+                pd.DataFrame(columns_value_counts)
+                .style.hide_index()
+                .format(precision=2)
+                .set_properties(
+                    subset=[
+                        "unique_values_total",
+                        "max_unique_value",
+                        "max_unique_value_total",
+                        "max_unique_value_pct",
+                    ],
+                    **{"background-color": background_color},
+                )
+            )
 
 
 ################################################################################
