@@ -286,8 +286,10 @@ Convert all columns in the DataFrame to object type to prevent issues with numer
    df = df.astype(str).fillna("")
 
 
-Version 0.0.6
----------------------------
+`Version 0.0.6`_
+----------------------
+
+.. _Version 0.0.6: file:///C:/Users/lshpaner/Documents/Python_Projects/eda_toolkit/_build/html/v0.0.6/index.html
 
 **Added validation for Plot Type Parameter in KDE Distributions Function**
 
@@ -303,8 +305,11 @@ This release adds a validation step for the ``plot_type`` parameter in the ``kde
             f"got '{plot_type}' instead."
         )
 
-Version 0.0.5 
----------------------------
+`Version 0.0.5`_
+----------------------
+
+.. _Version 0.0.5: file:///C:/Users/lshpaner/Documents/Python_Projects/eda_toolkit/_build/html/v0.0.5/index.html
+
 
 **Ensure Consistent Font Size and Text Wrapping Across Plot Elements**
 
