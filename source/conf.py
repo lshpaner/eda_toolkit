@@ -1,3 +1,6 @@
+from docutils import nodes
+from docutils.parsers.rst import roles
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -50,7 +53,20 @@ html_theme = "sphinx_rtd_theme"
 # If your documentation is served from a subdirectory, set this to the subdirectory path
 html_show_sourcelink = False
 
+# html_static_path = ["_static"]
+
 
 def setup(app):
     app.add_css_file("custom.css")
     app.add_js_file("custom.js")
+
+
+def bold_literal_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    # Creating a strong (bold) node that contains a literal node
+    node = nodes.strong()
+    literal_node = nodes.literal(text, text, classes=["bold-literal"])
+    node += literal_node
+    return [node], []
+
+
+roles.register_canonical_role("bold-literal", bold_literal_role)

@@ -70,7 +70,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8d">Version 0.0.8d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8">Version 0.0.8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8c">Version 0.0.8c</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8b">Version 0.0.8b</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8a">Version 0.0.8a</a></li>
@@ -117,8 +117,21 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
-<section id="version-0-0-8d">
-<h2>Version 0.0.8d<a class="headerlink" href="#version-0-0-8d" title="Link to this heading"></a></h2>
+<section id="version-0-0-8">
+<h2>Version 0.0.8<a class="headerlink" href="#version-0-0-8" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="usage_guide.html#stacked_crosstab_plot" title="stacked_crosstab_plot"><code class="xref py py-class docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code></a></p>
+<ul class="simple">
+<li><p><strong>Flexible `save_formats` Input</strong>:
+- <cite>save_formats</cite> now accepts a string, tuple, or list for specifying formats (e.g., <cite>“png”</cite>, <cite>(“png”, “svg”)</cite>, or <cite>[“png”, “svg”]</cite>).
+- Single strings or tuples are automatically converted to lists for consistent processing.</p></li>
+<li><p><strong>Dynamic Error Handling</strong>:
+- Added checks to ensure a valid path is provided for each format in <cite>save_formats</cite>.
+- Raises a <cite>ValueError</cite> if a format is specified without a corresponding path, with a clear, dynamic error message.</p></li>
+<li><p><strong>Improved Plot Saving Logic</strong>:
+- Updated logic allows saving plots in one format (e.g., only <cite>“png”</cite> or <cite>“svg”</cite>) without requiring the other.
+- Simplified and more intuitive path handling for saving plots.</p></li>
+</ul>
+<p><a class="reference internal" href="usage_guide.html#plot_3d_pdp" title="plot_3d_pdp"><code class="xref py py-class docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code></a></p>
 <p>This update introduces several key changes to the <cite>plot_3d_pdp</cite> function, simplifying the function’s interface and improving usability, while maintaining the flexibility needed for diverse visualization needs.</p>
 <p><strong>1. Parameter Changes</strong></p>
 <ul class="simple">

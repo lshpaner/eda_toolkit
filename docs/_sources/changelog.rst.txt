@@ -24,9 +24,26 @@
 Changelog
 =========
 
-Version 0.0.8d
+Version 0.0.8
 --------------------
 
+:class:`stacked_crosstab_plot` 
+
+- **Flexible `save_formats` Input**:
+  - `save_formats` now accepts a string, tuple, or list for specifying formats (e.g., `"png"`, `("png", "svg")`, or `["png", "svg"]`).
+  - Single strings or tuples are automatically converted to lists for consistent processing.
+
+- **Dynamic Error Handling**:
+  - Added checks to ensure a valid path is provided for each format in `save_formats`.
+  - Raises a `ValueError` if a format is specified without a corresponding path, with a clear, dynamic error message.
+
+- **Improved Plot Saving Logic**:
+  - Updated logic allows saving plots in one format (e.g., only `"png"` or `"svg"`) without requiring the other.
+  - Simplified and more intuitive path handling for saving plots.
+
+
+:class:`plot_3d_pdp`
+ 
 This update introduces several key changes to the `plot_3d_pdp` function, simplifying the function's interface and improving usability, while maintaining the flexibility needed for diverse visualization needs.
 
 **1. Parameter Changes**
