@@ -12,3 +12,9 @@
     margin: 0 auto;
     padding: 20px 0;
 }
+
+.bold-literal {
+    font-weight: bold;
+    color: red;  /* Set the text color to red */
+    font-family: monospace;
+}
