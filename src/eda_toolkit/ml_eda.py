@@ -88,21 +88,21 @@ def plot_2d_pdp(
     # Validate save_plots input
     if save_plots not in [None, "all", "individual", "grid"]:
         raise ValueError(
-            f"Invalid save_plots value selected. Choose from 'all',"
+            f"Invalid `save_plots` value selected. Choose from 'all',"
             f"'individual', 'grid', or None."
         )
 
     # Check if save_plots is set without image paths
     if save_plots and not (image_path_png or image_path_svg):
         raise ValueError(
-            f"To save plots, specify 'image_path_png' or " f"'image_path_svg'."
+            f"To save plots, specify `image_path_png` or `image_path_svg`."
         )
 
     n_features = len(features)
 
     if plot_type not in ["grid", "individual", "both"]:
         raise ValueError(
-            f"Invalid plot_type '{plot_type}'. Choose 'grid', 'individual', "
+            f"Invalid `plot_type` '{plot_type}'. Choose 'grid', 'individual', "
             f"or 'both'."
         )
 
@@ -422,15 +422,15 @@ def plot_3d_pdp(
     # Check if the plot_type is valid
     if plot_type not in ["static", "interactive", "both"]:
         raise ValueError(
-            "Invalid plot_type. Choose from 'static', 'interactive', or 'both'."
+            "Invalid `plot_type`. Choose from 'static', 'interactive', or 'both'."
         )
 
     # Validate that html_file_path and html_file_name are provided if needed
     if plot_type in ["interactive", "both"]:
         if not html_file_path or not html_file_name:
             raise ValueError(
-                f"html_file_path and html_file_name must be"
-                f" provided for interactive or both plot types."
+                f"`html_file_path` and `html_file_name` must be"
+                f" provided for 'interactive' or 'both' plot types."
             )
 
     # Handle both pandas DataFrame and NumPy array inputs
