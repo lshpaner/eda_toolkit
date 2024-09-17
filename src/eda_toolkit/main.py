@@ -1167,7 +1167,7 @@ def kde_distributions(
                 if plot_mean and mean_value is not None:
                     ax.axvline(
                         mean_value,
-                        color=kde_color,
+                        color=mean_color,
                         linestyle="--",
                         label="Mean",
                     )
