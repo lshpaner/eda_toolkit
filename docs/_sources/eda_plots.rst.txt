@@ -1677,7 +1677,7 @@ For users interested in understanding the strength of the relationship between v
     :param hue: Column name for the grouping variable that will produce points with different colors.
     :type hue: str, optional
 
-    :param hue_palette: Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette.
+    :param hue_palette: Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette. This parameter requires the `hue` parameter to be set.
     :type hue_palette: dict, list, or str, optional
 
     :param size: Column name for the grouping variable that will produce points with different sizes.
@@ -1710,14 +1710,14 @@ For users interested in understanding the strength of the relationship between v
     :raises ValueError: 
         - If ``all_vars`` is provided and either ``x_vars`` or ``y_vars`` is also provided.
         - If neither ``all_vars`` nor both ``x_vars`` and ``y_vars`` are provided.
+        - If ``hue_palette`` is specified without ``hue``.
         - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
         - If ``save_plots`` is not one of ``None``, ``"all"``, ``"individual"``, or ``"grid"``.
         - If ``save_plots`` is set but no image paths are provided.
         - If ``rotate_plot`` is not a boolean value.
         - If ``individual_figsize`` or ``grid_figsize`` are not tuples/lists with two numeric values.
 
-    :returns: ``None``. This function does not return any value but generates and optionally saves scatter plots for the specified ``x_vars` and `y_vars``, or for all combinations of variables in ``all_vars`` if it is provided.
-
+    :returns: ``None``. This function does not return any value but generates and optionally saves scatter plots for the specified ``x_vars`` and ``y_vars``, or for all combinations of variables in ``all_vars`` if it is provided.
 
 
 
@@ -1852,9 +1852,6 @@ images in the specified paths.
 
 Scatter Plots (All Combinations Example)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Scatter Plots for All Numeric Variable Combinations Example
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this example, the ``scatter_fit_plot`` function is used to generate a grid of scatter plots that explore the relationships between all numeric variables in the ``df`` DataFrame. The function automatically identifies and plots all possible combinations of these variables. Below are key aspects of this example:
 

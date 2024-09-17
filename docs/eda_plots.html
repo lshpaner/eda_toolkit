@@ -9,6 +9,8 @@
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.js?v=fecc5f50" />
 
   
   <!--[if lt IE 9]>
@@ -104,7 +106,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#regression-centric-scatter-plots-example">Regression-Centric Scatter Plots Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scatter-plots-grouped-by-category-example">Scatter Plots Grouped by Category Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scatter-plots-all-combinations-example">Scatter Plots (All Combinations Example)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scatter-plots-for-all-numeric-variable-combinations-example">Scatter Plots for All Numeric Variable Combinations Example</a></li>
 </ul>
 </li>
 </ul>
@@ -1350,7 +1351,7 @@ size, and markers.</p>
 <li><p><strong>best_fit_linecolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color code for the best fit line. Default is <code class="docutils literal notranslate"><span class="pre">&quot;red&quot;</span></code>.</p></li>
 <li><p><strong>best_fit_linestyle</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Linestyle for the best fit line. Default is <code class="docutils literal notranslate"><span class="pre">&quot;-&quot;</span></code>.</p></li>
 <li><p><strong>hue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column name for the grouping variable that will produce points with different colors.</p></li>
-<li><p><strong>hue_palette</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette.</p></li>
+<li><p><strong>hue_palette</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette. This parameter requires the <cite>hue</cite> parameter to be set.</p></li>
 <li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column name for the grouping variable that will produce points with different sizes.</p></li>
 <li><p><strong>sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary mapping sizes (smallest and largest) to min and max values.</p></li>
 <li><p><strong>marker</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Marker style used for the scatter points. Default is <code class="docutils literal notranslate"><span class="pre">&quot;o&quot;</span></code>.</p></li>
@@ -1366,6 +1367,7 @@ size, and markers.</p>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – <ul class="simple">
 <li><p>If <code class="docutils literal notranslate"><span class="pre">all_vars</span></code> is provided and either <code class="docutils literal notranslate"><span class="pre">x_vars</span></code> or <code class="docutils literal notranslate"><span class="pre">y_vars</span></code> is also provided.</p></li>
 <li><p>If neither <code class="docutils literal notranslate"><span class="pre">all_vars</span></code> nor both <code class="docutils literal notranslate"><span class="pre">x_vars</span></code> and <code class="docutils literal notranslate"><span class="pre">y_vars</span></code> are provided.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">hue_palette</span></code> is specified without <code class="docutils literal notranslate"><span class="pre">hue</span></code>.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">show_plot</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> is set but no image paths are provided.</p></li>
@@ -1375,7 +1377,7 @@ size, and markers.</p>
 </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>. This function does not return any value but generates and optionally saves scatter plots for the specified <code class="docutils literal notranslate"><span class="pre">x_vars`</span> <span class="pre">and</span> <span class="pre">`y_vars</span></code>, or for all combinations of variables in <code class="docutils literal notranslate"><span class="pre">all_vars</span></code> if it is provided.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>. This function does not return any value but generates and optionally saves scatter plots for the specified <code class="docutils literal notranslate"><span class="pre">x_vars</span></code> and <code class="docutils literal notranslate"><span class="pre">y_vars</span></code>, or for all combinations of variables in <code class="docutils literal notranslate"><span class="pre">all_vars</span></code> if it is provided.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1468,9 +1470,6 @@ images in the specified paths.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="scatter-plots-all-combinations-example">
 <h3>Scatter Plots (All Combinations Example)<a class="headerlink" href="#scatter-plots-all-combinations-example" title="Link to this heading"></a></h3>
-</section>
-<section id="scatter-plots-for-all-numeric-variable-combinations-example">
-<h3>Scatter Plots for All Numeric Variable Combinations Example<a class="headerlink" href="#scatter-plots-for-all-numeric-variable-combinations-example" title="Link to this heading"></a></h3>
 <p>In this example, the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function is used to generate a grid of scatter plots that explore the relationships between all numeric variables in the <code class="docutils literal notranslate"><span class="pre">df</span></code> DataFrame. The function automatically identifies and plots all possible combinations of these variables. Below are key aspects of this example:</p>
 <ol class="arabic simple">
 <li><p><strong>All Variables Combination</strong>: The <code class="docutils literal notranslate"><span class="pre">all_vars</span></code> parameter is used to automatically generate scatter plots for all possible combinations of numerical variables in the DataFrame. This means you don’t need to manually specify <code class="docutils literal notranslate"><span class="pre">x_vars</span></code> and <code class="docutils literal notranslate"><span class="pre">y_vars</span></code>, as the function will iterate through each possible pair.</p></li>
