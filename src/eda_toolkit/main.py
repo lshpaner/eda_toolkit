@@ -659,7 +659,7 @@ def contingency_table(
 
     # Ensure sort_by is either 0 or 1
     if sort_by not in [0, 1]:
-        raise ValueError("sort_by must be 0 or 1.")
+        raise ValueError("`sort_by` must be 0 or 1.")
 
     # Convert single column to list
     if isinstance(cols, str):
@@ -1001,8 +1001,8 @@ def kde_distributions(
         n_rows, n_cols = 1, 1
         if grid_figsize is not None:
             raise ValueError(
-                f"Cannot use grid_figsize when there is only one "
-                f"plot. Use figsize instead."
+                f"Cannot use `grid_figsize` when there is only one "
+                f"plot. Use `figsize` instead."
             )
     else:
         # Calculate columns based on square root
@@ -1029,7 +1029,7 @@ def kde_distributions(
         std_color = [std_color] * len(std_dev_levels)
     elif isinstance(std_color, list) and len(std_color) < len(std_dev_levels):
         raise ValueError(
-            f"Not enough colors specified in 'std_color'. "
+            f"Not enough colors specified in `std_color`. "
             f"You have {len(std_color)} color(s) but {len(std_dev_levels)} "
             f"standard deviation level(s). "
             f"Please provide at least as many colors as standard deviation levels."
@@ -1039,7 +1039,7 @@ def kde_distributions(
     valid_plot_types = ["hist", "kde", "both"]
     if plot_type.lower() not in valid_plot_types:
         raise ValueError(
-            f"Invalid plot_type value. Expected one of {valid_plot_types}, "
+            f"Invalid `plot_type` value. Expected one of {valid_plot_types}, "
             f"got '{plot_type}' instead."
         )
 
@@ -1054,7 +1054,7 @@ def kde_distributions(
     ]
     if stat.lower() not in valid_stats:
         raise ValueError(
-            f"Invalid stat value. Expected one of {valid_stats}, "
+            f"Invalid `stat` value. Expected one of {valid_stats}, "
             f"got '{stat}' instead."
         )
 
@@ -1062,20 +1062,20 @@ def kde_distributions(
     if log_scale_vars:
         invalid_vars = [var for var in log_scale_vars if var not in df.columns]
         if invalid_vars:
-            raise ValueError(f"Invalid log_scale_vars: {invalid_vars}")
+            raise ValueError(f"Invalid `log_scale_vars`: {invalid_vars}")
 
     # Check if edgecolor is being set while fill is False
     if not fill and hist_edgecolor != "#000000":
-        raise ValueError("Cannot change edgecolor when fill is set to False")
+        raise ValueError("Cannot change `edgecolor` when `fill` is set to False")
 
     # Check if fill_alpha is being set while fill is False
     if not fill and fill_alpha != 0.6:
-        raise ValueError("Cannot set fill_alpha when fill is set to False")
+        raise ValueError("Cannot set `fill_alpha` when `fill` is set to False")
 
     # Warn if both bins and binwidth are set
     if bins != "auto" and binwidth is not None:
         warnings.warn(
-            "Specifying both bins and binwidth may affect performance.",
+            "Specifying both `bins` and `binwidth` may affect performance.",
             UserWarning,
         )
 
@@ -1614,7 +1614,7 @@ def stacked_crosstab_plot(
     # Check if remove_stacks is used correctly
     if remove_stacks and plot_type != "regular":
         raise ValueError(
-            "remove_stacks can only be used when plot_type is set to 'regular'."
+            "`remove_stacks` can only be used when `plot_type` is set to 'regular'."
         )
 
     # Check if the output parameter is valid
@@ -1646,8 +1646,8 @@ def stacked_crosstab_plot(
 
     if not (len(title) == len(func_col) == len(legend_labels_list)):
         raise ValueError(
-            f"Length mismatch: Ensure that the lengths of title, func_col, "
-            f"and legend_labels_list are equal. Current lengths are: "
+            f"Length mismatch: Ensure that the lengths of `title`, `func_col`, "
+            f"and `legend_labels_list` are equal. Current lengths are: "
             f"title={len(title)}, func_col={len(func_col)}, "
             f"legend_labels_list={len(legend_labels_list)}. "
             "Check for missing items or commas."
@@ -1753,9 +1753,9 @@ def stacked_crosstab_plot(
                         f"Length mismatch: Crosstab columns "
                         f"({len(crosstabdest.columns)}) and legend "
                         f"({len(legend)}). Check the length of your "
-                        "legend_labels_list, func_col, and title to ensure "
-                        "you are not missing an item, comma, or have an extra "
-                        "item."
+                        f"`legend_labels_list`, `func_col`, and `title` to ensure "
+                        f"you are not missing an item, comma, or have an extra "
+                        f"item."
                     )
 
                 if plot_type in ["both", "regular"]:
@@ -2095,27 +2095,25 @@ def box_violin_plot(
     # Check for valid show_plot values
     if show_plot not in ["individual", "grid", "both"]:
         raise ValueError(
-            "Invalid show_plot value selected. Choose from 'individual', "
+            "Invalid `show_plot` value selected. Choose from 'individual', "
             "'grid', or 'both'."
         )
 
     # Check for valid save_plots values
     if save_plots not in [None, "all", "individual", "grid"]:
         raise ValueError(
-            "Invalid save_plots value selected. Choose from 'all', "
+            "Invalid `save_plots` value selected. Choose from 'all', "
             "'individual', 'grid', or None."
         )
 
     # Check if save_plots is set without image paths
     if save_plots and not (image_path_png or image_path_svg):
-        raise ValueError(
-            "To save plots, specify 'image_path_png' or " "'image_path_svg'."
-        )
+        raise ValueError("To save plots, specify `image_path_png` or `image_path_svg`.")
 
     # Check for valid rotate_plot values
     if not isinstance(rotate_plot, bool):
         raise ValueError(
-            "Invalid rotate_plot value selected. Choose from 'True' or 'False'."
+            "Invalid `rotate_plot` value selected. Choose from 'True' or 'False'."
         )
 
     # Check for valid individual_figsize values
@@ -2125,7 +2123,7 @@ def box_violin_plot(
         and all(isinstance(x, (int, float)) for x in individual_figsize)
     ):
         raise ValueError(
-            "Invalid individual_figsize value. It should be a tuple or list "
+            "Invalid `individual_figsize` value. It should be a tuple or list "
             "of two numbers (width, height)."
         )
 
@@ -2136,7 +2134,7 @@ def box_violin_plot(
         and all(isinstance(x, (int, float)) for x in grid_figsize)
     ):
         raise ValueError(
-            "Invalid grid_figsize value. It should be a tuple or list of two "
+            "Invalid `grid_figsize` value. It should be a tuple or list of two "
             "numbers (width, height)."
         )
 
@@ -2498,6 +2496,9 @@ def scatter_fit_plot(
         If neither `all_vars` nor both `x_vars` and `y_vars` are provided.
 
     ValueError
+        If `hue_palette` is specified without `hue`.
+
+    ValueError
         If `show_plot` is not one of ["individual", "grid", "both"].
 
     ValueError
@@ -2534,6 +2535,13 @@ def scatter_fit_plot(
             f"`y_vars` as inputs or `all_vars`."
         )
 
+    # Check if hue_palette is provided without hue
+    if hue_palette is not None and hue is None:
+        raise ValueError(
+            f"Cannot specify `hue_palette` without specifying `hue`. "
+            f"Please provide the `hue` parameter or remove `hue_palette`."
+        )
+
     # Generate combinations of x_vars and y_vars or use all_vars
     if all_vars:
         combinations = list(itertools.combinations(all_vars, 2))
@@ -2560,25 +2568,23 @@ def scatter_fit_plot(
     # Validate the show_plot input
     if show_plot not in ["individual", "grid", "both"]:
         raise ValueError(
-            f"Invalid show_plot. Choose 'individual', 'grid', " f"or 'both'."
+            f"Invalid `show_plot`. Choose 'individual', 'grid', " f"or 'both'."
         )
 
     # Validate the save_plots input
     if save_plots not in [None, "all", "individual", "grid"]:
         raise ValueError(
-            "Invalid save_plots value. Choose from 'all', "
+            "Invalid `save_plots` value. Choose from 'all', "
             "'individual', 'grid', or None."
         )
 
     # Check if save_plots is set without image paths
     if save_plots and not (image_path_png or image_path_svg):
-        raise ValueError(
-            "To save plots, specify 'image_path_png' or " "'image_path_svg'."
-        )
+        raise ValueError("To save plots, specify `image_path_png` or `image_path_svg`.")
 
     # Validate the rotate_plot input
     if not isinstance(rotate_plot, bool):
-        raise ValueError("Invalid rotate_plot. Choose 'True' or 'False'.")
+        raise ValueError("Invalid `rotate_plot`. Choose True or False.")
 
     # Validate the individual_figsize input
     if not (
@@ -2587,7 +2593,7 @@ def scatter_fit_plot(
         and all(isinstance(x, (int, float)) for x in individual_figsize)
     ):
         raise ValueError(
-            "Invalid individual_figsize value. It should be a tuple or list "
+            "Invalid `individual_figsize` value. It should be a tuple or list "
             "of two numbers (width, height)."
         )
 
@@ -2598,7 +2604,7 @@ def scatter_fit_plot(
         and all(isinstance(x, (int, float)) for x in grid_figsize)
     ):
         raise ValueError(
-            "Invalid grid_figsize value. It should be a tuple or list of two "
+            "Invalid `grid_figsize` value. It should be a tuple or list of two "
             "numbers (width, height)."
         )
 
@@ -2919,28 +2925,28 @@ def flex_corr_matrix(
     # Validation: Ensure annot is a boolean
     if not isinstance(annot, bool):
         raise ValueError(
-            "Invalid value for 'annot'. Please enter either True or False."
+            "Invalid value for `annot`. Please enter either True or False."
         )
 
     # Validation: Ensure cols is a list if provided
     if cols is not None and not isinstance(cols, list):
-        raise ValueError("The 'cols' parameter must be a list of column names.")
+        raise ValueError("The `cols` parameter must be a list of column names.")
 
     # Validation: Ensure save_plots is a boolean
     if not isinstance(save_plots, bool):
-        raise ValueError("Invalid 'save_plots' value. Enter True or False.")
+        raise ValueError("Invalid `save_plots` value. Enter True or False.")
 
     # Validation: Ensure triangular is a boolean
     if not isinstance(triangular, bool):
         raise ValueError(
-            "Invalid 'triangular' value. Please enter either True or False."
+            "Invalid `triangular` value. Please enter either True or False."
         )
 
     # Validate paths are specified if save_plots is True
     if save_plots and not (image_path_png or image_path_svg):
         raise ValueError(
-            "You must specify 'image_path_png' or 'image_path_svg' "
-            "when 'save_plots' is True."
+            f"You must specify `image_path_png` or `image_path_svg` "
+            f"when `save_plots` is True."
         )
 
     # Filter DataFrame if cols are specified
