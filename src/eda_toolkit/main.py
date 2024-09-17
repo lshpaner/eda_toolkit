@@ -820,11 +820,14 @@ def kde_distributions(
         'all', plots will be generated for all numeric columns.
 
     figsize : tuple of int, optional (default=(5, 5))
-        Size of each individual plot.
+        Size of each individual plot. This parameter is used when there is only
+        one variable being plotted or when generating separate plots for each
+        variable of interest.
 
     grid_figsize : tuple of int, optional
-        Size of the overall grid of plots. If not specified, it is calculated
-        based on `figsize`, `n_rows`, and `n_cols`.
+        Size of the overall grid of plots when there are multiple variables
+        being plotted in a single grid. This parameter is ignored when only one
+        variable is plotted or when using `single_var_image_filename`.
 
     hist_color : str, optional (default='#0000FF')
         Color of the histogram bars.
@@ -879,7 +882,9 @@ def kde_distributions(
 
     single_var_image_filename : str, optional
         Filename to use when saving the separate distribution plots. The
-        variable name will be appended to this filename.
+        variable name will be appended to this filename. When using this
+        parameter, the `figsize` parameter is used to determine the size of the
+        individual plots. The `grid_figsize` param. is ignored in this context.
 
     y_axis_label : str, optional (default='Density')
         The label to display on the y-axis.
@@ -966,6 +971,9 @@ def kde_distributions(
     ValueError
         If `bins` and `binwidth` are both set, which can affect performance.
 
+    ValueError
+        If `grid_figsize` is provided when only one plot is being created.
+
     Warnings:
     ---------
     UserWarning
@@ -987,14 +995,22 @@ def kde_distributions(
 
     # Dynamically calculate n_rows and n_cols if not provided
     num_vars = len(vars_of_interest)
-    if n_rows is None or n_cols is None:
-        # Calculate columns based on square root
-        n_cols = int(np.ceil(np.sqrt(num_vars)))
-        # Calculate rows based on the number of columns
-        n_rows = int(np.ceil(num_vars / n_cols))
 
-    # Adjust figsize for grid if multiple plots
-    if num_vars > 1:
+    # If only one variable is being plotted
+    if num_vars == 1:
+        n_rows, n_cols = 1, 1
+        if grid_figsize is not None:
+            raise ValueError(
+                f"Cannot use grid_figsize when there is only one "
+                f"plot. Use figsize instead."
+            )
+    else:
+        # Calculate columns based on square root
+        if n_rows is None or n_cols is None:
+            n_cols = int(np.ceil(np.sqrt(num_vars)))
+            n_rows = int(np.ceil(num_vars / n_cols))
+
+        # Adjust figsize for grid if multiple plots
         if grid_figsize is None:
             figsize = (figsize[0] * n_cols, figsize[1] * n_rows)
         else:
@@ -1012,8 +1028,11 @@ def kde_distributions(
     if isinstance(std_color, str):
         std_color = [std_color] * len(std_dev_levels)
     elif isinstance(std_color, list) and len(std_color) < len(std_dev_levels):
-        std_color = std_color + [std_color[-1]] * (
-            len(std_dev_levels) - len(std_color),
+        raise ValueError(
+            f"Not enough colors specified in 'std_color'. "
+            f"You have {len(std_color)} color(s) but {len(std_dev_levels)} "
+            f"standard deviation level(s). "
+            f"Please provide at least as many colors as standard deviation levels."
         )
 
     # Validate plot_type parameter
@@ -1063,15 +1082,8 @@ def kde_distributions(
     # Create subplots grid
     fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=figsize)
 
-    # Ensure axes is always treated as an array
-    if n_rows * n_cols == 1:
-        axes = np.array([axes])
-
     # Flatten the axes array to simplify iteration
-    if n_rows * n_cols == 1:
-        axes = np.array([axes])
-    else:
-        axes = axes.flatten()
+    axes = np.atleast_1d(axes).flatten()
 
     def get_label(var):
         """
