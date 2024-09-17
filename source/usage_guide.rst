@@ -1871,8 +1871,8 @@ statistical overlays to provide deeper insights into the data.
 
 .. note::
 
-    It is entirely your prerogative in terms of which lines to show among mean, 
-    median, and standard deviations. Show one, show none, or show all of these. 
+    It is entirely your prerogative whether or not to plot mean, 
+    median, and standard deviation line(s). Show one, show none, or show all of these simultaneously. 
 
 .. code-block:: python
 
