@@ -798,6 +798,7 @@ def kde_distributions(
     std_dev_levels=None,  # Parameter to control how many stdev to plot
     std_color="#808080",
     label_names=None,
+    show_legend=True,  # New parameter to toggle the legend
     **kwargs,  # To capture additional keyword arguments
 ):
     """
@@ -933,6 +934,9 @@ def kde_distributions(
     label_names : dict, optional
         Custom labels for the variables of interest. Keys should be column
         names, and values should be the corresponding labels to display.
+
+    show_legend : bool, optional (default=True)
+        Whether to show the legend on the plots.
 
     **kwargs : additional keyword arguments
         Additional keyword arguments passed to the Seaborn plotting function.
@@ -1192,14 +1196,16 @@ def kde_distributions(
                             linestyle="--",
                         )
 
-                # Check if any labels exist before adding a legend
-                _, labels = ax.get_legend_handles_labels()
-                if labels:
+                # Conditionally add the legend
+                if show_legend:
                     ax.legend(loc="best")
 
             except Exception as e:
-                # Handle exceptions, specifically looking for legend issues
-                print(f"Warning encountered while plotting '{col}': {str(e)}")
+                # Handle different Python versions or issues w/ legends & labels
+                if "No artists with labels found to put in legend." in str(e):
+                    print(f"Warning encountered while plotting '{col}': {str(e)}")
+                    if show_legend:
+                        ax.legend(loc="best")
 
             ax.set_xlabel(
                 xlabel,
@@ -1348,7 +1354,7 @@ def kde_distributions(
                             label="Median",
                         )
 
-                    # Plot standard deviation bands if std_dev_levels is specified
+                    # Plot std. deviation bands if std_dev_levels is specified
                     if std_dev_levels:
                         std_value = data[var].std()
                         for level, color in zip(std_dev_levels, std_color):
@@ -1364,14 +1370,16 @@ def kde_distributions(
                                 label=f"±{level} Std Dev",
                             )
 
-                    # Check if any labels exist before adding a legend
-                    _, labels = ax.get_legend_handles_labels()
-                    if labels:
+                    # Conditionally add the legend
+                    if show_legend:
                         ax.legend(loc="best")
 
                 except Exception as e:
-                    # Handle exceptions, specifically looking for legend issues
-                    print(f"Warning encountered while plotting '{var}': {str(e)}")
+                    # Handle different Python versions or issues w/ legends & labels
+                    if "No artists with labels found to put in legend." in str(e):
+                        print(f"Warning encountered while plotting '{var}': {str(e)}")
+                        if show_legend:
+                            ax.legend(loc="best")
 
                 ax.set_xlabel(xlabel, fontsize=label_fontsize)
 
