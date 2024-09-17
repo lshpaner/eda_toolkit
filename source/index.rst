@@ -34,9 +34,15 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 4
-   :caption: Usage Guide
+   :caption: Data Management
 
-   usage_guide
+   data_management
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Plotting Heuristics
+
+   eda_plots
 
 .. toctree::
    :maxdepth: 4

@@ -122,3 +122,15 @@ You can install ``eda_toolkit`` directly from PyPI:
     pip install eda_toolkit
 
 
+Description
+===============
+
+This guide provides detailed instructions and examples for using the functions 
+provided in the ``eda_toolkit`` library and how to use them effectively in your projects.
+
+For most of the ensuing examples, we will leverage the Census Income Data (1994) from
+the UCI Machine Learning Repository [#]_. This dataset provides a rich source of
+information for demonstrating the functionalities of the ``eda_toolkit``.
+
+.. [#] Kohavi, R. (1996). *Census Income*. UCI Machine Learning Repository. `https://doi.org/10.24432/C5GP7S <https://doi.org/10.24432/C5GP7S>`_.
+
