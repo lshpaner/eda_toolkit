@@ -9,8 +9,6 @@
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.js?v=fecc5f50" />
 
   
   <!--[if lt IE 9]>
@@ -109,6 +107,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#kde-and-histograms-example">KDE and Histograms Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#histogram-example-density">Histogram Example (Density)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#histogram-example-count">Histogram Example (Count)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#histogram-example-mean-and-median">Histogram Example - (Mean and Median)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#histogram-example-mean-median-and-std-deviation">Histogram Example - (Mean, Median, and Std. Deviation)</a></li>
 </ul>
 </li>
 </ul>
@@ -1554,8 +1554,8 @@ statistical graphics.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing the data to plot.</p></li>
 <li><p><strong>vars_of_interest</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – List of column names for which to generate distribution plots. If ‘all’, plots will be generated for all numeric columns.</p></li>
-<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Size of each individual plot, default is <code class="docutils literal notranslate"><span class="pre">(5,</span> <span class="pre">5)</span></code>.</p></li>
-<li><p><strong>grid_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Size of the overall grid of plots. If not specified, it is calculated based on <code class="docutils literal notranslate"><span class="pre">figsize</span></code>, <code class="docutils literal notranslate"><span class="pre">n_rows</span></code>, and <code class="docutils literal notranslate"><span class="pre">n_cols</span></code>.</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Size of each individual plot, default is <code class="docutils literal notranslate"><span class="pre">(5,</span> <span class="pre">5)</span></code>. Used when only one plot is being generated or when saving individual plots.</p></li>
+<li><p><strong>grid_figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Size of the overall grid of plots when multiple plots are generated in a grid. Ignored when only one plot is being generated or when saving individual plots. If not specified, it is calculated based on <code class="docutils literal notranslate"><span class="pre">figsize</span></code>, <code class="docutils literal notranslate"><span class="pre">n_rows</span></code>, and <code class="docutils literal notranslate"><span class="pre">n_cols</span></code>.</p></li>
 <li><p><strong>hist_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color of the histogram bars, default is <code class="docutils literal notranslate"><span class="pre">'#0000FF'</span></code>.</p></li>
 <li><p><strong>kde_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color of the KDE plot, default is <code class="docutils literal notranslate"><span class="pre">'#FF0000'</span></code>.</p></li>
 <li><p><strong>mean_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color of the mean line if <code class="docutils literal notranslate"><span class="pre">plot_mean</span></code> is True, default is <code class="docutils literal notranslate"><span class="pre">'#000000'</span></code>.</p></li>
@@ -1572,7 +1572,7 @@ statistical graphics.</p>
 <li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save the SVG image of the overall distribution plots.</p></li>
 <li><p><strong>image_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Filename to use when saving the overall distribution plots.</p></li>
 <li><p><strong>bbox_inches</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Bounding box to use when saving the figure. For example, <code class="docutils literal notranslate"><span class="pre">'tight'</span></code>.</p></li>
-<li><p><strong>single_var_image_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Filename to use when saving the separate distribution plots. The variable name will be appended to this filename.</p></li>
+<li><p><strong>single_var_image_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Filename to use when saving the separate distribution plots. The variable name will be appended to this filename. This parameter uses <code class="docutils literal notranslate"><span class="pre">figsize</span></code> for determining the plot size, ignoring <code class="docutils literal notranslate"><span class="pre">grid_figsize</span></code>.</p></li>
 <li><p><strong>y_axis_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The label to display on the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code>, default is <code class="docutils literal notranslate"><span class="pre">'Density'</span></code>.</p></li>
 <li><p><strong>plot_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The type of plot to generate, options are <code class="docutils literal notranslate"><span class="pre">'hist'</span></code>, <code class="docutils literal notranslate"><span class="pre">'kde'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'both'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'both'</span></code>.</p></li>
 <li><p><strong>log_scale_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Variable name(s) to apply log scaling. Can be a single string or a list of strings.</p></li>
@@ -1601,6 +1601,7 @@ statistical graphics.</p>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">stat</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">'count'</span></code>, <code class="docutils literal notranslate"><span class="pre">'density'</span></code>, <code class="docutils literal notranslate"><span class="pre">'frequency'</span></code>, <code class="docutils literal notranslate"><span class="pre">'probability'</span></code>, <code class="docutils literal notranslate"><span class="pre">'proportion'</span></code>, <code class="docutils literal notranslate"><span class="pre">'percent'</span></code>.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">log_scale_vars</span></code> contains variables that are not present in the DataFrame.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">fill</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> and <code class="docutils literal notranslate"><span class="pre">hist_edgecolor</span></code> is not the default.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">grid_figsize</span></code> is provided when only one plot is being created.</p></li>
 </ul>
 </p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.12)"><strong>UserWarning</strong></a> – <ul>
@@ -1756,6 +1757,117 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/count_hist_distributions.svg"><img alt="KDE Distributions - Histograms (Count)" class="align-center" src="_images/count_hist_distributions.svg" style="width: 900px;" /></a>
+</div><div style="height: 50px;"></div></section>
+<section id="histogram-example-mean-and-median">
+<h3>Histogram Example - (Mean and Median)<a class="headerlink" href="#histogram-example-mean-and-median" title="Link to this heading"></a></h3>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">kde_distributions()</span></code> function is customized to generate
+histograms that include mean and median lines. The <code class="docutils literal notranslate"><span class="pre">mean_color</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;blue&quot;</span></code>
+and the <code class="docutils literal notranslate"><span class="pre">median_color</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;black&quot;</span></code>, allowing for a clear distinction
+between the two statistical measures. The function parameters are adjusted to
+ensure that both the mean and median lines are plotted <code class="docutils literal notranslate"><span class="pre">(plot_mean=True,</span> <span class="pre">plot_median=True)</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">y_axis_label</span></code> remains <code class="docutils literal notranslate"><span class="pre">&quot;Density&quot;</span></code>, indicating that the histograms
+represent the density of observations within each bin. The histogram bars are
+colored using <code class="docutils literal notranslate"><span class="pre">hist_color=&quot;brown&quot;</span></code>, with a <code class="docutils literal notranslate"><span class="pre">fill_alpha=0.60</span></code> while the s
+tatistical overlays enhance the interpretability of the data. The layout is
+configured with a single row and multiple columns <code class="docutils literal notranslate"><span class="pre">(n_rows=1,</span> <span class="pre">n_cols=3)</span></code>, and
+the grid size is set to <cite>15x5 inches</cite>. This example highlights how to visualize
+central tendencies within the data using a histogram that prominently displays
+the mean and median.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+
+<span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;age&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;education-num&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hours-per-week&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">kde_distributions</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">hist_color</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+    <span class="n">vars_of_interest</span><span class="o">=</span><span class="n">vars_of_interest</span><span class="p">,</span>
+    <span class="n">y_axis_label</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
+    <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Font size for axis labels</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>  <span class="c1"># Font size for tick labels</span>
+    <span class="n">plot_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">plot_median</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">mean_color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="no-click"><a class="reference internal image-reference" href="_images/density_hist_dist_mean_median.svg"><img alt="KDE Distributions - Histograms (Count)" class="align-center" src="_images/density_hist_dist_mean_median.svg" style="width: 900px;" /></a>
+</div><div style="height: 50px;"></div></section>
+<section id="histogram-example-mean-median-and-std-deviation">
+<h3>Histogram Example - (Mean, Median, and Std. Deviation)<a class="headerlink" href="#histogram-example-mean-median-and-std-deviation" title="Link to this heading"></a></h3>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">kde_distributions()</span></code> function is customized to generate
+a histogram that include mean, median, and 3 standard deviation lines. The
+<code class="docutils literal notranslate"><span class="pre">mean_color</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;blue&quot;</span></code> and the median_color is set to <code class="docutils literal notranslate"><span class="pre">&quot;black&quot;</span></code>,
+allowing for a clear distinction between these two central tendency measures.
+The function parameters are adjusted to ensure that both the mean and median lines
+are plotted <code class="docutils literal notranslate"><span class="pre">(plot_mean=True,</span> <span class="pre">plot_median=True)</span></code>. The <code class="docutils literal notranslate"><span class="pre">y_axis_label</span></code> remains
+<code class="docutils literal notranslate"><span class="pre">&quot;Density&quot;</span></code>, indicating that the histograms represent the density of observations
+within each bin. The histogram bars are colored using <code class="docutils literal notranslate"><span class="pre">hist_color=&quot;brown&quot;</span></code>,
+with a <code class="docutils literal notranslate"><span class="pre">fill_alpha=0.40</span></code>, which adjusts the transparency of the fill color.
+Additionally, standard deviation bands are plotted using colors <code class="docutils literal notranslate"><span class="pre">&quot;purple&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;green&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;silver&quot;</span></code> for one, two, and three standard deviations, respectively.</p>
+<p>The layout is configured with a single row and multiple columns <code class="docutils literal notranslate"><span class="pre">(n_rows=1,</span> <span class="pre">n_cols=3)</span></code>,
+and the grid size is set to <cite>15x5 inches</cite>. This setup is particularly useful for
+visualizing the central tendencies within the data while also providing a clear
+view of the distribution and spread through the standard deviation bands. The
+configuration used in this example showcases how histograms can be enhanced with
+statistical overlays to provide deeper insights into the data.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is entirely your prerogative in terms of which lines to show among mean,
+median, and standard deviations. Show one, show none, or show all of these.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+
+<span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;age&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">kde_distributions</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df2</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">hist_color</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+    <span class="n">vars_of_interest</span><span class="o">=</span><span class="n">vars_of_interest</span><span class="p">,</span>
+    <span class="n">y_axis_label</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
+    <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.40</span><span class="p">,</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Font size for axis labels</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>  <span class="c1"># Font size for tick labels</span>
+    <span class="n">plot_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">plot_median</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">mean_color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+    <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
+    <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
+    <span class="n">std_dev_levels</span><span class="o">=</span><span class="p">[</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">3</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">std_color</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;silver&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="no-click"><a class="reference internal image-reference" href="_images/density_hist_dist_age.svg"><img alt="KDE Distributions - Histograms (Count)" class="align-center" src="_images/density_hist_dist_age.svg" style="width: 900px;" /></a>
 </div><div style="height: 50px;"></div></section>
 </section>
 </section>

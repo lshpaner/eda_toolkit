@@ -1479,9 +1479,9 @@ statistical graphics.
     :type df: pandas.DataFrame
     :param vars_of_interest: List of column names for which to generate distribution plots. If 'all', plots will be generated for all numeric columns.
     :type vars_of_interest: list of str, optional
-    :param figsize: Size of each individual plot, default is ``(5, 5)``.
+    :param figsize: Size of each individual plot, default is ``(5, 5)``. Used when only one plot is being generated or when saving individual plots.
     :type figsize: tuple of int, optional
-    :param grid_figsize: Size of the overall grid of plots. If not specified, it is calculated based on ``figsize``, ``n_rows``, and ``n_cols``.
+    :param grid_figsize: Size of the overall grid of plots when multiple plots are generated in a grid. Ignored when only one plot is being generated or when saving individual plots. If not specified, it is calculated based on ``figsize``, ``n_rows``, and ``n_cols``.
     :type grid_figsize: tuple of int, optional
     :param hist_color: Color of the histogram bars, default is ``'#0000FF'``.
     :type hist_color: str, optional
@@ -1515,7 +1515,7 @@ statistical graphics.
     :type image_filename: str, optional
     :param bbox_inches: Bounding box to use when saving the figure. For example, ``'tight'``.
     :type bbox_inches: str, optional
-    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename.
+    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename. This parameter uses ``figsize`` for determining the plot size, ignoring ``grid_figsize``.
     :type single_var_image_filename: str, optional
     :param y_axis_label: The label to display on the ``y-axis``, default is ``'Density'``.
     :type y_axis_label: str, optional
@@ -1561,6 +1561,7 @@ statistical graphics.
         - If ``stat`` is not one of ``'count'``, ``'density'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``.
         - If ``log_scale_vars`` contains variables that are not present in the DataFrame.
         - If ``fill`` is set to ``False`` and ``hist_edgecolor`` is not the default.
+        - If ``grid_figsize`` is provided when only one plot is being created.
     
     :raises UserWarning:
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
@@ -1778,6 +1779,158 @@ visualizing the raw counts in the dataset using orange-colored histograms.
 .. raw:: html
    
    <div style="height: 50px;"></div>
+
+Histogram Example - (Mean and Median) 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this example, the ``kde_distributions()`` function is customized to generate 
+histograms that include mean and median lines. The ``mean_color`` is set to ``"blue"`` 
+and the ``median_color`` is set to ``"black"``, allowing for a clear distinction
+between the two statistical measures. The function parameters are adjusted to 
+ensure that both the mean and median lines are plotted ``(plot_mean=True, plot_median=True)``. 
+The ``y_axis_label`` remains ``"Density"``, indicating that the histograms 
+represent the density of observations within each bin. The histogram bars are 
+colored using ``hist_color="brown"``, with a ``fill_alpha=0.60`` while the s
+tatistical overlays enhance the interpretability of the data. The layout is 
+configured with a single row and multiple columns ``(n_rows=1, n_cols=3)``, and 
+the grid size is set to `15x5 inches`. This example highlights how to visualize 
+central tendencies within the data using a histogram that prominently displays 
+the mean and median.
+
+.. code-block:: python
+
+    from eda_toolkit import kde_distributions
+
+    vars_of_interest = [
+        "age",
+        "education-num",
+        "hours-per-week",
+    ]
+
+    kde_distributions(
+        df=df,
+        n_rows=1,
+        n_cols=3,
+        grid_figsize=(14, 4),  # Size of the overall grid figure
+        text_wrap=50,
+        hist_color="brown",
+        bbox_inches="tight",
+        vars_of_interest=vars_of_interest,
+        y_axis_label="Density",
+        bins=10,
+        fill_alpha=0.60,
+        plot_type="hist",
+        stat="Density",
+        label_fontsize=16,  # Font size for axis labels
+        tick_fontsize=14,  # Font size for tick labels
+        plot_mean=True,
+        plot_median=True,
+        mean_color="blue",
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/density_hist_dist_mean_median.svg
+   :alt: KDE Distributions - Histograms (Count)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+
+Histogram Example - (Mean, Median, and Std. Deviation)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this example, the ``kde_distributions()`` function is customized to generate 
+a histogram that include mean, median, and 3 standard deviation lines. The 
+``mean_color`` is set to ``"blue"`` and the median_color is set to ``"black"``, 
+allowing for a clear distinction between these two central tendency measures. 
+The function parameters are adjusted to ensure that both the mean and median lines 
+are plotted ``(plot_mean=True, plot_median=True)``. The ``y_axis_label`` remains
+``"Density"``, indicating that the histograms represent the density of observations 
+within each bin. The histogram bars are colored using ``hist_color="brown"``, 
+with a ``fill_alpha=0.40``, which adjusts the transparency of the fill color. 
+Additionally, standard deviation bands are plotted using colors ``"purple"``, 
+``"green"``, and ``"silver"`` for one, two, and three standard deviations, respectively.
+
+The layout is configured with a single row and multiple columns ``(n_rows=1, n_cols=3)``, 
+and the grid size is set to `15x5 inches`. This setup is particularly useful for 
+visualizing the central tendencies within the data while also providing a clear 
+view of the distribution and spread through the standard deviation bands. The 
+configuration used in this example showcases how histograms can be enhanced with 
+statistical overlays to provide deeper insights into the data.
+
+.. note::
+
+    It is entirely your prerogative in terms of which lines to show among mean, 
+    median, and standard deviations. Show one, show none, or show all of these. 
+
+.. code-block:: python
+
+    from eda_toolkit import kde_distributions
+
+    vars_of_interest = [
+        "age",
+    ]
+
+    kde_distributions(
+        df=df2,
+        figsize=(10, 6),
+        text_wrap=50,
+        hist_color="brown",
+        bbox_inches="tight",
+        vars_of_interest=vars_of_interest,
+        y_axis_label="Density",
+        bins=10,
+        fill_alpha=0.40,
+        plot_type="both",
+        stat="Density",
+        label_fontsize=16,  # Font size for axis labels
+        tick_fontsize=14,  # Font size for tick labels
+        plot_mean=True,
+        plot_median=True,
+        mean_color="blue",
+        image_path_svg=image_path_svg,
+        image_path_png=image_path_png,
+        std_dev_levels=[
+            1,
+            2,
+            3,
+        ],
+        std_color=[
+            "purple",
+            "green",
+            "silver",
+        ],
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/density_hist_dist_age.svg
+   :alt: KDE Distributions - Histograms (Count)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
 
 Stacked Crosstab Plots
 =======================
