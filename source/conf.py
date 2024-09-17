@@ -74,6 +74,11 @@ html_context = {
     ],
 }
 
+html_css_files = [
+    "custom.css",
+    "custom.js",
+]
+
 
 def setup(app):
     app.add_css_file("custom.css")
