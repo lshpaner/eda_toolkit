@@ -24,8 +24,11 @@
 Changelog
 =========
 
-Version 0.0.8
---------------------
+`Version 0.0.8`_
+----------------------
+
+.. _Version 0.0.8: ./v0.0.8/index.html
+
 
 :class:`stacked_crosstab_plot` 
 
