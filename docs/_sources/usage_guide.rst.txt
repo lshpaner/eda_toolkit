@@ -1473,11 +1473,7 @@ statistical graphics.
 - **Log Scaling**: The function includes an option to apply logarithmic scaling to specific variables, which is useful when dealing with data that spans several orders of magnitude.
 - **Output Options**: The function supports saving plots as PNG or SVG files, with customizable filenames and output directories, making it easy to integrate the plots into reports or presentations.
 
-.. function:: kde_distributions(df, vars_of_interest=None, figsize=(5, 5), grid_figsize=None, hist_color="#0000FF", kde_color="#FF0000", mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, **kwargs)
-
-    Generate KDE and/or histogram distribution plots for columns in a DataFrame.
-
-    This function provides a flexible way to visualize the distribution of data for specified columns in a DataFrame. It supports both kernel density estimation (KDE) and histograms, with options to customize various aspects of the plots, including colors, labels, binning, scaling, and statistical overlays.
+.. function:: kde_distributions(df, vars_of_interest=None, figsize=(5, 5), grid_figsize=None, hist_color="#0000FF", kde_color="#FF0000", mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, show_legend=True, **kwargs)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -1555,6 +1551,8 @@ statistical graphics.
     :type std_color: str or list of str, optional
     :param label_names: Custom labels for the variables of interest. Keys should be column names, and values should be the corresponding labels to display.
     :type label_names: dict, optional
+    :param show_legend: Whether to show the legend on the plots, default is ``True``.
+    :type show_legend: bool, optional
     :param kwargs: Additional keyword arguments passed to the Seaborn plotting function.
     :type kwargs: additional keyword arguments
     
@@ -1568,7 +1566,6 @@ statistical graphics.
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
 
     :returns: ``None``
-
 
 
 \
@@ -1585,7 +1582,7 @@ KDE and Histograms Example
 In the below example, the ``kde_distributions`` function is used to generate 
 histograms for several variables of interest: ``"age"``, ``"education-num"``, and
 ``"hours-per-week"``. These variables represent different demographic and 
-financial attributes from the dataset. The ``kde=True`` parameter ensures that a 
+financial attributes from the dataset. The ``plot_type="both"`` parameter ensures that a 
 Kernel Density Estimate (KDE) plot is overlaid on the histograms, providing a 
 smoothed representation of the data's probability density.
 
@@ -1616,8 +1613,7 @@ the height of the bars or KDE line represents the data's density. The histograms
 are divided into `10 bins` (``bins=10``), offering a clear view of the distribution 
 of each variable.
 
-The ``plot_type="hist"`` parameter indicates that only histograms will be generated 
-for each variable. Additionally, the font sizes for the axis labels and tick labels 
+Additionally, the font sizes for the axis labels and tick labels 
 are set to `16 points` (``label_fontsize=16``) and `14 points` (``tick_fontsize=14``), 
 respectively, ensuring that all text within the plots is legible and well-formatted.
 
@@ -1634,21 +1630,17 @@ respectively, ensuring that all text within the plots is legible and well-format
 
     kde_distributions(
         df=df,
-        kde=True,
         n_rows=1,
         n_cols=3,
         grid_figsize=(14, 4),  # Size of the overall grid figure
-        single_figsize=(4, 4),  # Size of individual figures
         fill=True,
         fill_alpha=0.60,
-        w_pad=1,
-        h_pad=1,
         text_wrap=50,
         bbox_inches="tight",
         vars_of_interest=vars_of_interest,
         y_axis_label="Density",
         bins=10,
-        plot_type="hist",
+        plot_type="both", # Can also just plot KDE by itself by passing "kde"
         label_fontsize=16,  # Font size for axis labels
         tick_fontsize=14,  # Font size for tick labels
     )
@@ -1674,9 +1666,9 @@ respectively, ensuring that all text within the plots is legible and well-format
 Histogram Example (Density)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In this example, the kde_distributions function is used to generate histograms for 
+In this example, the ``kde_distributions()`` function is used to generate histograms for 
 the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with 
-``kde=False``, meaning no KDE plots are included—only histograms are displayed. 
+``plot_type="hist"``, meaning no KDE plots are included—only histograms are displayed. 
 The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
 with a grid size of `14x4 inches` (``grid_figsize=(14, 4)``). The histograms are 
 divided into `10 bins` (``bins=10``), and the ``y-axis`` is labeled "Density" (``y_axis_label="Density"``).
@@ -1697,20 +1689,16 @@ histogram representation without the KDE overlay.
 
     kde_distributions(
         df=df,
-        kde=False,
         n_rows=1,
         n_cols=3,
         grid_figsize=(14, 4),  # Size of the overall grid figure
-        single_figsize=(4, 4),  # Size of individual figures
-        w_pad=1,
-        h_pad=1,
+        fill=True,
         text_wrap=50,
         bbox_inches="tight",
         vars_of_interest=vars_of_interest,
         y_axis_label="Density",
         bins=10,
         plot_type="hist",
-        stat="Density",
         label_fontsize=16,  # Font size for axis labels
         tick_fontsize=14,  # Font size for tick labels
     )
@@ -1737,11 +1725,11 @@ histogram representation without the KDE overlay.
 Histogram Example (Count)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In this example, the kde_distributions function is modified to generate histograms 
+In this example, the ``kde_distributions()`` function is modified to generate histograms 
 with a few key changes. The ``hist_color`` is set to `"orange"`, changing the color of the 
-histogram bars. The ```y-axis``` label is updated to "Count" (``y_axis_label="Count"``), 
+histogram bars. The ``y-axis`` label is updated to "Count" (``y_axis_label="Count"``), 
 reflecting that the histograms display the count of observations within each bin. 
-Additionally, the stat parameter is set to `"Count"` to show the actual counts instead of 
+Additionally, the stat parameter is set to ``"Count"`` to show the actual counts instead of 
 densities. The rest of the parameters remain the same as in the previous example, 
 with the plots arranged in a single row of four columns (``n_rows=1, n_cols=4``), 
 a grid size of `14x4 inches`, and a bin count of `10`. This setup focuses on 
@@ -1759,13 +1747,9 @@ visualizing the raw counts in the dataset using orange-colored histograms.
 
     kde_distributions(
         df=df,
-        kde=False,
         n_rows=1,
         n_cols=3,
         grid_figsize=(14, 4),  # Size of the overall grid figure
-        single_figsize=(4, 4),  # Size of individual figures
-        w_pad=1,
-        h_pad=1,
         text_wrap=50,
         hist_color="orange",
         bbox_inches="tight",
@@ -1777,7 +1761,6 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         label_fontsize=16,  # Font size for axis labels
         tick_fontsize=14,  # Font size for tick labels
     )
-
 
 .. raw:: html
 
