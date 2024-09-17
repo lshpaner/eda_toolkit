@@ -2557,25 +2557,25 @@ The function is particularly useful in scenarios where the user needs to compare
 the distribution of multiple metrics across different categories, enabling a 
 clear visual analysis of how these metrics vary within the dataset.
 
-.. function:: box_violin_plot(df, metrics_list, metrics_boxplot_comp, n_rows, n_cols, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None)
+.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, label_names=None, **kwargs)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
     :param metrics_list: List of metric names (columns in df) to plot.
     :type metrics_list: list of str
-    :param metrics_boxplot_comp: List of comparison categories (columns in df).
-    :type metrics_boxplot_comp: list of str
-    :param n_rows: Number of rows in the subplot grid.
-    :type n_rows: int
-    :param n_cols: Number of columns in the subplot grid.
-    :type n_cols: int
+    :param metrics_comp: List of comparison categories (columns in df).
+    :type metrics_comp: list of str
+    :param n_rows: Number of rows in the subplot grid. Calculated automatically if not provided.
+    :type n_rows: int, optional
+    :param n_cols: Number of columns in the subplot grid. Calculated automatically if not provided.
+    :type n_cols: int, optional
     :param image_path_png: Optional directory path to save ``.png`` images.
     :type image_path_png: str, optional
     :param image_path_svg: Optional directory path to save ``.svg`` images.
     :type image_path_svg: str, optional
     :param save_plots: String, ``"all"``, ``"individual"``, or ``"grid"`` to control saving plots.
     :type save_plots: str, optional
-    :param show_legend: Boolean, True if showing the legend in the plots.
+    :param show_legend: Boolean, True if showing the legend in the plots. Default is ``True``.
     :type show_legend: bool, optional
     :param plot_type: Specify the type of plot, either ``"boxplot"`` or ``"violinplot"``. Default is ``"boxplot"``.
     :type plot_type: str, optional
@@ -2583,9 +2583,9 @@ clear visual analysis of how these metrics vary within the dataset.
     :type xlabel_rot: int, optional
     :param show_plot: Specify the plot display mode: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
     :type show_plot: str, optional
-    :param rotate_plot: Boolean, True if rotating (pivoting) the plots.
+    :param rotate_plot: Boolean, True if rotating (pivoting) the plots. Default is ``False``.
     :type rotate_plot: bool, optional
-    :param individual_figsize: Width and height of the figure for individual plots. Default is (``6, 4``).
+    :param individual_figsize: Width and height of the figure for individual plots. Default is ``(6, 4)``.
     :type individual_figsize: tuple or list, optional
     :param grid_figsize: Width and height of the figure for grid plots.
     :type grid_figsize: tuple or list, optional
@@ -2595,21 +2595,24 @@ clear visual analysis of how these metrics vary within the dataset.
     :type tick_fontsize: int, optional
     :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
     :type text_wrap: int, optional
-    :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
+    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min``, ``max``).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the ``y-axis`` as a tuple or list of (`min, max`).
+    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
     :type ylim: tuple or list, optional
+    :param label_names: Dictionary mapping original column names to custom labels. Default is ``None``.
+    :type label_names: dict, optional
+    :param kwargs: Additional keyword arguments passed to the Seaborn plotting function.
+    :type kwargs: additional keyword arguments
 
     :raises ValueError:
         - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
-        - If ``save_plots`` is not one of None, ``"all"``, ``"individual"``, or ``"grid"``.
+        - If ``save_plots`` is not one of ``None``, ``"all"``, ``"individual"``, or ``"grid"``.
         - If ``save_plots`` is set without specifying ``image_path_png`` or ``image_path_svg``.
         - If ``rotate_plot`` is not a boolean value.
         - If ``individual_figsize`` is not a tuple or list of two numbers.
-        - If ``grid_figsize`` is specified but is not a tuple or list of two numbers.
+        - If ``grid_figsize`` is provided and is not a tuple or list of two numbers.
 
     :returns: ``None``
-
 
 
 
@@ -2658,10 +2661,6 @@ metrics across different age groups, with all plots saved for future reference o
         df=df,
         metrics_list=age_boxplot_list,
         metrics_boxplot_comp=metrics_boxplot_comp,
-        n_rows=3,
-        n_cols=4,
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
         save_plots="all",
         show_plot="both",
         show_legend=False,
@@ -2704,10 +2703,6 @@ of boxplots while maintaining all other settings.
         df=df,
         metrics_list=age_boxplot_list,
         metrics_boxplot_comp=metrics_boxplot_comp,
-        n_rows=3,
-        n_cols=4,
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
         save_plots="all",
         show_plot="both",
         show_legend=False,
@@ -2750,10 +2745,6 @@ This adjustment flips the axes, providing a different perspective on the data di
         df=df,
         metrics_list=age_boxplot_list,
         metrics_boxplot_comp=metrics_boxplot_comp,
-        n_rows=3,
-        n_cols=4,
-        image_path_png=image_path_png,
-        image_path_svg=image_path_svg,
         save_plots="all",
         show_plot="both",
         rotate_plot=True,
