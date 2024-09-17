@@ -116,10 +116,10 @@ Adding Unique Identifiers
 
     :param df: The dataframe to add IDs to.
     :type df: pd.DataFrame
-    :param id_colname: The name of the new column for the IDs.
-    :type id_colname: str
-    :param num_digits: The number of digits for the unique IDs.
-    :type num_digits: int
+    :param id_colname: The name of the new column for the IDs. Defaults to ``"ID"``.
+    :type id_colname: str, optional
+    :param num_digits: The number of digits for the unique IDs. Defaults to ``9``.
+    :type num_digits: int, optional
     :param seed: The seed for the random number generator. Defaults to ``None``.
     :type seed: int, optional
     :param set_as_index: Whether to set the new ID column as the index. Defaults to ``False``.
@@ -127,6 +127,12 @@ Adding Unique Identifiers
 
     :returns: The updated dataframe with the new ID column.
     :rtype: pd.DataFrame
+
+.. note::
+    - If the dataframe index is not unique, a warning is printed.
+    - The function does not check if the number of rows exceeds the number of 
+        unique IDs that can be generated with the specified number of digits.
+    - The first digit of the generated IDs is ensured to be non-zero.
 
 The ``add_ids`` function is used to append a column of unique identifiers with a 
 specified number of digits to a given dataframe. This is particularly useful for 
@@ -292,6 +298,7 @@ Trailing Period Removal
     :returns: The updated DataFrame with the trailing periods removed from the specified column.
     :rtype: pd.DataFrame
 
+
     The ``strip_trailing_period`` function is designed to remove trailing periods 
     from float values in a specified column of a DataFrame. This can be particularly 
     useful when dealing with data that has been inconsistently formatted, ensuring 
@@ -433,6 +440,7 @@ Standardized Dates
     :raises ValueError: If ``date_str`` is in an unrecognized format or if the function
                         cannot parse the date.
 
+
 **Example Usage**
 
 In the example below, we demonstrate how to use the ``parse_date_with_rule`` 
@@ -506,7 +514,10 @@ DataFrame Analysis
 
 **Analyze DataFrame columns, including dtype, null values, and unique value counts.**
 
-.. function:: dataframe_columns(df)
+.. function:: dataframe_columns(df, background_color=None, return_df=False)
+
+    Analyze DataFrame columns to provide summary statistics such as data type,
+    null counts, unique values, and most frequent values.
 
     This function analyzes the columns of a DataFrame, providing details about the data type, 
     the number and percentage of ``null`` values, the total number of unique values, and the most 
@@ -515,9 +526,18 @@ DataFrame Analysis
 
     :param df: The DataFrame to analyze.
     :type df: pandas.DataFrame
+    :param background_color: Hex color code or color name for background styling in the output
+                             DataFrame. Defaults to ``None``.
+    :type background_color: str, optional
+    :param return_df: If ``True``, returns the plain DataFrame with the summary statistics. If 
+                      ``False``, returns a styled DataFrame for visual presentation. Defaults to ``False``.
+    :type return_df: bool, optional
 
-    :returns: A DataFrame with the analysis results for each column.
+    :returns: If `return_df` is ``True``, returns the plain DataFrame containing column summary 
+              statistics. If `return_df` is ``False``, returns a styled DataFrame with optional 
+              background color for specific columns.
     :rtype: pandas.DataFrame
+
 
 **Example Usage**
 
@@ -769,17 +789,23 @@ in a DataFrame and save them to an Excel file.**
 
     :param df: The pandas DataFrame containing the data.
     :type df: pandas.DataFrame
-    :param variables: List of unique variables to generate combinations.
-    :type variables: list
+    :param variables: List of column names from the DataFrame to generate combinations.
+    :type variables: list of str
     :param data_path: Path where the output Excel file will be saved.
     :type data_path: str
     :param data_name: Name of the output Excel file.
     :type data_name: str
-    :param min_length: Minimum length of combinations to generate. Defaults to ``2``.
-    :type min_length: int
+    :param min_length: Minimum size of the combinations to generate. Defaults to ``2``.
+    :type min_length: int, optional
 
-    :returns: A dictionary of summary tables and a list of all generated combinations.
+    :returns: A tuple containing a dictionary of summary tables and a list of all generated combinations.
     :rtype: tuple(dict, list)
+
+.. note::
+    - The function will create an Excel file with a sheet for each combination
+        of the specified variables, as well as a "Table of Contents" sheet with
+        hyperlinks to each summary table.
+    - The sheet names are limited to 31 characters due to Excel's constraints.
 
 The function returns two outputs:
 
@@ -993,10 +1019,10 @@ This section explains how to save multiple DataFrames to separate sheets in an E
     :param decimal_places: Number of decimal places to round numeric columns. Default is 0.
     :type decimal_places: int
 
-    :notes:
-        - The function will autofit columns and left-align text.
-        - Numeric columns will be formatted with the specified number of decimal places.
-        - Headers will be bold and left-aligned without borders.
+.. note::
+    - The function will autofit columns and left-align text.
+    - Numeric columns will be formatted with the specified number of decimal places.
+    - Headers will be bold and left-aligned without borders.
 
 The function performs the following tasks:
 
@@ -1044,18 +1070,18 @@ Creating Contingency Tables
 
 **Create a contingency table from one or more columns in a DataFrame, with sorting options.**
 
-This section explains how to create contingency tables from one or more columns in a DataFrame using the ``contingency_table`` function.
+This section explains how to create contingency tables from one or more columns in a DataFrame, with options to sort the results using the ``contingency_table`` function.
 
 .. function:: contingency_table(df, cols=None, sort_by=0)
 
     :param df: The DataFrame to analyze.
     :type df: pandas.DataFrame
     :param cols: Name of the column (as a string) for a single column or list of column names for multiple columns. Must provide at least one column.
-    :type cols: str or list, optional
-    :param sort_by: Enter ``0`` to sort results by column groups; enter ``1`` to sort results by totals in descending order.
-    :type sort_by: int
-    :raises ValueError: If no columns are specified or if sort_by is not ``0`` or ``1``.
-    :returns: A DataFrame with the specified columns, ``'Total'``, and ``'Percentage'``.
+    :type cols: str or list of str, optional
+    :param sort_by: Enter ``0`` to sort results by column groups; enter ``1`` to sort results by totals in descending order. Defaults to ``0``.
+    :type sort_by: int, optional
+    :raises ValueError: If no columns are specified or if ``sort_by`` is not ``0`` or ``1``.
+    :returns: A DataFrame containing the contingency table with the specified columns, a ``'Total'`` column representing the count of occurrences, and a ``'Percentage'`` column representing the percentage of the total count.
     :rtype: pandas.DataFrame
 
 **Example Usage**
@@ -1447,34 +1473,39 @@ statistical graphics.
 - **Log Scaling**: The function includes an option to apply logarithmic scaling to specific variables, which is useful when dealing with data that spans several orders of magnitude.
 - **Output Options**: The function supports saving plots as PNG or SVG files, with customizable filenames and output directories, making it easy to integrate the plots into reports or presentations.
 
-.. function:: kde_distributions(df, vars_of_interest=None, grid_figsize=(10, 8), single_figsize=(6, 4), kde=True, hist_color="#0000FF", kde_color="#FF0000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=1, n_cols=1, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_path_png=None, single_var_image_path_svg=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None)
+.. function:: kde_distributions(df, vars_of_interest=None, figsize=(5, 5), grid_figsize=None, hist_color="#0000FF", kde_color="#FF0000", mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, **kwargs)
+
+    Generate KDE and/or histogram distribution plots for columns in a DataFrame.
+
+    This function provides a flexible way to visualize the distribution of data for specified columns in a DataFrame. It supports both kernel density estimation (KDE) and histograms, with options to customize various aspects of the plots, including colors, labels, binning, scaling, and statistical overlays.
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
-    :param vars_of_interest: List of column names for which to generate distribution plots.
+    :param vars_of_interest: List of column names for which to generate distribution plots. If 'all', plots will be generated for all numeric columns.
     :type vars_of_interest: list of str, optional
-    :param grid_figsize: Size of the overall grid figure, default is ``(10, 8)``.
-    :type grid_figsize: tuple, optional
-    :param single_figsize: Size of individual figures for each variable, default is ``(6, 4)``.
-    :type single_figsize: tuple, optional
-    :param kde: Whether to include KDE plots on the histograms, default is ``True``.
-    :type kde: bool, optional
+    :param figsize: Size of each individual plot, default is ``(5, 5)``.
+    :type figsize: tuple of int, optional
+    :param grid_figsize: Size of the overall grid of plots. If not specified, it is calculated based on ``figsize``, ``n_rows``, and ``n_cols``.
+    :type grid_figsize: tuple of int, optional
     :param hist_color: Color of the histogram bars, default is ``'#0000FF'``.
     :type hist_color: str, optional
     :param kde_color: Color of the KDE plot, default is ``'#FF0000'``.
     :type kde_color: str, optional
+    :param mean_color: Color of the mean line if ``plot_mean`` is True, default is ``'#000000'``.
+    :type mean_color: str, optional
+    :param median_color: Color of the median line if ``plot_median`` is True, default is ``'#000000'``.
+    :type median_color: str, optional
     :param hist_edgecolor: Color of the histogram bar edges, default is ``'#000000'``.
     :type hist_edgecolor: str, optional
     :param hue: Column name to group data by, adding different colors for each group.
     :type hue: str, optional
     :param fill: Whether to fill the histogram bars with color, default is ``True``.
     :type fill: bool, optional
-    :param fill_alpha: Alpha transparency for the fill color of the histogram bars, where
-            ``0`` is fully transparent and ``1`` is fully opaque. Default is ``1``.
+    :param fill_alpha: Alpha transparency for the fill color of the histogram bars, where ``0`` is fully transparent and ``1`` is fully opaque. Default is ``1``.
     :type fill_alpha: float, optional
-    :param n_rows: Number of rows in the subplot grid, default is ``1``.
+    :param n_rows: Number of rows in the subplot grid. If not provided, it will be calculated automatically.
     :type n_rows: int, optional
-    :param n_cols: Number of columns in the subplot grid, default is ``1``.
+    :param n_cols: Number of columns in the subplot grid. If not provided, it will be calculated automatically.
     :type n_cols: int, optional
     :param w_pad: Width padding between subplots, default is ``1.0``.
     :type w_pad: float, optional
@@ -1488,38 +1519,44 @@ statistical graphics.
     :type image_filename: str, optional
     :param bbox_inches: Bounding box to use when saving the figure. For example, ``'tight'``.
     :type bbox_inches: str, optional
-    :param single_var_image_path_png: Directory path to save the PNG images of the separate distribution plots.
-    :type single_var_image_path_png: str, optional
-    :param single_var_image_path_svg: Directory path to save the SVG images of the separate distribution plots.
-    :type single_var_image_path_svg: str, optional
-    :param single_var_image_filename: Filename to use when saving the separate distribution plots.
-            The variable name will be appended to this filename.
+    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename.
     :type single_var_image_filename: str, optional
     :param y_axis_label: The label to display on the ``y-axis``, default is ``'Density'``.
     :type y_axis_label: str, optional
     :param plot_type: The type of plot to generate, options are ``'hist'``, ``'kde'``, or ``'both'``. Default is ``'both'``.
     :type plot_type: str, optional
-    :param log_scale_vars: List of variable names to apply log scaling.
-    :type log_scale_vars: list of str, optional
+    :param log_scale_vars: Variable name(s) to apply log scaling. Can be a single string or a list of strings.
+    :type log_scale_vars: str or list of str, optional
     :param bins: Specification of histogram bins, default is ``'auto'``.
     :type bins: int or sequence, optional
     :param binwidth: Width of each bin, overrides bins but can be used with binrange.
-    :type binwidth: number or pair of numbers, optional
+    :type binwidth: float, optional
     :param label_fontsize: Font size for axis labels, including xlabel, ylabel, and tick marks, default is ``10``.
     :type label_fontsize: int, optional
-    :param tick_fontsize: Font size for axis tick labels, default is ``10``.
+    :param tick_fontsize: Font size for tick labels on the axes, default is ``10``.
     :type tick_fontsize: int, optional
     :param text_wrap: Maximum width of the title text before wrapping, default is ``50``.
     :type text_wrap: int, optional
     :param disable_sci_notation: Toggle to disable scientific notation on axes, default is ``False``.
     :type disable_sci_notation: bool, optional
-    :param stat: Aggregate statistic to compute in each bin (e.g., ``'count'``, ``'frequency'``,
-            ``'probability'``, ``'percent'``, ``'density'``), default is ``'density'``.
+    :param stat: Aggregate statistic to compute in each bin (e.g., ``'count'``, ``'frequency'``, ``'probability'``, ``'percent'``, ``'density'``), default is ``'density'``.
     :type stat: str, optional
-    :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
+    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min``, ``max``).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the ``y-axis`` as a tuple or list of (`min, max`).
+    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
     :type ylim: tuple or list, optional
+    :param plot_mean: Whether to plot the mean as a vertical line, default is ``False``.
+    :type plot_mean: bool, optional
+    :param plot_median: Whether to plot the median as a vertical line, default is ``False``.
+    :type plot_median: bool, optional
+    :param std_dev_levels: Levels of standard deviation to plot around the mean.
+    :type std_dev_levels: list of int, optional
+    :param std_color: Color(s) for the standard deviation lines, default is ``'#808080'``.
+    :type std_color: str or list of str, optional
+    :param label_names: Custom labels for the variables of interest. Keys should be column names, and values should be the corresponding labels to display.
+    :type label_names: dict, optional
+    :param kwargs: Additional keyword arguments passed to the Seaborn plotting function.
+    :type kwargs: additional keyword arguments
     
     :raises ValueError: 
         - If ``plot_type`` is not one of ``'hist'``, ``'kde'``, or ``'both'``.
@@ -1528,10 +1565,10 @@ statistical graphics.
         - If ``fill`` is set to ``False`` and ``hist_edgecolor`` is not the default.
     
     :raises UserWarning:
-        - If ``stat`` is set to 'count' while ``kde`` is ``True``, as it may produce misleading plots.
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
 
     :returns: ``None``
+
 
 
 \
@@ -1560,6 +1597,11 @@ while each individual plot is configured to be `4 inches` by `4 inches`
 bars with color, and the spacing between the subplots is managed using 
 ``w_pad=1`` and ``h_pad=1``, which add `1 inch` of padding both horizontally and 
 vertically.
+
+.. note:: 
+    If you do not set ``n_rows`` or ``n_cols`` to any values, the function will 
+    automatically calculate and create a grid based on the number of variables being 
+    plotted, ensuring an optimal arrangement of the plots.
 
 To handle longer titles, the ``text_wrap=50`` parameter ensures that the title 
 text wraps to a new line after `50 characters`. The ``bbox_inches="tight"`` setting 
