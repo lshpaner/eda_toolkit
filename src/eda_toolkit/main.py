@@ -1097,96 +1097,109 @@ def kde_distributions(
             median_value = data[col].median() if plot_median else None
             std_value = data[col].std() if std_dev_levels else None
 
-            if plot_type == "hist":
-                sns.histplot(
-                    data=data,
-                    x=col,
-                    kde=False,
-                    ax=ax,
-                    hue=hue,
-                    color=hist_color if hue is None and fill else None,
-                    edgecolor=hist_edgecolor,
-                    stat=stat.lower(),
-                    fill=fill,
-                    alpha=fill_alpha,  # Apply the alpha value for transparency
-                    log_scale=log_scale,
-                    bins=bins,
-                    binwidth=binwidth,
-                    **kwargs,
-                )
-            elif plot_type == "kde":
-                sns.kdeplot(
-                    data=data,
-                    x=col,
-                    ax=ax,
-                    hue=hue,
-                    color=kde_color,
-                    fill=True,
-                    log_scale=log_scale,
-                    **kwargs,
-                )
-            elif plot_type == "both":
-                sns.histplot(
-                    data=data,
-                    x=col,
-                    kde=False,  # No need for kde since plot_type controls it
-                    ax=ax,
-                    hue=hue,
-                    color=hist_color if hue is None and fill else None,
-                    edgecolor=hist_edgecolor,
-                    stat=stat.lower(),
-                    fill=fill,
-                    alpha=fill_alpha,  # Apply the alpha value for transparency
-                    log_scale=log_scale,
-                    bins=bins,
-                    binwidth=binwidth,
-                    **kwargs,
-                )
-                sns.kdeplot(
-                    data=data,
-                    x=col,
-                    ax=ax,
-                    hue=hue,
-                    color=kde_color if hue is None else None,
-                    log_scale=log_scale,
-                    label="KDE",
-                    **kwargs,
-                )
-
-            # Plot mean as a vertical dotted line if plot_mean is True
-            if plot_mean and mean_value is not None:
-                ax.axvline(
-                    mean_value,
-                    color=kde_color,
-                    linestyle="--",
-                    label="Mean",
-                )
-
-            # Plot median as a vertical dotted line if plot_median is True
-            if plot_median and median_value is not None:
-                ax.axvline(
-                    median_value,
-                    color=median_color,
-                    linestyle="--",
-                    label="Median",
-                )
-
-            # Plot standard deviation bands if std_dev_levels is specified
-            if std_dev_levels and mean_value is not None and std_value is not None:
-                for level, color in zip(std_dev_levels, std_color):
-                    ax.axvline(
-                        mean_value + level * std_value,
-                        color=color,
-                        linestyle="--",
+            try:
+                # Your existing plot code
+                if plot_type == "hist":
+                    sns.histplot(
+                        data=data,
+                        x=col,
+                        kde=False,
+                        ax=ax,
+                        hue=hue,
+                        color=hist_color if hue is None and fill else None,
+                        edgecolor=hist_edgecolor,
+                        stat=stat.lower(),
+                        fill=fill,
+                        alpha=fill_alpha,  # Apply for transparency
+                        log_scale=log_scale,
+                        bins=bins,
+                        binwidth=binwidth,
+                        legend=False,  # Do not add legend automatically
+                        **kwargs,
                     )
-                    ax.axvline(
-                        mean_value - level * std_value,
-                        color=color,
-                        linestyle="--",
-                        label=f"±{level} Std Dev",
+                elif plot_type == "kde":
+                    sns.kdeplot(
+                        data=data,
+                        x=col,
+                        ax=ax,
+                        hue=hue,
+                        color=kde_color,
+                        fill=True,
+                        log_scale=log_scale,
+                        legend=False,  # Do not add legend automatically
+                        **kwargs,
+                    )
+                elif plot_type == "both":
+                    sns.histplot(
+                        data=data,
+                        x=col,
+                        kde=False,  # No need, since plot_type controls it
+                        ax=ax,
+                        hue=hue,
+                        color=hist_color if hue is None and fill else None,
+                        edgecolor=hist_edgecolor,
+                        stat=stat.lower(),
+                        fill=fill,
+                        alpha=fill_alpha,  # Apply for transparency
+                        log_scale=log_scale,
+                        bins=bins,
+                        binwidth=binwidth,
+                        legend=False,  # Do not add legend automatically
+                        **kwargs,
+                    )
+                    sns.kdeplot(
+                        data=data,
+                        x=col,
+                        ax=ax,
+                        hue=hue,
+                        color=kde_color if hue is None else None,
+                        log_scale=log_scale,
+                        label="KDE",
+                        legend=False,  # Do not add legend automatically
+                        **kwargs,
                     )
 
-            ax.legend(loc="best")  # place the legend in the best location
+                # Plot mean as a vertical dotted line if plot_mean is True
+                if plot_mean and mean_value is not None:
+                    ax.axvline(
+                        mean_value,
+                        color=kde_color,
+                        linestyle="--",
+                        label="Mean",
+                    )
+
+                # Plot median as a vertical dotted line if plot_median is True
+                if plot_median and median_value is not None:
+                    ax.axvline(
+                        median_value,
+                        color=median_color,
+                        linestyle="--",
+                        label="Median",
+                    )
+
+                # Plot standard deviation bands if std_dev_levels is specified
+                if std_dev_levels and mean_value is not None and std_value is not None:
+                    for level, color in zip(std_dev_levels, std_color):
+                        ax.axvline(
+                            mean_value + level * std_value,
+                            color=color,
+                            linestyle="--",
+                            label=f"±{level} Std Dev",
+                        )
+                        ax.axvline(
+                            mean_value - level * std_value,
+                            color=color,
+                            linestyle="--",
+                        )
+
+                # Check if any labels exist before adding a legend
+                _, labels = ax.get_legend_handles_labels()
+                if labels:
+                    ax.legend(loc="best")
+
+            except Exception as e:
+                # Handle exceptions, specifically looking for legend issues
+                print(f"Warning encountered while plotting '{col}': {str(e)}")
 
             ax.set_xlabel(
                 xlabel,
@@ -1254,109 +1267,111 @@ def kde_distributions(
                 # Filter out non-positive values if log_scale is True
                 data = df[df[var] > 0] if log_scale else df
 
-                # Updated:
-                if plot_type == "hist":
-                    sns.histplot(
-                        data=data,
-                        x=var,
-                        kde=False,
-                        ax=ax,
-                        hue=hue,
-                        color=hist_color if hue is None and fill else None,
-                        edgecolor=hist_edgecolor,
-                        stat=stat.lower(),
-                        fill=fill,
-                        alpha=fill_alpha,  # Apply alpha value for transparency
-                        log_scale=log_scale,
-                        bins=bins,
-                        binwidth=binwidth,
-                        **kwargs,
-                    )
-                elif plot_type == "kde":
-                    sns.kdeplot(
-                        data=data,
-                        x=var,
-                        ax=ax,
-                        hue=hue,
-                        color=kde_color,
-                        fill=True,
-                        log_scale=log_scale,
-                        **kwargs,
-                    )
-                elif plot_type == "both":
-                    sns.histplot(
-                        data=data,
-                        x=var,
-                        kde=False,  # No need for kde since plot_type controls it
-                        ax=ax,
-                        hue=hue,
-                        color=hist_color if hue is None and fill else None,
-                        edgecolor=hist_edgecolor,
-                        stat=stat.lower(),
-                        fill=fill,
-                        alpha=fill_alpha,  # Apply alpha value for transparency
-                        log_scale=log_scale,
-                        bins=bins,
-                        binwidth=binwidth,
-                        **kwargs,
-                    )
-                    sns.kdeplot(
-                        data=data,
-                        x=var,
-                        ax=ax,
-                        hue=hue,
-                        color=kde_color if hue is None else None,
-                        log_scale=log_scale,
-                        label="KDE",
-                        **kwargs,
-                    )
-
-                # Add "(Log)" to the label if log_scale is applied
-                xlabel = f"{get_label(var)} (Log)" if log_scale else get_label(var)
-
-                # Modify the title to include "(Log Scaled)" if log_scale is applied
-                title = f"Distribution of {get_label(var)} {'(Log Scaled)' if log_scale else ''}"
-
-                # Add a vertical dotted line at the mean
-                # Plot mean as a vertical dotted line if plot_mean is True
-                if plot_mean:
-                    mean_value = data[var].mean()
-                    ax.axvline(
-                        mean_value,
-                        color=mean_color,
-                        linestyle="--",
-                        label="Mean",
-                    )
-
-                # Add a vertical dotted line at the median
-                # Plot median as a vertical dotted line if plot_median is True
-                if plot_median:
-                    # Calculate the median
-                    median_value = data[var].median()
-                    ax.axvline(
-                        median_value,
-                        color=median_color,
-                        linestyle="--",
-                        label="Median",
-                    )
-
-                # Plot standard deviation bands if std_dev_levels is specified
-                if std_dev_levels:
-                    std_value = data[var].std()
-                    for level, color in zip(std_dev_levels, std_color):
-                        ax.axvline(
-                            mean_value + level * std_value,
-                            color=color,
-                            linestyle="--",
+                try:
+                    if plot_type == "hist":
+                        sns.histplot(
+                            data=data,
+                            x=var,
+                            kde=False,
+                            ax=ax,
+                            hue=hue,
+                            color=hist_color if hue is None and fill else None,
+                            edgecolor=hist_edgecolor,
+                            stat=stat.lower(),
+                            fill=fill,
+                            alpha=fill_alpha,  # Apply for transparency
+                            log_scale=log_scale,
+                            bins=bins,
+                            binwidth=binwidth,
+                            legend=False,  # Do not add legend automatically
+                            **kwargs,
                         )
-                        ax.axvline(
-                            mean_value - level * std_value,
-                            color=color,
-                            linestyle="--",
-                            label=f"±{level} Std Dev",
+                    elif plot_type == "kde":
+                        sns.kdeplot(
+                            data=data,
+                            x=var,
+                            ax=ax,
+                            hue=hue,
+                            color=kde_color,
+                            fill=True,
+                            log_scale=log_scale,
+                            legend=False,  # Do not add legend automatically
+                            **kwargs,
+                        )
+                    elif plot_type == "both":
+                        sns.histplot(
+                            data=data,
+                            x=var,
+                            kde=False,  # No need, since plot_type controls this
+                            ax=ax,
+                            hue=hue,
+                            color=hist_color if hue is None and fill else None,
+                            edgecolor=hist_edgecolor,
+                            stat=stat.lower(),
+                            fill=fill,
+                            alpha=fill_alpha,  # Apply for transparency
+                            log_scale=log_scale,
+                            bins=bins,
+                            binwidth=binwidth,
+                            legend=False,  # Do not add legend automatically
+                            **kwargs,
+                        )
+                        sns.kdeplot(
+                            data=data,
+                            x=var,
+                            ax=ax,
+                            hue=hue,
+                            color=kde_color if hue is None else None,
+                            log_scale=log_scale,
+                            label="KDE",
+                            legend=False,  # Do not add legend automatically
+                            **kwargs,
                         )
 
-                ax.legend(loc="best")  # place the legend in the best location
+                    # Plot mean as a vertical dotted line if plot_mean is True
+                    if plot_mean:
+                        mean_value = data[var].mean()
+                        ax.axvline(
+                            mean_value,
+                            color=mean_color,
+                            linestyle="--",
+                            label="Mean",
+                        )
+
+                    # Plot median as vertical dotted line if plot_median is True
+                    if plot_median:
+                        median_value = data[var].median()
+                        ax.axvline(
+                            median_value,
+                            color=median_color,
+                            linestyle="--",
+                            label="Median",
+                        )
+
+                    # Plot standard deviation bands if std_dev_levels is specified
+                    if std_dev_levels:
+                        std_value = data[var].std()
+                        for level, color in zip(std_dev_levels, std_color):
+                            ax.axvline(
+                                mean_value + level * std_value,
+                                color=color,
+                                linestyle="--",
+                            )
+                            ax.axvline(
+                                mean_value - level * std_value,
+                                color=color,
+                                linestyle="--",
+                                label=f"±{level} Std Dev",
+                            )
+
+                    # Check if any labels exist before adding a legend
+                    _, labels = ax.get_legend_handles_labels()
+                    if labels:
+                        ax.legend(loc="best")
+
+                except Exception as e:
+                    # Handle exceptions, specifically looking for legend issues
+                    print(f"Warning encountered while plotting '{var}': {str(e)}")
 
                 ax.set_xlabel(xlabel, fontsize=label_fontsize)
 
