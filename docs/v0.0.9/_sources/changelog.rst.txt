@@ -35,20 +35,29 @@ Improved error messages and validation checks across multiple functions to preve
 
 **Visualization Enhancements**
 
-DataFrame Columns: Added a ``background_color`` variable to ``dataframe_columns```, allowing the user to enter a string representing a color name, or hex value. Try/Except on the output, in case the end user has a deprecated version of Pandas, where the styler would use `hide()` instead of `hide_index()`. The highlighted columns allow for easier null versus unique value analysis.
+DataFrame Columns: Added a ``background_color`` variable to ``dataframe_columns```, 
+allowing the user to enter a string representing a color name, or hex value. 
+Try/Except on the output, in case the end user has a deprecated version of Pandas, 
+where the styler would use ``hide()`` instead of ``hide_index()``. The highlighted 
+columns allow for easier null versus unique value analysis.  
 
-The docstring now clearly describes the purpose of the function—analyzing DataFrame columns to provide summary statistics.
+The docstring now clearly describes the purpose of the function—analyzing 
+DataFrame columns to provide summary statistics.
 
 Args:
-- The ``df`` argument is specified as a ``pandas.DataFrame``.
-- The ``background_color`` argument is marked as optional, with a brief description of its role.
-- The ``return_df`` argument is also marked as optional, explaining what it controls.
 
-Returns: The return type is specified as ``pandas.DataFrame``, with a clear explanation of the difference based on the ``return_df`` flag.
+- The ``df`` argument is specified as a ``pandas.DataFrame``.  
 
-KDE Distribution Plots: Improved ``kde_distributions()`` with enhanced options for log scaling, mean/median plotting, custom standard deviation lines, and better handling of legends and scientific notation.
+- The ``background_color`` argument is marked as optional, with a brief description of its role.  
 
-Scatter Plots: Enhanced ``scatter_fit_plot()`` with support for hue-based coloring, best fit lines, correlation display, and flexible grid plotting options.
+- The ``return_df`` argument is also marked as optional, explaining what it controls.    
+
+
+Returns: The return type is specified as ``pandas.DataFrame``, with a clear explanation of the difference based on the ``return_df`` flag.  
+
+KDE Distribution Plots: Improved ``kde_distributions()`` with enhanced options for log scaling, mean/median plotting, custom standard deviation lines, and better handling of legends and scientific notation.  
+
+Scatter Plots: Enhanced ``scatter_fit_plot()`` with support for hue-based coloring, best fit lines, correlation display, and flexible grid plotting options.  
 
 
 `Version 0.0.8`_
