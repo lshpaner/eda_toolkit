@@ -488,7 +488,6 @@ histogram representation without the KDE overlay.
         plot_type="hist",
         label_fontsize=16,  # Font size for axis labels
         tick_fontsize=14,  # Font size for tick labels
-        show_legend=False,
     )
 
 
@@ -548,7 +547,6 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         stat="Count",
         label_fontsize=16,  # Font size for axis labels
         tick_fontsize=14,  # Font size for tick labels
-        show_legend=False,
     )
 
 .. raw:: html
