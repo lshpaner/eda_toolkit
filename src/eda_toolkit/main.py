@@ -1001,8 +1001,8 @@ def kde_distributions(
         n_rows, n_cols = 1, 1
         if grid_figsize is not None:
             raise ValueError(
-                f"Cannot use `grid_figsize` when there is only one "
-                f"plot. Use `figsize` instead."
+                f"Cannot use grid_figsize when there is only one "
+                f"plot. Use figsize instead."
             )
     else:
         # Calculate columns based on square root
@@ -1029,7 +1029,7 @@ def kde_distributions(
         std_color = [std_color] * len(std_dev_levels)
     elif isinstance(std_color, list) and len(std_color) < len(std_dev_levels):
         raise ValueError(
-            f"Not enough colors specified in `std_color`. "
+            f"Not enough colors specified in 'std_color'. "
             f"You have {len(std_color)} color(s) but {len(std_dev_levels)} "
             f"standard deviation level(s). "
             f"Please provide at least as many colors as standard deviation levels."
@@ -1039,7 +1039,7 @@ def kde_distributions(
     valid_plot_types = ["hist", "kde", "both"]
     if plot_type.lower() not in valid_plot_types:
         raise ValueError(
-            f"Invalid `plot_type` value. Expected one of {valid_plot_types}, "
+            f"Invalid plot_type value. Expected one of {valid_plot_types}, "
             f"got '{plot_type}' instead."
         )
 
@@ -1054,7 +1054,7 @@ def kde_distributions(
     ]
     if stat.lower() not in valid_stats:
         raise ValueError(
-            f"Invalid `stat` value. Expected one of {valid_stats}, "
+            f"Invalid stat value. Expected one of {valid_stats}, "
             f"got '{stat}' instead."
         )
 
@@ -1062,20 +1062,20 @@ def kde_distributions(
     if log_scale_vars:
         invalid_vars = [var for var in log_scale_vars if var not in df.columns]
         if invalid_vars:
-            raise ValueError(f"Invalid `log_scale_vars`: {invalid_vars}")
+            raise ValueError(f"Invalid log_scale_vars: {invalid_vars}")
 
     # Check if edgecolor is being set while fill is False
     if not fill and hist_edgecolor != "#000000":
-        raise ValueError("Cannot change `edgecolor` when `fill` is set to False")
+        raise ValueError("Cannot change edgecolor when fill is set to False")
 
     # Check if fill_alpha is being set while fill is False
     if not fill and fill_alpha != 0.6:
-        raise ValueError("Cannot set `fill_alpha` when `fill` is set to False")
+        raise ValueError("Cannot set fill_alpha when fill is set to False")
 
     # Warn if both bins and binwidth are set
     if bins != "auto" and binwidth is not None:
         warnings.warn(
-            "Specifying both `bins` and `binwidth` may affect performance.",
+            "Specifying both bins and binwidth may affect performance.",
             UserWarning,
         )
 
@@ -1130,7 +1130,6 @@ def kde_distributions(
                         log_scale=log_scale,
                         bins=bins,
                         binwidth=binwidth,
-                        legend=False,  # Do not add legend automatically
                         **kwargs,
                     )
                 elif plot_type == "kde":
@@ -1142,7 +1141,6 @@ def kde_distributions(
                         color=kde_color,
                         fill=True,
                         log_scale=log_scale,
-                        legend=False,  # Do not add legend automatically
                         **kwargs,
                     )
                 elif plot_type == "both":
@@ -1160,7 +1158,6 @@ def kde_distributions(
                         log_scale=log_scale,
                         bins=bins,
                         binwidth=binwidth,
-                        legend=False,  # Do not add legend automatically
                         **kwargs,
                     )
                     sns.kdeplot(
@@ -1171,7 +1168,6 @@ def kde_distributions(
                         color=kde_color if hue is None else None,
                         log_scale=log_scale,
                         label="KDE",
-                        legend=False,  # Do not add legend automatically
                         **kwargs,
                     )
 
@@ -1208,16 +1204,25 @@ def kde_distributions(
                             linestyle="--",
                         )
 
-                # Conditionally add the legend
-                if show_legend:
+                # After plotting logic, before showing the legend
+                handles, labels = ax.get_legend_handles_labels()
+
+                if show_legend and len(handles) > 0:
                     ax.legend(loc="best")
+                else:
+                    if ax.get_legend() is not None:
+                        ax.get_legend().remove()
 
             except Exception as e:
                 # Handle different Python versions or issues w/ legends & labels
                 if "No artists with labels found to put in legend." in str(e):
                     print(f"Warning encountered while plotting '{col}': {str(e)}")
-                    if show_legend:
+                    handles, labels = ax.get_legend_handles_labels()
+                    if show_legend and len(handles) > 0 and len(labels) > 0:
                         ax.legend(loc="best")
+                    else:
+                        if ax.get_legend() is not None:
+                            ax.get_legend().remove()
 
             ax.set_xlabel(
                 xlabel,
@@ -1301,7 +1306,6 @@ def kde_distributions(
                             log_scale=log_scale,
                             bins=bins,
                             binwidth=binwidth,
-                            legend=False,  # Do not add legend automatically
                             **kwargs,
                         )
                     elif plot_type == "kde":
@@ -1313,7 +1317,6 @@ def kde_distributions(
                             color=kde_color,
                             fill=True,
                             log_scale=log_scale,
-                            legend=False,  # Do not add legend automatically
                             **kwargs,
                         )
                     elif plot_type == "both":
@@ -1331,7 +1334,6 @@ def kde_distributions(
                             log_scale=log_scale,
                             bins=bins,
                             binwidth=binwidth,
-                            legend=False,  # Do not add legend automatically
                             **kwargs,
                         )
                         sns.kdeplot(
@@ -1342,7 +1344,6 @@ def kde_distributions(
                             color=kde_color if hue is None else None,
                             log_scale=log_scale,
                             label="KDE",
-                            legend=False,  # Do not add legend automatically
                             **kwargs,
                         )
 
@@ -1382,16 +1383,25 @@ def kde_distributions(
                                 label=f"±{level} Std Dev",
                             )
 
-                    # Conditionally add the legend
-                    if show_legend:
+                    # After plotting logic, before showing the legend
+                    handles, labels = ax.get_legend_handles_labels()
+
+                    if show_legend and len(handles) > 0 and len(labels) > 0:
                         ax.legend(loc="best")
+                    else:
+                        if ax.get_legend() is not None:
+                            ax.get_legend().remove()
 
                 except Exception as e:
                     # Handle different Python versions or issues w/ legends & labels
                     if "No artists with labels found to put in legend." in str(e):
-                        print(f"Warning encountered while plotting '{var}': {str(e)}")
-                        if show_legend:
+                        print(f"Warning encountered while plotting '{col}': {str(e)}")
+                        handles, labels = ax.get_legend_handles_labels()
+                        if show_legend and len(handles) > 0 and len(labels) > 0:
                             ax.legend(loc="best")
+                        else:
+                            if ax.get_legend() is not None:
+                                ax.get_legend().remove()
 
                 ax.set_xlabel(xlabel, fontsize=label_fontsize)
 
