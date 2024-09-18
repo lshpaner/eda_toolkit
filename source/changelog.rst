@@ -24,6 +24,23 @@
 Changelog
 =========
 
+`Version 0.0.10`_
+----------------------
+
+.. _Version 0.0.10: https://lshpaner.github.io/eda_toolkit/v0.0.10/index.html
+
+**Legend Handling**
+
+- The legend is now displayed only if there are valid legend handles (``len(handles) > 0``) and if ``show_legend`` is set to ``True``.
+
+- The check ``ax.get_legend().remove()`` ensures that unnecessary legends are removed if they are empty or if ``show_legend`` is set to ``False``.
+
+**Error Handling**
+- Error handling in the ``except`` block has been enhanced to ensure that any exceptions related to legends or labels are managed properly. The legend handling logic still respects the ``show_legend`` flag even in cases where exceptions occur.
+
+This update prevents empty legend squares from appearing and maintains the intended default behavior of showing legends only when they contain relevant content.
+
+
 `Version 0.0.9`_
 ----------------------
 
