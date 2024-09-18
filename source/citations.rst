@@ -24,7 +24,7 @@
 Citing EDA Toolkit
 ===================
 
-Shpaner, L., & Gil, O. (2024). EDA Toolkit (0.0.9). Zenodo. https://doi.org/10.5281/zenodo.13163208
+Shpaner, L., & Gil, O. (2024). EDA Toolkit (0.0.10). Zenodo. https://doi.org/10.5281/zenodo.13163208
 
 .. code:: bash
 
@@ -35,7 +35,7 @@ Shpaner, L., & Gil, O. (2024). EDA Toolkit (0.0.9). Zenodo. https://doi.org/10.5
     month        = aug,
     year         = 2024,
     publisher    = {Zenodo},
-    version      = {0.0.9},
+    version      = {0.0.10},
     doi          = {10.5281/zenodo.13162633},
     url          = {https://doi.org/10.5281/zenodo.13162633}
     }
