@@ -77,6 +77,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-10">Version 0.0.10</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-9">Version 0.0.9</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8">Version 0.0.8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-8c">Version 0.0.8c</a></li>
@@ -90,9 +91,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id8">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id9">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -125,6 +126,17 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-10">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.10/index.html">Version 0.0.10</a><a class="headerlink" href="#version-0-0-10" title="Link to this heading"></a></h2>
+<p><strong>Legend Handling</strong></p>
+<ul class="simple">
+<li><p>The legend is now displayed only if there are valid legend handles (<code class="docutils literal notranslate"><span class="pre">len(handles)</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>) and if <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p>The check <code class="docutils literal notranslate"><span class="pre">ax.get_legend().remove()</span></code> ensures that unnecessary legends are removed if they are empty or if <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+<p><strong>Error Handling</strong>
+- Error handling in the <code class="docutils literal notranslate"><span class="pre">except</span></code> block has been enhanced to ensure that any exceptions related to legends or labels are managed properly. The legend handling logic still respects the <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> flag even in cases where exceptions occur.</p>
+<p>This update prevents empty legend squares from appearing and maintains the intended default behavior of showing legends only when they contain relevant content.</p>
+</section>
 <section id="version-0-0-9">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.9/index.html">Version 0.0.9</a><a class="headerlink" href="#version-0-0-9" title="Link to this heading"></a></h2>
 <p><strong>Bug Fixes and Minor Improvements</strong></p>
@@ -569,8 +581,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id7">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="id8">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -588,8 +600,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id8">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -671,8 +683,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id9">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<section id="id10">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
