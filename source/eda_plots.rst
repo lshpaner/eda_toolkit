@@ -519,7 +519,7 @@ histogram bars. The ``y-axis`` label is updated to "Count" (``y_axis_label="Coun
 reflecting that the histograms display the count of observations within each bin. 
 Additionally, the stat parameter is set to ``"Count"`` to show the actual counts instead of 
 densities. The rest of the parameters remain the same as in the previous example, 
-with the plots arranged in a single row of four columns (``n_rows=1, n_cols=4``), 
+with the plots arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
 a grid size of `14x4 inches`, and a bin count of `10`. This setup focuses on 
 visualizing the raw counts in the dataset using orange-colored histograms.
 
@@ -1411,11 +1411,10 @@ Box Plots Grid Example
 
 In this example with the US census data [1]_, the box_violin_plot function is employed to create a grid of 
 boxplots, comparing different metrics against the ``"age_group"`` column in the 
-DataFrame. The ``metrics_boxplot_comp`` parameter is set to [``"age_group"``], meaning 
+DataFrame. The ``metrics_comp`` parameter is set to [``"age_group"``], meaning 
 that the comparison will be based on different age groups. The ``metrics_list`` is 
 provided as ``age_boxplot_list``, which contains the specific metrics to be visualized. 
-The function is configured to arrange the plots in a grid format with `3` rows and `4`
-columns, using the ``n_rows=3`` and ``n_cols=4`` parameters. The ``image_path_png`` and 
+The function is configured to arrange the plots in a grid formatThe ``image_path_png`` and 
 ``image_path_svg`` parameters are specified to save the plots in both PNG and 
 SVG formats, and the save_plots option is set to ``"all"``, ensuring that both 
 individual and grid plots are saved.
@@ -1443,12 +1442,14 @@ metrics across different age groups, with all plots saved for future reference o
 
     from eda_toolkit import box_violin_plot
 
-    metrics_boxplot_comp = ["age_group"]
+    metrics_comp = ["age_group"]
 
     box_violin_plot(
         df=df,
         metrics_list=age_boxplot_list,
-        metrics_boxplot_comp=metrics_boxplot_comp,
+        metrics_boxplot_comp=metrics_comp,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
         save_plots="all",
         show_plot="both",
         show_legend=False,
@@ -1485,12 +1486,14 @@ of boxplots while maintaining all other settings.
 
     from eda_toolkit import box_violin_plot
 
-    metrics_boxplot_comp = ["age_group"]
+    metrics_comp = ["age_group"]
 
     box_violin_plot(
         df=df,
         metrics_list=age_boxplot_list,
-        metrics_boxplot_comp=metrics_boxplot_comp,
+        metrics_comp=metrics_comp,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
         save_plots="all",
         show_plot="both",
         show_legend=False,
@@ -1520,20 +1523,19 @@ Pivoted Violin Plots Grid Example
 ------------------------------------
 
 In this example with the US census data [1]_, we set ``xlabel_rot=0`` and ``rotate_plot=True`` 
-to pivot the plot, changing the orientation of the axes while keeping the ```x-axis``` labels upright. 
+to pivot the plot, changing the orientation of the axes while keeping the ``x-axis`` labels upright. 
 This adjustment flips the axes, providing a different perspective on the data distribution.
 
 .. code-block:: python
 
     from eda_toolkit import box_violin_plot
 
-    metrics_boxplot_comp = ["age_group"]
+    metrics_comp = ["age_group"]
 
     box_violin_plot(
         df=df,
         metrics_list=age_boxplot_list,
-        metrics_boxplot_comp=metrics_boxplot_comp,
-        save_plots="all",
+        metrics_boxplot_comp=metrics_comp,
         show_plot="both",
         rotate_plot=True,
         show_legend=False,
@@ -1606,26 +1608,26 @@ For users interested in understanding the strength of the relationship between v
 
 .. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, all_vars=None, label_names=None, **kwargs)
 
-    Create and save scatter plots or a grid of scatter plots for given `x_vars`
-    and `y_vars`, with an optional best fit line and customizable point color,
+    Create and save scatter plots or a grid of scatter plots for given ``x_vars``
+    and ``y_vars``, with an optional best fit line and customizable point color,
     size, and markers.
 
     :param df: The DataFrame containing the data.
     :type df: pandas.DataFrame
 
-    :param x_vars: List of variable names to plot on the `x-axis`.
+    :param x_vars: List of variable names to plot on the ``x-axis``.
     :type x_vars: list of str, optional
 
-    :param y_vars: List of variable names to plot on the `y-axis`.
+    :param y_vars: List of variable names to plot on the ``y-axis``.
     :type y_vars: list of str, optional
 
-    :param n_rows: Number of rows in the subplot grid. Calculated based on the number of plots and `n_cols` if not specified.
+    :param n_rows: Number of rows in the subplot grid. Calculated based on the number of plots and ``n_cols`` if not specified.
     :type n_rows: int, optional
 
-    :param n_cols: Number of columns in the subplot grid. Calculated based on the number of plots and `max_cols` if not specified.
+    :param n_cols: Number of columns in the subplot grid. Calculated based on the number of plots and ``max_cols`` if not specified.
     :type n_cols: int, optional
 
-    :param max_cols: Maximum number of columns in the subplot grid. Default is 4.
+    :param max_cols: Maximum number of columns in the subplot grid. Default is ``4``.
     :type max_cols: int, optional
 
     :param image_path_png: Directory path to save PNG images of the scatter plots.
@@ -1640,7 +1642,7 @@ For users interested in understanding the strength of the relationship between v
     :param show_legend: Whether to display the legend on the plots. Default is ``True``.
     :type show_legend: bool, optional
 
-    :param xlabel_rot: Rotation angle for `x-axis` labels. Default is 0.
+    :param xlabel_rot: Rotation angle for ``x-axis`` labels. Default is ``0``.
     :type xlabel_rot: int, optional
 
     :param show_plot: Controls plot display: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
@@ -1661,7 +1663,7 @@ For users interested in understanding the strength of the relationship between v
     :param tick_fontsize: Font size for axis tick labels. Default is 10.
     :type tick_fontsize: int, optional
 
-    :param text_wrap: The maximum width of the title text before wrapping. Default is 50.
+    :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
     :type text_wrap: int, optional
 
     :param add_best_fit_line: Whether to add a best fit line to the scatter plots. Default is ``False``.
@@ -1679,7 +1681,7 @@ For users interested in understanding the strength of the relationship between v
     :param hue: Column name for the grouping variable that will produce points with different colors.
     :type hue: str, optional
 
-    :param hue_palette: Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette. This parameter requires the `hue` parameter to be set.
+    :param hue_palette: Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette. This parameter requires the ``hue`` parameter to be set.
     :type hue_palette: dict, list, or str, optional
 
     :param size: Column name for the grouping variable that will produce points with different sizes.
@@ -1694,10 +1696,10 @@ For users interested in understanding the strength of the relationship between v
     :param show_correlation: Whether to display the Pearson correlation coefficient in the plot title. Default is ``True``.
     :type show_correlation: bool, optional
 
-    :param xlim: Limits for the `x-axis` as a tuple or list of (`min`, `max`).
+    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min``, ``max``).
     :type xlim: tuple or list, optional
 
-    :param ylim: Limits for the `y-axis` as a tuple or list of (`min`, `max`).
+    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
     :type ylim: tuple or list, optional
 
     :param all_vars: If provided, automatically generates scatter plots for all combinations of variables in this list, overriding `x_vars` and `y_vars`.
@@ -1706,7 +1708,7 @@ For users interested in understanding the strength of the relationship between v
     :param label_names: A dictionary to rename columns for display in the plot titles and labels.
     :type label_names: dict, optional
 
-    :param kwargs: Additional keyword arguments to pass to `sns.scatterplot`.
+    :param kwargs: Additional keyword arguments to pass to ``sns.scatterplot``.
     :type kwargs: dict, optional
 
     :raises ValueError: 
