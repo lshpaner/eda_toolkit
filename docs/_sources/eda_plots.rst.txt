@@ -671,7 +671,7 @@ statistical overlays to provide deeper insights into the data.
     ]
 
     kde_distributions(
-        df=df2,
+        df=df,
         figsize=(10, 6),
         text_wrap=50,
         hist_color="brown",
@@ -1876,8 +1876,8 @@ These settings allow for the creation of scatter plots that comprehensively expl
     from eda_toolkit import scatter_fit_plot
 
     scatter_fit_plot(
-        df=df2,
-        all_vars=df2.select_dtypes(np.number).columns.to_list(),
+        df=df,
+        all_vars=df.select_dtypes(np.number).columns.to_list(),
         show_legend=True,
         show_plot="grid",
         label_fontsize=14,
