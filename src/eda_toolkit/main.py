@@ -1641,6 +1641,15 @@ def stacked_crosstab_plot(
             f"Invalid plot type: {plot_type}. Valid options are {valid_plot_types}"
         )
 
+    # Ensure save_formats is a list even if None, string, or tuple is passed
+    save_formats = (
+        save_formats or []
+    )  # Modified line: Ensures save_formats is an empty list if None
+    if isinstance(save_formats, str):
+        save_formats = [save_formats]
+    elif isinstance(save_formats, tuple):
+        save_formats = list(save_formats)
+
     # Initialize the dictionary to store crosstabs
     crosstabs_dict = {}
     # Default color settings
