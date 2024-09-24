@@ -1536,9 +1536,10 @@ def stacked_crosstab_plot(
     image_path_svg : str, optional
         Directory path where generated SVG plot images will be saved.
 
-    save_formats : list of str, optional
+    save_formats : list of str, optional (default=None)
         List of file formats to save the plot images in. Valid formats are
-        'png' and 'svg'.
+        'png' and 'svg'. If not provided, defaults to an empty list and no
+        images will be saved.
 
     color : list of str, optional
         List of colors to use for the plots. If not provided, a default
