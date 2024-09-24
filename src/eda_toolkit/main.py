@@ -1536,9 +1536,10 @@ def stacked_crosstab_plot(
     image_path_svg : str, optional
         Directory path where generated SVG plot images will be saved.
 
-    save_formats : list of str, optional
+    save_formats : list of str, optional (default=None)
         List of file formats to save the plot images in. Valid formats are
-        'png' and 'svg'.
+        'png' and 'svg'. If not provided, defaults to an empty list and no
+        images will be saved.
 
     color : list of str, optional
         List of colors to use for the plots. If not provided, a default
@@ -1640,6 +1641,15 @@ def stacked_crosstab_plot(
         raise ValueError(
             f"Invalid plot type: {plot_type}. Valid options are {valid_plot_types}"
         )
+
+    # Ensure save_formats is a list even if None, string, or tuple is passed
+    save_formats = (
+        save_formats or []
+    )  # Modified line: Ensures save_formats is an empty list if None
+    if isinstance(save_formats, str):
+        save_formats = [save_formats]
+    elif isinstance(save_formats, tuple):
+        save_formats = list(save_formats)
 
     # Initialize the dictionary to store crosstabs
     crosstabs_dict = {}
