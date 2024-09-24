@@ -24,8 +24,10 @@
 Changelog
 =========
 
-Version 0.0.7
----------------------------
+`Version 0.0.7`_
+-------------------------
+
+.. _Version 0.0.7: https://lshpaner.github.io/eda_toolkit/v0.0.7/
 
 **Added Function for Customizable Correlation Matrix Visualization**
 
@@ -66,8 +68,10 @@ Convert all columns in the DataFrame to object type to prevent issues with numer
    df = df.astype(str).fillna("")
 
 
-Version 0.0.6
----------------------------
+`Version 0.0.6`_
+-------------------------
+
+.. _Version 0.0.6: https://lshpaner.github.io/eda_toolkit/v0.0.6/
 
 **Added validation for Plot Type Parameter in KDE Distributions Function**
 
@@ -83,8 +87,10 @@ This release adds a validation step for the ``plot_type`` parameter in the ``kde
             f"got '{plot_type}' instead."
         )
 
-Version 0.0.5 
----------------------------
+`Version 0.0.5`_
+-------------------------
+
+.. _Version 0.0.5: https://lshpaner.github.io/eda_toolkit/v0.0.5/
 
 **Ensure Consistent Font Size and Text Wrapping Across Plot Elements**
 
