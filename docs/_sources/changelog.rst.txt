@@ -24,6 +24,27 @@
 Changelog
 =========
 
+`Version 0.0.11`_
+----------------------
+
+.. _Version 0.0.11: https://lshpaner.github.io/eda_toolkit/v0.0.11/index.html
+
+
+**Description**
+
+Fixes a ``TypeError`` in the ``stacked_crosstab_plot`` function when ``save_formats`` is ``None``. The update ensures that ``save_formats`` defaults to an empty list, preventing iteration over a ``NoneType`` object.
+
+**Changes**
+
+- Initializes ``save_formats`` as an empty list if not provided.
+- Adds handling for string and tuple input types for ``save_formats``.
+
+**Issue Fixed**
+
+- Resolves ``TypeError`` when ``save_formats`` is ``None``.
+
+
+
 `Version 0.0.10`_
 ----------------------
 
