@@ -759,7 +759,7 @@ The function also supports generating both regular and normalized stacked bar pl
     :type image_path_png: str, optional
     :param image_path_svg: Directory path where generated SVG plot images will be saved.
     :type image_path_svg: str, optional
-    :param save_formats: List of file formats to save the plot images in.
+    :param save_formats: List of file formats to save the plot images in. Valid formats are ``'png'`` and ``'svg'``. If not provided, defaults to an empty list and no images will be saved.
     :type save_formats: list, optional
     :param color: List of colors to use for the plots. If not provided, a default color scheme is used.
     :type color: list, optional
@@ -803,7 +803,6 @@ The function also supports generating both regular and normalized stacked bar pl
 
     :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is ``True``. Otherwise, returns ``None``.
     :rtype: ``dict`` or ``None``
-
 
 
 Stacked Bar Plots With Crosstabs Example
@@ -892,7 +891,7 @@ In this example:
         title=title,
         kind="bar",
         width=0.8, 
-        rot=45, # axis rotation angle
+        rot=0, # axis rotation angle
         custom_order=None,
         color=["#00BFC4", "#F8766D"], # default color schema
         output="both",
