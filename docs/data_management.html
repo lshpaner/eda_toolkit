@@ -79,6 +79,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#dataframe-analysis">DataFrame Analysis</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dataframe_columns"><code class="docutils literal notranslate"><span class="pre">dataframe_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#census-income-example">Census Income Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dataframe-column-names">DataFrame Column Names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculation-details">Calculation Details</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#generating-summary-tables-for-variable-combinations">Generating Summary Tables for Variable Combinations</a><ul>
@@ -629,8 +632,8 @@ DataFrame. Defaults to <code class="docutils literal notranslate"><span class="p
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If <cite>return_df</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plain DataFrame containing column summary
-statistics. If <cite>return_df</cite> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, returns a styled DataFrame with optional
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">return_df</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plain DataFrame containing column summary
+statistics. If <code class="docutils literal notranslate"><span class="pre">return_df</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, returns a styled DataFrame with optional
 background color for specific columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -639,7 +642,8 @@ background color for specific columns.</p>
 </dl>
 </dd></dl>
 
-<p><strong>Example Usage</strong></p>
+<section id="census-income-example">
+<h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Link to this heading"></a></h3>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
 function to analyze a DataFrame’s columns.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">dataframe_columns</span>
@@ -864,6 +868,30 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
     </tbody>
 </table>
 </div><p></p>
+</section>
+<section id="dataframe-column-names">
+<h3>DataFrame Column Names<a class="headerlink" href="#dataframe-column-names" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">unique_values_total</span></code></dt><dd><p>This column indicates the total number of unique values present in each column of the DataFrame. It measures the distinct values that a column holds. For example, in the <code class="docutils literal notranslate"><span class="pre">age</span></code> column, there are 74 unique values, meaning the ages vary across 74 distinct entries.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">max_unique_value</span></code></dt><dd><p>This column shows the most frequently occurring value in each column. For example, in the <code class="docutils literal notranslate"><span class="pre">workclass</span></code> column, the most common value is <code class="docutils literal notranslate"><span class="pre">Private</span></code>, indicating that this employment type is the most represented in the dataset. For numeric columns like <code class="docutils literal notranslate"><span class="pre">capital-gain</span></code> and <code class="docutils literal notranslate"><span class="pre">capital-loss</span></code>, the most common value is <code class="docutils literal notranslate"><span class="pre">0</span></code>, which suggests that the majority of individuals have no capital gain or loss.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">max_unique_value_total</span></code></dt><dd><p>This represents the count of the most frequently occurring value in each column. For instance, in the <code class="docutils literal notranslate"><span class="pre">native-country</span></code> column, the value <code class="docutils literal notranslate"><span class="pre">United-States</span></code> appears <code class="docutils literal notranslate"><span class="pre">43,832</span></code> times, indicating that the majority of individuals in the dataset are from the United States.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">max_unique_value_pct</span></code></dt><dd><p>This column shows the percentage that the most frequent value constitutes of the total number of rows. For example, in the <code class="docutils literal notranslate"><span class="pre">race</span></code> column, the value <code class="docutils literal notranslate"><span class="pre">White</span></code> makes up <code class="docutils literal notranslate"><span class="pre">85.5%</span></code> of the data, suggesting a significant majority of the dataset belongs to this racial group.</p>
+</dd>
+</dl>
+</section>
+<section id="calculation-details">
+<h3>Calculation Details<a class="headerlink" href="#calculation-details" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unique_values_total</span></code> is calculated using the <code class="docutils literal notranslate"><span class="pre">nunique()</span></code> function, which counts the number of unique values in a column.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_unique_value</span></code> is determined by finding the value with the highest frequency using <code class="docutils literal notranslate"><span class="pre">value_counts()</span></code>. For string columns, any missing values (if present) are replaced with the string <code class="docutils literal notranslate"><span class="pre">&quot;null&quot;</span></code> before computing the frequency.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_unique_value_total</span></code> is the frequency count of the <code class="docutils literal notranslate"><span class="pre">max_unique_value</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_unique_value_pct</span></code> is the percentage of <code class="docutils literal notranslate"><span class="pre">max_unique_value_total</span></code> divided by the total number of rows in the DataFrame, providing an idea of how dominant the most frequent value is.</p></li>
+</ul>
+<p>This analysis helps in identifying columns with a high proportion of dominant values, like <code class="docutils literal notranslate"><span class="pre">&lt;=50K</span></code> in the <code class="docutils literal notranslate"><span class="pre">income</span></code> column, which appears <code class="docutils literal notranslate"><span class="pre">24,720</span></code> times, making up <code class="docutils literal notranslate"><span class="pre">50.61%</span></code> of the entries. This insight can be useful for understanding data distributions, identifying potential data imbalances, or even spotting opportunities for feature engineering in further data processing steps.</p>
+</section>
 </section>
 <section id="generating-summary-tables-for-variable-combinations">
 <h2>Generating Summary Tables for Variable Combinations<a class="headerlink" href="#generating-summary-tables-for-variable-combinations" title="Link to this heading"></a></h2>
