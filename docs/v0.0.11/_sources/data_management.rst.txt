@@ -532,13 +532,14 @@ DataFrame Analysis
                       ``False``, returns a styled DataFrame for visual presentation. Defaults to ``False``.
     :type return_df: bool, optional
 
-    :returns: If `return_df` is ``True``, returns the plain DataFrame containing column summary 
-              statistics. If `return_df` is ``False``, returns a styled DataFrame with optional 
+    :returns: If ``return_df`` is ``True``, returns the plain DataFrame containing column summary 
+              statistics. If ``return_df`` is ``False``, returns a styled DataFrame with optional 
               background color for specific columns.
     :rtype: pandas.DataFrame
 
 
-**Example Usage**
+Census Income Example
+""""""""""""""""""""""""""""""
 
 In the example below, we demonstrate how to use the ``dataframe_columns`` 
 function to analyze a DataFrame's columns.
@@ -776,6 +777,30 @@ function to analyze a DataFrame's columns.
 
 
 \
+
+DataFrame Column Names
+""""""""""""""""""""""""""""""
+
+``unique_values_total``
+    This column indicates the total number of unique values present in each column of the DataFrame. It measures the distinct values that a column holds. For example, in the ``age`` column, there are 74 unique values, meaning the ages vary across 74 distinct entries.
+
+``max_unique_value``
+    This column shows the most frequently occurring value in each column. For example, in the ``workclass`` column, the most common value is ``Private``, indicating that this employment type is the most represented in the dataset. For numeric columns like ``capital-gain`` and ``capital-loss``, the most common value is ``0``, which suggests that the majority of individuals have no capital gain or loss.
+
+``max_unique_value_total``
+    This represents the count of the most frequently occurring value in each column. For instance, in the ``native-country`` column, the value ``United-States`` appears ``43,832`` times, indicating that the majority of individuals in the dataset are from the United States.
+
+``max_unique_value_pct``
+    This column shows the percentage that the most frequent value constitutes of the total number of rows. For example, in the ``race`` column, the value ``White`` makes up ``85.5%`` of the data, suggesting a significant majority of the dataset belongs to this racial group.
+
+Calculation Details
+""""""""""""""""""""""""""""""
+- ``unique_values_total`` is calculated using the ``nunique()`` function, which counts the number of unique values in a column.
+- ``max_unique_value`` is determined by finding the value with the highest frequency using ``value_counts()``. For string columns, any missing values (if present) are replaced with the string ``"null"`` before computing the frequency.
+- ``max_unique_value_total`` is the frequency count of the ``max_unique_value``.
+- ``max_unique_value_pct`` is the percentage of ``max_unique_value_total`` divided by the total number of rows in the DataFrame, providing an idea of how dominant the most frequent value is.
+
+This analysis helps in identifying columns with a high proportion of dominant values, like ``<=50K`` in the ``income`` column, which appears ``24,720`` times, making up ``50.61%`` of the entries. This insight can be useful for understanding data distributions, identifying potential data imbalances, or even spotting opportunities for feature engineering in further data processing steps.
 
 Generating Summary Tables for Variable Combinations
 -----------------------------------------------------
