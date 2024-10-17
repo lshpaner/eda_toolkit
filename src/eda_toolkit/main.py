@@ -3071,4 +3071,186 @@ def flex_corr_matrix(
     plt.show()
 
 
+
+################################################################################
+############################## Data Doctor #####################################
+################################################################################
+
+def data_doctor(
+    df,
+    feature_name,
+    data_fraction=1,
+    scale_conversion=None,
+    apply_cutoff=False,
+    lower_cutoff=None,
+    upper_cutoff=None,
+    show_plot=True,
+    apply_as_new_col_to_df=False,
+):
+    
+    """
+    Function to analyze and adjust individual dataframe features for outliers, or any other experimentation. 
+    The function examines the distribution of each feature, applies specified lower and/or upper 
+    cutoff thresholds, and if desired, creates a new column in the dataframe with the adjusted values.
+
+
+    Args:
+        df (dataframe): the dataframe containing the feature to analyze
+
+        
+        feature_name (string): the feature to analyze
+        
+        data_fraction (float): fraction of data to analyze, in the case of a big data set where a sample represents population
+                               Defaults to 1, for 100 percent of the data.
+
+        scale_conversion (string): the type of conversion to perform; options:
+            abs = absolute values
+            log = natural logarithm values
+            sqrt = square root values
+            cbrt = cube root values
+            invrs = inverted values
+            stdrz = Standardized values
+            normlz = Normalized values
+        
+        apply_cutoff (bool): Choose whether not not to apply cutoffs. True, False. Defaults to False
+        lower_cutoff (float)
+        upper_cutoff (float)
+
+        show_plot (bool): Choose whether or not to show plot. True, False. Defaults to True.        
+
+        apply_as_new_col_to_df (bool): Choose whether or not to add a new column to your dataframe with the converted data. 
+                                       True, False. Defaults to False
+
+    Raises:
+        No Raises
+        Null and empty string pre-processing
+
+    Returns:
+        str:       Prints feature name, descriptive statistics, quartile information, and outlier information. 
+                   Also, confirms if new column was created, when applicable.
+
+        visual:    kdeplot and boxplot of data
+    """
+    # Suppress warnings for division by zero, or invalid values encountered in subtract
+    np.seterr(divide='ignore', invalid='ignore')
+
+    # If conversion will be applied to a new column, set sample_frac to 1
+    if apply_as_new_col_to_df == True:
+        data_fraction = 1  # change the sample fraction value to 100 percent, to apply data to new column
+        new_col_name = feature_name + "_" + scale_conversion
+
+
+    # Convert data according to scale_conversion selection
+
+    if scale_conversion == "abs":
+        feature_ = np.abs(df.sample(frac=data_fraction)[feature_name])
+
+    elif scale_conversion == "log":
+        feature_ = np.log(df.sample(frac=data_fraction)[feature_name])
+
+    elif scale_conversion == "sqrt":
+        feature_ = np.sqrt(df.sample(frac=data_fraction)[feature_name])
+
+    elif scale_conversion == "cbrt":
+        feature_ = np.cbrt(df.sample(frac=data_fraction)[feature_name])
+
+    elif scale_conversion == "invrs":
+        feature_ = 1 / np.cbrt(df.sample(frac=data_fraction)[feature_name])
+
+
+    elif scale_conversion == "stdrz":
+
+        x_ = np.abs(df.sample(frac=data_fraction)[feature_name])
+
+        feature_ = (x_ - np.mean(x_)) / np.std(x_)
+    elif scale_conversion == "normlz":
+
+        x_ = np.abs(df.sample(frac=data_fraction)[feature_name])
+
+        feature_ = (x_ - np.min(x_)) / (np.max(x_) - np.min(x_))
+
+    else:
+        feature_ = df.sample(frac=data_fraction)[feature_name]
+        scale_conversion = "None"
+
+
+
+    # Replace values in feature_ greater than the cutoff, ONLY if apply_cutoff == True
+
+    if apply_cutoff == True:
+        if lower_cutoff != None:
+            feature_ = np.where(feature_ < lower_cutoff, lower_cutoff, feature_)
+        if upper_cutoff != None:
+            feature_ = np.where(feature_ > upper_cutoff, upper_cutoff, feature_)
+
+
+    # Print statistical data
+
+    print("Feature:    ", feature_name, "\n")
+    print("min    ", np.min(feature_))
+    print("max    ", np.max(feature_))
+    print("mean   ", np.mean(feature_))
+    print("median ", np.median(feature_))
+    print("std    ", np.std(feature_), "\n")
+    print("Q1     ", np.quantile(feature_, 0.25))
+    print("Q2     ", np.quantile(feature_, 0.50))
+    print("IQR    ", np.quantile(feature_, 0.75) - np.quantile(feature_, 0.25))
+    print("Q3     ", np.quantile(feature_, 0.75))
+    print("Q4     ", np.quantile(feature_, 1), "\n")
+    print(
+        "Outlier-lower_bound     ",
+        np.quantile(feature_, 0.25)
+        - 1.5 * np.quantile(feature_, 0.75)
+        - np.quantile(feature_, 0.25),
+    )
+    print(
+        "Outlier-upper_bound     ",
+        np.quantile(feature_, 0.75)
+        + 1.5 * np.quantile(feature_, 0.75)
+        - np.quantile(feature_, 0.25),
+        "\n",
+    )
+
+    # add column to dataframe along with data
+
+    if (apply_as_new_col_to_df == True and data_fraction == 1) == True:
+        df[new_col_name] = feature_
+        print("New Column Name:     ", new_col_name)
+        print("New column was successfully added to dataframe.")
+
+    elif (apply_as_new_col_to_df == True and data_fraction != 1) == True:
+        print("New Column Name:     ", new_col_name)
+        print(
+            "NOTE: Column was not added to dataframe as sample_frac is set to "
+            + str(data_fraction)
+            + " and not to 1, representing 100 percent."
+        )
+
+
+    # Update lower_cutoff and upper_cutoff values to represent any value updates made in steps above
+    # ...to ensure the xlable reflects these values
+
+    lower_cutoff = round(np.min(feature_), 4)
+    upper_cutoff = round(np.max(feature_), 4)
+
+
+    # Plot kdeplot and boxplot
+    if (show_plot == True) == True:
+
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+        sns.kdeplot(x=feature_, ax=axes[0], clip=(lower_cutoff, upper_cutoff))
+        plt.xlabel(
+            "Lower cutoff: "
+            + str(lower_cutoff)
+            + "             Upper cutoff: "
+            + str(upper_cutoff)
+        )
+
+        sns.boxplot(x=feature_, ax=axes[1])
+        axes[1].set_title("Conversion type:   " + scale_conversion)
+
+        plt.show();
+
+
 ################################################################################
