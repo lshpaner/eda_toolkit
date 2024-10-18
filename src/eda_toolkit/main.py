@@ -3171,8 +3171,8 @@ def data_doctor(
 
     else:
         feature_ = df.sample(frac=data_fraction)[feature_name]
-        scale_conversion = "None"
-
+        if scale_conversion == None:
+            scale_conversion = "None"
 
 
     # Replace values in feature_ greater than the cutoff, ONLY if apply_cutoff == True
@@ -3248,7 +3248,7 @@ def data_doctor(
         )
 
         sns.boxplot(x=feature_, ax=axes[1])
-        axes[1].set_title("Conversion type:   " + scale_conversion)
+        axes[1].set_title("Scale Conversion:   " + scale_conversion)
 
         plt.show();
 
