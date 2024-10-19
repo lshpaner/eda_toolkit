@@ -21,15 +21,16 @@ Before you install `eda_toolkit`, ensure your system meets the following require
 
 Additionally, `eda_toolkit` depends on the following packages, which will be automatically installed when you install `eda_toolkit`:
 
-- `jinja2`: version `3.1.4` or higher
-- `matplotlib`: version `3.5.3` or higher
-- `nbformat`: version `4.2.0` or higher
-- `numpy`: version `1.21.6` or higher
-- `pandas`: version `1.3.5` or higher
-- `plotly`: version `5.18.0` or higher
-- `scikit-learn`: version `1.0.2` or higher
-- `seaborn`: version `0.12.2` or higher
-- `xlsxwriter`: version `3.2.0` or higher
+- `jinja2`: version `3.1.4` (Exact version required)
+- `matplotlib`: version `3.5.3` or higher, but capped at `3.9.2`
+- `nbformat`: version `4.2.0` or higher, but capped at `5.10.4`
+- `numpy`: version `1.21.6` or higher, but capped at `2.1.0`
+- `pandas`: version `1.3.5` or higher, but capped at `2.2.2`
+- `plotly`: version `5.18.0` or higher, but capped at `5.24.0`
+- `scikit-learn`: version `1.0.2` or higher, but capped at `1.5.2`
+- `seaborn`: version `0.12.2` or higher, but capped below `0.13.0`
+- `xlsxwriter`: version `3.2.0` (Exact version required)
+- `scipy`: version `1.7.3` or higher, but capped at `1.11.1`
 
 
 ## 💾 Installation
@@ -81,7 +82,7 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
   month        = aug,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {0.0.11},
+  version      = {0.0.12},
   doi          = {10.5281/zenodo.13162633},
   url          = {https://doi.org/10.5281/zenodo.13162633}
 }
