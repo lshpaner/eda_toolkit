@@ -23,7 +23,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],  # Classifiers for the package
-    python_requires=">=3.7.4, <3.12",  # Python versions 3.7.4 to 3.11
+    python_requires=">=3.7.4",  # Python versions 3.7.4 to 3.11
     install_requires=[
         "jinja2==3.1.4",  # Exact version of Jinja2 required
         "matplotlib>=3.5.3,<=3.9.2",  # Matplotlib capped at 3.9.2
