@@ -2830,7 +2830,7 @@ def flex_corr_matrix(
     image_path_png=None,
     image_path_svg=None,
     figsize=(10, 10),
-    title="Cervical Cancer Data: Correlation Matrix",
+    title=None,
     label_fontsize=12,
     tick_fontsize=10,
     xlabel_rot=45,
