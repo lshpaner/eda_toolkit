@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 import math
+import scipy.stats as stats
 import random
 import itertools  # Import itertools for combinations
 from itertools import combinations
@@ -3071,10 +3072,10 @@ def flex_corr_matrix(
     plt.show()
 
 
-
 ################################################################################
 ############################## Data Doctor #####################################
 ################################################################################
+
 
 def data_doctor(
     df,
@@ -3085,60 +3086,119 @@ def data_doctor(
     lower_cutoff=None,
     upper_cutoff=None,
     show_plot=True,
+    save_plot=False,  # Added to control plot saving
+    image_path_png=None,  # Path for saving PNG images
+    image_path_svg=None,  # Path for saving SVG images
     apply_as_new_col_to_df=False,
 ):
-    
     """
-    Function to analyze and adjust individual dataframe features for outliers, or any other experimentation. 
-    The function examines the distribution of each feature, applies specified lower and/or upper 
-    cutoff thresholds, and if desired, creates a new column in the dataframe with the adjusted values.
+    Analyze and transform a specific feature in a DataFrame, with options for
+    scaling, applying cutoffs, and visualizing the results. This function also
+    allows for the creation of a new column with the transformed data if
+    specified. Plots can be saved in PNG or SVG format if required.
 
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame containing the feature to analyze.
 
-    Args:
-        df (dataframe): the dataframe containing the feature to analyze
+    feature_name : str
+        The name of the feature (column) to analyze.
 
-        
-        feature_name (string): the feature to analyze
-        
-        data_fraction (float): fraction of data to analyze, in the case of a big data set where a sample represents population
-                               Defaults to 1, for 100 percent of the data.
+    data_fraction : float, optional (default=1)
+        Fraction of the data to analyze. Useful for large datasets where a
+        sample can represent the population.
 
-        scale_conversion (string): the type of conversion to perform; options:
-            abs = absolute values
-            log = natural logarithm values
-            sqrt = square root values
-            cbrt = cube root values
-            invrs = inverted values
-            stdrz = Standardized values
-            normlz = Normalized values
-        
-        apply_cutoff (bool): Choose whether not not to apply cutoffs. True, False. Defaults to False
-        lower_cutoff (float)
-        upper_cutoff (float)
+    scale_conversion : str, optional
+        Type of conversion to apply to the feature. Options include:
+            - 'abs': Absolute values
+            - 'log': Natural logarithm values
+            - 'sqrt': Square root values
+            - 'cbrt': Cube root values
+            - 'invrs': Inverted values
+            - 'stdrz': Standardized values (z-score)
+            - 'normlz': Normalized values
+            - 'boxcox': Box-Cox transformation (only for positive values).
+        Defaults to None (no conversion).
 
-        show_plot (bool): Choose whether or not to show plot. True, False. Defaults to True.        
+    apply_cutoff : bool, optional (default=False)
+        Whether to apply upper and/or lower cutoffs to the feature.
 
-        apply_as_new_col_to_df (bool): Choose whether or not to add a new column to your dataframe with the converted data. 
-                                       True, False. Defaults to False
+    lower_cutoff : float, optional
+        Lower bound to apply if `apply_cutoff` is True. Defaults to None.
 
-    Raises:
-        No Raises
-        Null and empty string pre-processing
+    upper_cutoff : float, optional
+        Upper bound to apply if `apply_cutoff` is True. Defaults to None.
+
+    show_plot : bool, optional (default=True)
+        Whether to display a KDE plot and boxplot of the feature.
+
+    save_plots : bool, optional (default=False)
+        Whether to save the plots as PNG and/or SVG images. If `True`, the user
+        must specify at least one of `image_path_png` or `image_path_svg`,
+        otherwise a `ValueError` is raised.
+
+    image_path_png : str, optional
+        Directory path to save the plot as a PNG file.
+        Only used if `save_plots=True`.
+
+    image_path_svg : str, optional
+        Directory path to save the plot as an SVG file.
+        Only used if `save_plots=True`.
+
+    apply_as_new_col_to_df : bool, optional (default=False)
+        Whether to create a new column in the DataFrame with the transformed
+        values. If True, the new column will be named using the format:
+        `<feature_name>_<scale_conversion>`.
 
     Returns:
-        str:       Prints feature name, descriptive statistics, quartile information, and outlier information. 
-                   Also, confirms if new column was created, when applicable.
+    --------
+    None
+        Displays the feature name, descriptive statistics, quartile information,
+        and outlier details. If a new column is created, confirms the new column's
+        addition to the DataFrame.
 
-        visual:    kdeplot and boxplot of data
+    Raises:
+    -------
+    ValueError
+        If an invalid `scale_conversion` is provided.
+
+    ValueError
+        If Box-Cox transformation is applied to non-positive values.
+
+    ValueError
+        If `save_plots=True` but neither `image_path_png` nor `image_path_svg`
+        is provided.
     """
-    # Suppress warnings for division by zero, or invalid values encountered in subtract
-    np.seterr(divide='ignore', invalid='ignore')
+
+    # Suppress warnings for division by zero, or invalid values in subtract
+    np.seterr(divide="ignore", invalid="ignore")
 
     # If conversion will be applied to a new column, set sample_frac to 1
     if apply_as_new_col_to_df == True:
-        data_fraction = 1  # change the sample fraction value to 100 percent, to apply data to new column
+        data_fraction = 1  # change the sample fraction value to 100 percent, to
+        # apply data to new column
         new_col_name = feature_name + "_" + scale_conversion
 
+    # Define valid scale conversions
+    valid_conversions = [
+        "abs",
+        "log",
+        "sqrt",
+        "cbrt",
+        "invrs",
+        "stdrz",
+        "normlz",
+        "boxcox",
+        None,
+    ]
+
+    # Check if scale_conversion is valid
+    if scale_conversion not in valid_conversions:
+        raise ValueError(
+            f"Invalid scale_conversion '{scale_conversion}'. "
+            f"Valid options are: {valid_conversions[:-1]}"
+        )
 
     # Convert data according to scale_conversion selection
 
@@ -3157,7 +3217,6 @@ def data_doctor(
     elif scale_conversion == "invrs":
         feature_ = 1 / np.cbrt(df.sample(frac=data_fraction)[feature_name])
 
-
     elif scale_conversion == "stdrz":
 
         x_ = np.abs(df.sample(frac=data_fraction)[feature_name])
@@ -3168,21 +3227,25 @@ def data_doctor(
         x_ = np.abs(df.sample(frac=data_fraction)[feature_name])
 
         feature_ = (x_ - np.min(x_)) / (np.max(x_) - np.min(x_))
-
+    elif scale_conversion == "boxcox":
+        feature_ = df.sample(frac=data_fraction)[feature_name]
+        if np.any(feature_ <= 0):
+            raise ValueError(
+                "Box-Cox transformation requires strictly positive values."
+            )
+        feature_, _ = stats.boxcox(feature_)
     else:
         feature_ = df.sample(frac=data_fraction)[feature_name]
         if scale_conversion == None:
             scale_conversion = "None"
 
-
-    # Replace values in feature_ greater than the cutoff, ONLY if apply_cutoff == True
+    # Replace values in feature_ > than the cutoff, ONLY if apply_cutoff == True
 
     if apply_cutoff == True:
         if lower_cutoff != None:
             feature_ = np.where(feature_ < lower_cutoff, lower_cutoff, feature_)
         if upper_cutoff != None:
             feature_ = np.where(feature_ > upper_cutoff, upper_cutoff, feature_)
-
 
     # Print statistical data
 
@@ -3226,31 +3289,59 @@ def data_doctor(
             + " and not to 1, representing 100 percent."
         )
 
-
-    # Update lower_cutoff and upper_cutoff values to represent any value updates made in steps above
-    # ...to ensure the xlable reflects these values
+    # Update lower_cutoff and upper_cutoff values to represent any value updates
+    # made in steps above...to ensure the xlable reflects these values
 
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
 
-
     # Plot kdeplot and boxplot
-    if (show_plot == True) == True:
-
+    if show_plot:
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
+        # KDE plot
         sns.kdeplot(x=feature_, ax=axes[0], clip=(lower_cutoff, upper_cutoff))
-        plt.xlabel(
-            "Lower cutoff: "
-            + str(lower_cutoff)
-            + "             Upper cutoff: "
-            + str(upper_cutoff)
+        axes[0].set_title(f"KDE Plot: {feature_name} (Scale: {scale_conversion})")
+        axes[0].set_xlabel(f"{feature_name}")
+
+        # Boxplot
+        sns.boxplot(x=feature_, ax=axes[1])
+        axes[1].set_title(f"Boxplot: {feature_name} (Scale: {scale_conversion})")
+
+        # Only show lower and upper cutoffs below the boxplot
+        axes[1].set_xlabel(
+            f"Lower cutoff: {lower_cutoff} | Upper cutoff: {upper_cutoff}"
         )
 
-        sns.boxplot(x=feature_, ax=axes[1])
-        axes[1].set_title("Scale Conversion:   " + scale_conversion)
+        plt.tight_layout()
 
-        plt.show();
+        # Check if save_plots=True but no image path is provided
+        if save_plot and not image_path_png and not image_path_svg:
+            raise ValueError(
+                "You must provide either 'image_path_png' or 'image_path_svg' "
+                "when 'save_plots=True'."
+            )
+
+        # Save the plots if save_plots is True and the paths are provided
+        if save_plot:
+            # Generate a default filename based on the feature name and scale
+            # conversion
+            default_filename = (
+                f"{feature_name}_"
+                f"{scale_conversion if scale_conversion else 'original'}"
+            )
+
+            # Save as PNG if path is provided
+            if image_path_png:
+                png_filename = f"{image_path_png}/{default_filename}.png"
+                plt.savefig(png_filename, format="png")
+                print(f"Plot saved as PNG at {png_filename}")
+
+            # Save as SVG if path is provided
+            if image_path_svg:
+                svg_filename = f"{image_path_svg}/{default_filename}.svg"
+                plt.savefig(svg_filename, format="svg")
+                print(f"Plot saved as SVG at {svg_filename}")
 
 
 ################################################################################
