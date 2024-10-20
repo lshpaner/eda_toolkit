@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eda_toolkit"
-version = "0.0.11a"
+version = "0.0.11a1"
 description = "A Python library for EDA, including visualizations, directory management, data preprocessing, reporting, and more."
 readme = "README_min.md"
 readme-content-type = "text/markdown"
