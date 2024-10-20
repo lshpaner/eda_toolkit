@@ -3295,22 +3295,27 @@ def data_doctor(
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
 
-    # Plot kdeplot and boxplot
+    # Plot kdeplot, boxplot, and histplot
     if show_plot:
-        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
         # KDE plot
         sns.kdeplot(x=feature_, ax=axes[0], clip=(lower_cutoff, upper_cutoff))
         axes[0].set_title(f"KDE Plot: {feature_name} (Scale: {scale_conversion})")
         axes[0].set_xlabel(f"{feature_name}")
 
+        # Histplot
+        sns.histplot(x=feature_, ax=axes[1])
+        axes[1].set_title(f"Histplot: {feature_name} (Scale: {scale_conversion})")
+
         # Boxplot
-        sns.boxplot(x=feature_, ax=axes[1])
-        axes[1].set_title(f"Boxplot: {feature_name} (Scale: {scale_conversion})")
+        sns.boxplot(x=feature_, ax=axes[2])
+        axes[2].set_title(f"Boxplot: {feature_name} (Scale: {scale_conversion})")
+
 
         # Only show lower and upper cutoffs below the boxplot
-        axes[1].set_xlabel(
-            f"Lower cutoff: {lower_cutoff} | Upper cutoff: {upper_cutoff}"
+        axes[2].set_xlabel(
+            f"Lower cutoff: {lower_cutoff}    |    Upper cutoff: {upper_cutoff}"
         )
 
         plt.tight_layout()
