@@ -3086,13 +3086,13 @@ def data_doctor(
     lower_cutoff=None,
     upper_cutoff=None,
     show_plot=True,
-    save_plot=False,  # Added to control plot saving
-    image_path_png=None,  # Path for saving PNG images
-    image_path_svg=None,  # Path for saving SVG images
+    save_plot=False,
+    image_path_png=None,
+    image_path_svg=None,
     apply_as_new_col_to_df=False,
-    kde_kws=None,  # Keyword arguments for KDE plot
-    hist_kws=None,  # Keyword arguments for Histplot
-    box_kws=None,  # Keyword arguments for Boxplot
+    kde_kws=None,
+    hist_kws=None,
+    box_kws=None,
 ):
     """
     Analyze and transform a specific feature in a DataFrame, with options for
