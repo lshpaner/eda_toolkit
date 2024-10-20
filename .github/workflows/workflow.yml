@@ -8,24 +8,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2  # Check out the code from the repository
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'  # Setup with version 3.x
+        python-version: '3.x'  # Setup with Python 3.x
 
-    - name: Install dependencies
+    - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine
+        pip install build twine  # Use build instead of setup.py
 
-    - name: List files in the directory
+    - name: List files in the directory (debug step)
       run: ls -la
 
-    - name: Build and publish
+    - name: Build the package
+      run: python -m build  # Build using pyproject.toml
+
+    - name: Publish to PyPI
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        python setup.py sdist bdist_wheel
-        twine upload dist/*
+      run: twine upload dist/*

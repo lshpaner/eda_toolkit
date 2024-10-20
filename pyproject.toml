@@ -4,10 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eda_toolkit"
-version = "0.0.11a"
+version = "0.0.11a1"
 description = "A Python library for EDA, including visualizations, directory management, data preprocessing, reporting, and more."
-readme = "README_min.md"
-readme-content-type = "text/markdown"
+readme = { file = "README_min.md", content-type = "text/markdown" }
 authors = [
     { name = "Leonid Shpaner", email = "lshpaner@ucla.edu" },
     { name = "Oscar Gil" }
@@ -25,17 +24,19 @@ dependencies = [
     "xlsxwriter==3.2.0"
 ]
 
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+# Correct place for URLs under [project.urls]
 [project.urls]
+"Documentation" = "https://lshpaner.github.io/eda_toolkit/"
+"Source Code" = "https://github.com/lshpaner/eda_toolkit/"
 "Leonid Shpaner's Website" = "https://www.leonshpaner.com"
 "Oscar Gil's Website" = "https://www.oscargildata.com"
-"Documentation" = "https://lshpaner.github.io/eda_toolkit/"
 "Zenodo Archive" = "https://zenodo.org/records/13162633"
-"Source Code" = "https://github.com/lshpaner/eda_toolkit/"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[project.classifiers]
-Programming Language = "Python :: 3"
-License = "OSI Approved :: MIT License"
-Operating System = "OS Independent"
