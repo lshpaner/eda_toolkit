@@ -3090,6 +3090,9 @@ def data_doctor(
     image_path_png=None,  # Path for saving PNG images
     image_path_svg=None,  # Path for saving SVG images
     apply_as_new_col_to_df=False,
+    kde_kws=None,  # Keyword arguments for KDE plot
+    hist_kws=None,  # Keyword arguments for Histplot
+    box_kws=None,  # Keyword arguments for Boxplot
 ):
     """
     Analyze and transform a specific feature in a DataFrame, with options for
@@ -3131,32 +3134,42 @@ def data_doctor(
         Upper bound to apply if `apply_cutoff` is True. Defaults to None.
 
     show_plot : bool, optional (default=True)
-        Whether to display a KDE plot and boxplot of the feature.
+        Whether to display a KDE plot, histogram, and boxplot of the feature.
 
-    save_plots : bool, optional (default=False)
+    save_plot : bool, optional (default=False)
         Whether to save the plots as PNG and/or SVG images. If `True`, the user
         must specify at least one of `image_path_png` or `image_path_svg`,
         otherwise a `ValueError` is raised.
 
     image_path_png : str, optional
         Directory path to save the plot as a PNG file.
-        Only used if `save_plots=True`.
+        Only used if `save_plot=True`.
 
     image_path_svg : str, optional
         Directory path to save the plot as an SVG file.
-        Only used if `save_plots=True`.
+        Only used if `save_plot=True`.
 
     apply_as_new_col_to_df : bool, optional (default=False)
         Whether to create a new column in the DataFrame with the transformed
         values. If True, the new column will be named using the format:
         `<feature_name>_<scale_conversion>`.
 
+    kde_kws : dict, optional
+        Additional keyword arguments to pass to the KDE plot (seaborn.kdeplot).
+
+    hist_kws : dict, optional
+        Additional keyword arguments to pass to the histogram plot
+        (seaborn.histplot).
+
+    box_kws : dict, optional
+        Additional keyword arguments to pass to the boxplot (seaborn.boxplot).
+
     Returns:
     --------
     None
         Displays the feature name, descriptive statistics, quartile information,
-        and outlier details. If a new column is created, confirms the new column's
-        addition to the DataFrame.
+        and outlier details. If a new column is created, confirms the new
+        column's addition to the DataFrame.
 
     Raises:
     -------
@@ -3167,7 +3180,7 @@ def data_doctor(
         If Box-Cox transformation is applied to non-positive values.
 
     ValueError
-        If `save_plots=True` but neither `image_path_png` nor `image_path_svg`
+        If `save_plot=True` but neither `image_path_png` nor `image_path_svg`
         is provided.
     """
 
@@ -3295,22 +3308,40 @@ def data_doctor(
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
 
-    # Plot kdeplot and boxplot
+    # Plot kdeplot, boxplot, and histplot
     if show_plot:
-        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
         # KDE plot
-        sns.kdeplot(x=feature_, ax=axes[0], clip=(lower_cutoff, upper_cutoff))
+        sns.kdeplot(
+            x=feature_,
+            ax=axes[0],
+            clip=(lower_cutoff, upper_cutoff),
+            **(kde_kws or {}),
+        )
         axes[0].set_title(f"KDE Plot: {feature_name} (Scale: {scale_conversion})")
         axes[0].set_xlabel(f"{feature_name}")
 
+        # Histplot
+        sns.histplot(
+            x=feature_,
+            ax=axes[1],
+            **(hist_kws or {}),
+        )
+        axes[1].set_title(f"Histplot: {feature_name} (Scale: {scale_conversion})")
+        axes[1].set_xlabel(f"{feature_name}")  # Add x-axis label here
+
         # Boxplot
-        sns.boxplot(x=feature_, ax=axes[1])
-        axes[1].set_title(f"Boxplot: {feature_name} (Scale: {scale_conversion})")
+        sns.boxplot(
+            x=feature_,
+            ax=axes[2],
+            **(box_kws or {}),
+        )
+        axes[2].set_title(f"Boxplot: {feature_name} (Scale: {scale_conversion})")
 
         # Only show lower and upper cutoffs below the boxplot
-        axes[1].set_xlabel(
-            f"Lower cutoff: {lower_cutoff} | Upper cutoff: {upper_cutoff}"
+        axes[2].set_xlabel(
+            f"Lower cutoff: {lower_cutoff}    |    Upper cutoff: {upper_cutoff}"
         )
 
         plt.tight_layout()
