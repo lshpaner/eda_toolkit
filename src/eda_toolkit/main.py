@@ -3093,6 +3093,8 @@ def data_doctor(
     kde_kws=None,
     hist_kws=None,
     box_kws=None,
+    label_fontsize=12,
+    tick_fontsize=10,
 ):
     """
     Analyze and transform a specific feature in a DataFrame, with options for
@@ -3310,40 +3312,61 @@ def data_doctor(
 
     # Plot kdeplot, boxplot, and histplot
     if show_plot:
-        fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+        fig, axes = plt.subplots(
+            2, 3, figsize=(18, 6), gridspec_kw={"height_ratios": [10, 1]}
+        )
 
         # KDE plot
         sns.kdeplot(
             x=feature_,
-            ax=axes[0],
+            ax=axes[0, 0],
             clip=(lower_cutoff, upper_cutoff),
             **(kde_kws or {}),
         )
-        axes[0].set_title(f"KDE Plot: {feature_name} (Scale: {scale_conversion})")
-        axes[0].set_xlabel(f"{feature_name}")
+        axes[0, 0].set_title(
+            f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
+            fontsize=label_fontsize,
+        )
+        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
+        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)  # Updated
+        axes[0, 0].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Histplot
-        sns.histplot(
-            x=feature_,
-            ax=axes[1],
-            **(hist_kws or {}),
+        sns.histplot(x=feature_, ax=axes[0, 1], **(hist_kws or {}))
+        axes[0, 1].set_title(
+            f"Histplot: {feature_name} (Scale: {scale_conversion})",
+            fontsize=label_fontsize,
         )
-        axes[1].set_title(f"Histplot: {feature_name} (Scale: {scale_conversion})")
-        axes[1].set_xlabel(f"{feature_name}")  # Add x-axis label here
+        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
+        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)  # Updated
+        axes[0, 1].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Boxplot
-        sns.boxplot(
-            x=feature_,
-            ax=axes[2],
-            **(box_kws or {}),
+        sns.boxplot(x=feature_, ax=axes[0, 2], **(box_kws or {}))
+        axes[0, 2].set_title(
+            f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+            fontsize=label_fontsize,
         )
-        axes[2].set_title(f"Boxplot: {feature_name} (Scale: {scale_conversion})")
+        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
+        axes[0, 2].set_ylabel(
+            "", fontsize=label_fontsize
+        )  # Set an empty label just in case
+        axes[0, 2].tick_params(axis="both", labelsize=tick_fontsize)
 
-        # Only show lower and upper cutoffs below the boxplot
-        axes[2].set_xlabel(
-            f"Lower cutoff: {lower_cutoff}    |    Upper cutoff: {upper_cutoff}"
+        # Create a separate axis for the text (2nd row, span across all columns)
+        axes[1, 0].text(
+            0,
+            0.5,  # X and Y positions (set X to 0 to align with left)
+            f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+            fontsize=label_fontsize,
+            ha="left",
+            va="center",
         )
+        axes[1, 0].axis("off")  # Hide the subplot axes for text
+        axes[1, 1].axis("off")  # Hide the subplot axes
+        axes[1, 2].axis("off")  # Hide the subplot axes
 
+        # Adjust layout and show plot
         plt.tight_layout()
 
         # Check if save_plots=True but no image path is provided
