@@ -40,6 +40,12 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 4
+   :caption: Theoretical Overview
+
+   theoretical_overview
+   
+.. toctree::
+   :maxdepth: 4
    :caption: Plotting Heuristics
 
    eda_plots

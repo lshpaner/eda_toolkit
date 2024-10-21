@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -6,26 +8,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Table of Contents &mdash; EDA Toolkit 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.js?v=fecc5f50" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=0c446633"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="_static/copybutton.js?v=a0ccc04e"></script>
-        <script src="_static/custom.js?v=fecc5f50"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=0c446633"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=a0ccc04e"></script>
+      <script src="_static/custom.js?v=fecc5f50"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -61,10 +59,17 @@
 <li class="toctree-l1"><a class="reference internal" href="data_management.html">Data Management Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_management.html#data-management-techniques">Data Management Techniques</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html">Gaussian Assumption for Normality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Plotting and Theoretical Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#outliers-and-feature-scaling">Outliers and Feature Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
@@ -103,7 +108,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" /></a>
+  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" />
+</a>
 </div><div style="height: 100px;"></div><section id="table-of-contents">
 <h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
@@ -171,15 +177,22 @@
 </ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Overview</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Plotting and Theoretical Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#gaussian-assumption-for-normality">Gaussian Assumption for Normality</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histograms-and-kernel-density-estimation-kde">Histograms and Kernel Density Estimation (KDE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html">Gaussian Assumption for Normality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#histograms-and-kernel-density-estimation-kde">Histograms and Kernel Density Estimation (KDE)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#heuristics-for-visualizations">Heuristics for Visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#methodologies">Methodologies</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a><ul>
@@ -190,6 +203,16 @@
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histogram-example-count">Histogram Example (Count)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histogram-example-mean-and-median">Histogram Example - (Mean and Median)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#histogram-example-mean-median-and-std-deviation">Histogram Example - (Mean, Median, and Std. Deviation)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#outliers-and-feature-scaling">Outliers and Feature Scaling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#data_doctor"><code class="docutils literal notranslate"><span class="pre">data_doctor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#box-cox-transformation-example">Box-Cox Transformation Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#explanation">Explanation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#key-points">Key Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#available-scale-conversions">Available Scale Conversions</a></li>
 </ul>
 </li>
 </ul>
@@ -231,9 +254,9 @@
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#d-plots-ca-housing-example">2D Plots - CA Housing Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#id14">3D Partial Dependence Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#id15">3D Partial Dependence Plots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#plot_3d_pdp"><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#id15">3D Plots - CA Housing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#id17">3D Plots - CA Housing Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#static-plot">Static Plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="eda_plots.html#interactive-plot">Interactive Plot</a></li>
 </ul>
