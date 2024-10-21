@@ -19,218 +19,61 @@
    
    <div style="height: 100px;"></div>
 
-Plotting and Theoretical Overview
-=======================================
+Creating Effective Visualizations
+=================================
 
-Gaussian Assumption for Normality
-----------------------------------
+This section explores key heuristics and methodologies for creating effective visualizations 
+using various plotting techniques available in the EDA Toolkit. 
 
-The Gaussian (normal) distribution is a key assumption in many statistical methods. It is mathematically represented by the probability density function (PDF):
+Heuristics for Visualizations
+-----------------------------
 
-.. math::
+When creating visualizations, there are several key heuristics to keep in mind:
 
-    f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+- **Clarity**: The visualization should clearly convey the intended information without 
+  ambiguity.
+- **Simplicity**: Avoid overcomplicating visualizations with unnecessary elements; focus on 
+  the data and insights.
+- **Consistency**: Ensure consistent use of colors, shapes, and scales across visualizations 
+  to facilitate comparisons.
 
-where:
+Methodologies
+-------------
 
-- :math:`\mu` is the mean
-- :math:`\sigma^2` is the variance
+The EDA Toolkit supports the following methodologies for creating effective visualizations:
 
-In a normally distributed dataset:
+- **KDE and Histograms Plots**: Useful for showing the distribution of a single variable. 
+  When combined, these can provide a clearer picture of data density and distribution.
 
-- 68% of data falls within :math:`\mu \pm \sigma`
-- 95% within :math:`\mu \pm 2\sigma`
-- 99.7% within :math:`\mu \pm 3\sigma`
+- **Outliers and Feature Scaling**: Identifying outliers is critical for understanding the data's distribution and potential anomalies. 
+  The EDA Toolkit offers various methods for outlier detection, including enhanced visualizations using box plots and scatter plots.
 
-.. raw:: html
+- **Stacked Crosstab Plots**: These are used to display multiple data series on the same chart, comparing 
+  cumulative quantities across categories. In addition to the visual stacked bar plots, the corresponding 
+  crosstab table is printed alongside the visualization, providing detailed numerical insight into how the 
+  data is distributed across different categories. This combination allows for both a visual and tabular 
+  representation of categorical data, enhancing interpretability.
 
-   <div class="no-click">
+- **Box and Violin Plots**: Useful for visualizing the distribution of data points, identifying outliers, 
+  and understanding the spread of the data. Box plots are particularly effective when visualizing multiple categories 
+  side by side, enabling comparisons across groups. Violin plots provide additional insights by showing the 
+  distribution's density, giving a fuller picture of the data's distribution shape.
 
-.. image:: ../assets/normal_distribution.png
-   :alt: KDE Distributions - KDE (+) Histograms (Density)
-   :align: center
-   :width: 950px
+- **Scatter Plots and Best Fit Lines**: Effective for visualizing relationships between two continuous variables. 
+  Scatter plots can also be enhanced with regression lines or trend lines to identify relationships more clearly.
 
-.. raw:: html
+- **Correlation Matrices**: Helpful for visualizing the strength of relationships between multiple variables. 
+  Correlation heatmaps use color gradients to indicate the degree of correlation, with options for annotating the values directly on the heatmap.
 
-   </div>
 
-.. raw:: html
-   
-   <div style="height: 50px;"></div>
-
-
-Histograms and Kernel Density Estimation (KDE)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Histograms**:
-
-- Visualize data distribution by binning values and counting frequencies.
-- If data is Gaussian, the histogram approximates a bell curve.
-
-**KDE**:
-
-- A non-parametric way to estimate the PDF by smoothing individual data points with a kernel function.
-- The KDE for a dataset :math:`X = \{x_1, x_2, \ldots, x_n\}` is given by:
-
-.. math::
-
-    \hat{f}(x) = \frac{1}{nh} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)
-
-where:
-
-- :math:`K` is the kernel function (often Gaussian)
-- :math:`h` is the bandwidth (smoothing parameter)
-
-.. raw:: html
-
-   <b><a href="#kde_hist_plots">Combined Use of Histograms and KDE</a></b>
-
-\
-
-- **Histograms** offer a discrete, binned view of the data.
-- **KDE** provides a smooth, continuous estimate of the underlying distribution.
-- Together, they effectively illustrate how well the data aligns with the Gaussian assumption, highlighting any deviations from normality.
-
-
-Pearson Correlation Coefficient
---------------------------------
-
-The Pearson correlation coefficient, often denoted as :math:`r`, is a measure of 
-the linear relationship between two variables. It quantifies the degree to which 
-a change in one variable is associated with a change in another variable. The 
-Pearson correlation ranges from :math:`-1` to :math:`1`, where:
-
-- :math:`r = 1` indicates a perfect positive linear relationship.
-- :math:`r = -1` indicates a perfect negative linear relationship.
-- :math:`r = 0` indicates no linear relationship.
-
-The Pearson correlation coefficient between two variables :math:`X` and :math:`Y` is defined as:
-
-.. math::
-
-    r_{XY} = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y}
-
-where:
-
-- :math:`\text{Cov}(X, Y)` is the covariance of :math:`X` and :math:`Y`.
-- :math:`\sigma_X` is the standard deviation of :math:`X`.
-- :math:`\sigma_Y` is the standard deviation of :math:`Y`.
-
-Covariance measures how much two variables change together. It is defined as:
-
-.. math::
-
-    \text{Cov}(X, Y) = \frac{1}{n} \sum_{i=1}^{n} (X_i - \mu_X)(Y_i - \mu_Y)
-
-where:
-
-- :math:`n` is the number of data points.
-- :math:`X_i` and :math:`Y_i` are the individual data points.
-- :math:`\mu_X` and :math:`\mu_Y` are the means of :math:`X` and :math:`Y`.
-
-The standard deviation measures the dispersion or spread of a set of values. For 
-a variable :math:`X`, the standard deviation :math:`\sigma_X` is:
-
-.. math::
-
-    \sigma_X = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (X_i - \mu_X)^2}
-
-Substituting the covariance and standard deviation into the Pearson correlation formula:
-
-.. math::
-
-    r_{XY} = \frac{\sum_{i=1}^{n} (X_i - \mu_X)(Y_i - \mu_Y)}{\sqrt{\sum_{i=1}^{n} (X_i - \mu_X)^2} \sqrt{\sum_{i=1}^{n} (Y_i - \mu_Y)^2}}
-
-This formula normalizes the covariance by the product of the standard deviations of the two variables, resulting in a dimensionless coefficient that indicates the strength and direction of the linear relationship between :math:`X` and :math:`Y`.
-
-- :math:`r > 0`: Positive correlation. As :math:`X` increases, :math:`Y` tends to increase.
-- :math:`r < 0`: Negative correlation. As :math:`X` increases, :math:`Y` tends to decrease.
-- :math:`r = 0`: No linear correlation. There is no consistent linear relationship between :math:`X` and :math:`Y`.
-
-The closer the value of :math:`r` is to :math:`\pm 1`, the stronger the linear relationship between the two variables.
-
-
-Partial Dependence Foundations
---------------------------------
-
-Let :math:`\mathbf{X}` represent the complete set of input features for a machine 
-learning model, where :math:`\mathbf{X} = \{X_1, X_2, \dots, X_p\}`. Suppose we're 
-particularly interested in a subset of these features, denoted by :math:`\mathbf{X}_S`. 
-The complementary set, :math:`\mathbf{X}_C`, contains all the features in :math:`\mathbf{X}` 
-that are not in :math:`\mathbf{X}_S`. Mathematically, this relationship is expressed as:
-
-.. math::
-
-   \mathbf{X}_C = \mathbf{X} \setminus \mathbf{X}_S
-
-where :math:`\mathbf{X}_C` is the set of features in :math:`\mathbf{X}` after 
-removing the features in :math:`\mathbf{X}_S`.
-
-Partial Dependence Plots (PDPs) are used to illustrate the effect of the features 
-in :math:`\mathbf{X}_S` on the model's predictions, while averaging out the 
-influence of the features in :math:`\mathbf{X}_C`. This is mathematically defined as:
-
-.. math::
-   \begin{align*}
-   \text{PD}_{\mathbf{X}_S}(x_S) &= \mathbb{E}_{\mathbf{X}_C} \left[ f(x_S, \mathbf{X}_C) \right] \\
-   &= \int f(x_S, x_C) \, p(x_C) \, dx_C \\
-   &= \int \left( \int f(x_S, x_C) \, p(x_C \mid x_S) \, dx_C \right) p(x_S) \, dx_S
-   \end{align*}
-
-
-where:
-
-- :math:`\mathbb{E}_{\mathbf{X}_C} \left[ \cdot \right]` indicates that we are taking the expected value over the possible values of the features in the set :math:`\mathbf{X}_C`.
-- :math:`p(x_C)` represents the probability density function of the features in :math:`\mathbf{X}_C`.
-
-This operation effectively summarizes the model's output over all potential values of the complementary features, providing a clear view of how the features in :math:`\mathbf{X}_S` alone impact the model's predictions.
-
-
-**2D Partial Dependence Plots**
-
-Consider a trained machine learning model `2D Partial Dependence Plots`_ :math:`f(\mathbf{X})`, where :math:`\mathbf{X} = (X_1, X_2, \dots, X_p)` represents the vector of input features. The partial dependence of the predicted response :math:`\hat{y}` on a single feature :math:`X_j` is defined as:
-
-.. math::
-
-   \text{PD}(X_j) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, \mathbf{X}_{C_i})
-
-where:
-
-- :math:`X_j` is the feature of interest.
-- :math:`\mathbf{X}_{C_i}` represents the complement set of :math:`X_j`, meaning the remaining features in :math:`\mathbf{X}` not included in :math:`X_j` for the :math:`i`-th instance.
-- :math:`n` is the number of observations in the dataset.
-
-For two features, :math:`X_j` and :math:`X_k`, the partial dependence is given by:
-
-.. math::
-
-   \text{PD}(X_j, X_k) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, X_k, \mathbf{X}_{C_i})
-
-This results in a 2D surface plot (or contour plot) that shows how the predicted outcome changes as the values of :math:`X_j` and :math:`X_k` vary, while the effects of the other features are averaged out.
-
-- **Single Feature PDP:** When plotting :math:`\text{PD}(X_j)`, the result is a 2D line plot showing the marginal effect of feature :math:`X_j` on the predicted outcome, averaged over all possible values of the other features.
-- **Two Features PDP:** When plotting :math:`\text{PD}(X_j, X_k)`, the result is a 3D surface plot (or a contour plot) that shows the combined marginal effect of :math:`X_j` and :math:`X_k` on the predicted outcome. The surface represents the expected value of the prediction as :math:`X_j` and :math:`X_k` vary, while all other features are averaged out.
-
-
-**3D Partial Dependence Plots**
-
-For a more comprehensive analysis, especially when exploring interactions between two features, `3D Partial Dependence Plots`_ are invaluable. The partial dependence function for two features in a 3D context is:
-
-.. math::
-
-   \text{PD}(X_j, X_k) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, X_k, \mathbf{X}_{C_i})
-
-Here, the function :math:`f(X_j, X_k, \mathbf{X}_{C_i})` is evaluated across a grid of values for :math:`X_j` and :math:`X_k`. The resulting 3D surface plot represents how the model's prediction changes over the joint range of these two features.
-
-The 3D plot offers a more intuitive visualization of feature interactions compared to 2D contour plots, allowing for a better understanding of the combined effects of features on the model's predictions. The surface plot is particularly useful when you need to capture complex relationships that might not be apparent in 2D.
-
-- **Feature Interaction Visualization:** The 3D PDP provides a comprehensive view of the interaction between two features. The resulting surface plot allows for the visualization of how the model’s output changes when the values of two features are varied simultaneously, making it easier to understand complex interactions.
-- **Enhanced Interpretation:** 3D PDPs offer enhanced interpretability in scenarios where feature interactions are not linear or where the effect of one feature depends on the value of another. The 3D visualization makes these dependencies more apparent.
+- **Partial Dependence Plots**: Useful for visualizing the relationship between a target variable and one or more features 
+  after accounting for the average effect of the other features. These plots are often used in model interpretability 
+  to understand how specific variables influence predictions.
 
 
 KDE and Histogram Distribution Plots
 =======================================
+
 
 .. raw:: html
 
@@ -683,7 +526,7 @@ statistical overlays to provide deeper insights into the data.
         label_fontsize=16,  # Font size for axis labels
         tick_fontsize=14,  # Font size for tick labels
         plot_mean=True,
-        plot_median=True,
+        plOutliers and ot_median=True,
         mean_color="blue",
         image_path_svg=image_path_svg,
         image_path_png=image_path_png,
@@ -716,6 +559,260 @@ statistical overlays to provide deeper insights into the data.
    
    <div style="height: 50px;"></div>
 
+
+Outliers and Feature Scaling
+=============================
+
+.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_kws=None)
+
+    Analyze and transform a specific feature in a DataFrame, with options for scaling, applying cutoffs, and visualizing the results. The function also allows for creating a new column with the transformed data if specified. Plots can be saved in PNG or SVG format if required.
+
+    :param df: The DataFrame containing the feature to analyze.
+    :type df: pandas.DataFrame
+
+    :param feature_name: The name of the feature (column) to analyze.
+    :type feature_name: str
+
+    :param data_fraction: Fraction of the data to analyze. Default is ``1`` (full dataset). Useful for large datasets where a sample can represent the population.
+    :type data_fraction: float, optional
+
+    :param scale_conversion: Type of conversion to apply to the feature. Options include:
+        - ``'abs'``: Absolute values
+        - ``'log'``: Natural logarithm values
+        - ``'sqrt'``: Square root values
+        - ``'cbrt'``: Cube root values
+        - ``'invrs'``: Inverted values
+        - ``'stdrz'``: Standardized values (z-score)
+        - ``'normlz'``: Normalized values
+        - ``'boxcox'``: Box-Cox transformation (only for positive values)
+        Defaults to ``None`` (no conversion).
+    :type scale_conversion: str, optional
+
+    :param apply_cutoff: Whether to apply upper and/or lower cutoffs to the feature. Default is ``False``.
+    :type apply_cutoff: bool, optional
+
+    :param lower_cutoff: Lower bound to apply if ``apply_cutoff`` is ``True``.
+    :type lower_cutoff: float, optional
+
+    :param upper_cutoff: Upper bound to apply if ``apply_cutoff`` is ``True``.
+    :type upper_cutoff: float, optional
+
+    :param show_plot: Whether to display KDE plot, histogram, and boxplot of the feature. Default is ``True``.
+    :type show_plot: bool, optional
+
+    :param save_plot: Whether to save the plots as PNG and/or SVG images. If ``True``, the user must specify at least one of ``image_path_png`` or ``image_path_svg``, otherwise a ``ValueError`` is raised.
+    :type save_plot: bool, optional
+
+    :param image_path_png: Directory path to save the plot as a PNG file.
+    :type image_path_png: str, optional
+
+    :param image_path_svg: Directory path to save the plot as an SVG file.
+    :type image_path_svg: str, optional
+
+    :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If ``True``, the new column will be named as ``<feature_name>_<scale_conversion>``. Default is ``False``.
+    :type apply_as_new_col_to_df: bool, optional
+
+    :param kde_kws: Additional keyword arguments for the KDE plot (seaborn.kdeplot).
+    :type kde_kws: dict, optional
+
+    :param hist_kws: Additional keyword arguments for the histogram plot (seaborn.histplot).
+    :type hist_kws: dict, optional
+
+    :param box_kws: Additional keyword arguments for the boxplot (seaborn.boxplot).
+    :type box_kws: dict, optional
+
+    :raises ValueError: 
+        - If an invalid ``scale_conversion`` is provided.
+        - If Box-Cox transformation is applied to non-positive values.
+        - If ``save_plot=True`` but neither ``image_path_png`` nor ``image_path_svg`` is provided.
+
+    :returns: ``None`` 
+        Displays the feature's descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame.
+
+
+Box-Cox Transformation Example
+-------------------------------
+
+In this example, we will demonstrate the usage of the ``data_doctor`` function to apply a **Box-Cox transformation** to the ``age`` column in a DataFrame. The ``data_doctor`` function provides a flexible way to preprocess data by applying various scaling techniques. Here, we use the Box-Cox transformation as an example, but you can choose any scale conversion from the list of available options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.).
+
+.. code-block:: python
+
+   data_doctor(
+       df=df,
+       feature_name="age",
+       data_fraction=1,
+       scale_conversion="boxcox",
+       apply_cutoff=False,
+       lower_cutoff=None,
+       upper_cutoff=None,
+       show_plot=True,
+       apply_as_new_col_to_df=True,
+   )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/age_boxcox.svg
+   :alt: Box-Cox Transformation W/ Data Doctor
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+.. code-block:: python
+
+    df.head()
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+    .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+    .tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-lightpink{background-color:#FFCCCC; border-width: 0px;} /* Remove borders and apply solid pink color */
+    </style>
+    <div class="tg-wrap">
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-zv4m"></th>
+          <th class="tg-aw21">age</th>
+          <th class="tg-aw21">workclass</th>
+          <th class="tg-aw21">education</th>
+          <th class="tg-aw21">education-num</th>
+          <th class="tg-aw21">marital-status</th>
+          <th class="tg-aw21">occupation</th>
+          <th class="tg-aw21">relationship</th>
+          <th class="tg-aw21 tg-lightpink">age_boxcox</th> <!-- Highlighted column -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-aw21">census_id</td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo tg-lightpink"></td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">74130842</td>
+          <td class="tg-8jgo">39</td>
+          <td class="tg-8jgo">State-gov</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Never-married</td>
+          <td class="tg-8jgo">Adm-clerical</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">4.019591</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">97751875</td>
+          <td class="tg-8jgo">50</td>
+          <td class="tg-8jgo">Self-emp-not-inc</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Exec-managerial</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">6.840919</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">12202842</td>
+          <td class="tg-8jgo">38</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">HS-grad</td>
+          <td class="tg-8jgo">9</td>
+          <td class="tg-8jgo">Divorced</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">3.760645</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">96078789</td>
+          <td class="tg-8jgo">53</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">11th</td>
+          <td class="tg-8jgo">7</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">6.584950</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">35130194</td>
+          <td class="tg-8jgo">28</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Prof-specialty</td>
+          <td class="tg-8jgo">Wife</td>
+          <td class="tg-8jgo tg-lightpink">5.450405</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+
+\
+
+Explanation
+^^^^^^^^^^^^^
+
+- ``df=df``: We are passing ``df`` as the input DataFrame.
+- ``feature_name="age"``: The feature we are transforming is ``age``.
+- ``data_fraction=1``: We are using 100% of the data in the ``age`` column. You can adjust this if you want to perform the operation on a subset of the data.
+- ``scale_conversion="boxcox"``: This parameter defines the type of scaling we want to apply. In this case, we are using the Box-Cox transformation. You can change ``boxcox`` to any supported scale conversion method.
+- ``apply_cutoff=False``: We are not applying any outlier cutoff in this example.
+- ``lower_cutoff=None`` and ``upper_cutoff=None``: These are left as ``None`` since we are not applying outlier cutoffs in this case.
+- ``show_plot=True``: This option will generate a plot to visualize the distribution of the ``age`` column before and after the transformation.
+- ``apply_as_new_col_to_df=True``: This tells the function to apply the transformation and create a new column in the DataFrame. The new column will be named ``age_boxcox``, where "boxcox" indicates the type of transformation applied.
+
+Key Points
+^^^^^^^^^^^
+
+1. **Box-Cox Transformation**: This transformation normalizes the data by making the distribution more Gaussian-like, which can be beneficial for certain statistical models.
+   
+2. **No Outlier Handling**: In this example, we are not applying any cutoffs to remove or modify outliers. This means the function will process the entire range of values in the ``age`` column without making adjustments for extreme values.
+
+3. **New Column Creation**: By setting ``apply_as_new_col_to_df=True``, a new column named ``age_boxcox`` will be created in the ``df2`` DataFrame, where the transformed values will be stored. This allows us to keep the original ``age`` column intact while adding the transformed data as a new feature.
+
+4. The ``show_plot=True`` parameter will generate a plot that visualizes the distribution of the original ``age`` data alongside the transformed ``age_boxcox`` data. This can help you assess how the Box-Cox transformation has affected the data distribution.
+
+Available Scale Conversions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``scale_conversion`` parameter accepts several options for data scaling, including:
+
+- ``boxcox``: Applies the Box-Cox transformation to stabilize variance and normalize the data.
+- ``minmax``: Rescales the data to a specified range (default is [0, 1]).
+- ``standard``: Standardizes the data to have a mean of 0 and standard deviation of 1.
+- ``robust``: Scales the data based on percentiles, which makes it less sensitive to outliers.
+
+``boxcox`` is just one of the many options you can use with the ``data_doctor`` function.
 
 
 Stacked Crosstab Plots
@@ -1941,7 +2038,7 @@ The function offers flexibility in configuring axis labels and titles:
 
 The ``flex_corr_matrix`` function allows you to display the heatmap directly or save it as PNG or SVG files for use in reports or presentations. If saving is enabled, you can specify file paths and names for the images.
 
-.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, figsize=(10, 10), title="Cervical Cancer Data: Correlation Matrix", label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, **kwargs)
+.. function:: flex_corr_matrix(df, cols=None, annot=True, cmap="coolwarm", save_plots=False, image_path_png=None, image_path_svg=None, figsize=(10, 10), title=None, label_fontsize=12, tick_fontsize=10, xlabel_rot=45, ylabel_rot=0, xlabel_alignment="right", ylabel_alignment="center_baseline", text_wrap=50, vmin=-1, vmax=1, cbar_label="Correlation Index", triangular=True, **kwargs)
 
     Create a customizable correlation heatmap with options for annotation, color mapping, figure size, and saving the plot.
 
@@ -1969,7 +2066,7 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
     :param figsize: Width and height of the figure for the heatmap. Default is ``(10, 10)``.
     :type figsize: tuple, optional
 
-    :param title: Title of the heatmap. Default is ``"Cervical Cancer Data: Correlation Matrix"``.
+    :param title: Title of the heatmap. Default is ``None``.
     :type title: str, optional
 
     :param label_fontsize: Font size for tick labels and colorbar label. Default is ``12``.
@@ -2017,6 +2114,7 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
 
     :returns: ``None``
         This function does not return any value but generates and optionally saves a correlation heatmap.
+
 
 Triangular Correlation Matrix Example
 --------------------------------------
@@ -2144,6 +2242,8 @@ interpretability, providing insights into how features influence the predicted
 outcome of a model. PDPs can be generated in both 2D and 3D, depending on 
 whether you want to analyze the effect of one feature or the interaction between 
 two features on the model's predictions.
+
+.. _2D_Partial_Dependence_Plots:
 
 2D Partial Dependence Plots
 -----------------------------
@@ -2327,6 +2427,7 @@ the California housing dataset:
    
    <div style="height: 50px;"></div>
 
+.. _3D_Partial_Dependence_Plots:
 
 3D Partial Dependence Plots
 -----------------------------

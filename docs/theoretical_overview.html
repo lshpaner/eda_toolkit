@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gaussian Assumption for Normality &mdash; EDA Toolkit 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.js?v=fecc5f50" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=0c446633"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=a0ccc04e"></script>
+      <script src="_static/custom.js?v=fecc5f50"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Creating Effective Visualizations" href="eda_plots.html" />
+    <link rel="prev" title="Data Management Overview" href="data_management.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            EDA Toolkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Welcome to the EDA Toolkit Python Library Documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#description">Description</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Management</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data_management.html">Data Management Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_management.html#data-management-techniques">Data Management Techniques</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Overview</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Gaussian Assumption for Normality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#histograms-and-kernel-density-estimation-kde">Histograms and Kernel Density Estimation (KDE)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#partial-dependence-foundations">Partial Dependence Foundations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#outliers-and-feature-scaling">Outliers and Feature Scaling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EDA Toolkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Gaussian Assumption for Normality</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" />
+</a>
+</div><div style="height: 100px;"></div><p></p>
+<section id="gaussian-assumption-for-normality">
+<h1>Gaussian Assumption for Normality<a class="headerlink" href="#gaussian-assumption-for-normality" title="Link to this heading"></a></h1>
+<p>The Gaussian (normal) distribution is a key assumption in many statistical methods. It is mathematically represented by the probability density function (PDF):</p>
+<div class="math notranslate nohighlight">
+\[f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mu\)</span> is the mean</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma^2\)</span> is the variance</p></li>
+</ul>
+<p>In a normally distributed dataset:</p>
+<ul class="simple">
+<li><p>68% of data falls within <span class="math notranslate nohighlight">\(\mu \pm \sigma\)</span></p></li>
+<li><p>95% within <span class="math notranslate nohighlight">\(\mu \pm 2\sigma\)</span></p></li>
+<li><p>99.7% within <span class="math notranslate nohighlight">\(\mu \pm 3\sigma\)</span></p></li>
+</ul>
+<div class="no-click"><a class="reference internal image-reference" href="_images/normal_distribution.png"><img alt="KDE Distributions - KDE (+) Histograms (Density)" class="align-center" src="_images/normal_distribution.png" style="width: 950px;" />
+</a>
+</div><div style="height: 50px;"></div><section id="histograms-and-kernel-density-estimation-kde">
+<h2>Histograms and Kernel Density Estimation (KDE)<a class="headerlink" href="#histograms-and-kernel-density-estimation-kde" title="Link to this heading"></a></h2>
+<p><strong>Histograms</strong>:</p>
+<ul class="simple">
+<li><p>Visualize data distribution by binning values and counting frequencies.</p></li>
+<li><p>If data is Gaussian, the histogram approximates a bell curve.</p></li>
+</ul>
+<p><strong>KDE</strong>:</p>
+<ul class="simple">
+<li><p>A non-parametric way to estimate the PDF by smoothing individual data points with a kernel function.</p></li>
+<li><p>The KDE for a dataset <span class="math notranslate nohighlight">\(X = \{x_1, x_2, \ldots, x_n\}\)</span> is given by:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\hat{f}(x) = \frac{1}{nh} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(K\)</span> is the kernel function (often Gaussian)</p></li>
+<li><p><span class="math notranslate nohighlight">\(h\)</span> is the bandwidth (smoothing parameter)</p></li>
+</ul>
+<b><a href="../eda_plots.html#kde_hist_plots">Combined Use of Histograms and KDE</a></b><p></p>
+<ul class="simple">
+<li><p><strong>Histograms</strong> offer a discrete, binned view of the data.</p></li>
+<li><p><strong>KDE</strong> provides a smooth, continuous estimate of the underlying distribution.</p></li>
+<li><p>Together, they effectively illustrate how well the data aligns with the Gaussian assumption, highlighting any deviations from normality.</p></li>
+</ul>
+</section>
+</section>
+<section id="pearson-correlation-coefficient">
+<h1>Pearson Correlation Coefficient<a class="headerlink" href="#pearson-correlation-coefficient" title="Link to this heading"></a></h1>
+<p>The Pearson correlation coefficient, often denoted as <span class="math notranslate nohighlight">\(r\)</span>, is a measure of
+the linear relationship between two variables. It quantifies the degree to which
+a change in one variable is associated with a change in another variable. The
+Pearson correlation ranges from <span class="math notranslate nohighlight">\(-1\)</span> to <span class="math notranslate nohighlight">\(1\)</span>, where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(r = 1\)</span> indicates a perfect positive linear relationship.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r = -1\)</span> indicates a perfect negative linear relationship.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r = 0\)</span> indicates no linear relationship.</p></li>
+</ul>
+<p>The Pearson correlation coefficient between two variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[r_{XY} = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\text{Cov}(X, Y)\)</span> is the covariance of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_X\)</span> is the standard deviation of <span class="math notranslate nohighlight">\(X\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_Y\)</span> is the standard deviation of <span class="math notranslate nohighlight">\(Y\)</span>.</p></li>
+</ul>
+<p>Covariance measures how much two variables change together. It is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Cov}(X, Y) = \frac{1}{n} \sum_{i=1}^{n} (X_i - \mu_X)(Y_i - \mu_Y)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span> is the number of data points.</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_i\)</span> and <span class="math notranslate nohighlight">\(Y_i\)</span> are the individual data points.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu_X\)</span> and <span class="math notranslate nohighlight">\(\mu_Y\)</span> are the means of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p></li>
+</ul>
+<p>The standard deviation measures the dispersion or spread of a set of values. For
+a variable <span class="math notranslate nohighlight">\(X\)</span>, the standard deviation <span class="math notranslate nohighlight">\(\sigma_X\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_X = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (X_i - \mu_X)^2}\]</div>
+<p>Substituting the covariance and standard deviation into the Pearson correlation formula:</p>
+<div class="math notranslate nohighlight">
+\[r_{XY} = \frac{\sum_{i=1}^{n} (X_i - \mu_X)(Y_i - \mu_Y)}{\sqrt{\sum_{i=1}^{n} (X_i - \mu_X)^2} \sqrt{\sum_{i=1}^{n} (Y_i - \mu_Y)^2}}\]</div>
+<p>This formula normalizes the covariance by the product of the standard deviations of the two variables, resulting in a dimensionless coefficient that indicates the strength and direction of the linear relationship between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(r &gt; 0\)</span>: Positive correlation. As <span class="math notranslate nohighlight">\(X\)</span> increases, <span class="math notranslate nohighlight">\(Y\)</span> tends to increase.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r &lt; 0\)</span>: Negative correlation. As <span class="math notranslate nohighlight">\(X\)</span> increases, <span class="math notranslate nohighlight">\(Y\)</span> tends to decrease.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r = 0\)</span>: No linear correlation. There is no consistent linear relationship between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p></li>
+</ul>
+<p>The closer the value of <span class="math notranslate nohighlight">\(r\)</span> is to <span class="math notranslate nohighlight">\(\pm 1\)</span>, the stronger the linear relationship between the two variables.</p>
+</section>
+<section id="partial-dependence-foundations">
+<h1>Partial Dependence Foundations<a class="headerlink" href="#partial-dependence-foundations" title="Link to this heading"></a></h1>
+<p>Let <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> represent the complete set of input features for a machine
+learning model, where <span class="math notranslate nohighlight">\(\mathbf{X} = \{X_1, X_2, \dots, X_p\}\)</span>. Suppose we’re
+particularly interested in a subset of these features, denoted by <span class="math notranslate nohighlight">\(\mathbf{X}_S\)</span>.
+The complementary set, <span class="math notranslate nohighlight">\(\mathbf{X}_C\)</span>, contains all the features in <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>
+that are not in <span class="math notranslate nohighlight">\(\mathbf{X}_S\)</span>. Mathematically, this relationship is expressed as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{X}_C = \mathbf{X} \setminus \mathbf{X}_S\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{X}_C\)</span> is the set of features in <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> after
+removing the features in <span class="math notranslate nohighlight">\(\mathbf{X}_S\)</span>.</p>
+<p>Partial Dependence Plots (PDPs) are used to illustrate the effect of the features
+in <span class="math notranslate nohighlight">\(\mathbf{X}_S\)</span> on the model’s predictions, while averaging out the
+influence of the features in <span class="math notranslate nohighlight">\(\mathbf{X}_C\)</span>. This is mathematically defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\text{PD}_{\mathbf{X}_S}(x_S) &amp;= \mathbb{E}_{\mathbf{X}_C} \left[ f(x_S, \mathbf{X}_C) \right] \\
+&amp;= \int f(x_S, x_C) \, p(x_C) \, dx_C \\
+&amp;= \int \left( \int f(x_S, x_C) \, p(x_C \mid x_S) \, dx_C \right) p(x_S) \, dx_S
+\end{align*}\end{split}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{X}_C} \left[ \cdot \right]\)</span> indicates that we are taking the expected value over the possible values of the features in the set <span class="math notranslate nohighlight">\(\mathbf{X}_C\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(p(x_C)\)</span> represents the probability density function of the features in <span class="math notranslate nohighlight">\(\mathbf{X}_C\)</span>.</p></li>
+</ul>
+<p>This operation effectively summarizes the model’s output over all potential values of the complementary features, providing a clear view of how the features in <span class="math notranslate nohighlight">\(\mathbf{X}_S\)</span> alone impact the model’s predictions.</p>
+<p><strong>2D Partial Dependence Plots</strong></p>
+<p>Consider a trained machine learning model <a class="reference internal" href="eda_plots.html#d-partial-dependence-plots"><span class="std std-ref">2D Partial Dependence Plots</span></a><span class="math notranslate nohighlight">\(f(\mathbf{X})\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{X} = (X_1, X_2, \dots, X_p)\)</span> represents the vector of input features. The partial dependence of the predicted response <span class="math notranslate nohighlight">\(\hat{y}\)</span> on a single feature <span class="math notranslate nohighlight">\(X_j\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{PD}(X_j) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, \mathbf{X}_{C_i})\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(X_j\)</span> is the feature of interest.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{X}_{C_i}\)</span> represents the complement set of <span class="math notranslate nohighlight">\(X_j\)</span>, meaning the remaining features in <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> not included in <span class="math notranslate nohighlight">\(X_j\)</span> for the <span class="math notranslate nohighlight">\(i\)</span>-th instance.</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> is the number of observations in the dataset.</p></li>
+</ul>
+<p>For two features, <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span>, the partial dependence is given by:</p>
+<div class="math notranslate nohighlight">
+\[\text{PD}(X_j, X_k) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, X_k, \mathbf{X}_{C_i})\]</div>
+<p>This results in a 2D surface plot (or contour plot) that shows how the predicted outcome changes as the values of <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span> vary, while the effects of the other features are averaged out.</p>
+<ul class="simple">
+<li><p><strong>Single Feature PDP:</strong> When plotting <span class="math notranslate nohighlight">\(\text{PD}(X_j)\)</span>, the result is a 2D line plot showing the marginal effect of feature <span class="math notranslate nohighlight">\(X_j\)</span> on the predicted outcome, averaged over all possible values of the other features.</p></li>
+<li><p><strong>Two Features PDP:</strong> When plotting <span class="math notranslate nohighlight">\(\text{PD}(X_j, X_k)\)</span>, the result is a 3D surface plot (or a contour plot) that shows the combined marginal effect of <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span> on the predicted outcome. The surface represents the expected value of the prediction as <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span> vary, while all other features are averaged out.</p></li>
+</ul>
+<p><strong>3D Partial Dependence Plots</strong></p>
+<p>For a more comprehensive analysis, especially when exploring interactions between two features, <a class="reference internal" href="eda_plots.html#id15"><span class="std std-ref">3D Partial Dependence Plots</span></a> are invaluable. The partial dependence function for two features in a 3D context is:</p>
+<div class="math notranslate nohighlight">
+\[\text{PD}(X_j, X_k) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, X_k, \mathbf{X}_{C_i})\]</div>
+<p>Here, the function <span class="math notranslate nohighlight">\(f(X_j, X_k, \mathbf{X}_{C_i})\)</span> is evaluated across a grid of values for <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span>. The resulting 3D surface plot represents how the model’s prediction changes over the joint range of these two features.</p>
+<p>The 3D plot offers a more intuitive visualization of feature interactions compared to 2D contour plots, allowing for a better understanding of the combined effects of features on the model’s predictions. The surface plot is particularly useful when you need to capture complex relationships that might not be apparent in 2D.</p>
+<ul class="simple">
+<li><p><strong>Feature Interaction Visualization:</strong> The 3D PDP provides a comprehensive view of the interaction between two features. The resulting surface plot allows for the visualization of how the model’s output changes when the values of two features are varied simultaneously, making it easier to understand complex interactions.</p></li>
+<li><p><strong>Enhanced Interpretation:</strong> 3D PDPs offer enhanced interpretability in scenarios where feature interactions are not linear or where the effect of one feature depends on the value of another. The 3D visualization makes these dependencies more apparent.</p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_management.html" class="btn btn-neutral float-left" title="Data Management Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="eda_plots.html" class="btn btn-neutral float-right" title="Creating Effective Visualizations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Leonid Shpaner, Oscar Gil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
