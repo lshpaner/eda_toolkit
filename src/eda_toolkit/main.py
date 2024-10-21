@@ -3192,8 +3192,12 @@ def data_doctor(
     # If conversion will be applied to a new column, set sample_frac to 1
     if apply_as_new_col_to_df == True:
         data_fraction = 1  # change the sample fraction value to 100 percent, to
-        # apply data to new column
-        new_col_name = feature_name + "_" + scale_conversion
+        
+    # New column name options when apply_as_new_col_to_df == True
+    if apply_as_new_col_to_df == True and scale_conversion == None and apply_cutoff == True:
+      new_col_name = feature_name + "_" + 'w_cutoff'
+    elif apply_as_new_col_to_df == True and scale_conversion != None:
+      new_col_name = feature_name + "_" + scale_conversion
 
     # Define valid scale conversions
     valid_conversions = [
