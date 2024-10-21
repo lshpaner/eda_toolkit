@@ -88,7 +88,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#data_doctor"><code class="docutils literal notranslate"><span class="pre">data_doctor()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#box-cox-transformation-example">Box-Cox Transformation Example</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#explanation">Explanation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#key-points">Key Points</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#available-scale-conversions">Available Scale Conversions</a></li>
 </ul>
 </li>
@@ -753,9 +752,6 @@ Displays the feature’s descriptive statistics, quartile information, and outli
 <li><p><code class="docutils literal notranslate"><span class="pre">show_plot=True</span></code>: This option will generate a plot to visualize the distribution of the <code class="docutils literal notranslate"><span class="pre">age</span></code> column before and after the transformation.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">apply_as_new_col_to_df=True</span></code>: This tells the function to apply the transformation and create a new column in the DataFrame. The new column will be named <code class="docutils literal notranslate"><span class="pre">age_boxcox</span></code>, where “boxcox” indicates the type of transformation applied.</p></li>
 </ul>
-</section>
-<section id="key-points">
-<h3>Key Points<a class="headerlink" href="#key-points" title="Link to this heading"></a></h3>
 <ol class="arabic simple">
 <li><p><strong>Box-Cox Transformation</strong>: This transformation normalizes the data by making the distribution more Gaussian-like, which can be beneficial for certain statistical models.</p></li>
 <li><p><strong>No Outlier Handling</strong>: In this example, we are not applying any cutoffs to remove or modify outliers. This means the function will process the entire range of values in the <code class="docutils literal notranslate"><span class="pre">age</span></code> column without making adjustments for extreme values.</p></li>

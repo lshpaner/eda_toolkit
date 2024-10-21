@@ -791,9 +791,6 @@ Explanation
 - ``show_plot=True``: This option will generate a plot to visualize the distribution of the ``age`` column before and after the transformation.
 - ``apply_as_new_col_to_df=True``: This tells the function to apply the transformation and create a new column in the DataFrame. The new column will be named ``age_boxcox``, where "boxcox" indicates the type of transformation applied.
 
-Key Points
-^^^^^^^^^^^
-
 1. **Box-Cox Transformation**: This transformation normalizes the data by making the distribution more Gaussian-like, which can be beneficial for certain statistical models.
    
 2. **No Outlier Handling**: In this example, we are not applying any cutoffs to remove or modify outliers. This means the function will process the entire range of values in the ``age`` column without making adjustments for extreme values.
@@ -813,6 +810,8 @@ The ``scale_conversion`` parameter accepts several options for data scaling, inc
 - ``robust``: Scales the data based on percentiles, which makes it less sensitive to outliers.
 
 ``boxcox`` is just one of the many options you can use with the ``data_doctor`` function.
+
+
 
 
 Stacked Crosstab Plots
