@@ -649,6 +649,28 @@ In this example, we will demonstrate the usage of the ``data_doctor`` function t
        apply_as_new_col_to_df=True,
    )
 
+.. code-block:: python
+
+    Feature:     age 
+
+    min     3.6663875469340628
+    max     6.8409185306695575
+    mean    5.016307889147798
+    median  5.033257139954852
+    std     0.6761449960500445 
+
+    Q1      4.521908091303337
+    Q2      5.033257139954852
+    IQR     1.0119099754998357
+    Q3      5.533818066803173
+    Q4      6.8409185306695575 
+
+    Outlier-lower_bound      -8.30072710020476
+    Outlier-upper_bound      9.312637075704597 
+
+    New Column Name:      age_boxcox
+    New column was successfully added to dataframe.
+
 .. raw:: html
 
    <div class="no-click">
