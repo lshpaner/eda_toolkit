@@ -3153,8 +3153,10 @@ def data_doctor(
 
     apply_as_new_col_to_df : bool, optional (default=False)
         Whether to create a new column in the DataFrame with the transformed
-        values. If True, the new column will be named using the format:
-        `<feature_name>_<scale_conversion>`.
+        values. A new column name will be generated based on the feature name
+        and applied transformation. If set to `True`, the user must specify 
+        either a valid `scale_conversion` or `apply_cutoff=True`, otherwise a 
+        `ValueError` will be raised.
 
     kde_kws : dict, optional
         Additional keyword arguments to pass to the KDE plot (seaborn.kdeplot).
@@ -3165,6 +3167,12 @@ def data_doctor(
 
     box_kws : dict, optional
         Additional keyword arguments to pass to the boxplot (seaborn.boxplot).
+
+    label_fontsize : int, optional (default=12)
+        Font size for the axis labels and plot titles.
+
+    tick_fontsize : int, optional (default=10)
+        Font size for the tick labels on both axes.
 
     Returns:
     --------
@@ -3184,16 +3192,38 @@ def data_doctor(
     ValueError
         If `save_plot=True` but neither `image_path_png` nor `image_path_svg`
         is provided.
+
+    ValueError
+        If `apply_as_new_col_to_df=True` but neither a `scale_conversion` nor 
+        `apply_cutoff=True` is specified, making it impossible to create a 
+        new column.
     """
+
 
     # Suppress warnings for division by zero, or invalid values in subtract
     np.seterr(divide="ignore", invalid="ignore")
 
+    # If the user specifies apply_as_new_col_to_df, check for valid conditions
+    if apply_as_new_col_to_df:
+        if scale_conversion is None and not apply_cutoff:
+            raise ValueError(
+                "When applying a new column with `apply_as_new_col_to_df=True`, "
+                "you must specify either a `scale_conversion` or set "
+                "`apply_cutoff=True`."
+            )
+
     # If conversion will be applied to a new column, set sample_frac to 1
     if apply_as_new_col_to_df == True:
         data_fraction = 1  # change the sample fraction value to 100 percent, to
-        # apply data to new column
-        new_col_name = feature_name + "_" + scale_conversion
+        
+    new_col_name = feature_name
+
+    # New column name options when apply_as_new_col_to_df == True
+    if apply_as_new_col_to_df:
+        if scale_conversion is None and apply_cutoff:
+            new_col_name = feature_name + "_w_cutoff"
+        elif scale_conversion is not None:
+            new_col_name = feature_name + "_" + scale_conversion
 
     # Define valid scale conversions
     valid_conversions = [
@@ -3327,8 +3357,8 @@ def data_doctor(
             f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
-        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)  # Updated
+        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  
+        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)  
         axes[0, 0].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Histplot
@@ -3337,8 +3367,8 @@ def data_doctor(
             f"Histplot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
-        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)  # Updated
+        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  
+        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)  
         axes[0, 1].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Boxplot
@@ -3347,7 +3377,7 @@ def data_doctor(
             f"Boxplot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
+        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize) 
         axes[0, 2].set_ylabel(
             "", fontsize=label_fontsize
         )  # Set an empty label just in case
@@ -3357,7 +3387,8 @@ def data_doctor(
         axes[1, 0].text(
             0,
             0.5,  # X and Y positions (set X to 0 to align with left)
-            f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+            f"Lower cutoff: {round(lower_cutoff, 2)} | "
+            f"Upper cutoff: {round(upper_cutoff, 2)}",
             fontsize=label_fontsize,
             ha="left",
             va="center",
@@ -3396,6 +3427,7 @@ def data_doctor(
                 svg_filename = f"{image_path_svg}/{default_filename}.svg"
                 plt.savefig(svg_filename, format="svg")
                 print(f"Plot saved as SVG at {svg_filename}")
+
 
 
 ################################################################################
