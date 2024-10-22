@@ -3267,6 +3267,7 @@ def data_doctor(
 
     # Sample the data once to ensure consistency in transformations
     # Convert data according to scale_conversion selection
+    # 
 
     sampled_feature = df.sample(frac=data_fraction)[feature_name]
 
@@ -3330,7 +3331,6 @@ def data_doctor(
             scale_conversion = "None"
 
     # Replace values in feature_ > than the cutoff, ONLY if apply_cutoff == True
-
     if apply_cutoff == True:
         if lower_cutoff != None:
             feature_ = np.where(feature_ < lower_cutoff, lower_cutoff, feature_)
@@ -3338,7 +3338,6 @@ def data_doctor(
             feature_ = np.where(feature_ > upper_cutoff, upper_cutoff, feature_)
 
     # Print statistical data
-
     print("Feature:    ", feature_name, "\n")
     print("min    ", np.min(feature_))
     print("max    ", np.max(feature_))
@@ -3378,9 +3377,9 @@ def data_doctor(
             + str(data_fraction)
             + " and not to 1, representing 100 percent."
         )
-
     # Update lower_cutoff and upper_cutoff values to represent any value updates
     # made in steps above...to ensure the xlabel reflects these values
+
 
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
