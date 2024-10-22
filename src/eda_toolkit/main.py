@@ -3408,8 +3408,8 @@ def data_doctor(
             f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
-        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)  # Updated
+        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)
         axes[0, 0].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Histplot
@@ -3418,8 +3418,8 @@ def data_doctor(
             f"Histplot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
-        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)  # Updated
+        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)
         axes[0, 1].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Boxplot
@@ -3428,7 +3428,7 @@ def data_doctor(
             f"Boxplot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  # Updated
+        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
         axes[0, 2].set_ylabel(
             "", fontsize=label_fontsize
         )  # Set an empty label just in case
