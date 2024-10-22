@@ -3122,8 +3122,16 @@ def data_doctor(
             - 'cbrt': Cube root values
             - 'invrs': Inverted values
             - 'stdrz': Standardized values (z-score)
-            - 'normlz': Normalized values
-            - 'boxcox': Box-Cox transformation (only for positive values).
+            - 'minmax': Min-Max scaling
+            - 'boxcox': Box-Cox transformation (only for positive values)
+            - 'robust': Robust scaling (median and IQR)
+            - 'maxabs': Max-abs scaling
+            - 'reciprocal': Reciprocal transformation
+            - 'exp': Exponential transformation
+            - 'logit': Logit transformation
+            - 'arcsinh': Inverse hyperbolic sine
+            - 'square': Squaring the values
+            - 'power': Power transformation (Yeo-Johnson).
         Defaults to None (no conversion).
 
     apply_cutoff : bool, optional (default=False)
@@ -3153,10 +3161,11 @@ def data_doctor(
 
     apply_as_new_col_to_df : bool, optional (default=False)
         Whether to create a new column in the DataFrame with the transformed
-        values. A new column name will be generated based on the feature name
-        and applied transformation. If set to `True`, the user must specify 
-        either a valid `scale_conversion` or `apply_cutoff=True`, otherwise a 
-        `ValueError` will be raised.
+        values. If True, the new column name will be generated based on the
+        feature name and the transformation applied:
+            - `<feature_name>_<scale_conversion>`: If a transformation is
+            applied.
+            - `<feature_name>_w_cutoff`: If only cutoffs are applied.
 
     kde_kws : dict, optional
         Additional keyword arguments to pass to the KDE plot (seaborn.kdeplot).
@@ -3194,11 +3203,13 @@ def data_doctor(
         is provided.
 
     ValueError
-        If `apply_as_new_col_to_df=True` but neither a `scale_conversion` nor 
-        `apply_cutoff=True` is specified, making it impossible to create a 
-        new column.
-    """
+        If `apply_as_new_col_to_df=True` but no valid column name could be
+        generated.
 
+    ValueError
+        If `apply_as_new_col_to_df=True` but both `scale_conversion` and
+        `apply_cutoff` are False or None.
+    """
 
     # Suppress warnings for division by zero, or invalid values in subtract
     np.seterr(divide="ignore", invalid="ignore")
@@ -3215,7 +3226,7 @@ def data_doctor(
     # If conversion will be applied to a new column, set sample_frac to 1
     if apply_as_new_col_to_df == True:
         data_fraction = 1  # change the sample fraction value to 100 percent, to
-        
+
     new_col_name = feature_name
 
     # New column name options when apply_as_new_col_to_df == True
@@ -3233,8 +3244,16 @@ def data_doctor(
         "cbrt",
         "invrs",
         "stdrz",
-        "normlz",
+        "minmax",
         "boxcox",
+        "robust",
+        "maxabs",
+        "reciprocal",
+        "exp",
+        "logit",
+        "arcsinh",
+        "square",
+        "power",
         None,
     ]
 
@@ -3245,47 +3264,80 @@ def data_doctor(
             f"Valid options are: {valid_conversions[:-1]}"
         )
 
+    # Sample the data once to ensure consistency in transformations
     # Convert data according to scale_conversion selection
+    #
+
+    sampled_feature = df.sample(frac=data_fraction)[feature_name]
 
     if scale_conversion == "abs":
-        feature_ = np.abs(df.sample(frac=data_fraction)[feature_name])
+        feature_ = np.abs(sampled_feature)
 
     elif scale_conversion == "log":
-        feature_ = np.log(df.sample(frac=data_fraction)[feature_name])
+        feature_ = np.log(sampled_feature)
 
     elif scale_conversion == "sqrt":
-        feature_ = np.sqrt(df.sample(frac=data_fraction)[feature_name])
+        feature_ = np.sqrt(sampled_feature)
 
     elif scale_conversion == "cbrt":
-        feature_ = np.cbrt(df.sample(frac=data_fraction)[feature_name])
+        feature_ = np.cbrt(sampled_feature)
 
     elif scale_conversion == "invrs":
-        feature_ = 1 / np.cbrt(df.sample(frac=data_fraction)[feature_name])
+        feature_ = 1 / sampled_feature
 
     elif scale_conversion == "stdrz":
+        feature_ = (sampled_feature - np.mean(sampled_feature)) / np.std(
+            sampled_feature
+        )
 
-        x_ = np.abs(df.sample(frac=data_fraction)[feature_name])
+    elif scale_conversion == "minmax":
+        feature_ = (sampled_feature - np.min(sampled_feature)) / (
+            np.max(sampled_feature) - np.min(sampled_feature),
+        )
 
-        feature_ = (x_ - np.mean(x_)) / np.std(x_)
-    elif scale_conversion == "normlz":
+    elif scale_conversion == "robust":
+        feature_ = (sampled_feature - np.median(sampled_feature)) / (
+            np.percentile(sampled_feature, 75) - np.percentile(sampled_feature, 25),
+        )
 
-        x_ = np.abs(df.sample(frac=data_fraction)[feature_name])
+    elif scale_conversion == "maxabs":
+        feature_ = sampled_feature / np.max(np.abs(sampled_feature))
 
-        feature_ = (x_ - np.min(x_)) / (np.max(x_) - np.min(x_))
+    elif scale_conversion == "reciprocal":
+        feature_ = 1 / sampled_feature
+
+    elif scale_conversion == "exp":
+        feature_ = np.exp(sampled_feature)
+
+    elif scale_conversion == "logit":
+        feature_ = np.log(sampled_feature / (1 - sampled_feature))
+
+    elif scale_conversion == "arcsinh":
+        feature_ = np.arcsinh(sampled_feature)
+
+    elif scale_conversion == "square":
+        feature_ = np.square(sampled_feature)
+
     elif scale_conversion == "boxcox":
-        feature_ = df.sample(frac=data_fraction)[feature_name]
+        feature_ = sampled_feature
         if np.any(feature_ <= 0):
             raise ValueError(
-                "Box-Cox transformation requires strictly positive values."
+                "Box-Cox transformation requires strictly " "positive values."
             )
         feature_, _ = stats.boxcox(feature_)
+
+    elif scale_conversion == "power":
+        from sklearn.preprocessing import PowerTransformer
+
+        pt = PowerTransformer(method="yeo-johnson")
+        feature_ = pt.fit_transform(sampled_feature.values.reshape(-1, 1)).flatten()
+
     else:
-        feature_ = df.sample(frac=data_fraction)[feature_name]
-        if scale_conversion == None:
+        feature_ = sampled_feature
+        if scale_conversion is None:
             scale_conversion = "None"
 
     # Replace values in feature_ > than the cutoff, ONLY if apply_cutoff == True
-
     if apply_cutoff == True:
         if lower_cutoff != None:
             feature_ = np.where(feature_ < lower_cutoff, lower_cutoff, feature_)
@@ -3293,7 +3345,6 @@ def data_doctor(
             feature_ = np.where(feature_ > upper_cutoff, upper_cutoff, feature_)
 
     # Print statistical data
-
     print("Feature:    ", feature_name, "\n")
     print("min    ", np.min(feature_))
     print("max    ", np.max(feature_))
@@ -3333,9 +3384,8 @@ def data_doctor(
             + str(data_fraction)
             + " and not to 1, representing 100 percent."
         )
-
     # Update lower_cutoff and upper_cutoff values to represent any value updates
-    # made in steps above...to ensure the xlable reflects these values
+    # made in steps above...to ensure the xlabel reflects these values
 
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
@@ -3351,14 +3401,15 @@ def data_doctor(
             x=feature_,
             ax=axes[0, 0],
             clip=(lower_cutoff, upper_cutoff),
+            warn_singular=False,
             **(kde_kws or {}),
         )
         axes[0, 0].set_title(
             f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  
-        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)  
+        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)
         axes[0, 0].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Histplot
@@ -3367,8 +3418,8 @@ def data_doctor(
             f"Histplot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)  
-        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)  
+        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)
         axes[0, 1].tick_params(axis="both", labelsize=tick_fontsize)
 
         # Boxplot
@@ -3377,7 +3428,7 @@ def data_doctor(
             f"Boxplot: {feature_name} (Scale: {scale_conversion})",
             fontsize=label_fontsize,
         )
-        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize) 
+        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
         axes[0, 2].set_ylabel(
             "", fontsize=label_fontsize
         )  # Set an empty label just in case
@@ -3427,7 +3478,6 @@ def data_doctor(
                 svg_filename = f"{image_path_svg}/{default_filename}.svg"
                 plt.savefig(svg_filename, format="svg")
                 print(f"Plot saved as SVG at {svg_filename}")
-
 
 
 ################################################################################
