@@ -21,6 +21,7 @@ import os
 import sys
 import warnings
 from sklearn.inspection import partial_dependence, PartialDependenceDisplay
+from sklearn.preprocessing import PowerTransformer
 
 if sys.version_info >= (3, 7):
     from datetime import datetime
@@ -3227,15 +3228,6 @@ def data_doctor(
     if apply_as_new_col_to_df == True:
         data_fraction = 1  # change the sample fraction value to 100 percent, to
 
-    new_col_name = feature_name
-
-    # New column name options when apply_as_new_col_to_df == True
-    if apply_as_new_col_to_df:
-        if scale_conversion is None and apply_cutoff:
-            new_col_name = feature_name + "_w_cutoff"
-        elif scale_conversion is not None:
-            new_col_name = feature_name + "_" + scale_conversion
-
     # Define valid scale conversions
     valid_conversions = [
         "abs",
@@ -3264,11 +3256,27 @@ def data_doctor(
             f"Valid options are: {valid_conversions[:-1]}"
         )
 
+    new_col_name = feature_name
+
     # Sample the data once to ensure consistency in transformations
     # Convert data according to scale_conversion selection
-    #
 
     sampled_feature = df.sample(frac=data_fraction)[feature_name]
+
+    # New column name options when apply_as_new_col_to_df == True
+    if apply_as_new_col_to_df:
+        if scale_conversion is None and apply_cutoff:
+            new_col_name = feature_name + "_w_cutoff"
+        elif scale_conversion is not None:
+            new_col_name = feature_name + "_" + scale_conversion
+
+    if scale_conversion == "logit":
+        if np.any((sampled_feature <= 0) | (sampled_feature >= 1)):
+            raise ValueError(
+                "Logit transformation requires values to be between 0 and 1. "
+                "Consider using a scaling method such as min-max scaling first."
+            )
+        feature_ = np.log(sampled_feature / (1 - sampled_feature))
 
     if scale_conversion == "abs":
         feature_ = np.abs(sampled_feature)
@@ -3327,8 +3335,6 @@ def data_doctor(
         feature_, _ = stats.boxcox(feature_)
 
     elif scale_conversion == "power":
-        from sklearn.preprocessing import PowerTransformer
-
         pt = PowerTransformer(method="yeo-johnson")
         feature_ = pt.fit_transform(sampled_feature.values.reshape(-1, 1)).flatten()
 
