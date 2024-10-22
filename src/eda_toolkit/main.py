@@ -227,7 +227,7 @@ def dataframe_columns(
     df,
     background_color=None,
     return_df=False,
-    sort_cols_alpha=False
+    sort_cols_alpha=False,
 ):
     """
     Analyze DataFrame columns to provide summary statistics such as data type,
