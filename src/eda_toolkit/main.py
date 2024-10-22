@@ -3161,9 +3161,9 @@ def data_doctor(
 
     apply_as_new_col_to_df : bool, optional (default=False)
         Whether to create a new column in the DataFrame with the transformed
-        values. If True, the new column name will be generated based on the 
+        values. If True, the new column name will be generated based on the
         feature name and the transformation applied:
-            - `<feature_name>_<scale_conversion>`: If a transformation is 
+            - `<feature_name>_<scale_conversion>`: If a transformation is
             applied.
             - `<feature_name>_w_cutoff`: If only cutoffs are applied.
 
@@ -3203,7 +3203,7 @@ def data_doctor(
         is provided.
 
     ValueError
-        If `apply_as_new_col_to_df=True` but no valid column name could be 
+        If `apply_as_new_col_to_df=True` but no valid column name could be
         generated.
 
     ValueError
@@ -3226,7 +3226,7 @@ def data_doctor(
     # If conversion will be applied to a new column, set sample_frac to 1
     if apply_as_new_col_to_df == True:
         data_fraction = 1  # change the sample fraction value to 100 percent, to
-        
+
     new_col_name = feature_name
 
     # New column name options when apply_as_new_col_to_df == True
@@ -3244,7 +3244,7 @@ def data_doctor(
         "cbrt",
         "invrs",
         "stdrz",
-        "minmax",  
+        "minmax",
         "boxcox",
         "robust",
         "maxabs",
@@ -3257,7 +3257,6 @@ def data_doctor(
         None,
     ]
 
-
     # Check if scale_conversion is valid
     if scale_conversion not in valid_conversions:
         raise ValueError(
@@ -3267,7 +3266,7 @@ def data_doctor(
 
     # Sample the data once to ensure consistency in transformations
     # Convert data according to scale_conversion selection
-    # 
+    #
 
     sampled_feature = df.sample(frac=data_fraction)[feature_name]
 
@@ -3287,13 +3286,19 @@ def data_doctor(
         feature_ = 1 / sampled_feature
 
     elif scale_conversion == "stdrz":
-        feature_ = (sampled_feature - np.mean(sampled_feature)) / np.std(sampled_feature)
+        feature_ = (sampled_feature - np.mean(sampled_feature)) / np.std(
+            sampled_feature
+        )
 
-    elif scale_conversion == "minmax": 
-        feature_ = (sampled_feature - np.min(sampled_feature)) / (np.max(sampled_feature) - np.min(sampled_feature),)
+    elif scale_conversion == "minmax":
+        feature_ = (sampled_feature - np.min(sampled_feature)) / (
+            np.max(sampled_feature) - np.min(sampled_feature),
+        )
 
     elif scale_conversion == "robust":
-        feature_ = (sampled_feature - np.median(sampled_feature)) / (np.percentile(sampled_feature, 75) - np.percentile(sampled_feature, 25),)
+        feature_ = (sampled_feature - np.median(sampled_feature)) / (
+            np.percentile(sampled_feature, 75) - np.percentile(sampled_feature, 25),
+        )
 
     elif scale_conversion == "maxabs":
         feature_ = sampled_feature / np.max(np.abs(sampled_feature))
@@ -3316,13 +3321,15 @@ def data_doctor(
     elif scale_conversion == "boxcox":
         feature_ = sampled_feature
         if np.any(feature_ <= 0):
-            raise ValueError("Box-Cox transformation requires strictly "
-                            "positive values.")
+            raise ValueError(
+                "Box-Cox transformation requires strictly " "positive values."
+            )
         feature_, _ = stats.boxcox(feature_)
 
     elif scale_conversion == "power":
         from sklearn.preprocessing import PowerTransformer
-        pt = PowerTransformer(method='yeo-johnson')
+
+        pt = PowerTransformer(method="yeo-johnson")
         feature_ = pt.fit_transform(sampled_feature.values.reshape(-1, 1)).flatten()
 
     else:
@@ -3379,7 +3386,6 @@ def data_doctor(
         )
     # Update lower_cutoff and upper_cutoff values to represent any value updates
     # made in steps above...to ensure the xlabel reflects these values
-
 
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
@@ -3472,7 +3478,6 @@ def data_doctor(
                 svg_filename = f"{image_path_svg}/{default_filename}.svg"
                 plt.savefig(svg_filename, format="svg")
                 print(f"Plot saved as SVG at {svg_filename}")
-
 
 
 ################################################################################
