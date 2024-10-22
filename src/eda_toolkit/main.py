@@ -237,13 +237,17 @@ def dataframe_columns(
         df (pandas.DataFrame): The DataFrame to analyze.
         background_color (str, optional): Hex color code or color name for
                                           background styling in the output
-                                          DataFrame. Defaults to None.
+                                          DataFrame. Applies to specific columns
+                                          such as unique value totals and 
+                                          percentages. Defaults to None.
         return_df (bool, optional): If True, returns the plain DataFrame with
                                     the summary statistics. If False, returns a
                                     styled DataFrame for visual presentation.
                                     Defaults to False.
-        sort_cols_alpha (bool, optional): If True, sorts columns in alphabetical order.
-                                          Defaults to False
+        sort_cols_alpha (bool, optional): If True, sorts columns in alphabetical
+                                          order before returning the DataFrame.
+                                          Applies to both plain and styled 
+                                          outputs. Defaults to False.
 
     Raises:
         None.
@@ -253,9 +257,21 @@ def dataframe_columns(
                           containing column summary statistics. If `return_df`
                           is False, returns a styled DataFrame with optional
                           background color for specific columns.
+                          
+                          The DataFrame includes the following summary columns:
+                          - column: Column name
+                          - dtype: Data type of the column
+                          - null_total: Total number of null values
+                          - null_pct: Percentage of null values
+                          - unique_values_total: Total number of unique values
+                          - max_unique_value: The most frequent value
+                          - max_unique_value_total: Frequency of the most 
+                                                    frequent value
+                          - max_unique_value_pct: Percentage of the most 
+                                                  frequent value
 
-                          If `sort_cols_alpha` is True, returns results 
-                          by column alphabetical order.
+                          If `sort_cols_alpha` is True, the columns will be
+                          sorted alphabetically in the output.
 
     Example:
         styled_df = dataframe_columns(df, background_color="#FFFF00")
