@@ -238,7 +238,7 @@ def dataframe_columns(
         background_color (str, optional): Hex color code or color name for
                                           background styling in the output
                                           DataFrame. Applies to specific columns
-                                          such as unique value totals and 
+                                          such as unique value totals and
                                           percentages. Defaults to None.
         return_df (bool, optional): If True, returns the plain DataFrame with
                                     the summary statistics. If False, returns a
@@ -246,7 +246,7 @@ def dataframe_columns(
                                     Defaults to False.
         sort_cols_alpha (bool, optional): If True, sorts columns in alphabetical
                                           order before returning the DataFrame.
-                                          Applies to both plain and styled 
+                                          Applies to both plain and styled
                                           outputs. Defaults to False.
 
     Raises:
@@ -257,7 +257,7 @@ def dataframe_columns(
                           containing column summary statistics. If `return_df`
                           is False, returns a styled DataFrame with optional
                           background color for specific columns.
-                          
+
                           The DataFrame includes the following summary columns:
                           - column: Column name
                           - dtype: Data type of the column
@@ -265,9 +265,9 @@ def dataframe_columns(
                           - null_pct: Percentage of null values
                           - unique_values_total: Total number of unique values
                           - max_unique_value: The most frequent value
-                          - max_unique_value_total: Frequency of the most 
+                          - max_unique_value_total: Frequency of the most
                                                     frequent value
-                          - max_unique_value_pct: Percentage of the most 
+                          - max_unique_value_pct: Percentage of the most
                                                   frequent value
 
                           If `sort_cols_alpha` is True, the columns will be
@@ -333,26 +333,25 @@ def dataframe_columns(
     )
 
     if sort_cols_alpha:
-        result_df = pd.DataFrame(columns_value_counts).sort_values(by='column')
+        result_df = pd.DataFrame(columns_value_counts).sort_values(by="column")
     else:
         result_df = pd.DataFrame(columns_value_counts)
-
 
     if return_df:
         # Return the plain DataFrame
         return result_df
     else:
         if sort_cols_alpha:
-        # Return the styled DataFrame
+            # Return the styled DataFrame
 
-        # Output, try/except, accounting for the potential of Python version with
-        # the styler as hide_index() is deprecated since Pandas 1.4, in such cases,
-        # hide() is used instead
-        
+            # Output, try/except, accounting for the potential of Python version with
+            # the styler as hide_index() is deprecated since Pandas 1.4, in such cases,
+            # hide() is used instead
+
             try:
                 return (
                     pd.DataFrame(columns_value_counts)
-                    .sort_values(by='column')
+                    .sort_values(by="column")
                     .style.hide()
                     .format(precision=2)
                     .set_properties(
@@ -368,7 +367,7 @@ def dataframe_columns(
             except:
                 return (
                     pd.DataFrame(columns_value_counts)
-                    .sort_values(by='column')
+                    .sort_values(by="column")
                     .style.hide_index()
                     .format(precision=2)
                     .set_properties(
@@ -381,7 +380,7 @@ def dataframe_columns(
                         **{"background-color": background_color},
                     )
                 )
-        
+
         else:
 
             try:
@@ -3156,8 +3155,8 @@ def data_doctor(
     apply_as_new_col_to_df=False,
     kde_kws=None,
     hist_kws=None,
-    box_violin_kws=None,  
-    box_violin="box", 
+    box_violin_kws=None,
+    box_violin="boxplot",
     label_fontsize=12,
     tick_fontsize=10,
 ):
@@ -3209,7 +3208,7 @@ def data_doctor(
         Upper bound to apply if `apply_cutoff` is True. Defaults to None.
 
     show_plot : bool, optional (default=True)
-        Whether to display a KDE plot, histogram, and boxplot/violinplot of the 
+        Whether to display a KDE plot, histogram, and boxplot/violinplot of the
         feature.
 
     box_violin : str, optional (default="boxplot")
@@ -3312,7 +3311,6 @@ def data_doctor(
         "power",
         None,
     ]
-    
 
     # Check if scale_conversion is valid
     if scale_conversion not in valid_conversions:
@@ -3529,8 +3527,10 @@ def data_doctor(
 
         # Check if the user-specified plot type is valid
         if box_violin not in ["boxplot", "violinplot"]:
-            raise ValueError(f"Invalid plot type '{box_violin}'. "
-                             f"Valid options are 'boxplot' or 'violinplot'.")
+            raise ValueError(
+                f"Invalid plot type '{box_violin}'. "
+                f"Valid options are 'boxplot' or 'violinplot'."
+            )
 
         # Check if save_plots=True but no image path is provided
         if save_plot and not image_path_png and not image_path_svg:
