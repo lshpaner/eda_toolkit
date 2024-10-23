@@ -232,7 +232,7 @@ directories do not exist, the function creates them.</p>
 </div>
 </section>
 <section id="adding-unique-identifiers">
-<h2>Adding Unique Identifiers<a class="headerlink" href="#adding-unique-identifiers" title="Link to this heading"></a></h2>
+<span id="id1"></span><h2>Adding Unique Identifiers<a class="headerlink" href="#adding-unique-identifiers" title="Link to this heading"></a></h2>
 <p><strong>Add a column of unique IDs with a specified number of digits to the dataframe.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="add_ids">
@@ -298,7 +298,7 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id7" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id8" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>DataFrame<span class="w"> </span>index<span class="w"> </span>is<span class="w"> </span>unique.
 </pre></div>
 </div>
@@ -345,7 +345,7 @@ column in the dataframe.</p>
       <td class="tg-8jgo"></td>
     </tr>
     <tr>
-      <td class="tg-zv4m">74130842</td>
+      <td class="tg-zv4m">582248222</td>
       <td class="tg-8jgo">39</td>
       <td class="tg-8jgo">State-gov</td>
       <td class="tg-8jgo">77516</td>
@@ -356,7 +356,7 @@ column in the dataframe.</p>
       <td class="tg-8jgo">Not-in-family</td>
     </tr>
     <tr>
-      <td class="tg-zv4m">97751875</td>
+      <td class="tg-zv4m">561810758</td>
       <td class="tg-8jgo">50</td>
       <td class="tg-8jgo">Self-emp-not-inc</td>
       <td class="tg-8jgo">83311</td>
@@ -367,7 +367,7 @@ column in the dataframe.</p>
       <td class="tg-8jgo">Husband</td>
     </tr>
     <tr>
-      <td class="tg-zv4m">12202842</td>
+      <td class="tg-zv4m">598098459</td>
       <td class="tg-8jgo">38</td>
       <td class="tg-8jgo">Private</td>
       <td class="tg-8jgo">215646</td>
@@ -378,7 +378,7 @@ column in the dataframe.</p>
       <td class="tg-8jgo">Not-in-family</td>
     </tr>
     <tr>
-      <td class="tg-zv4m">96078789</td>
+      <td class="tg-zv4m">776705221</td>
       <td class="tg-8jgo">53</td>
       <td class="tg-8jgo">Private</td>
       <td class="tg-8jgo">234721</td>
@@ -389,7 +389,7 @@ column in the dataframe.</p>
       <td class="tg-8jgo">Husband</td>
     </tr>
     <tr>
-      <td class="tg-zv4m">35130194</td>
+      <td class="tg-zv4m">479262902</td>
       <td class="tg-8jgo">28</td>
       <td class="tg-8jgo">Private</td>
       <td class="tg-8jgo">338409</td>
@@ -658,7 +658,7 @@ function to analyze a DataFrame’s columns.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id7" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id8" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
 <span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
@@ -945,7 +945,7 @@ Each summary table includes the count and proportion of occurrences for each uni
 This is useful for understanding which combinations were analyzed and included in the summary tables.</p>
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
-variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id8" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
@@ -1196,7 +1196,7 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
-from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id7" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id8" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
 
 <span class="c1"># Example usage</span>
@@ -1261,7 +1261,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
-columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id7" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
+columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id8" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
 
 <span class="c1"># Applying the highlight function</span>
@@ -1316,7 +1316,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
     <td class="tg-3xi5"></td>
 </tr>
 <tr>
-    <td class="tg-c6of">82943611</td>
+    <td class="tg-c6of">582248222</td>
     <td class="tg-6qlg">39</td>
     <td class="tg-3xi5">State-gov</td>
     <td class="tg-3xi5">77516</td>
@@ -1327,7 +1327,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
     <td class="tg-3xi5">Not-in-family</td>
 </tr>
 <tr>
-    <td class="tg-c6of">42643227</td>
+    <td class="tg-c6of">561810758</td>
     <td class="tg-6qlg">50</td>
     <td class="tg-3xi5">Self-emp-not-inc</td>
     <td class="tg-3xi5">83311</td>
@@ -1338,7 +1338,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
     <td class="tg-3xi5">Husband</td>
 </tr>
 <tr>
-    <td class="tg-c6of">93837254</td>
+    <td class="tg-c6of">598098459</td>
     <td class="tg-6qlg">38</td>
     <td class="tg-3xi5">Private</td>
     <td class="tg-3xi5">215646</td>
@@ -1349,7 +1349,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
     <td class="tg-3xi5">Not-in-family</td>
 </tr>
 <tr>
-    <td class="tg-c6of">87104229</td>
+    <td class="tg-c6of">776705221</td>
     <td class="tg-6qlg">53</td>
     <td class="tg-3xi5">Private</td>
     <td class="tg-3xi5">234721</td>
@@ -1360,7 +1360,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
     <td class="tg-3xi5">Husband</td>
 </tr>
 <tr>
-    <td class="tg-c6of">90069867</td>
+    <td class="tg-c6of">479262902</td>
     <td class="tg-6qlg">28</td>
     <td class="tg-3xi5">Private</td>
     <td class="tg-3xi5">338409</td>
@@ -1387,7 +1387,7 @@ label to each age in the DataFrame. The <code class="docutils literal notranslat
 categorize the ages and assign them to a new column, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>. Adjust the bins
 and labels as needed for your specific data.</p>
 </div>
-<p>Below, we use the <code class="docutils literal notranslate"><span class="pre">age</span></code> column of the census data <a class="footnote-reference brackets" href="#id7" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> from the UCI Machine Learning Repository as an example:</p>
+<p>Below, we use the <code class="docutils literal notranslate"><span class="pre">age</span></code> column of the census data <a class="footnote-reference brackets" href="#id8" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> from the UCI Machine Learning Repository as an example:</p>
 <ol class="arabic">
 <li><p><strong>Bins Definition</strong>:
 The bins are defined by specifying the boundaries of each interval. For example,
@@ -1466,9 +1466,9 @@ when the upper bound is infinity (<code class="docutils literal notranslate"><sp
 </li>
 </ol>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id7" role="doc-footnote">
+<aside class="footnote brackets" id="id8" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id5">5</a>,<a role="doc-backlink" href="#id6">6</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>,<a role="doc-backlink" href="#id6">5</a>,<a role="doc-backlink" href="#id7">6</a>)</span>
 <p>Kohavi, R. (1996). <em>Census Income</em>. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
 </aside>
