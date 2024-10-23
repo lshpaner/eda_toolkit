@@ -3156,7 +3156,8 @@ def data_doctor(
     apply_as_new_col_to_df=False,
     kde_kws=None,
     hist_kws=None,
-    box_kws=None,
+    box_violin_kws=None,  
+    box_violin="box", 
     label_fontsize=12,
     tick_fontsize=10,
 ):
@@ -3208,7 +3209,12 @@ def data_doctor(
         Upper bound to apply if `apply_cutoff` is True. Defaults to None.
 
     show_plot : bool, optional (default=True)
-        Whether to display a KDE plot, histogram, and boxplot of the feature.
+        Whether to display a KDE plot, histogram, and boxplot/violinplot of the 
+        feature.
+
+    box_violin : str, optional (default="boxplot")
+        Choose the type of plot to display. Options are 'boxplot' or 'violinplot'.
+        Raises a ValueError if anything else is provided.
 
     save_plot : bool, optional (default=False)
         Whether to save the plots as PNG and/or SVG images. If `True`, the user
@@ -3238,8 +3244,8 @@ def data_doctor(
         Additional keyword arguments to pass to the histogram plot
         (seaborn.histplot).
 
-    box_kws : dict, optional
-        Additional keyword arguments to pass to the boxplot (seaborn.boxplot).
+    box_violin_kws : dict, optional
+        Additional keyword arguments to pass to either boxplot or violinplot.
 
     label_fontsize : int, optional (default=12)
         Font size for the axis labels and plot titles.
@@ -3267,12 +3273,7 @@ def data_doctor(
         is provided.
 
     ValueError
-        If `apply_as_new_col_to_df=True` but no valid column name could be
-        generated.
-
-    ValueError
-        If `apply_as_new_col_to_df=True` but both `scale_conversion` and
-        `apply_cutoff` are False or None.
+        If an invalid option is provided for `box_violin`.
     """
 
     # Suppress warnings for division by zero, or invalid values in subtract
@@ -3311,6 +3312,7 @@ def data_doctor(
         "power",
         None,
     ]
+    
 
     # Check if scale_conversion is valid
     if scale_conversion not in valid_conversions:
@@ -3491,17 +3493,22 @@ def data_doctor(
         axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)
         axes[0, 1].tick_params(axis="both", labelsize=tick_fontsize)
 
-        # Boxplot
-        sns.boxplot(x=feature_, ax=axes[0, 2], **(box_kws or {}))
-        axes[0, 2].set_title(
-            f"Boxplot: {feature_name} (Scale: {scale_conversion})",
-            fontsize=label_fontsize,
-        )
+        # Plot based on box_violin input
+        if box_violin == "boxplot":
+            sns.boxplot(x=feature_, ax=axes[0, 2], **(box_violin_kws or {}))
+            axes[0, 2].set_title(
+                f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+                fontsize=label_fontsize,
+            )
+        elif box_violin == "violinplot":
+            sns.violinplot(x=feature_, ax=axes[0, 2], **(box_violin_kws or {}))
+            axes[0, 2].set_title(
+                f"Violinplot: {feature_name} (Scale: {scale_conversion})",
+                fontsize=label_fontsize,
+            )
+
         axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-        axes[0, 2].set_ylabel(
-            "", fontsize=label_fontsize
-        )  # Set an empty label just in case
-        axes[0, 2].tick_params(axis="both", labelsize=tick_fontsize)
+        axes[0, 2].set_ylabel("", fontsize=label_fontsize)
 
         # Create a separate axis for the text (2nd row, span across all columns)
         axes[1, 0].text(
@@ -3519,6 +3526,11 @@ def data_doctor(
 
         # Adjust layout and show plot
         plt.tight_layout()
+
+        # Check if the user-specified plot type is valid
+        if box_violin not in ["boxplot", "violinplot"]:
+            raise ValueError(f"Invalid plot type '{box_violin}'. "
+                             f"Valid options are 'boxplot' or 'violinplot'.")
 
         # Check if save_plots=True but no image path is provided
         if save_plot and not image_path_png and not image_path_svg:
