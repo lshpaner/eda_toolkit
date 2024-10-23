@@ -633,7 +633,11 @@ Outliers and Feature Scaling
 Box-Cox Transformation Example
 -------------------------------
 
-In this example, we will demonstrate the usage of the ``data_doctor`` function to apply a **Box-Cox transformation** to the ``age`` column in a DataFrame. The ``data_doctor`` function provides a flexible way to preprocess data by applying various scaling techniques. Here, we use the Box-Cox transformation as an example, but you can choose any scale conversion from the list of available options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.).
+In this example from the US Census dataset [1]_, we demonstrate the usage of the ``data_doctor`` 
+function to apply a **Box-Cox transformation** to the ``age`` column in a DataFrame. 
+The ``data_doctor`` function provides a flexible way to preprocess data by applying 
+various scaling techniques. Here, we use the Box-Cox transformation as an example, 
+but you can choose any scale conversion from the list of available options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.).
 
 .. code-block:: python
 
@@ -738,7 +742,7 @@ In this example, we will demonstrate the usage of the ``data_doctor`` function t
           <td class="tg-8jgo tg-lightpink"></td>
         </tr>
         <tr>
-          <td class="tg-zv4m">74130842</td>
+          <td class="tg-zv4m">582248222</td>
           <td class="tg-8jgo">39</td>
           <td class="tg-8jgo">State-gov</td>
           <td class="tg-8jgo">Bachelors</td>
@@ -749,7 +753,7 @@ In this example, we will demonstrate the usage of the ``data_doctor`` function t
           <td class="tg-8jgo tg-lightpink">4.019591</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">97751875</td>
+          <td class="tg-zv4m">561810758</td>
           <td class="tg-8jgo">50</td>
           <td class="tg-8jgo">Self-emp-not-inc</td>
           <td class="tg-8jgo">Bachelors</td>
@@ -760,7 +764,7 @@ In this example, we will demonstrate the usage of the ``data_doctor`` function t
           <td class="tg-8jgo tg-lightpink">6.840919</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">12202842</td>
+          <td class="tg-zv4m">598098459</td>
           <td class="tg-8jgo">38</td>
           <td class="tg-8jgo">Private</td>
           <td class="tg-8jgo">HS-grad</td>
@@ -771,7 +775,7 @@ In this example, we will demonstrate the usage of the ``data_doctor`` function t
           <td class="tg-8jgo tg-lightpink">3.760645</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">96078789</td>
+          <td class="tg-zv4m">776705221</td>
           <td class="tg-8jgo">53</td>
           <td class="tg-8jgo">Private</td>
           <td class="tg-8jgo">11th</td>
@@ -782,7 +786,7 @@ In this example, we will demonstrate the usage of the ``data_doctor`` function t
           <td class="tg-8jgo tg-lightpink">6.584950</td>
         </tr>
         <tr>
-          <td class="tg-zv4m">35130194</td>
+          <td class="tg-zv4m">479262902</td>
           <td class="tg-8jgo">28</td>
           <td class="tg-8jgo">Private</td>
           <td class="tg-8jgo">Bachelors</td>
@@ -800,6 +804,11 @@ In this example, we will demonstrate the usage of the ``data_doctor`` function t
 
 
 \
+
+
+.. note::
+
+    Notice that we also apply the :ref:`unique identifiers <Adding_Unique_Identifiers>` function here to generate randomized census IDs for the rows of the data.
 
 Explanation
 ^^^^^^^^^^^^^
@@ -834,6 +843,9 @@ The ``scale_conversion`` parameter accepts several options for data scaling, inc
 ``boxcox`` is just one of the many options you can use with the ``data_doctor`` function.
 
 
+.. warning::
+
+    test
 
 
 Stacked Crosstab Plots
@@ -2586,7 +2598,6 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
     :notes:
         - This function handles warnings related to scikit-learn's ``partial_dependence`` function, specifically a ``FutureWarning`` related to non-tuple sequences for multidimensional indexing. This warning is suppressed as it stems from the internal workings of scikit-learn in Python versions like 3.7.4.
         - To maintain compatibility with different versions of scikit-learn, the function attempts to use ``"values"`` for grid extraction in newer versions and falls back to ``"grid_values"`` for older versions.
-
 
 3D Plots - CA Housing Example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
