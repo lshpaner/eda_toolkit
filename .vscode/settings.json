@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "notebook.defaultFormatter": "ms-python.black-formatter",
+    "black-formatter.interpreter": [
+        "C:\\Users\\lshpaner\\AppData\\Local\\miniconda3\\python.exe"
+    ],
+    "black-formatter.path": [
+        "[\"black\"]"
+    ],
+    "editor.defaultFoldingRangeProvider": "ms-python.black-formatter",
+    "notebook.formatOnSave.enabled": false
+}
