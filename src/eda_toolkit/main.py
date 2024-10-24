@@ -21,7 +21,7 @@ import os
 import sys
 import warnings
 from sklearn.inspection import partial_dependence, PartialDependenceDisplay
-from sklearn.preprocessing import PowerTransformer
+from sklearn.preprocessing import PowerTransformer, RobustScaler
 
 if sys.version_info >= (3, 7):
     from datetime import datetime
