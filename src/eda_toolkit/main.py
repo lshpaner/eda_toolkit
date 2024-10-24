@@ -3194,7 +3194,9 @@ def data_doctor(
             - 'invrs': Inverted values
             - 'stdrz': Standardized (z-score)
             - 'minmax': Min-Max scaling
-            - 'boxcox': Box-Cox transformation (positive values only)
+            - 'boxcox': Box-Cox transformation (positive values only; supports
+                        `lmbda` for specific lambda or `alpha` for confidence
+                        interval)
             - 'robust': Robust scaling (median and IQR)
             - 'maxabs': Max-abs scaling
             - 'reciprocal': Reciprocal transformation
@@ -3206,9 +3208,11 @@ def data_doctor(
         Defaults to None (no conversion).
 
     scale_conversion_kws : dict, optional
-        Additional keyword arguments to pass to the scaling functions, such as
-        'alpha' for Box-Cox transformation, or 'quantile_range' for robust
-        scaling.
+        Additional keyword arguments to pass to the scaling functions, such as:
+            - 'alpha' for Box-Cox transformation (returns a confidence interval 
+               for lambda)
+            - 'lmbda' for a specific Box-Cox transformation value
+            - 'quantile_range' for robust scaling.
 
     apply_cutoff : bool, optional (default=False)
         Whether to apply upper and/or lower cutoffs to the feature.
@@ -3254,8 +3258,11 @@ def data_doctor(
         values. If True, the new column name is generated based on the
         feature name and the transformation applied:
             - `<feature_name>_<scale_conversion>`: If a transformation is
-              applied.
+            applied.
             - `<feature_name>_w_cutoff`: If only cutoffs are applied.
+        For Box-Cox transformation, if `alpha` is specified, the confidence 
+        interval for lambda is displayed. If `lmbda` is specified, the lambda 
+        value is displayed.
 
     kde_kws : dict, optional
         Additional keyword arguments to pass to the KDE plot (seaborn.kdeplot).
@@ -3281,7 +3288,9 @@ def data_doctor(
     None
         Displays the feature name, descriptive statistics, quartile information,
         and outlier details. If a new column is created, confirms the new
-        column's addition to the DataFrame.
+        column's addition to the DataFrame. Also, for Box-Cox transformation,
+        prints the lambda value (if provided) or confidence interval for lambda
+        (if `alpha` is provided).
 
     Raises:
     -------
@@ -3297,7 +3306,13 @@ def data_doctor(
 
     ValueError
         If an invalid option is provided for `box_violin`.
+
+    ValueError
+        If the length of transformed data does not match the original feature 
+        length.
     """
+
+
 
     # Suppress warnings for division by zero, or invalid values in subtract
     np.seterr(divide="ignore", invalid="ignore")
@@ -3448,6 +3463,45 @@ def data_doctor(
             **scale_conversion_kws,
         )
 
+    # elif scale_conversion == "boxcox":
+    #     if np.any(sampled_feature <= 0):
+    #         raise ValueError(
+    #             "Box-Cox transformation requires strictly positive values."
+    #         )
+
+    #     # Initialize scale_conversion_kws if None
+    #     scale_conversion_kws = scale_conversion_kws or {}
+
+    #     # Apply Box-Cox transformation with or without kwargs
+    #     try:
+    #         # Try applying Box-Cox transformation
+    #         result = stats.boxcox(sampled_feature, **scale_conversion_kws)
+
+    #         # Handle cases where 'alpha' is provided and Box-Cox returns a tuple
+    #         if isinstance(result, tuple):
+    #             feature_array = result[0]  # Transformed data
+    #             box_cox_lmbda = result[1]  # Lambda confidence interval
+    #         else:
+    #             # Only the transformed data is returned (no tuple)
+    #             feature_array = result
+
+    #     except ValueError as ve:
+    #         # Catch and re-raise any ValueError for debugging
+    #         raise ValueError(f"Error during Box-Cox transformation: {ve}")
+
+    #     # Ensure feature_array is a 1D array
+    #     feature_array = np.asarray(feature_array).flatten()
+
+    #     # Check if the length of feature_array matches the sampled feature
+    #     if len(feature_array) != len(sampled_feature):
+    #         raise ValueError(
+    #             f"Length of transformed data ({len(feature_array)}) does not match "
+    #             f"the length of the sampled feature ({len(sampled_feature)})"
+    #         )
+
+    #     # Convert the feature_array into a pandas Series with the correct index
+    #     feature_ = pd.Series(feature_array, index=sampled_feature.index)
+
     elif scale_conversion == "boxcox":
         if np.any(sampled_feature <= 0):
             raise ValueError(
@@ -3457,21 +3511,20 @@ def data_doctor(
         # Initialize scale_conversion_kws if None
         scale_conversion_kws = scale_conversion_kws or {}
 
-        # Apply Box-Cox transformation with or without kwargs
+        # Apply Box-Cox transformation
         try:
-            # Try applying Box-Cox transformation
-            result = stats.boxcox(sampled_feature, **scale_conversion_kws)
-
-            # Handle cases where 'alpha' is provided and Box-Cox returns a tuple
-            if isinstance(result, tuple):
-                feature_array = result[0]  # Transformed data
-                box_cox_lmbda = result[1]  # Lambda confidence interval
+            if "alpha" in scale_conversion_kws:
+                # Apply Box-Cox transformation and get confidence interval
+                feature_array, box_cox_lmbda, conf_interval = stats.boxcox(
+                    sampled_feature, **scale_conversion_kws
+                )
             else:
-                # Only the transformed data is returned (no tuple)
-                feature_array = result
+                # Apply Box-Cox transformation and get single lambda
+                feature_array, box_cox_lmbda = stats.boxcox(
+                    sampled_feature, **scale_conversion_kws
+                )
 
         except ValueError as ve:
-            # Catch and re-raise any ValueError for debugging
             raise ValueError(f"Error during Box-Cox transformation: {ve}")
 
         # Ensure feature_array is a 1D array
@@ -3486,6 +3539,8 @@ def data_doctor(
 
         # Convert the feature_array into a pandas Series with the correct index
         feature_ = pd.Series(feature_array, index=sampled_feature.index)
+
+
 
     elif scale_conversion == "power":
         pt = PowerTransformer(**scale_conversion_kws)
@@ -3578,21 +3633,31 @@ def data_doctor(
         # Assign values directly
         df[new_col_name] = feature_.values
         print()
-        print("New Column Name:     ", new_col_name)
-        print()
-        # Optional: Print lambda if 'lmbda' was specified
+        print("New Column Name:", new_col_name)
+        # Print lambda if 'lmbda' was specified
         if "lmbda" in scale_conversion_kws:
-            print(f"Box-Cox Lambda: {scale_conversion_kws['lmbda']}")
-        else:
-            print(f"Box Cox lambda: {box_cox_lmbda}")
+            print(f"Box-Cox Lambda (provided): {scale_conversion_kws['lmbda']:.4f}")
+
+        # Print the lambda or confidence interval based on the transformation
+        elif scale_conversion == "boxcox":
+            if "alpha" in scale_conversion_kws:
+                # Confidence interval is available, so print it
+                if 'conf_interval' in locals():
+                    print(f"Box-Cox C.I. for Lambda: {conf_interval}")
+            else:
+                # No alpha, so we print the single lambda value
+                if 'box_cox_lmbda' in locals():
+                    print(f"Box-Cox Lambda: {round(box_cox_lmbda, 4)}")
+
 
     elif apply_as_new_col_to_df and data_fraction != 1:
-        print("New Column Name:     ", new_col_name)
+        print("New Column Name:", new_col_name)
         print(
             "NOTE: Column was not added to dataframe as sample_frac is set to "
             + str(data_fraction)
             + " and not to 1, representing 100 percent."
         )
+
     # Update lower_cutoff and upper_cutoff values to represent any value updates
     # made in steps above...to ensure the xlabel reflects these values
 
