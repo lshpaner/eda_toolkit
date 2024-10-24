@@ -21,7 +21,7 @@ import os
 import sys
 import warnings
 from sklearn.inspection import partial_dependence, PartialDependenceDisplay
-from sklearn.preprocessing import PowerTransformer
+from sklearn.preprocessing import PowerTransformer, RobustScaler
 
 if sys.version_info >= (3, 7):
     from datetime import datetime
@@ -3145,10 +3145,15 @@ def data_doctor(
     feature_name,
     data_fraction=1,
     scale_conversion=None,
+    scale_conversion_kws=None,
     apply_cutoff=False,
     lower_cutoff=None,
     upper_cutoff=None,
     show_plot=True,
+    xlim=None,
+    kde_ylim=None, 
+    hist_ylim=None,
+    box_violin_ylim=None,
     save_plot=False,
     image_path_png=None,
     image_path_svg=None,
@@ -3159,11 +3164,12 @@ def data_doctor(
     box_violin="boxplot",
     label_fontsize=12,
     tick_fontsize=10,
+    random_state=None,
 ):
     """
-    Analyze and transform a specific feature in a DataFrame, with options for
-    scaling, applying cutoffs, and visualizing the results. This function also
-    allows for the creation of a new column with the transformed data if
+    Analyze and transform a specific feature in a DataFrame, with options for 
+    scaling, applying cutoffs, and visualizing the results. This function also 
+    allows for the creation of a new column with the transformed data if 
     specified. Plots can be saved in PNG or SVG format if required.
 
     Parameters:
@@ -3175,7 +3181,7 @@ def data_doctor(
         The name of the feature (column) to analyze.
 
     data_fraction : float, optional (default=1)
-        Fraction of the data to analyze. Useful for large datasets where a
+        Fraction of the data to analyze. Useful for large datasets where a 
         sample can represent the population.
 
     scale_conversion : str, optional
@@ -3198,6 +3204,10 @@ def data_doctor(
             - 'power': Power transformation (Yeo-Johnson).
         Defaults to None (no conversion).
 
+    scale_conversion_kws : dict, optional
+        Additional keyword arguments to pass to the scaling functions, such as 
+        'alpha' for Box-Cox transformation.
+
     apply_cutoff : bool, optional (default=False)
         Whether to apply upper and/or lower cutoffs to the feature.
 
@@ -3208,39 +3218,48 @@ def data_doctor(
         Upper bound to apply if `apply_cutoff` is True. Defaults to None.
 
     show_plot : bool, optional (default=True)
-        Whether to display a KDE plot, histogram, and boxplot/violinplot of the
-        feature.
+        Whether to display plots of the transformed feature: KDE, histogram, and 
+        boxplot/violinplot.
 
-    box_violin : str, optional (default="boxplot")
-        Choose the type of plot to display. Options are 'boxplot' or 'violinplot'.
-        Raises a ValueError if anything else is provided.
+    xlim : tuple or list, optional
+        Limits for the x-axis in all plots, specified as (xmin, xmax).
+
+    kde_ylim : tuple or list, optional
+        Limits for the y-axis in the KDE plot, specified as (ymin, ymax).
+
+    hist_ylim : tuple or list, optional
+        Limits for the y-axis in the histogram plot, specified as (ymin, ymax).
+
+    box_violin_ylim : tuple or list, optional
+        Limits for the y-axis in the boxplot or violin plot, specified as 
+        (ymin, ymax).
 
     save_plot : bool, optional (default=False)
-        Whether to save the plots as PNG and/or SVG images. If `True`, the user
-        must specify at least one of `image_path_png` or `image_path_svg`,
+        Whether to save the plots as PNG and/or SVG images. If `True`, the user 
+        must specify at least one of `image_path_png` or `image_path_svg`, 
         otherwise a `ValueError` is raised.
 
     image_path_png : str, optional
-        Directory path to save the plot as a PNG file.
-        Only used if `save_plot=True`.
+        Directory path to save the plot as a PNG file. Only used if 
+        `save_plot=True`.
 
     image_path_svg : str, optional
-        Directory path to save the plot as an SVG file.
-        Only used if `save_plot=True`.
+        Directory path to save the plot as an SVG file. Only used if 
+        `save_plot=True`.
 
     apply_as_new_col_to_df : bool, optional (default=False)
-        Whether to create a new column in the DataFrame with the transformed
-        values. If True, the new column name will be generated based on the
+        Whether to create a new column in the DataFrame with the transformed 
+        values. If True, the new column name will be generated based on the 
         feature name and the transformation applied:
-            - `<feature_name>_<scale_conversion>`: If a transformation is
-            applied.
+            - `<feature_name>_<scale_conversion>`: If a transformation is 
+                                                   applied.
             - `<feature_name>_w_cutoff`: If only cutoffs are applied.
 
     kde_kws : dict, optional
         Additional keyword arguments to pass to the KDE plot (seaborn.kdeplot).
 
     hist_kws : dict, optional
-        Additional keyword arguments to pass to the histogram plot
+        Additional keyword arguments to pass to the histogram plot 
         (seaborn.histplot).
 
     box_violin_kws : dict, optional
@@ -3252,11 +3271,14 @@ def data_doctor(
     tick_fontsize : int, optional (default=10)
         Font size for the tick labels on both axes.
 
+    random_state : int, optional
+        Seed for reproducibility when sampling the data.
+
     Returns:
     --------
     None
-        Displays the feature name, descriptive statistics, quartile information,
-        and outlier details. If a new column is created, confirms the new
+        Displays the feature name, descriptive statistics, quartile information, 
+        and outlier details. If a new column is created, confirms the new 
         column's addition to the DataFrame.
 
     Raises:
@@ -3268,8 +3290,8 @@ def data_doctor(
         If Box-Cox transformation is applied to non-positive values.
 
     ValueError
-        If `save_plot=True` but neither `image_path_png` nor `image_path_svg`
-        is provided.
+        If `save_plot=True` but neither `image_path_png` nor `image_path_svg` is 
+        provided.
 
     ValueError
         If an invalid option is provided for `box_violin`.
@@ -3297,13 +3319,12 @@ def data_doctor(
         "log",
         "sqrt",
         "cbrt",
-        "invrs",
+        "reciprocal",
         "stdrz",
         "minmax",
         "boxcox",
         "robust",
         "maxabs",
-        "reciprocal",
         "exp",
         "logit",
         "arcsinh",
@@ -3324,7 +3345,7 @@ def data_doctor(
     # Sample the data once to ensure consistency in transformations
     # Convert data according to scale_conversion selection
 
-    sampled_feature = df.sample(frac=data_fraction)[feature_name]
+    sampled_feature = df.sample(frac=data_fraction, random_state=random_state)[feature_name]
 
     # New column name options when apply_as_new_col_to_df == True
     if apply_as_new_col_to_df:
@@ -3333,120 +3354,163 @@ def data_doctor(
         elif scale_conversion is not None:
             new_col_name = feature_name + "_" + scale_conversion
 
+    # Initialize scale_conversion_kws if None
+    scale_conversion_kws = scale_conversion_kws or {}
+
+    # Transformation logic
     if scale_conversion == "logit":
         if np.any((sampled_feature <= 0) | (sampled_feature >= 1)):
             raise ValueError(
                 "Logit transformation requires values to be between 0 and 1. "
                 "Consider using a scaling method such as min-max scaling first."
             )
-        feature_ = np.log(sampled_feature / (1 - sampled_feature))
+        from scipy.special import logit
+        feature_ = logit(sampled_feature, **scale_conversion_kws)
 
-    if scale_conversion == "abs":
-        feature_ = np.abs(sampled_feature)
+    elif scale_conversion == "abs":
+        feature_ = np.abs(sampled_feature, **scale_conversion_kws)
 
     elif scale_conversion == "log":
-        feature_ = np.log(sampled_feature)
+        feature_ = np.log(sampled_feature, **scale_conversion_kws)
 
     elif scale_conversion == "sqrt":
-        feature_ = np.sqrt(sampled_feature)
+        feature_ = np.sqrt(sampled_feature, **scale_conversion_kws)
 
     elif scale_conversion == "cbrt":
-        feature_ = np.cbrt(sampled_feature)
-
-    elif scale_conversion == "invrs":
-        feature_ = 1 / sampled_feature
-
-    elif scale_conversion == "stdrz":
-        feature_ = (sampled_feature - np.mean(sampled_feature)) / np.std(
-            sampled_feature
-        )
-
-    elif scale_conversion == "minmax":
-        feature_ = (sampled_feature - np.min(sampled_feature)) / (
-            np.max(sampled_feature) - np.min(sampled_feature),
-        )
-
-    elif scale_conversion == "robust":
-        feature_ = (sampled_feature - np.median(sampled_feature)) / (
-            np.percentile(sampled_feature, 75) - np.percentile(sampled_feature, 25),
-        )
-
-    elif scale_conversion == "maxabs":
-        feature_ = sampled_feature / np.max(np.abs(sampled_feature))
+        feature_ = np.cbrt(sampled_feature, **scale_conversion_kws)
 
     elif scale_conversion == "reciprocal":
-        feature_ = 1 / sampled_feature
+        feature_ = np.divide(1, sampled_feature, **scale_conversion_kws)
+
+    elif scale_conversion == "stdrz":
+        mean = np.mean(sampled_feature)
+        std = np.std(sampled_feature)
+        feature_ = np.divide(sampled_feature - mean, std, **scale_conversion_kws)
+
+    elif scale_conversion == "minmax":
+        min_val = np.min(sampled_feature)
+        max_val = np.max(sampled_feature)
+        feature_ = np.divide(sampled_feature - min_val, max_val - min_val, **scale_conversion_kws)
+
+    elif scale_conversion == "robust":
+        # Extract optional keyword arguments for RobustScaler
+        # Default to True (center by median)
+        with_centering = scale_conversion_kws.get("with_centering", True)  
+        # Default to IQR
+        quantile_range = scale_conversion_kws.get("quantile_range", (25.0, 75.0))  
+        
+        # Apply RobustScaler with optional kwargs
+        scaler = RobustScaler(with_centering=with_centering, quantile_range=quantile_range)
+        feature_ = scaler.fit_transform(sampled_feature.values.reshape(-1, 1)).flatten()
+
+    elif scale_conversion == "maxabs":
+        max_abs = np.max(np.abs(sampled_feature))
+        # This directly divides by max abs value
+        feature_ = sampled_feature / max_abs  
 
     elif scale_conversion == "exp":
-        feature_ = np.exp(sampled_feature)
-
-    elif scale_conversion == "logit":
-        feature_ = np.log(sampled_feature / (1 - sampled_feature))
+        feature_ = np.exp(sampled_feature, **scale_conversion_kws)
 
     elif scale_conversion == "arcsinh":
-        feature_ = np.arcsinh(sampled_feature)
+        feature_ = np.arcsinh(sampled_feature, **scale_conversion_kws)
 
     elif scale_conversion == "square":
-        feature_ = np.square(sampled_feature)
+        feature_ = np.square(sampled_feature, **scale_conversion_kws)
 
     elif scale_conversion == "boxcox":
-        feature_ = sampled_feature
-        if np.any(feature_ <= 0):
-            raise ValueError(
-                "Box-Cox transformation requires strictly " "positive values."
-            )
-        feature_, _ = stats.boxcox(feature_)
+        if np.any(sampled_feature <= 0):
+            raise ValueError("Box-Cox transformation requires strictly positive values.")
+        
+        # Apply the Box-Cox transformation
+        boxcox_result = stats.boxcox(sampled_feature, **scale_conversion_kws)
+        
+        # Check if 'alpha' is specified and 'lmbda' is None
+        if 'alpha' in scale_conversion_kws and scale_conversion_kws['alpha'] is not None and 'lmbda' not in scale_conversion_kws:
+            # Unpack both the transformed data and the confidence interval
+            feature_array, (min_lambda, max_lambda) = boxcox_result
+            # Optionally, print or store the confidence interval
+            print(f"Confidence interval for lmbda: ({min_lambda}, {max_lambda})")
+        else:
+            # Only the transformed data is returned
+            feature_array = boxcox_result
+        
+        # Convert to pandas Series
+        feature_ = pd.Series(feature_array)
 
     elif scale_conversion == "power":
-        pt = PowerTransformer(method="yeo-johnson")
-        feature_ = pt.fit_transform(sampled_feature.values.reshape(-1, 1)).flatten()
+        pt = PowerTransformer(**scale_conversion_kws)
+        feature_array = pt.fit_transform(sampled_feature.values.reshape(-1, 1)).flatten()
+        feature_ = pd.Series(feature_array)  # Do not specify index
 
     else:
-        feature_ = sampled_feature
+        feature_ = sampled_feature.copy()
         if scale_conversion is None:
             scale_conversion = "None"
 
-    # Replace values in feature_ > than the cutoff, ONLY if apply_cutoff == True
-    if apply_cutoff == True:
-        if lower_cutoff != None:
+    # Apply cutoffs if specified
+    if apply_cutoff:
+        if lower_cutoff is not None:
             feature_ = np.where(feature_ < lower_cutoff, lower_cutoff, feature_)
-        if upper_cutoff != None:
+        if upper_cutoff is not None:
             feature_ = np.where(feature_ > upper_cutoff, upper_cutoff, feature_)
 
-    # Print statistical data
-    print("Feature:    ", feature_name, "\n")
-    print("min    ", np.min(feature_))
-    print("max    ", np.max(feature_))
-    print("mean   ", np.mean(feature_))
-    print("median ", np.median(feature_))
-    print("std    ", np.std(feature_), "\n")
-    print("Q1     ", np.quantile(feature_, 0.25))
-    print("Q2     ", np.quantile(feature_, 0.50))
-    print("IQR    ", np.quantile(feature_, 0.75) - np.quantile(feature_, 0.25))
-    print("Q3     ", np.quantile(feature_, 0.75))
-    print("Q4     ", np.quantile(feature_, 1), "\n")
-    print(
-        "Outlier-lower_bound     ",
-        np.quantile(feature_, 0.25)
-        - 1.5 * np.quantile(feature_, 0.75)
-        - np.quantile(feature_, 0.25),
-    )
-    print(
-        "Outlier-upper_bound     ",
-        np.quantile(feature_, 0.75)
-        + 1.5 * np.quantile(feature_, 0.75)
-        - np.quantile(feature_, 0.25),
-        "\n",
-    )
+    # Ensure feature_ is a pandas Series
+    if not isinstance(feature_, pd.Series):
+        feature_ = pd.Series(feature_)
+  
+    print("DATA DOCTOR SUMMARY REPORT".center(52))
 
-    # add column to dataframe along with data
+    # ASCII table for statistical data
+    print(f"+{'-'*30}+{'-'*20}+")
+    print(f"| {'Feature':<28} | {feature_name:<18} |")
+    print(f"+{'-'*30}+{'-'*20}+")
 
-    if (apply_as_new_col_to_df == True and data_fraction == 1) == True:
-        df[new_col_name] = feature_
+    # Header for the statistical section
+    print(f"| {'Statistic':<28} | {'Value':<18} |")
+    print(f"+{'-'*30}+{'-'*20}+")
+    print(f"| {'Min':<28} | {np.min(feature_):<18.4f} |")
+    print(f"| {'Max':<28} | {np.max(feature_):<18.4f} |")
+    print(f"| {'Mean':<28} | {np.mean(feature_):<18.4f} |")
+    print(f"| {'Median':<28} | {np.median(feature_):<18.4f} |")
+    print(f"| {'Std Dev':<28} | {np.std(feature_):<18.4f} |")
+
+    # Header for the quartiles section
+    print(f"+{'-'*30}+{'-'*20}+")
+    print(f"| {'Quartile':<28} | {'Value':<18} |")
+    print(f"+{'-'*30}+{'-'*20}+")
+    print(f"| {'Q1 (25%)':<28} | {np.quantile(feature_, 0.25):<18.4f} |")
+    print(f"| {'Q2 (Median)':<28} | {np.quantile(feature_, 0.50):<18.4f} |")
+    print(f"| {'IQR':<28} | {(np.quantile(feature_, 0.75) - np.quantile(feature_, 0.25)):<18.4f} |")
+    print(f"| {'Q3 (75%)':<28} | {np.quantile(feature_, 0.75):<18.4f} |")
+    print(f"| {'Q4 (Max)':<28} | {np.quantile(feature_, 1):<18.4f} |")
+
+    # Calculate outlier bounds based on the original logic
+    outlier_lower_bound = np.quantile(feature_, 0.25) - 1.5 * np.quantile(feature_, 0.75) - np.quantile(feature_, 0.25)
+    outlier_upper_bound = np.quantile(feature_, 0.75) + 1.5 * np.quantile(feature_, 0.75) - np.quantile(feature_, 0.25)
+
+    # Header for the outlier section
+    print(f"+{'-'*30}+{'-'*20}+")
+    print(f"| {'Outlier Bound':<28} | {'Value':<18} |")
+    print(f"+{'-'*30}+{'-'*20}+")
+    print(f"| {'Lower Bound':<28} | {outlier_lower_bound:<18.4f} |")
+    print(f"| {'Upper Bound':<28} | {outlier_upper_bound:<18.4f} |")
+    print(f"+{'-'*30}+{'-'*20}+")
+
+
+    # Add column to dataframe along with data
+    if apply_as_new_col_to_df and data_fraction == 1:
+        # Ensure feature_ has the same length as df
+        if len(feature_) != len(df):
+            raise ValueError("Length of transformed feature does not match length of DataFrame.")
+        
+        # Assign values directly
+        df[new_col_name] = feature_.values
+        print()
         print("New Column Name:     ", new_col_name)
+        print()
         print("New column was successfully added to dataframe.")
 
-    elif (apply_as_new_col_to_df == True and data_fraction != 1) == True:
+    elif apply_as_new_col_to_df and data_fraction != 1:
         print("New Column Name:     ", new_col_name)
         print(
             "NOTE: Column was not added to dataframe as sample_frac is set to "
@@ -3481,6 +3545,14 @@ def data_doctor(
         axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)
         axes[0, 0].tick_params(axis="both", labelsize=tick_fontsize)
 
+
+        # Apply custom xlim for KDE plot if specified
+        if xlim:
+            axes[0, 0].set_xlim(xlim)
+        # Apply custom kde_ylim for KDE plot if specified
+        if kde_ylim:
+            axes[0, 0].set_ylim(kde_ylim)
+
         # Histplot
         sns.histplot(x=feature_, ax=axes[0, 1], **(hist_kws or {}))
         axes[0, 1].set_title(
@@ -3490,6 +3562,13 @@ def data_doctor(
         axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
         axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)
         axes[0, 1].tick_params(axis="both", labelsize=tick_fontsize)
+
+        # Apply custom xlim for histplot if specified
+        if xlim:
+            axes[0, 1].set_xlim(xlim)
+        # Apply custom hist_ylim for Histogram plot if specified
+        if hist_ylim:
+            axes[0, 1].set_ylim(hist_ylim)
 
         # Plot based on box_violin input
         if box_violin == "boxplot":
@@ -3507,6 +3586,14 @@ def data_doctor(
 
         axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
         axes[0, 2].set_ylabel("", fontsize=label_fontsize)
+
+        # Apply custom xlim for boxplot/violinplot if specified
+        if xlim:
+            axes[0, 2].set_xlim(xlim)
+        # Apply custom box_violin_ylim for Boxplot/Violin plot if specified
+        if box_violin_ylim:
+            axes[0, 2].set_ylim(box_violin_ylim)
+
 
         # Create a separate axis for the text (2nd row, span across all columns)
         axes[1, 0].text(
