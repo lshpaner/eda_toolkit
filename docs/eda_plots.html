@@ -86,7 +86,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#feature-scaling-and-outliers">Feature Scaling and Outliers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#data_doctor"><code class="docutils literal notranslate"><span class="pre">data_doctor()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#box-cox-transformation-example">Box-Cox Transformation Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#box-cox-transformation-example-1">Box-Cox Transformation Example 1</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#explanation">Explanation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#available-scale-conversions">Available Scale Conversions</a></li>
 </ul>
@@ -572,35 +572,56 @@ standard deviation lines. You can display one, none, or all of these simultaneou
 <h1>Feature Scaling and Outliers<a class="headerlink" href="#feature-scaling-and-outliers" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="data_doctor">
-<span class="sig-name descname"><span class="pre">data_doctor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_conversion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_as_new_col_to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kde_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_doctor" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">data_doctor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_conversion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_conversion_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_as_new_col_to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kde_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_violin_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_violin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'boxplot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_doctor" title="Link to this definition"></a></dt>
 <dd><p>Analyze and transform a specific feature in a DataFrame, with options for scaling, applying cutoffs, and visualizing the results. The function also allows for creating a new column with the transformed data if specified. Plots can be saved in PNG or SVG format if required.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing the feature to analyze.</p></li>
 <li><p><strong>feature_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the feature (column) to analyze.</p></li>
-<li><p><strong>data_fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Fraction of the data to analyze. Default is <code class="docutils literal notranslate"><span class="pre">1</span></code> (full dataset). Useful for large datasets where a sample can represent the population.</p></li>
-<li><p><strong>scale_conversion</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Type of conversion to apply to the feature. Options include:
-- <code class="docutils literal notranslate"><span class="pre">'abs'</span></code>: Absolute values
-- <code class="docutils literal notranslate"><span class="pre">'log'</span></code>: Natural logarithm values
-- <code class="docutils literal notranslate"><span class="pre">'sqrt'</span></code>: Square root values
-- <code class="docutils literal notranslate"><span class="pre">'cbrt'</span></code>: Cube root values
-- <code class="docutils literal notranslate"><span class="pre">'invrs'</span></code>: Inverted values
-- <code class="docutils literal notranslate"><span class="pre">'stdrz'</span></code>: Standardized values (z-score)
-- <code class="docutils literal notranslate"><span class="pre">'normlz'</span></code>: Normalized values
-- <code class="docutils literal notranslate"><span class="pre">'boxcox'</span></code>: Box-Cox transformation (only for positive values)
-Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (no conversion).</p></li>
+<li><p><strong>data_fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Fraction of the data to analyze. Default is <code class="docutils literal notranslate"><span class="pre">1</span></code> (full dataset). Useful for large datasets where a sample can represent the population. If <code class="docutils literal notranslate"><span class="pre">apply_as_new_col_to_df=True</span></code>, the full dataset is always used.</p></li>
+<li><p><strong>scale_conversion</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Type of conversion to apply to the feature. Options include:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'abs'</span></code>: Absolute values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'log'</span></code>: Natural logarithm values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'sqrt'</span></code>: Square root values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'cbrt'</span></code>: Cube root values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'stdrz'</span></code>: Standardized values (z-score)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'minmax'</span></code>: Min-Max scaling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'boxcox'</span></code>: Box-Cox transformation (positive values only; supports <code class="docutils literal notranslate"><span class="pre">lmbda</span></code> or <code class="docutils literal notranslate"><span class="pre">alpha</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'robust'</span></code>: Robust scaling (median and IQR)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'maxabs'</span></code>: Max-abs scaling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'reciprocal'</span></code>: Reciprocal transformation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'exp'</span></code>: Exponential transformation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'logit'</span></code>: Logit transformation (values between 0 and 1)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'arcsinh'</span></code>: Inverse hyperbolic sine</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'square'</span></code>: Squaring the values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'power'</span></code>: Power transformation (Yeo-Johnson)</p></li>
+</ul>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (no conversion).</p>
+</p></li>
+<li><p><strong>scale_conversion_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – <p>Additional keyword arguments to pass to the scaling functions, such as:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'alpha'</span></code> for Box-Cox transformation (returns lambda confidence interval)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'lmbda'</span></code> for a specific Box-Cox lambda value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'quantile_range'</span></code> for robust scaling.</p></li>
+</ul>
+</p></li>
 <li><p><strong>apply_cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to apply upper and/or lower cutoffs to the feature. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>lower_cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Lower bound to apply if <code class="docutils literal notranslate"><span class="pre">apply_cutoff</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>upper_cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Upper bound to apply if <code class="docutils literal notranslate"><span class="pre">apply_cutoff</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>show_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to display KDE plot, histogram, and boxplot of the feature. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>show_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to display plots of the transformed feature: KDE plot, histogram, and boxplot/violinplot. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>save_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to save the plots as PNG and/or SVG images. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the user must specify at least one of <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> or <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code>, otherwise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised.</p></li>
 <li><p><strong>image_path_png</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save the plot as a PNG file.</p></li>
 <li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save the plot as an SVG file.</p></li>
-<li><p><strong>apply_as_new_col_to_df</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to create a new column in the DataFrame with the transformed values. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the new column will be named as <code class="docutils literal notranslate"><span class="pre">&lt;feature_name&gt;_&lt;scale_conversion&gt;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>apply_as_new_col_to_df</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to create a new column in the DataFrame with the transformed values. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the new column will be named as <code class="docutils literal notranslate"><span class="pre">&lt;feature_name&gt;_&lt;scale_conversion&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;feature_name&gt;_w_cutoff</span></code> if only cutoffs are applied. For Box-Cox, the lambda or confidence interval will be displayed. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>kde_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments for the KDE plot (seaborn.kdeplot).</p></li>
 <li><p><strong>hist_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments for the histogram plot (seaborn.histplot).</p></li>
-<li><p><strong>box_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments for the boxplot (seaborn.boxplot).</p></li>
+<li><p><strong>box_violin_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments for either boxplot or violinplot.</p></li>
+<li><p><strong>box_violin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Plot type for the third plot, can be <code class="docutils literal notranslate"><span class="pre">'boxplot'</span></code> or <code class="docutils literal notranslate"><span class="pre">'violinplot'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'boxplot'</span></code>.</p></li>
+<li><p><strong>label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for the axis labels and plot titles. Default is <code class="docutils literal notranslate"><span class="pre">12</span></code>.</p></li>
+<li><p><strong>tick_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for the tick labels on both axes. Default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Seed for reproducibility when sampling the data.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -608,23 +629,26 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">None</s
 <li><p>If an invalid <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> is provided.</p></li>
 <li><p>If Box-Cox transformation is applied to non-positive values.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">save_plot=True</span></code> but neither <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> nor <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code> is provided.</p></li>
+<li><p>If an invalid option is provided for <code class="docutils literal notranslate"><span class="pre">box_violin</span></code>.</p></li>
 </ul>
 </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>
-Displays the feature’s descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame.</p>
+Displays the feature’s descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame. For Box-Cox, either the lambda or its confidence interval is displayed.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<section id="box-cox-transformation-example">
-<h2>Box-Cox Transformation Example<a class="headerlink" href="#box-cox-transformation-example" title="Link to this heading"></a></h2>
+<section id="box-cox-transformation-example-1">
+<h2>Box-Cox Transformation Example 1<a class="headerlink" href="#box-cox-transformation-example-1" title="Link to this heading"></a></h2>
 <p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id19" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
 function to apply a <strong>Box-Cox transformation</strong> to the <code class="docutils literal notranslate"><span class="pre">age</span></code> column in a DataFrame.
 The <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function provides a flexible way to preprocess data by applying
-various scaling techniques. Here, we use the Box-Cox transformation as an example,
-but you can choose any scale conversion from the list of available options (such as <code class="docutils literal notranslate"><span class="pre">'minmax'</span></code>, <code class="docutils literal notranslate"><span class="pre">'standard'</span></code>, <code class="docutils literal notranslate"><span class="pre">'robust'</span></code>, etc.).</p>
+various scaling techniques. In this case, we apply the Box-Cox transformation <strong>without any tuning</strong>
+of the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> or <code class="docutils literal notranslate"><span class="pre">lambda</span></code> parameters, allowing the function to handle the transformation in a
+barebones approach. You can also choose other scaling conversions from the list of available
+options (such as <code class="docutils literal notranslate"><span class="pre">'minmax'</span></code>, <code class="docutils literal notranslate"><span class="pre">'standard'</span></code>, <code class="docutils literal notranslate"><span class="pre">'robust'</span></code>, etc.), depending on your needs.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -726,7 +750,7 @@ but you can choose any scale conversion from the list of available options (such
       <td class="tg-8jgo">Never-married</td>
       <td class="tg-8jgo">Adm-clerical</td>
       <td class="tg-8jgo">Not-in-family</td>
-      <td class="tg-8jgo tg-lightpink">4.019591</td>
+      <td class="tg-8jgo tg-lightpink">5.180807</td>
     </tr>
     <tr>
       <td class="tg-zv4m">561810758</td>
@@ -737,7 +761,7 @@ but you can choose any scale conversion from the list of available options (such
       <td class="tg-8jgo">Married-civ-spouse</td>
       <td class="tg-8jgo">Exec-managerial</td>
       <td class="tg-8jgo">Husband</td>
-      <td class="tg-8jgo tg-lightpink">6.840919</td>
+      <td class="tg-8jgo tg-lightpink">5.912323</td>
     </tr>
     <tr>
       <td class="tg-zv4m">598098459</td>
@@ -748,7 +772,7 @@ but you can choose any scale conversion from the list of available options (such
       <td class="tg-8jgo">Divorced</td>
       <td class="tg-8jgo">Handlers-cleaners</td>
       <td class="tg-8jgo">Not-in-family</td>
-      <td class="tg-8jgo tg-lightpink">3.760645</td>
+      <td class="tg-8jgo tg-lightpink">5.227960</td>
     </tr>
     <tr>
       <td class="tg-zv4m">776705221</td>
@@ -759,7 +783,7 @@ but you can choose any scale conversion from the list of available options (such
       <td class="tg-8jgo">Married-civ-spouse</td>
       <td class="tg-8jgo">Handlers-cleaners</td>
       <td class="tg-8jgo">Husband</td>
-      <td class="tg-8jgo tg-lightpink">6.584950</td>
+      <td class="tg-8jgo tg-lightpink">6.389562</td>
     </tr>
     <tr>
       <td class="tg-zv4m">479262902</td>
@@ -770,14 +794,14 @@ but you can choose any scale conversion from the list of available options (such
       <td class="tg-8jgo">Married-civ-spouse</td>
       <td class="tg-8jgo">Prof-specialty</td>
       <td class="tg-8jgo">Wife</td>
-      <td class="tg-8jgo tg-lightpink">5.450405</td>
+      <td class="tg-8jgo tg-lightpink">3.850675</td>
     </tr>
   </tbody>
 </table>
 </div><p></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Notice that we also apply the <a class="reference internal" href="data_management.html#adding-unique-identifiers"><span class="std std-ref">unique identifiers</span></a> function here to generate randomized census IDs for the rows of the data.</p>
+<p>Notice that the <a class="reference internal" href="data_management.html#adding-unique-identifiers"><span class="std std-ref">unique identifiers</span></a> function was also applied on the dataframe to generate randomized census IDs for the rows of the data.</p>
 </div>
 <section id="explanation">
 <h3>Explanation<a class="headerlink" href="#explanation" title="Link to this heading"></a></h3>

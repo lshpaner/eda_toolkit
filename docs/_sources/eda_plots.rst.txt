@@ -563,7 +563,7 @@ statistical overlays to provide deeper insights into the data.
 Feature Scaling and Outliers
 =============================
 
-.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_kws=None)
+.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None)
 
     Analyze and transform a specific feature in a DataFrame, with options for scaling, applying cutoffs, and visualizing the results. The function also allows for creating a new column with the transformed data if specified. Plots can be saved in PNG or SVG format if required.
 
@@ -573,20 +573,37 @@ Feature Scaling and Outliers
     :param feature_name: The name of the feature (column) to analyze.
     :type feature_name: str
 
-    :param data_fraction: Fraction of the data to analyze. Default is ``1`` (full dataset). Useful for large datasets where a sample can represent the population.
+    :param data_fraction: Fraction of the data to analyze. Default is ``1`` (full dataset). Useful for large datasets where a sample can represent the population. If ``apply_as_new_col_to_df=True``, the full dataset is always used.
     :type data_fraction: float, optional
 
     :param scale_conversion: Type of conversion to apply to the feature. Options include:
+    
         - ``'abs'``: Absolute values
         - ``'log'``: Natural logarithm values
         - ``'sqrt'``: Square root values
         - ``'cbrt'``: Cube root values
-        - ``'invrs'``: Inverted values
         - ``'stdrz'``: Standardized values (z-score)
-        - ``'normlz'``: Normalized values
-        - ``'boxcox'``: Box-Cox transformation (only for positive values)
+        - ``'minmax'``: Min-Max scaling
+        - ``'boxcox'``: Box-Cox transformation (positive values only; supports ``lmbda`` or ``alpha``)
+        - ``'robust'``: Robust scaling (median and IQR)
+        - ``'maxabs'``: Max-abs scaling
+        - ``'reciprocal'``: Reciprocal transformation
+        - ``'exp'``: Exponential transformation
+        - ``'logit'``: Logit transformation (values between 0 and 1)
+        - ``'arcsinh'``: Inverse hyperbolic sine
+        - ``'square'``: Squaring the values
+        - ``'power'``: Power transformation (Yeo-Johnson)
         Defaults to ``None`` (no conversion).
+    
     :type scale_conversion: str, optional
+
+    :param scale_conversion_kws: Additional keyword arguments to pass to the scaling functions, such as:
+
+        - ``'alpha'`` for Box-Cox transformation (returns lambda confidence interval)
+        - ``'lmbda'`` for a specific Box-Cox lambda value
+        - ``'quantile_range'`` for robust scaling.
+    
+    :type scale_conversion_kws: dict, optional
 
     :param apply_cutoff: Whether to apply upper and/or lower cutoffs to the feature. Default is ``False``.
     :type apply_cutoff: bool, optional
@@ -597,7 +614,7 @@ Feature Scaling and Outliers
     :param upper_cutoff: Upper bound to apply if ``apply_cutoff`` is ``True``.
     :type upper_cutoff: float, optional
 
-    :param show_plot: Whether to display KDE plot, histogram, and boxplot of the feature. Default is ``True``.
+    :param show_plot: Whether to display plots of the transformed feature: KDE plot, histogram, and boxplot/violinplot. Default is ``True``.
     :type show_plot: bool, optional
 
     :param save_plot: Whether to save the plots as PNG and/or SVG images. If ``True``, the user must specify at least one of ``image_path_png`` or ``image_path_svg``, otherwise a ``ValueError`` is raised.
@@ -609,7 +626,7 @@ Feature Scaling and Outliers
     :param image_path_svg: Directory path to save the plot as an SVG file.
     :type image_path_svg: str, optional
 
-    :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If ``True``, the new column will be named as ``<feature_name>_<scale_conversion>``. Default is ``False``.
+    :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If ``True``, the new column will be named as ``<feature_name>_<scale_conversion>`` or ``<feature_name>_w_cutoff`` if only cutoffs are applied. For Box-Cox, the lambda or confidence interval will be displayed. Default is ``False``.
     :type apply_as_new_col_to_df: bool, optional
 
     :param kde_kws: Additional keyword arguments for the KDE plot (seaborn.kdeplot).
@@ -618,26 +635,41 @@ Feature Scaling and Outliers
     :param hist_kws: Additional keyword arguments for the histogram plot (seaborn.histplot).
     :type hist_kws: dict, optional
 
-    :param box_kws: Additional keyword arguments for the boxplot (seaborn.boxplot).
-    :type box_kws: dict, optional
+    :param box_violin_kws: Additional keyword arguments for either boxplot or violinplot.
+    :type box_violin_kws: dict, optional
+
+    :param box_violin: Plot type for the third plot, can be ``'boxplot'`` or ``'violinplot'``. Default is ``'boxplot'``.
+    :type box_violin: str, optional
+
+    :param label_fontsize: Font size for the axis labels and plot titles. Default is ``12``.
+    :type label_fontsize: int, optional
+
+    :param tick_fontsize: Font size for the tick labels on both axes. Default is ``10``.
+    :type tick_fontsize: int, optional
+
+    :param random_state: Seed for reproducibility when sampling the data.
+    :type random_state: int, optional
 
     :raises ValueError: 
         - If an invalid ``scale_conversion`` is provided.
         - If Box-Cox transformation is applied to non-positive values.
         - If ``save_plot=True`` but neither ``image_path_png`` nor ``image_path_svg`` is provided.
+        - If an invalid option is provided for ``box_violin``.
 
     :returns: ``None`` 
-        Displays the feature's descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame.
+        Displays the feature's descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame. For Box-Cox, either the lambda or its confidence interval is displayed.
 
-
-Box-Cox Transformation Example
--------------------------------
+Box-Cox Transformation Example 1
+----------------------------------
 
 In this example from the US Census dataset [1]_, we demonstrate the usage of the ``data_doctor`` 
 function to apply a **Box-Cox transformation** to the ``age`` column in a DataFrame. 
 The ``data_doctor`` function provides a flexible way to preprocess data by applying 
-various scaling techniques. Here, we use the Box-Cox transformation as an example, 
-but you can choose any scale conversion from the list of available options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.).
+various scaling techniques. In this case, we apply the Box-Cox transformation **without any tuning** 
+of the ``alpha`` or ``lambda`` parameters, allowing the function to handle the transformation in a 
+barebones approach. You can also choose other scaling conversions from the list of available 
+options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on your needs.
+
 
 .. code-block:: python
 
@@ -760,7 +792,7 @@ but you can choose any scale conversion from the list of available options (such
           <td class="tg-8jgo">Never-married</td>
           <td class="tg-8jgo">Adm-clerical</td>
           <td class="tg-8jgo">Not-in-family</td>
-          <td class="tg-8jgo tg-lightpink">4.019591</td>
+          <td class="tg-8jgo tg-lightpink">5.180807</td>
         </tr>
         <tr>
           <td class="tg-zv4m">561810758</td>
@@ -771,7 +803,7 @@ but you can choose any scale conversion from the list of available options (such
           <td class="tg-8jgo">Married-civ-spouse</td>
           <td class="tg-8jgo">Exec-managerial</td>
           <td class="tg-8jgo">Husband</td>
-          <td class="tg-8jgo tg-lightpink">6.840919</td>
+          <td class="tg-8jgo tg-lightpink">5.912323</td>
         </tr>
         <tr>
           <td class="tg-zv4m">598098459</td>
@@ -782,7 +814,7 @@ but you can choose any scale conversion from the list of available options (such
           <td class="tg-8jgo">Divorced</td>
           <td class="tg-8jgo">Handlers-cleaners</td>
           <td class="tg-8jgo">Not-in-family</td>
-          <td class="tg-8jgo tg-lightpink">3.760645</td>
+          <td class="tg-8jgo tg-lightpink">5.227960</td>
         </tr>
         <tr>
           <td class="tg-zv4m">776705221</td>
@@ -793,7 +825,7 @@ but you can choose any scale conversion from the list of available options (such
           <td class="tg-8jgo">Married-civ-spouse</td>
           <td class="tg-8jgo">Handlers-cleaners</td>
           <td class="tg-8jgo">Husband</td>
-          <td class="tg-8jgo tg-lightpink">6.584950</td>
+          <td class="tg-8jgo tg-lightpink">6.389562</td>
         </tr>
         <tr>
           <td class="tg-zv4m">479262902</td>
@@ -804,7 +836,7 @@ but you can choose any scale conversion from the list of available options (such
           <td class="tg-8jgo">Married-civ-spouse</td>
           <td class="tg-8jgo">Prof-specialty</td>
           <td class="tg-8jgo">Wife</td>
-          <td class="tg-8jgo tg-lightpink">5.450405</td>
+          <td class="tg-8jgo tg-lightpink">3.850675</td>
         </tr>
       </tbody>
     </table>
@@ -817,7 +849,7 @@ but you can choose any scale conversion from the list of available options (such
 
 .. note::
 
-    Notice that we also apply the :ref:`unique identifiers <Adding_Unique_Identifiers>` function here to generate randomized census IDs for the rows of the data.
+    Notice that the :ref:`unique identifiers <Adding_Unique_Identifiers>` function was also applied on the dataframe to generate randomized census IDs for the rows of the data.
 
 Explanation
 ^^^^^^^^^^^^^
