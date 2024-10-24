@@ -20,13 +20,13 @@
    <div style="height: 100px;"></div>
 
 Creating Effective Visualizations
-=================================
+==================================
 
 This section explores key heuristics and methodologies for creating effective visualizations 
 using various plotting techniques available in the EDA Toolkit. 
 
 Heuristics for Visualizations
------------------------------
+------------------------------
 
 When creating visualizations, there are several key heuristics to keep in mind:
 
@@ -45,7 +45,7 @@ The EDA Toolkit supports the following methodologies for creating effective visu
 - **KDE and Histograms Plots**: Useful for showing the distribution of a single variable. 
   When combined, these can provide a clearer picture of data density and distribution.
 
-- **Outliers and Feature Scaling**: Identifying outliers is critical for understanding the data's distribution and potential anomalies. 
+- **Feature Scaling and Outliers**: Identifying outliers is critical for understanding the data's distribution and potential anomalies. 
   The EDA Toolkit offers various methods for outlier detection, including enhanced visualizations using box plots and scatter plots.
 
 - **Stacked Crosstab Plots**: These are used to display multiple data series on the same chart, comparing 
@@ -560,7 +560,7 @@ statistical overlays to provide deeper insights into the data.
    <div style="height: 50px;"></div>
 
 
-Outliers and Feature Scaling
+Feature Scaling and Outliers
 =============================
 
 .. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_kws=None)
@@ -655,25 +655,35 @@ but you can choose any scale conversion from the list of available options (such
 
 .. code-block:: python
 
-    Feature:     age 
+                DATA DOCTOR SUMMARY REPORT             
+    +------------------------------+--------------------+
+    | Feature                      | age                |
+    +------------------------------+--------------------+
+    | Statistic                    | Value              |
+    +------------------------------+--------------------+
+    | Min                          | 3.6664             |
+    | Max                          | 6.8409             |
+    | Mean                         | 5.0163             |
+    | Median                       | 5.0333             |
+    | Std Dev                      | 0.6761             |
+    +------------------------------+--------------------+
+    | Quartile                     | Value              |
+    +------------------------------+--------------------+
+    | Q1 (25%)                     | 4.5219             |
+    | Q2 (Median)                  | 5.0333             |
+    | IQR                          | 1.0119             |
+    | Q3 (75%)                     | 5.5338             |
+    | Q4 (Max)                     | 6.8409             |
+    +------------------------------+--------------------+
+    | Outlier Bound                | Value              |
+    +------------------------------+--------------------+
+    | Lower Bound                  | -8.3007            |
+    | Upper Bound                  | 9.3126             |
+    +------------------------------+--------------------+
 
-    min     3.6663875469340628
-    max     6.8409185306695575
-    mean    5.016307889147798
-    median  5.033257139954852
-    std     0.6761449960500445 
+    New Column Name: age_boxcox
 
-    Q1      4.521908091303337
-    Q2      5.033257139954852
-    IQR     1.0119099754998357
-    Q3      5.533818066803173
-    Q4      6.8409185306695575 
-
-    Outlier-lower_bound      -8.30072710020476
-    Outlier-upper_bound      9.312637075704597 
-
-    New Column Name:      age_boxcox
-    New column was successfully added to dataframe.
+    Box Cox lambda: 0.1748
 
 .. raw:: html
 

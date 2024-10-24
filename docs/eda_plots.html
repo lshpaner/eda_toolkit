@@ -84,7 +84,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#outliers-and-feature-scaling">Outliers and Feature Scaling</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="#feature-scaling-and-outliers">Feature Scaling and Outliers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#data_doctor"><code class="docutils literal notranslate"><span class="pre">data_doctor()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#box-cox-transformation-example">Box-Cox Transformation Example</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#explanation">Explanation</a></li>
@@ -196,7 +196,7 @@ to facilitate comparisons.</p></li>
 <ul class="simple">
 <li><p><strong>KDE and Histograms Plots</strong>: Useful for showing the distribution of a single variable.
 When combined, these can provide a clearer picture of data density and distribution.</p></li>
-<li><p><strong>Outliers and Feature Scaling</strong>: Identifying outliers is critical for understanding the data’s distribution and potential anomalies.
+<li><p><strong>Feature Scaling and Outliers</strong>: Identifying outliers is critical for understanding the data’s distribution and potential anomalies.
 The EDA Toolkit offers various methods for outlier detection, including enhanced visualizations using box plots and scatter plots.</p></li>
 <li><p><strong>Stacked Crosstab Plots</strong>: These are used to display multiple data series on the same chart, comparing
 cumulative quantities across categories. In addition to the visual stacked bar plots, the corresponding
@@ -568,8 +568,8 @@ standard deviation lines. You can display one, none, or all of these simultaneou
 </div><div style="height: 50px;"></div></section>
 </section>
 </section>
-<section id="outliers-and-feature-scaling">
-<h1>Outliers and Feature Scaling<a class="headerlink" href="#outliers-and-feature-scaling" title="Link to this heading"></a></h1>
+<section id="feature-scaling-and-outliers">
+<h1>Feature Scaling and Outliers<a class="headerlink" href="#feature-scaling-and-outliers" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="data_doctor">
 <span class="sig-name descname"><span class="pre">data_doctor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_conversion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path_svg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_as_new_col_to_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kde_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_doctor" title="Link to this definition"></a></dt>
@@ -638,25 +638,35 @@ but you can choose any scale conversion from the list of available options (such
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Feature</span><span class="p">:</span>     <span class="n">age</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>            <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">age</span>                <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Statistic</span>                    <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Min</span>                          <span class="o">|</span> <span class="mf">3.6664</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Max</span>                          <span class="o">|</span> <span class="mf">6.8409</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Mean</span>                         <span class="o">|</span> <span class="mf">5.0163</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Median</span>                       <span class="o">|</span> <span class="mf">5.0333</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Std</span> <span class="n">Dev</span>                      <span class="o">|</span> <span class="mf">0.6761</span>             <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Quartile</span>                     <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Q1</span> <span class="p">(</span><span class="mi">25</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">4.5219</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Q2</span> <span class="p">(</span><span class="n">Median</span><span class="p">)</span>                  <span class="o">|</span> <span class="mf">5.0333</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">IQR</span>                          <span class="o">|</span> <span class="mf">1.0119</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Q3</span> <span class="p">(</span><span class="mi">75</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">5.5338</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Q4</span> <span class="p">(</span><span class="n">Max</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">6.8409</span>             <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Outlier</span> <span class="n">Bound</span>                <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Lower</span> <span class="n">Bound</span>                  <span class="o">|</span> <span class="o">-</span><span class="mf">8.3007</span>            <span class="o">|</span>
+<span class="o">|</span> <span class="n">Upper</span> <span class="n">Bound</span>                  <span class="o">|</span> <span class="mf">9.3126</span>             <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
 
-<span class="nb">min</span>     <span class="mf">3.6663875469340628</span>
-<span class="nb">max</span>     <span class="mf">6.8409185306695575</span>
-<span class="n">mean</span>    <span class="mf">5.016307889147798</span>
-<span class="n">median</span>  <span class="mf">5.033257139954852</span>
-<span class="n">std</span>     <span class="mf">0.6761449960500445</span>
+<span class="n">New</span> <span class="n">Column</span> <span class="n">Name</span><span class="p">:</span> <span class="n">age_boxcox</span>
 
-<span class="n">Q1</span>      <span class="mf">4.521908091303337</span>
-<span class="n">Q2</span>      <span class="mf">5.033257139954852</span>
-<span class="n">IQR</span>     <span class="mf">1.0119099754998357</span>
-<span class="n">Q3</span>      <span class="mf">5.533818066803173</span>
-<span class="n">Q4</span>      <span class="mf">6.8409185306695575</span>
-
-<span class="n">Outlier</span><span class="o">-</span><span class="n">lower_bound</span>      <span class="o">-</span><span class="mf">8.30072710020476</span>
-<span class="n">Outlier</span><span class="o">-</span><span class="n">upper_bound</span>      <span class="mf">9.312637075704597</span>
-
-<span class="n">New</span> <span class="n">Column</span> <span class="n">Name</span><span class="p">:</span>      <span class="n">age_boxcox</span>
-<span class="n">New</span> <span class="n">column</span> <span class="n">was</span> <span class="n">successfully</span> <span class="n">added</span> <span class="n">to</span> <span class="n">dataframe</span><span class="o">.</span>
+<span class="n">Box</span> <span class="n">Cox</span> <span class="k">lambda</span><span class="p">:</span> <span class="mf">0.1748</span>
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/age_boxcox.svg"><img alt="Box-Cox Transformation W/ Data Doctor" class="align-center" src="_images/age_boxcox.svg" style="width: 900px;" />
