@@ -3182,23 +3182,24 @@ def data_doctor(
 
     data_fraction : float, optional (default=1)
         Fraction of the data to analyze. Useful for large datasets where a
-        sample can represent the population.
+        sample can represent the population. If `apply_as_new_col_to_df=True`,
+        the full dataset is used (data_fraction=1).
 
     scale_conversion : str, optional
         Type of conversion to apply to the feature. Options include:
             - 'abs': Absolute values
-            - 'log': Natural logarithm values
-            - 'sqrt': Square root values
-            - 'cbrt': Cube root values
+            - 'log': Natural logarithm
+            - 'sqrt': Square root
+            - 'cbrt': Cube root
             - 'invrs': Inverted values
-            - 'stdrz': Standardized values (z-score)
+            - 'stdrz': Standardized (z-score)
             - 'minmax': Min-Max scaling
-            - 'boxcox': Box-Cox transformation (only for positive values)
+            - 'boxcox': Box-Cox transformation (positive values only)
             - 'robust': Robust scaling (median and IQR)
             - 'maxabs': Max-abs scaling
             - 'reciprocal': Reciprocal transformation
             - 'exp': Exponential transformation
-            - 'logit': Logit transformation
+            - 'logit': Logit transformation (values between 0 and 1)
             - 'arcsinh': Inverse hyperbolic sine
             - 'square': Squaring the values
             - 'power': Power transformation (Yeo-Johnson).
@@ -3206,16 +3207,17 @@ def data_doctor(
 
     scale_conversion_kws : dict, optional
         Additional keyword arguments to pass to the scaling functions, such as
-        'alpha' for Box-Cox transformation.
+        'alpha' for Box-Cox transformation, or 'quantile_range' for robust
+        scaling.
 
     apply_cutoff : bool, optional (default=False)
         Whether to apply upper and/or lower cutoffs to the feature.
 
     lower_cutoff : float, optional
-        Lower bound to apply if `apply_cutoff` is True. Defaults to None.
+        Lower bound to apply if `apply_cutoff=True`. Defaults to None.
 
     upper_cutoff : float, optional
-        Upper bound to apply if `apply_cutoff` is True. Defaults to None.
+        Upper bound to apply if `apply_cutoff=True`. Defaults to None.
 
     show_plot : bool, optional (default=True)
         Whether to display plots of the transformed feature: KDE, histogram, and
@@ -3249,10 +3251,10 @@ def data_doctor(
 
     apply_as_new_col_to_df : bool, optional (default=False)
         Whether to create a new column in the DataFrame with the transformed
-        values. If True, the new column name will be generated based on the
+        values. If True, the new column name is generated based on the
         feature name and the transformation applied:
             - `<feature_name>_<scale_conversion>`: If a transformation is
-                                                   applied.
+              applied.
             - `<feature_name>_w_cutoff`: If only cutoffs are applied.
 
     kde_kws : dict, optional
@@ -3315,6 +3317,7 @@ def data_doctor(
 
     # Define valid scale conversions
     valid_conversions = [
+        "logit",
         "abs",
         "log",
         "sqrt",
@@ -3322,13 +3325,12 @@ def data_doctor(
         "reciprocal",
         "stdrz",
         "minmax",
-        "boxcox",
         "robust",
         "maxabs",
         "exp",
-        "logit",
         "arcsinh",
         "square",
+        "boxcox",
         "power",
         None,
     ]
@@ -3452,28 +3454,38 @@ def data_doctor(
                 "Box-Cox transformation requires strictly positive values."
             )
 
-        # Apply the Box-Cox transformation
-        boxcox_result = stats.boxcox(
-            sampled_feature,
-            **scale_conversion_kws,
-        )
+        # Initialize scale_conversion_kws if None
+        scale_conversion_kws = scale_conversion_kws or {}
 
-        # Check if 'alpha' is specified and 'lmbda' is None
-        if (
-            "alpha" in scale_conversion_kws
-            and scale_conversion_kws["alpha"] is not None
-            and "lmbda" not in scale_conversion_kws
-        ):
-            # Unpack both the transformed data and the confidence interval
-            feature_array, (min_lambda, max_lambda) = boxcox_result
-            # Optionally, print or store the confidence interval
-            print(f"Confidence interval for lmbda: ({min_lambda}, {max_lambda})")
-        else:
-            # Only the transformed data is returned
-            feature_array = boxcox_result
+        # Apply Box-Cox transformation with or without kwargs
+        try:
+            # Try applying Box-Cox transformation
+            result = stats.boxcox(sampled_feature, **scale_conversion_kws)
 
-        # Convert to pandas Series
-        feature_ = pd.Series(feature_array)
+            # Handle cases where 'alpha' is provided and Box-Cox returns a tuple
+            if isinstance(result, tuple):
+                feature_array = result[0]  # Transformed data
+                box_cox_lmbda = result[1]  # Lambda confidence interval
+            else:
+                # Only the transformed data is returned (no tuple)
+                feature_array = result
+
+        except ValueError as ve:
+            # Catch and re-raise any ValueError for debugging
+            raise ValueError(f"Error during Box-Cox transformation: {ve}")
+
+        # Ensure feature_array is a 1D array
+        feature_array = np.asarray(feature_array).flatten()
+
+        # Check if the length of feature_array matches the sampled feature
+        if len(feature_array) != len(sampled_feature):
+            raise ValueError(
+                f"Length of transformed data ({len(feature_array)}) does not match "
+                f"the length of the sampled feature ({len(sampled_feature)})"
+            )
+
+        # Convert the feature_array into a pandas Series with the correct index
+        feature_ = pd.Series(feature_array, index=sampled_feature.index)
 
     elif scale_conversion == "power":
         pt = PowerTransformer(**scale_conversion_kws)
@@ -3568,7 +3580,11 @@ def data_doctor(
         print()
         print("New Column Name:     ", new_col_name)
         print()
-        print("New column was successfully added to dataframe.")
+        # Optional: Print lambda if 'lmbda' was specified
+        if "lmbda" in scale_conversion_kws:
+            print(f"Box-Cox Lambda: {scale_conversion_kws['lmbda']}")
+        else:
+            print(f"Box Cox lambda: {box_cox_lmbda}")
 
     elif apply_as_new_col_to_df and data_fraction != 1:
         print("New Column Name:     ", new_col_name)
