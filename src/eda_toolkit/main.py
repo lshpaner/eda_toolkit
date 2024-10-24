@@ -106,24 +106,22 @@ def add_ids(
     else:
         print("DataFrame index is unique.")
 
-    random.seed(seed)
+    # Set the random seed for reproducibility
+    np.random.seed(seed)
 
-    # Ensure the first digit is non-zero
-    def generate_id():
-        first_digit = random.choice("123456789")
-        other_digits = "".join(random.choices("0123456789", k=num_digits - 1))
-        return first_digit + other_digits
+    # Number of rows in the dataframe
+    n_rows = len(df)
 
-    # Generate a set of unique IDs
-    ids = set()
-    while len(ids) < len(df):
-        new_ids = {generate_id() for _ in range(len(df) - len(ids))}
-        ids.update(new_ids)
+    # Generate the first digit (non-zero)
+    first_digits = np.random.choice(list("123456789"), size=n_rows)
 
-    # Convert the set of unique IDs to a list
-    ids = list(ids)
+    # Generate the remaining digits
+    other_digits = np.random.choice(list("0123456789"), size=(n_rows, num_digits - 1),)
 
-    # Create a new column in df for these IDs
+    # Concatenate first digit with other digits and join as strings
+    ids = np.array([fd + ''.join(od) for fd, od in zip(first_digits, other_digits)],)
+
+    # Assign the generated IDs to the dataframe
     df[id_colname] = ids
 
     if set_as_index:
