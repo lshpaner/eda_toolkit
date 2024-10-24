@@ -3191,7 +3191,7 @@ def data_doctor(
             - 'log': Natural logarithm
             - 'sqrt': Square root
             - 'cbrt': Cube root
-            - 'invrs': Inverted values
+            - 'reciprocal': Reciprocal transformation
             - 'stdrz': Standardized (z-score)
             - 'minmax': Min-Max scaling
             - 'boxcox': Box-Cox transformation (positive values only; supports
@@ -3199,7 +3199,6 @@ def data_doctor(
                         interval)
             - 'robust': Robust scaling (median and IQR)
             - 'maxabs': Max-abs scaling
-            - 'reciprocal': Reciprocal transformation
             - 'exp': Exponential transformation
             - 'logit': Logit transformation (values between 0 and 1)
             - 'arcsinh': Inverse hyperbolic sine
