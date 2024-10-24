@@ -526,7 +526,7 @@ statistical overlays to provide deeper insights into the data.
         label_fontsize=16,  # Font size for axis labels
         tick_fontsize=14,  # Font size for tick labels
         plot_mean=True,
-        plOutliers and ot_median=True,
+        plot_median=True,
         mean_color="blue",
         image_path_svg=image_path_svg,
         image_path_png=image_path_png,
