@@ -802,7 +802,6 @@ but you can choose any scale conversion from the list of available options (such
 
 
 
-
 \
 
 
