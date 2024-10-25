@@ -593,10 +593,10 @@ Feature Scaling and Outliers
         - ``'arcsinh'``: Inverse hyperbolic sine
         - ``'square'``: Squaring the values
         - ``'power'``: Power transformation (Yeo-Johnson)
-        Defaults to ``None`` (no conversion).
-    
-    :type scale_conversion: str, optional
 
+    Defaults to ``None`` (no conversion).
+
+    :type scale_conversion: str, optional
     :param scale_conversion_kws: Additional keyword arguments to pass to the scaling functions, such as:
 
         - ``'alpha'`` for Box-Cox transformation (returns lambda confidence interval)
@@ -658,6 +658,29 @@ Feature Scaling and Outliers
 
     :returns: ``None`` 
         Displays the feature's descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame. For Box-Cox, either the lambda or its confidence interval is displayed.
+
+Available Scale Conversions
+-----------------------------
+
+The ``scale_conversion`` parameter accepts several options for data scaling, providing flexibility in how you preprocess your data. Each option addresses specific transformation needs, such as normalizing data, stabilizing variance, or adjusting data ranges. Below is the exhaustive list of available scale conversions:
+
+- ``'abs'``: Takes the absolute values of the data, removing any negative signs.
+- ``'log'``: Applies the natural logarithm to the data, useful for compressing large ranges and reducing skewness.
+- ``'sqrt'``: Applies the square root transformation, often used to stabilize variance.
+- ``'cbrt'``: Takes the cube root of the data, which can be useful for transforming both positive and negative values symmetrically.
+- ``'stdrz'``: Standardizes the data to have a mean of 0 and a standard deviation of 1, also known as z-score normalization.
+- ``'minmax'``: Rescales the data to a specified range, defaulting to [0, 1], ensuring that all values fall within this range.
+- ``'boxcox'``: Applies the Box-Cox transformation to stabilize variance and make the data more normally distributed. Only works with positive values and supports passing ``lmbda`` or ``alpha`` for flexibility.
+- ``'robust'``: Scales the data based on percentiles (such as the interquartile range), which reduces the influence of outliers.
+- ``'maxabs'``: Scales the data by dividing it by its maximum absolute value, preserving the sign of the data while constraining it to the range [-1, 1].
+- ``'reciprocal'``: Transforms the data by taking the reciprocal (1/x), which is useful when handling values that are far from zero.
+- ``'exp'``: Applies the exponential function to the data, which is useful for modeling exponential growth or increasing the impact of large values.
+- ``'logit'``: Applies the logit transformation to data, which is only valid for values between 0 and 1. This is typically used in logistic regression models.
+- ``'arcsinh'``: Applies the inverse hyperbolic sine transformation, which is similar to the logarithm but can handle both positive and negative values.
+- ``'square'``: Squares the values of the data, effectively emphasizing larger values while downplaying smaller ones.
+- ``'power'``: Applies the power transformation (Yeo-Johnson), which is similar to Box-Cox but works for both positive and negative values.
+
+``boxcox`` is just one of the many options available for transforming data in the ``data_doctor`` function, providing versatility to handle different scaling needs.
 
 Box-Cox Transformation Example 1
 ----------------------------------
@@ -871,22 +894,250 @@ Explanation
 
 4. The ``show_plot=True`` parameter will generate a plot that visualizes the distribution of the original ``age`` data alongside the transformed ``age_boxcox`` data. This can help you assess how the Box-Cox transformation has affected the data distribution.
 
-Available Scale Conversions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``scale_conversion`` parameter accepts several options for data scaling, including:
+Box-Cox Transformation Example 2
+----------------------------------
 
-- ``boxcox``: Applies the Box-Cox transformation to stabilize variance and normalize the data.
-- ``minmax``: Rescales the data to a specified range (default is [0, 1]).
-- ``standard``: Standardizes the data to have a mean of 0 and standard deviation of 1.
-- ``robust``: Scales the data based on percentiles, which makes it less sensitive to outliers.
+In this second example from the US Census dataset [1]_, we apply the Box-Cox 
+transformation to the ``age`` column in a DataFrame, but this time with custom 
+keyword arguments passed through the ``scale_conversion_kws``. Specifically, we 
+provide an ``alpha`` value of `0.8`, influencing the confidence interval for the 
+transformation. Additionally, we customize the visual appearance of the plots by 
+specifying keyword arguments for the boxplot, KDE, and histogram plots. These 
+customizations allow for greater control over the visual output.
 
-``boxcox`` is just one of the many options you can use with the ``data_doctor`` function.
+
+.. code-block:: python 
+
+    data_doctor(
+        df=df,
+        feature_name="age",
+        data_fraction=1,
+        scale_conversion="boxcox",
+        apply_cutoff=False,
+        lower_cutoff=None,
+        upper_cutoff=None,
+        show_plot=True,
+        apply_as_new_col_to_df=True,
+        scale_conversion_kws={"alpha": 0.8},
+        box_violin_kws={
+            "boxprops": dict(facecolor="none", edgecolor="blue")
+        },
+        kde_kws={"fill": True, "color": "blue"},
+        hist_kws={"color": "blue"},
+    )
+
+.. code-block:: python
+
+                    DATA DOCTOR SUMMARY REPORT             
+    +------------------------------+--------------------+
+    | Feature                      | age                |
+    +------------------------------+--------------------+
+    | Statistic                    | Value              |
+    +------------------------------+--------------------+
+    | Min                          | 3.6664             |
+    | Max                          | 6.8409             |
+    | Mean                         | 5.0163             |
+    | Median                       | 5.0333             |
+    | Std Dev                      | 0.6761             |
+    +------------------------------+--------------------+
+    | Quartile                     | Value              |
+    +------------------------------+--------------------+
+    | Q1 (25%)                     | 4.5219             |
+    | Q2 (Median)                  | 5.0333             |
+    | IQR                          | 1.0119             |
+    | Q3 (75%)                     | 5.5338             |
+    | Q4 (Max)                     | 6.8409             |
+    +------------------------------+--------------------+
+    | Outlier Bound                | Value              |
+    +------------------------------+--------------------+
+    | Lower Bound                  | -8.3007            |
+    | Upper Bound                  | 9.3126             |
+    +------------------------------+--------------------+
+
+    New Column Name: age_boxcox
+    Box-Cox C.I. for Lambda: (0.17168590895749103, 0.1778798368446025)
 
 
-.. warning::
+.. raw:: html
 
-    test
+   <div class="no-click">
+
+.. image:: ../assets/age_boxcox_custom_plots.svg
+   :alt: Box-Cox Transformation W/ Data Doctor
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+.. code-block:: python
+
+    df.head()
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+    .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+    .tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-lightpink{background-color:#FFCCCC; border-width: 0px;} /* Remove borders and apply solid pink color */
+    </style>
+    <div class="tg-wrap">
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-zv4m"></th>
+          <th class="tg-aw21">age</th>
+          <th class="tg-aw21">workclass</th>
+          <th class="tg-aw21">education</th>
+          <th class="tg-aw21">education-num</th>
+          <th class="tg-aw21">marital-status</th>
+          <th class="tg-aw21">occupation</th>
+          <th class="tg-aw21">relationship</th>
+          <th class="tg-aw21 tg-lightpink">age_boxcox</th> <!-- Highlighted column -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-aw21">census_id</td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo tg-lightpink"></td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">582248222</td>
+          <td class="tg-8jgo">39</td>
+          <td class="tg-8jgo">State-gov</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Never-married</td>
+          <td class="tg-8jgo">Adm-clerical</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">3.936876</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">561810758</td>
+          <td class="tg-8jgo">50</td>
+          <td class="tg-8jgo">Self-emp-not-inc</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Exec-managerial</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">4.019590</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">598098459</td>
+          <td class="tg-8jgo">38</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">HS-grad</td>
+          <td class="tg-8jgo">9</td>
+          <td class="tg-8jgo">Divorced</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">4.521908</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">776705221</td>
+          <td class="tg-8jgo">53</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">11th</td>
+          <td class="tg-8jgo">7</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">5.033257</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">479262902</td>
+          <td class="tg-8jgo">28</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">13</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Prof-specialty</td>
+          <td class="tg-8jgo">Wife</td>
+          <td class="tg-8jgo tg-lightpink">5.614411	</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+\
+
+In this example, you can see how the ``data_doctor`` function supports further 
+flexibility with customizable plot aesthetics and scaling techniques. The 
+Box-Cox transformation is still applied without any tuning of the ``lambda`` parameter, 
+while the ``alpha`` value provides a confidence interval for the resulting transformation:
+
+.. code-block:: python
+
+    Box-Cox C.I. for Lambda: (0.17168590895749103, 0.1778798368446025)
+
+This allows for tailored visualizations with consistent styling across multiple plot types.
+
+Some of the keyword arguments, such as those passed in ``box_violin_kws``, are 
+specific to Python version 3.7. For example, in this version, we remove the fill 
+color from the boxplot using ``boxprops``. 
+
+.. code-block:: python
+
+    box_violin_kws={
+        "boxprops": dict(facecolor="none", edgecolor="blue")
+    },
+
+In later Python versions (e.g., 3.11), 
+this can be done more easily with ``fill=True``. Therefore, it is important to pass 
+any desired keyword arguments based on the correct version of Python you're using.
+
+Explanation
+^^^^^^^^^^^^^
+
+- ``df=df``: We are passing ``df`` as the input DataFrame.
+- ``feature_name="age"``: The feature we are transforming is ``age``.
+- ``data_fraction=1``: We are using 100% of the data in the ``age`` column. You can adjust this if you want to perform the operation on a subset of the data.
+- ``scale_conversion="boxcox"``: This parameter defines the type of scaling we want to apply. In this case, we are using the Box-Cox transformation.
+- ``apply_cutoff=False``: We are not applying any outlier cutoff in this example.
+- ``lower_cutoff=None`` and ``upper_cutoff=None``: These are left as ``None`` since we are not applying outlier cutoffs in this case.
+- ``show_plot=True``: This option will generate a plot to visualize the distribution of the ``age`` column before and after the transformation.
+- ``apply_as_new_col_to_df=True``: This tells the function to apply the transformation and create a new column in the DataFrame. The new column will be named ``age_boxcox_alpha`` to indicate that an alpha parameter was used in the transformation.
+- ``scale_conversion_kws={"alpha":0.8}``: The ``alpha`` keyword argument specifies the confidence interval for the Box-Cox transformation's lambda value, ensuring a confidence interval is returned instead of a single lambda value.
+- ``box_violin_kws={"boxprops": dict(facecolor='none', edgecolor="blue")}``: This keyword argument customizes the appearance of the boxplot by removing the fill color and setting the edge color to blue. This syntax is specific to Python 3.7. In later versions (i.e., 3.11+), the ``fill=True`` argument can be used to control this behavior.
+- ``kde_kws={"fill":True, "color":"blue"}``: This fills the area under the KDE plot with a blue color, enhancing the plot's visual presentation.
+- ``hist_kws={"color":"blue"}``: This colors the histogram bars in blue for visual consistency across plots.
+- ``image_path_svg=image_path_svg``: This parameter specifies the path where the resulting plot will be saved as an SVG file.
+- ``save_plot=True``: This tells the function to save the plot, and since an image path is provided, the plot will be saved as an SVG file.
+
+1. **Box-Cox Transformation with Confidence Interval**: In this example, we use the Box-Cox transformation with the ``alpha`` parameter set to 0.8, which returns a confidence interval for the lambda value rather than a single value.
+   
+2. **No Outlier Handling**: Similar to Example 1, no outliers are handled in this transformation.
+   
+3. **New Column Creation**: The transformed data is added to the DataFrame in a new column named ``age_boxcox_alpha``, where "alpha" indicates the confidence interval applied in the Box-Cox transformation.
+
+4. **Custom Plot Visuals**: The KDE, histogram, and boxplot are customized with blue colors, and specific keyword arguments are provided for the boxplot appearance based on Python version. These changes allow for finer control over the visual aesthetics of the resulting plots.
+
+5. **Plot Saving**: The ``save_plot`` parameter is set to ``True``, and the plot will be saved as an SVG file at the specified location.
 
 
 Stacked Crosstab Plots
