@@ -86,9 +86,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#feature-scaling-and-outliers">Feature Scaling and Outliers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#data_doctor"><code class="docutils literal notranslate"><span class="pre">data_doctor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#available-scale-conversions">Available Scale Conversions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#box-cox-transformation-example-1">Box-Cox Transformation Example 1</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#explanation">Explanation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#available-scale-conversions">Available Scale Conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#box-cox-transformation-example-2">Box-Cox Transformation Example 2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Explanation</a></li>
 </ul>
 </li>
 </ul>
@@ -130,9 +134,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#d-plots-ca-housing-example">2D Plots - CA Housing Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id16">3D Partial Dependence Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id18">3D Partial Dependence Plots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#plot_3d_pdp"><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id18">3D Plots - CA Housing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">3D Plots - CA Housing Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#static-plot">Static Plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#interactive-plot">Interactive Plot</a></li>
 </ul>
@@ -226,8 +230,8 @@ to understand how specific variables influence predictions.</p></li>
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for
 specified columns within a DataFrame. This function is particularly useful for
 visualizing the distribution of numerical data across various categories or groups.
-It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id20" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
-matplotlib <a class="footnote-reference brackets" href="#id21" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
+It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id22" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
+matplotlib <a class="footnote-reference brackets" href="#id23" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
 statistical graphics.</p>
 <p><strong>Key Features and Parameters</strong></p>
 <ul class="simple">
@@ -580,7 +584,7 @@ standard deviation lines. You can display one, none, or all of these simultaneou
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing the feature to analyze.</p></li>
 <li><p><strong>feature_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the feature (column) to analyze.</p></li>
 <li><p><strong>data_fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Fraction of the data to analyze. Default is <code class="docutils literal notranslate"><span class="pre">1</span></code> (full dataset). Useful for large datasets where a sample can represent the population. If <code class="docutils literal notranslate"><span class="pre">apply_as_new_col_to_df=True</span></code>, the full dataset is always used.</p></li>
-<li><p><strong>scale_conversion</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Type of conversion to apply to the feature. Options include:</p>
+<li><p><strong>scale_conversion</strong> – <p>Type of conversion to apply to the feature. Options include:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">'abs'</span></code>: Absolute values</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'log'</span></code>: Natural logarithm values</p></li>
@@ -598,8 +602,14 @@ standard deviation lines. You can display one, none, or all of these simultaneou
 <li><p><code class="docutils literal notranslate"><span class="pre">'square'</span></code>: Squaring the values</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'power'</span></code>: Power transformation (Yeo-Johnson)</p></li>
 </ul>
-<p>Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (no conversion).</p>
 </p></li>
+</ul>
+</dd>
+</dl>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (no conversion).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>scale_conversion_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – <p>Additional keyword arguments to pass to the scaling functions, such as:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">'alpha'</span></code> for Box-Cox transformation (returns lambda confidence interval)</p></li>
@@ -640,9 +650,31 @@ Displays the feature’s descriptive statistics, quartile information, and outli
 </dl>
 </dd></dl>
 
+<section id="available-scale-conversions">
+<h2>Available Scale Conversions<a class="headerlink" href="#available-scale-conversions" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> parameter accepts several options for data scaling, providing flexibility in how you preprocess your data. Each option addresses specific transformation needs, such as normalizing data, stabilizing variance, or adjusting data ranges. Below is the exhaustive list of available scale conversions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'abs'</span></code>: Takes the absolute values of the data, removing any negative signs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'log'</span></code>: Applies the natural logarithm to the data, useful for compressing large ranges and reducing skewness.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'sqrt'</span></code>: Applies the square root transformation, often used to stabilize variance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'cbrt'</span></code>: Takes the cube root of the data, which can be useful for transforming both positive and negative values symmetrically.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'stdrz'</span></code>: Standardizes the data to have a mean of 0 and a standard deviation of 1, also known as z-score normalization.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'minmax'</span></code>: Rescales the data to a specified range, defaulting to [0, 1], ensuring that all values fall within this range.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'boxcox'</span></code>: Applies the Box-Cox transformation to stabilize variance and make the data more normally distributed. Only works with positive values and supports passing <code class="docutils literal notranslate"><span class="pre">lmbda</span></code> or <code class="docutils literal notranslate"><span class="pre">alpha</span></code> for flexibility.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'robust'</span></code>: Scales the data based on percentiles (such as the interquartile range), which reduces the influence of outliers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'maxabs'</span></code>: Scales the data by dividing it by its maximum absolute value, preserving the sign of the data while constraining it to the range [-1, 1].</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'reciprocal'</span></code>: Transforms the data by taking the reciprocal (1/x), which is useful when handling values that are far from zero.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'exp'</span></code>: Applies the exponential function to the data, which is useful for modeling exponential growth or increasing the impact of large values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'logit'</span></code>: Applies the logit transformation to data, which is only valid for values between 0 and 1. This is typically used in logistic regression models.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'arcsinh'</span></code>: Applies the inverse hyperbolic sine transformation, which is similar to the logarithm but can handle both positive and negative values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'square'</span></code>: Squares the values of the data, effectively emphasizing larger values while downplaying smaller ones.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'power'</span></code>: Applies the power transformation (Yeo-Johnson), which is similar to Box-Cox but works for both positive and negative values.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">boxcox</span></code> is just one of the many options available for transforming data in the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function, providing versatility to handle different scaling needs.</p>
+</section>
 <section id="box-cox-transformation-example-1">
 <h2>Box-Cox Transformation Example 1<a class="headerlink" href="#box-cox-transformation-example-1" title="Link to this heading"></a></h2>
-<p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id19" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
+<p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
 function to apply a <strong>Box-Cox transformation</strong> to the <code class="docutils literal notranslate"><span class="pre">age</span></code> column in a DataFrame.
 The <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function provides a flexible way to preprocess data by applying
 various scaling techniques. In this case, we apply the Box-Cox transformation <strong>without any tuning</strong>
@@ -822,20 +854,215 @@ options (such as <code class="docutils literal notranslate"><span class="pre">'m
 <li><p>The <code class="docutils literal notranslate"><span class="pre">show_plot=True</span></code> parameter will generate a plot that visualizes the distribution of the original <code class="docutils literal notranslate"><span class="pre">age</span></code> data alongside the transformed <code class="docutils literal notranslate"><span class="pre">age_boxcox</span></code> data. This can help you assess how the Box-Cox transformation has affected the data distribution.</p></li>
 </ol>
 </section>
-<section id="available-scale-conversions">
-<h3>Available Scale Conversions<a class="headerlink" href="#available-scale-conversions" title="Link to this heading"></a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> parameter accepts several options for data scaling, including:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">boxcox</span></code>: Applies the Box-Cox transformation to stabilize variance and normalize the data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">minmax</span></code>: Rescales the data to a specified range (default is [0, 1]).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">standard</span></code>: Standardizes the data to have a mean of 0 and standard deviation of 1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">robust</span></code>: Scales the data based on percentiles, which makes it less sensitive to outliers.</p></li>
-</ul>
-<p><code class="docutils literal notranslate"><span class="pre">boxcox</span></code> is just one of the many options you can use with the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>test</p>
+</section>
+<section id="box-cox-transformation-example-2">
+<h2>Box-Cox Transformation Example 2<a class="headerlink" href="#box-cox-transformation-example-2" title="Link to this heading"></a></h2>
+<p>In this second example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we apply the Box-Cox
+transformation to the <code class="docutils literal notranslate"><span class="pre">age</span></code> column in a DataFrame, but this time with custom
+keyword arguments passed through the <code class="docutils literal notranslate"><span class="pre">scale_conversion_kws</span></code>. Specifically, we
+provide an <code class="docutils literal notranslate"><span class="pre">alpha</span></code> value of <cite>0.8</cite>, influencing the confidence interval for the
+transformation. Additionally, we customize the visual appearance of the plots by
+specifying keyword arguments for the boxplot, KDE, and histogram plots. These
+customizations allow for greater control over the visual output.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
+    <span class="n">data_fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">scale_conversion</span><span class="o">=</span><span class="s2">&quot;boxcox&quot;</span><span class="p">,</span>
+    <span class="n">apply_cutoff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">lower_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">upper_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">apply_as_new_col_to_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">scale_conversion_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">},</span>
+    <span class="n">box_violin_kws</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;boxprops&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="n">kde_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">},</span>
+    <span class="n">hist_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
 </div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>                <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">age</span>                <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Statistic</span>                    <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Min</span>                          <span class="o">|</span> <span class="mf">3.6664</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Max</span>                          <span class="o">|</span> <span class="mf">6.8409</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Mean</span>                         <span class="o">|</span> <span class="mf">5.0163</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Median</span>                       <span class="o">|</span> <span class="mf">5.0333</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Std</span> <span class="n">Dev</span>                      <span class="o">|</span> <span class="mf">0.6761</span>             <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Quartile</span>                     <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Q1</span> <span class="p">(</span><span class="mi">25</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">4.5219</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Q2</span> <span class="p">(</span><span class="n">Median</span><span class="p">)</span>                  <span class="o">|</span> <span class="mf">5.0333</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">IQR</span>                          <span class="o">|</span> <span class="mf">1.0119</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Q3</span> <span class="p">(</span><span class="mi">75</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">5.5338</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">Q4</span> <span class="p">(</span><span class="n">Max</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">6.8409</span>             <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Outlier</span> <span class="n">Bound</span>                <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+<span class="o">|</span> <span class="n">Lower</span> <span class="n">Bound</span>                  <span class="o">|</span> <span class="o">-</span><span class="mf">8.3007</span>            <span class="o">|</span>
+<span class="o">|</span> <span class="n">Upper</span> <span class="n">Bound</span>                  <span class="o">|</span> <span class="mf">9.3126</span>             <span class="o">|</span>
+<span class="o">+------------------------------+--------------------+</span>
+
+<span class="n">New</span> <span class="n">Column</span> <span class="n">Name</span><span class="p">:</span> <span class="n">age_boxcox</span>
+<span class="n">Box</span><span class="o">-</span><span class="n">Cox</span> <span class="n">C</span><span class="o">.</span><span class="n">I</span><span class="o">.</span> <span class="k">for</span> <span class="n">Lambda</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.17168590895749103</span><span class="p">,</span> <span class="mf">0.1778798368446025</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="no-click"><a class="reference internal image-reference" href="_images/age_boxcox_custom_plots.svg"><img alt="Box-Cox Transformation W/ Data Doctor" class="align-center" src="_images/age_boxcox_custom_plots.svg" style="width: 900px;" />
+</a>
+</div><div style="height: 50px;"></div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<style type="text/css">
+.tg-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+  overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+  font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+.tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+.tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+.tg .tg-lightpink{background-color:#FFCCCC; border-width: 0px;} /* Remove borders and apply solid pink color */
+</style>
+<div class="tg-wrap">
+<table class="tg">
+  <thead>
+    <tr>
+      <th class="tg-zv4m"></th>
+      <th class="tg-aw21">age</th>
+      <th class="tg-aw21">workclass</th>
+      <th class="tg-aw21">education</th>
+      <th class="tg-aw21">education-num</th>
+      <th class="tg-aw21">marital-status</th>
+      <th class="tg-aw21">occupation</th>
+      <th class="tg-aw21">relationship</th>
+      <th class="tg-aw21 tg-lightpink">age_boxcox</th> <!-- Highlighted column -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-aw21">census_id</td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo tg-lightpink"></td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">582248222</td>
+      <td class="tg-8jgo">39</td>
+      <td class="tg-8jgo">State-gov</td>
+      <td class="tg-8jgo">Bachelors</td>
+      <td class="tg-8jgo">13</td>
+      <td class="tg-8jgo">Never-married</td>
+      <td class="tg-8jgo">Adm-clerical</td>
+      <td class="tg-8jgo">Not-in-family</td>
+      <td class="tg-8jgo tg-lightpink">3.936876</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">561810758</td>
+      <td class="tg-8jgo">50</td>
+      <td class="tg-8jgo">Self-emp-not-inc</td>
+      <td class="tg-8jgo">Bachelors</td>
+      <td class="tg-8jgo">13</td>
+      <td class="tg-8jgo">Married-civ-spouse</td>
+      <td class="tg-8jgo">Exec-managerial</td>
+      <td class="tg-8jgo">Husband</td>
+      <td class="tg-8jgo tg-lightpink">4.019590</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">598098459</td>
+      <td class="tg-8jgo">38</td>
+      <td class="tg-8jgo">Private</td>
+      <td class="tg-8jgo">HS-grad</td>
+      <td class="tg-8jgo">9</td>
+      <td class="tg-8jgo">Divorced</td>
+      <td class="tg-8jgo">Handlers-cleaners</td>
+      <td class="tg-8jgo">Not-in-family</td>
+      <td class="tg-8jgo tg-lightpink">4.521908</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">776705221</td>
+      <td class="tg-8jgo">53</td>
+      <td class="tg-8jgo">Private</td>
+      <td class="tg-8jgo">11th</td>
+      <td class="tg-8jgo">7</td>
+      <td class="tg-8jgo">Married-civ-spouse</td>
+      <td class="tg-8jgo">Handlers-cleaners</td>
+      <td class="tg-8jgo">Husband</td>
+      <td class="tg-8jgo tg-lightpink">5.033257</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">479262902</td>
+      <td class="tg-8jgo">28</td>
+      <td class="tg-8jgo">Private</td>
+      <td class="tg-8jgo">Bachelors</td>
+      <td class="tg-8jgo">13</td>
+      <td class="tg-8jgo">Married-civ-spouse</td>
+      <td class="tg-8jgo">Prof-specialty</td>
+      <td class="tg-8jgo">Wife</td>
+      <td class="tg-8jgo tg-lightpink">5.614411     </td>
+    </tr>
+  </tbody>
+</table>
+</div><p></p>
+<p>In this example, you can see how the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function supports further
+flexibility with customizable plot aesthetics and scaling techniques. The
+Box-Cox transformation is still applied without any tuning of the <code class="docutils literal notranslate"><span class="pre">lambda</span></code> parameter,
+while the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> value provides a confidence interval for the resulting transformation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Box</span><span class="o">-</span><span class="n">Cox</span> <span class="n">C</span><span class="o">.</span><span class="n">I</span><span class="o">.</span> <span class="k">for</span> <span class="n">Lambda</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.17168590895749103</span><span class="p">,</span> <span class="mf">0.1778798368446025</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This allows for tailored visualizations with consistent styling across multiple plot types.</p>
+<p>Some of the keyword arguments, such as those passed in <code class="docutils literal notranslate"><span class="pre">box_violin_kws</span></code>, are
+specific to Python version 3.7. For example, in this version, we remove the fill
+color from the boxplot using <code class="docutils literal notranslate"><span class="pre">boxprops</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">box_violin_kws</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;boxprops&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>In later Python versions (e.g., 3.11),
+this can be done more easily with <code class="docutils literal notranslate"><span class="pre">fill=True</span></code>. Therefore, it is important to pass
+any desired keyword arguments based on the correct version of Python you’re using.</p>
+<section id="id5">
+<h3>Explanation<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">df=df</span></code>: We are passing <code class="docutils literal notranslate"><span class="pre">df</span></code> as the input DataFrame.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_name=&quot;age&quot;</span></code>: The feature we are transforming is <code class="docutils literal notranslate"><span class="pre">age</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_fraction=1</span></code>: We are using 100% of the data in the <code class="docutils literal notranslate"><span class="pre">age</span></code> column. You can adjust this if you want to perform the operation on a subset of the data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale_conversion=&quot;boxcox&quot;</span></code>: This parameter defines the type of scaling we want to apply. In this case, we are using the Box-Cox transformation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">apply_cutoff=False</span></code>: We are not applying any outlier cutoff in this example.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lower_cutoff=None</span></code> and <code class="docutils literal notranslate"><span class="pre">upper_cutoff=None</span></code>: These are left as <code class="docutils literal notranslate"><span class="pre">None</span></code> since we are not applying outlier cutoffs in this case.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show_plot=True</span></code>: This option will generate a plot to visualize the distribution of the <code class="docutils literal notranslate"><span class="pre">age</span></code> column before and after the transformation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">apply_as_new_col_to_df=True</span></code>: This tells the function to apply the transformation and create a new column in the DataFrame. The new column will be named <code class="docutils literal notranslate"><span class="pre">age_boxcox_alpha</span></code> to indicate that an alpha parameter was used in the transformation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale_conversion_kws={&quot;alpha&quot;:0.8}</span></code>: The <code class="docutils literal notranslate"><span class="pre">alpha</span></code> keyword argument specifies the confidence interval for the Box-Cox transformation’s lambda value, ensuring a confidence interval is returned instead of a single lambda value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">box_violin_kws={&quot;boxprops&quot;:</span> <span class="pre">dict(facecolor='none',</span> <span class="pre">edgecolor=&quot;blue&quot;)}</span></code>: This keyword argument customizes the appearance of the boxplot by removing the fill color and setting the edge color to blue. This syntax is specific to Python 3.7. In later versions (i.e., 3.11+), the <code class="docutils literal notranslate"><span class="pre">fill=True</span></code> argument can be used to control this behavior.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kde_kws={&quot;fill&quot;:True,</span> <span class="pre">&quot;color&quot;:&quot;blue&quot;}</span></code>: This fills the area under the KDE plot with a blue color, enhancing the plot’s visual presentation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hist_kws={&quot;color&quot;:&quot;blue&quot;}</span></code>: This colors the histogram bars in blue for visual consistency across plots.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">image_path_svg=image_path_svg</span></code>: This parameter specifies the path where the resulting plot will be saved as an SVG file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_plot=True</span></code>: This tells the function to save the plot, and since an image path is provided, the plot will be saved as an SVG file.</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p><strong>Box-Cox Transformation with Confidence Interval</strong>: In this example, we use the Box-Cox transformation with the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> parameter set to 0.8, which returns a confidence interval for the lambda value rather than a single value.</p></li>
+<li><p><strong>No Outlier Handling</strong>: Similar to Example 1, no outliers are handled in this transformation.</p></li>
+<li><p><strong>New Column Creation</strong>: The transformed data is added to the DataFrame in a new column named <code class="docutils literal notranslate"><span class="pre">age_boxcox_alpha</span></code>, where “alpha” indicates the confidence interval applied in the Box-Cox transformation.</p></li>
+<li><p><strong>Custom Plot Visuals</strong>: The KDE, histogram, and boxplot are customized with blue colors, and specific keyword arguments are provided for the boxplot appearance based on Python version. These changes allow for finer control over the visual aesthetics of the resulting plots.</p></li>
+<li><p><strong>Plot Saving</strong>: The <code class="docutils literal notranslate"><span class="pre">save_plot</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, and the plot will be saved as an SVG file at the specified location.</p></li>
+</ol>
 </section>
 </section>
 </section>
@@ -912,7 +1139,7 @@ choose between regular or normalized plots.</p>
 <p>The provided code snippet demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function to generate stacked bar plots and corresponding crosstabs for different
 columns in a DataFrame. Here’s a detailed breakdown of the code using the census
-dataset as an example <a class="footnote-reference brackets" href="#id19" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+dataset as an example <a class="footnote-reference brackets" href="#id21" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>First, the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list is defined, specifying the columns <code class="docutils literal notranslate"><span class="pre">[&quot;sex&quot;,</span> <span class="pre">&quot;income&quot;]</span></code>
 to be analyzed. These columns will be used in the loop to generate separate plots.
 The <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> is then defined, with each entry corresponding to a
@@ -1278,7 +1505,7 @@ DataFrames by assigning them to their own vriables. For example:</p>
 </section>
 <section id="pivoted-stacked-bar-plots-example">
 <h2>Pivoted Stacked Bar Plots Example<a class="headerlink" href="#pivoted-stacked-bar-plots-example" title="Link to this heading"></a></h2>
-<p>Using the census dataset <a class="footnote-reference brackets" href="#id19" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
+<p>Using the census dataset <a class="footnote-reference brackets" href="#id21" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
 <code class="docutils literal notranslate"><span class="pre">&quot;barh&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span> <span class="pre">function</span></code>. This option pivots the
 standard vertical stacked bar plot into a horizontal orientation, making it easier
 to compare categories when there are many labels on the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code>.</p>
@@ -1287,7 +1514,7 @@ to compare categories when there are many labels on the <code class="docutils li
 </div><div style="height: 50px;"></div></section>
 <section id="non-normalized-stacked-bar-plots-example">
 <h2>Non-Normalized Stacked Bar Plots Example<a class="headerlink" href="#non-normalized-stacked-bar-plots-example" title="Link to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id19" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
+<p>In the census data <a class="footnote-reference brackets" href="#id21" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
 set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function. This option removes the display of normalized plots beneath the regular
 versions. Alternatively, setting the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display
@@ -1298,7 +1525,7 @@ for income by age.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="regular-non-stacked-bar-plots-example">
 <h2>Regular Non-Stacked Bar Plots Example<a class="headerlink" href="#regular-non-stacked-bar-plots-example" title="Link to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id19" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
+<p>In the census data <a class="footnote-reference brackets" href="#id21" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
 displaying their normalized versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>
 in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function and enable <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> by setting
 it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This configuration removes any stacked elements and prevents the
@@ -1385,7 +1612,7 @@ clear visual analysis of how these metrics vary within the dataset.</p>
 <p>This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, a grid of plots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.</p>
 <section id="box-plots-grid-example">
 <h2>Box Plots Grid Example<a class="headerlink" href="#box-plots-grid-example" title="Link to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id19" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, the box_violin_plot function is employed to create a grid of
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id21" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, the box_violin_plot function is employed to create a grid of
 boxplots, comparing different metrics against the <code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code> column in the
 DataFrame. The <code class="docutils literal notranslate"><span class="pre">metrics_comp</span></code> parameter is set to [<code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code>], meaning
 that the comparison will be based on different age groups. The <code class="docutils literal notranslate"><span class="pre">metrics_list</span></code> is
@@ -1432,7 +1659,7 @@ metrics across different age groups, with all plots saved for future reference o
 </div><div style="height: 50px;"></div></section>
 <section id="violin-plots-grid-example">
 <h2>Violin Plots Grid Example<a class="headerlink" href="#violin-plots-grid-example" title="Link to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id19" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id21" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
 <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>. This adjustment will generate violin plots instead
 of boxplots while maintaining all other settings.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
@@ -1458,7 +1685,7 @@ of boxplots while maintaining all other settings.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="pivoted-violin-plots-grid-example">
 <h2>Pivoted Violin Plots Grid Example<a class="headerlink" href="#pivoted-violin-plots-grid-example" title="Link to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id19" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id21" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
 to pivot the plot, changing the orientation of the axes while keeping the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels upright.
 This adjustment flips the axes, providing a different perspective on the data distribution.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
@@ -1576,7 +1803,7 @@ size, and markers.</p>
 
 <section id="regression-centric-scatter-plots-example">
 <h3>Regression-Centric Scatter Plots Example<a class="headerlink" href="#regression-centric-scatter-plots-example" title="Link to this heading"></a></h3>
-<p>In this US census data <a class="footnote-reference brackets" href="#id19" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function is
+<p>In this US census data <a class="footnote-reference brackets" href="#id21" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function is
 configured to display the Pearson correlation coefficient and a best fit line
 on each scatter plot. The correlation coefficient is shown in the plot title,
 controlled by the <code class="docutils literal notranslate"><span class="pre">show_correlation=True</span></code> parameter, which provides a measure
@@ -1765,7 +1992,7 @@ This function does not return any value but generates and optionally saves a cor
 
 <section id="triangular-correlation-matrix-example">
 <h2>Triangular Correlation Matrix Example<a class="headerlink" href="#triangular-correlation-matrix-example" title="Link to this heading"></a></h2>
-<p>The provided code filters the census <a class="footnote-reference brackets" href="#id19" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> to include only numeric columns using
+<p>The provided code filters the census <a class="footnote-reference brackets" href="#id21" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> to include only numeric columns using
 <code class="docutils literal notranslate"><span class="pre">select_dtypes(np.number)</span></code>. It then utilizes the <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code> function
 to generate a right triangular correlation matrix, which only displays the
 upper half of the correlation matrix. The heatmap is customized with specific
@@ -1810,7 +2037,7 @@ the strength and direction of the correlations.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="full-correlation-matrix-example">
 <h2>Full Correlation Matrix Example<a class="headerlink" href="#full-correlation-matrix-example" title="Link to this heading"></a></h2>
-<p>In this modified census <a class="footnote-reference brackets" href="#id19" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the key changes are the use of the viridis colormap
+<p>In this modified census <a class="footnote-reference brackets" href="#id21" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the key changes are the use of the viridis colormap
 and the decision to plot the full correlation matrix instead of just the upper
 triangle. By setting <code class="docutils literal notranslate"><span class="pre">cmap=&quot;viridis&quot;</span></code>, the heatmap will use a different color
 scheme, which can provide better visual contrast or align with specific aesthetic
@@ -1852,7 +2079,7 @@ outcome of a model. PDPs can be generated in both 2D and 3D, depending on
 whether you want to analyze the effect of one feature or the interaction between
 two features on the model’s predictions.</p>
 <section id="d-partial-dependence-plots">
-<span id="id14"></span><h2>2D Partial Dependence Plots<a class="headerlink" href="#d-partial-dependence-plots" title="Link to this heading"></a></h2>
+<span id="id16"></span><h2>2D Partial Dependence Plots<a class="headerlink" href="#d-partial-dependence-plots" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code> function generates 2D partial dependence plots for individual features or pairs of features. These plots are essential for examining the marginal effect of features on the predicted outcome.</p>
 <ul class="simple">
 <li><p><strong>Grid and Individual Plots</strong>: Generate all 2D partial dependence plots in a grid layout or as separate individual plots, offering flexibility in presentation.</p></li>
@@ -1901,7 +2128,7 @@ This function generates partial dependence plots and displays them. It does not 
 <section id="d-plots-ca-housing-example">
 <h3>2D Plots - CA Housing Example<a class="headerlink" href="#d-plots-ca-housing-example" title="Link to this heading"></a></h3>
 <p>Consider a scenario where you have a machine learning model predicting median
-house values in California. <a class="footnote-reference brackets" href="#id22" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> Suppose you want to understand how non-location
+house values in California. <a class="footnote-reference brackets" href="#id24" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> Suppose you want to understand how non-location
 features like the average number of occupants per household (<code class="docutils literal notranslate"><span class="pre">AveOccup</span></code>) and the
 age of the house (<code class="docutils literal notranslate"><span class="pre">HouseAge</span></code>) jointly influence house values. A 2D partial
 dependence plot allows you to visualize this relationship in two ways: either as
@@ -1984,8 +2211,8 @@ the California housing dataset:</p>
 </a>
 </div><div style="height: 50px;"></div></section>
 </section>
-<section id="id16">
-<span id="id17"></span><h2>3D Partial Dependence Plots<a class="headerlink" href="#id16" title="Link to this heading"></a></h2>
+<section id="id18">
+<span id="id19"></span><h2>3D Partial Dependence Plots<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> function extends the concept of partial dependence to three dimensions, allowing you to visualize the interaction between two features and their combined effect on the model’s predictions.</p>
 <ul class="simple">
 <li><p><strong>Interactive and Static 3D Plots</strong>: Generate static 3D plots using Matplotlib or interactive 3D plots using Plotly. The function also allows for generating both types simultaneously.</p></li>
@@ -2061,8 +2288,8 @@ This function generates 3D partial dependence plots and displays or saves them. 
 </dl>
 </dd></dl>
 
-<section id="id18">
-<h3>3D Plots - CA Housing Example<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<section id="id20">
+<h3>3D Plots - CA Housing Example<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <p>Consider a scenario where you have a machine learning model predicting median
 house values in California.[4]_ Suppose you want to understand how non-location
 features like the average number of occupants per household (<code class="docutils literal notranslate"><span class="pre">AveOccup</span></code>) and the
@@ -2205,21 +2432,21 @@ generating a static plot using Matplotlib.</p>
 </ul>
 <p>By adjusting these parameters, you can customize the behavior and appearance of your 3D Partial Dependence Plots according to your needs, whether for static or interactive visualization.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id19" role="doc-footnote">
+<aside class="footnote brackets" id="id21" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>,<a role="doc-backlink" href="#id5">3</a>,<a role="doc-backlink" href="#id6">4</a>,<a role="doc-backlink" href="#id7">5</a>,<a role="doc-backlink" href="#id8">6</a>,<a role="doc-backlink" href="#id9">7</a>,<a role="doc-backlink" href="#id10">8</a>,<a role="doc-backlink" href="#id11">9</a>,<a role="doc-backlink" href="#id12">10</a>,<a role="doc-backlink" href="#id13">11</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>,<a role="doc-backlink" href="#id6">3</a>,<a role="doc-backlink" href="#id7">4</a>,<a role="doc-backlink" href="#id8">5</a>,<a role="doc-backlink" href="#id9">6</a>,<a role="doc-backlink" href="#id10">7</a>,<a role="doc-backlink" href="#id11">8</a>,<a role="doc-backlink" href="#id12">9</a>,<a role="doc-backlink" href="#id13">10</a>,<a role="doc-backlink" href="#id14">11</a>,<a role="doc-backlink" href="#id15">12</a>)</span>
 <p>Kohavi, R. (1996). <em>Census Income</em>. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id20" role="doc-footnote">
+<aside class="footnote brackets" id="id22" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
 <p>Waskom, M. (2021). <em>Seaborn: Statistical Data Visualization</em>. <em>Journal of Open Source Software</em>, 6(60), 3021. <a class="reference external" href="https://doi.org/10.21105/joss.03021">https://doi.org/10.21105/joss.03021</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id21" role="doc-footnote">
+<aside class="footnote brackets" id="id23" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
 <p>Hunter, J. D. (2007). <em>Matplotlib: A 2D Graphics Environment</em>. <em>Computing in Science &amp; Engineering</em>, 9(3), 90-95. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id22" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id15">4</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id24" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id17">4</a><span class="fn-bracket">]</span></span>
 <p>Pace, R. K., &amp; Barry, R. (1997). <em>Sparse Spatial Autoregressions</em>. <em>Statistics &amp; Probability Letters</em>, 33(3), 291-297. <a class="reference external" href="https://doi.org/10.1016/S0167-7152(96)00140-X">https://doi.org/10.1016/S0167-7152(96)00140-X</a>.</p>
 </aside>
 </aside>
