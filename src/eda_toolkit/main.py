@@ -3150,6 +3150,7 @@ def data_doctor(
     lower_cutoff=None,
     upper_cutoff=None,
     show_plot=True,
+    plot_type="all",
     xlim=None,
     kde_ylim=None,
     hist_ylim=None,
@@ -3170,7 +3171,8 @@ def data_doctor(
     Analyze and transform a specific feature in a DataFrame, with options for
     scaling, applying cutoffs, and visualizing the results. This function also
     allows for the creation of a new column with the transformed data if
-    specified. Plots can be saved in PNG or SVG format if required.
+    specified. Plots can be saved in PNG or SVG format with filenames that
+    incorporate the `plot_type`, `feature_name`, and `scale_conversion`.
 
     Parameters:
     -----------
@@ -3208,7 +3210,7 @@ def data_doctor(
 
     scale_conversion_kws : dict, optional
         Additional keyword arguments to pass to the scaling functions, such as:
-            - 'alpha' for Box-Cox transformation (returns a confidence interval 
+            - 'alpha' for Box-Cox transformation (returns a confidence interval
                for lambda)
             - 'lmbda' for a specific Box-Cox transformation value
             - 'quantile_range' for robust scaling.
@@ -3225,6 +3227,15 @@ def data_doctor(
     show_plot : bool, optional (default=True)
         Whether to display plots of the transformed feature: KDE, histogram, and
         boxplot/violinplot.
+
+    plot_type : str, optional (default="all")
+        Specifies the type of plot(s) to produce. Options are:
+            - 'all': Generates KDE, histogram, and boxplot/violinplot.
+            - 'kde': KDE plot only.
+            - 'hist': Histogram plot only.
+            - 'box_violin': Boxplot or violin plot only (specified by
+                            `box_violin`).
+        If an invalid plot type is provided, a `ValueError` is raised.
 
     xlim : tuple or list, optional
         Limits for the x-axis in all plots, specified as (xmin, xmax).
@@ -3259,8 +3270,8 @@ def data_doctor(
             - `<feature_name>_<scale_conversion>`: If a transformation is
             applied.
             - `<feature_name>_w_cutoff`: If only cutoffs are applied.
-        For Box-Cox transformation, if `alpha` is specified, the confidence 
-        interval for lambda is displayed. If `lmbda` is specified, the lambda 
+        For Box-Cox transformation, if `alpha` is specified, the confidence
+        interval for lambda is displayed. If `lmbda` is specified, the lambda
         value is displayed.
 
     kde_kws : dict, optional
@@ -3272,6 +3283,10 @@ def data_doctor(
 
     box_violin_kws : dict, optional
         Additional keyword arguments to pass to either boxplot or violinplot.
+
+    box_violin : str, optional (default="boxplot")
+        Specifies whether to plot a 'boxplot' or 'violinplot' if `plot_type` is
+        set to 'box_violin'.
 
     label_fontsize : int, optional (default=12)
         Font size for the axis labels and plot titles.
@@ -3307,11 +3322,20 @@ def data_doctor(
         If an invalid option is provided for `box_violin`.
 
     ValueError
-        If the length of transformed data does not match the original feature 
+        If an invalid option is provided for `plot_type`.
+
+    ValueError
+        If the length of transformed data does not match the original feature
         length.
+
+    Notes:
+    ------
+    When saving plots, the filename will include the `feature_name`,
+    `scale_conversion`, and `plot_type` to allow easy identification. For
+    example, if `feature_name` is "age", `scale_conversion` is "boxcox", and
+    `plot_type` is "kde", the filename will be: `age_boxcox_kde.png` or
+    `age_boxcox_kde.svg`.
     """
-
-
 
     # Suppress warnings for division by zero, or invalid values in subtract
     np.seterr(divide="ignore", invalid="ignore")
@@ -3462,45 +3486,6 @@ def data_doctor(
             **scale_conversion_kws,
         )
 
-    # elif scale_conversion == "boxcox":
-    #     if np.any(sampled_feature <= 0):
-    #         raise ValueError(
-    #             "Box-Cox transformation requires strictly positive values."
-    #         )
-
-    #     # Initialize scale_conversion_kws if None
-    #     scale_conversion_kws = scale_conversion_kws or {}
-
-    #     # Apply Box-Cox transformation with or without kwargs
-    #     try:
-    #         # Try applying Box-Cox transformation
-    #         result = stats.boxcox(sampled_feature, **scale_conversion_kws)
-
-    #         # Handle cases where 'alpha' is provided and Box-Cox returns a tuple
-    #         if isinstance(result, tuple):
-    #             feature_array = result[0]  # Transformed data
-    #             box_cox_lmbda = result[1]  # Lambda confidence interval
-    #         else:
-    #             # Only the transformed data is returned (no tuple)
-    #             feature_array = result
-
-    #     except ValueError as ve:
-    #         # Catch and re-raise any ValueError for debugging
-    #         raise ValueError(f"Error during Box-Cox transformation: {ve}")
-
-    #     # Ensure feature_array is a 1D array
-    #     feature_array = np.asarray(feature_array).flatten()
-
-    #     # Check if the length of feature_array matches the sampled feature
-    #     if len(feature_array) != len(sampled_feature):
-    #         raise ValueError(
-    #             f"Length of transformed data ({len(feature_array)}) does not match "
-    #             f"the length of the sampled feature ({len(sampled_feature)})"
-    #         )
-
-    #     # Convert the feature_array into a pandas Series with the correct index
-    #     feature_ = pd.Series(feature_array, index=sampled_feature.index)
-
     elif scale_conversion == "boxcox":
         if np.any(sampled_feature <= 0):
             raise ValueError(
@@ -3538,8 +3523,6 @@ def data_doctor(
 
         # Convert the feature_array into a pandas Series with the correct index
         feature_ = pd.Series(feature_array, index=sampled_feature.index)
-
-
 
     elif scale_conversion == "power":
         pt = PowerTransformer(**scale_conversion_kws)
@@ -3641,13 +3624,12 @@ def data_doctor(
         elif scale_conversion == "boxcox":
             if "alpha" in scale_conversion_kws:
                 # Confidence interval is available, so print it
-                if 'conf_interval' in locals():
+                if "conf_interval" in locals():
                     print(f"Box-Cox C.I. for Lambda: {conf_interval}")
             else:
                 # No alpha, so we print the single lambda value
-                if 'box_cox_lmbda' in locals():
+                if "box_cox_lmbda" in locals():
                     print(f"Box-Cox Lambda: {round(box_cox_lmbda, 4)}")
-
 
     elif apply_as_new_col_to_df and data_fraction != 1:
         print("New Column Name:", new_col_name)
@@ -3663,91 +3645,115 @@ def data_doctor(
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
 
-    # Plot kdeplot, boxplot, and histplot
-    if show_plot:
+    # Ensure the plot_type is one of the allowed options
+    valid_plot_types = ["all", "kde", "hist", "box_violin"]
+    if plot_type not in valid_plot_types:
+        raise ValueError(
+            f"Invalid plot_type '{plot_type}'. "
+            f"Valid options are: {valid_plot_types}"
+        )
+
+    # Conditionally create subplots if plot_type is "all"
+    if plot_type == "all":
         fig, axes = plt.subplots(
             2, 3, figsize=(18, 6), gridspec_kw={"height_ratios": [10, 1]}
         )
+    else:
+        fig, ax = plt.subplots(figsize=(8, 6))  # Single plot when not "all"
 
-        # KDE plot
-        sns.kdeplot(
-            x=feature_,
-            ax=axes[0, 0],
-            clip=(lower_cutoff, upper_cutoff),
-            warn_singular=False,
-            **(kde_kws or {}),
-        )
-        axes[0, 0].set_title(
-            f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
-            fontsize=label_fontsize,
-        )
-        axes[0, 0].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-        axes[0, 0].set_ylabel("Density", fontsize=label_fontsize)
-        axes[0, 0].tick_params(axis="both", labelsize=tick_fontsize)
-
-        # Apply custom xlim for KDE plot if specified
-        if xlim:
-            axes[0, 0].set_xlim(xlim)
-        # Apply custom kde_ylim for KDE plot if specified
-        if kde_ylim:
-            axes[0, 0].set_ylim(kde_ylim)
-
-        # Histplot
-        sns.histplot(x=feature_, ax=axes[0, 1], **(hist_kws or {}))
-        axes[0, 1].set_title(
-            f"Histplot: {feature_name} (Scale: {scale_conversion})",
-            fontsize=label_fontsize,
-        )
-        axes[0, 1].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-        axes[0, 1].set_ylabel("Count", fontsize=label_fontsize)
-        axes[0, 1].tick_params(axis="both", labelsize=tick_fontsize)
-
-        # Apply custom xlim for histplot if specified
-        if xlim:
-            axes[0, 1].set_xlim(xlim)
-        # Apply custom hist_ylim for Histogram plot if specified
-        if hist_ylim:
-            axes[0, 1].set_ylim(hist_ylim)
-
-        # Plot based on box_violin input
-        if box_violin == "boxplot":
-            sns.boxplot(x=feature_, ax=axes[0, 2], **(box_violin_kws or {}))
-            axes[0, 2].set_title(
-                f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+    # Plot based on plot_type
+    if show_plot:
+        if plot_type in ["all", "kde"]:
+            kde_ax = axes[0, 0] if plot_type == "all" else ax
+            sns.kdeplot(
+                x=feature_,
+                ax=kde_ax,
+                clip=(lower_cutoff, upper_cutoff),
+                warn_singular=False,
+                **(kde_kws or {}),
+            )
+            kde_ax.set_title(
+                f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
                 fontsize=label_fontsize,
             )
-        elif box_violin == "violinplot":
-            sns.violinplot(x=feature_, ax=axes[0, 2], **(box_violin_kws or {}))
-            axes[0, 2].set_title(
-                f"Violinplot: {feature_name} (Scale: {scale_conversion})",
+            kde_ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+            kde_ax.set_ylabel("Density", fontsize=label_fontsize)
+            kde_ax.tick_params(axis="both", labelsize=tick_fontsize)
+            if xlim:
+                kde_ax.set_xlim(xlim)
+            if kde_ylim:
+                kde_ax.set_ylim(kde_ylim)
+
+        if plot_type in ["all", "hist"]:
+            hist_ax = axes[0, 1] if plot_type == "all" else ax
+            sns.histplot(x=feature_, ax=hist_ax, **(hist_kws or {}))
+            hist_ax.set_title(
+                f"Histplot: {feature_name} (Scale: {scale_conversion})",
+                fontsize=label_fontsize,
+            )
+            hist_ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+            hist_ax.set_ylabel("Count", fontsize=label_fontsize)
+            hist_ax.tick_params(axis="both", labelsize=tick_fontsize)
+            if xlim:
+                hist_ax.set_xlim(xlim)
+            if hist_ylim:
+                hist_ax.set_ylim(hist_ylim)
+
+        if plot_type in ["all", "box_violin"]:
+            box_violin_ax = axes[0, 2] if plot_type == "all" else ax
+            if box_violin == "boxplot":
+                sns.boxplot(
+                    x=feature_,
+                    ax=box_violin_ax,
+                    **(box_violin_kws or {}),
+                )
+                box_violin_ax.set_title(
+                    f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+                    fontsize=label_fontsize,
+                )
+            elif box_violin == "violinplot":
+                sns.violinplot(
+                    x=feature_,
+                    ax=box_violin_ax,
+                    **(box_violin_kws or {}),
+                )
+                box_violin_ax.set_title(
+                    f"Violinplot: {feature_name} (Scale: {scale_conversion})",
+                    fontsize=label_fontsize,
+                )
+            box_violin_ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+            box_violin_ax.set_ylabel("", fontsize=label_fontsize)
+            box_violin_ax.tick_params(axis="both", labelsize=tick_fontsize)
+            if xlim:
+                box_violin_ax.set_xlim(xlim)
+            if box_violin_ylim:
+                box_violin_ax.set_ylim(box_violin_ylim)
+
+        # Display the cutoff text universally
+        if plot_type == "all":
+            # Use dedicated row for text when in subplot mode
+            axes[1, 0].text(
+                0,
+                0.5,
+                f"Lower cutoff: {round(lower_cutoff, 2)} | "
+                f"Upper cutoff: {round(upper_cutoff, 2)}",
+                fontsize=label_fontsize,
+                ha="left",
+                va="center",
+            )
+            axes[1, 0].axis("off")
+            axes[1, 1].axis("off")
+            axes[1, 2].axis("off")
+        else:
+            # Display text below the single plot
+            fig.text(
+                0.5,
+                -0.05,  # Position below the plot
+                f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+                ha="center",
                 fontsize=label_fontsize,
             )
 
-        axes[0, 2].set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-        axes[0, 2].set_ylabel("", fontsize=label_fontsize)
-
-        # Apply custom xlim for boxplot/violinplot if specified
-        if xlim:
-            axes[0, 2].set_xlim(xlim)
-        # Apply custom box_violin_ylim for Boxplot/Violin plot if specified
-        if box_violin_ylim:
-            axes[0, 2].set_ylim(box_violin_ylim)
-
-        # Create a separate axis for the text (2nd row, span across all columns)
-        axes[1, 0].text(
-            0,
-            0.5,  # X and Y positions (set X to 0 to align with left)
-            f"Lower cutoff: {round(lower_cutoff, 2)} | "
-            f"Upper cutoff: {round(upper_cutoff, 2)}",
-            fontsize=label_fontsize,
-            ha="left",
-            va="center",
-        )
-        axes[1, 0].axis("off")  # Hide the subplot axes for text
-        axes[1, 1].axis("off")  # Hide the subplot axes
-        axes[1, 2].axis("off")  # Hide the subplot axes
-
-        # Adjust layout and show plot
         plt.tight_layout()
 
         # Check if the user-specified plot type is valid
@@ -3766,11 +3772,12 @@ def data_doctor(
 
         # Save the plots if save_plots is True and the paths are provided
         if save_plot:
-            # Generate a default filename based on the feature name and scale
-            # conversion
+            # Generate a default filename based on the feature name, scale
+            # conversion, and plot type
             default_filename = (
                 f"{feature_name}_"
-                f"{scale_conversion if scale_conversion else 'original'}"
+                f"{scale_conversion if scale_conversion else 'original'}_"
+                f"{plot_type}"
             )
 
             # Save as PNG if path is provided
