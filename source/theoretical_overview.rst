@@ -152,6 +152,142 @@ This formula normalizes the covariance by the product of the standard deviations
 
 The closer the value of :math:`r` is to :math:`\pm 1`, the stronger the linear relationship between the two variables.
 
+.. _Box_Cox_Transformation:
+
+Box-Cox Transformation
+--------------------------
+
+The Box-Cox transformation is a powerful technique for stabilizing variance and 
+making data more closely follow a normal distribution. Developed by statisticians 
+George Box and David Cox in 1964, the transformation is particularly useful in 
+linear regression models where assumptions of normality and homoscedasticity are 
+necessary. This document provides an accessible overview of the theoretical 
+concepts underlying the Box-Cox transformation.
+
+Many statistical methods assume that data is normally distributed and that the 
+variance remains constant across observations (homoscedasticity). However, 
+real-world data often violates these assumptions, especially when dealing with 
+positive-only, skewed distributions (e.g., income, expenditure, biological measurements). 
+The Box-Cox transformation is a family of power transformations designed to address 
+these issues by "normalizing" the data and stabilizing variance.
+
+Mathematical Definition
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Box-Cox transformation is defined as follows:
+
+.. math::
+
+    y(\lambda) = 
+    \begin{cases}
+      \frac{y^{\lambda} - 1}{\lambda}, & \text{if } \lambda \neq 0 \\
+      \ln(y), & \text{if } \lambda = 0 
+    \end{cases}
+
+Here:
+
+- :math:`y(\lambda)` is the transformed variable,
+
+- :math:`y` is the original variable (positive and continuous),
+
+- :math:`\lambda` is the transformation parameter.
+
+When :math:`\lambda = 0`, the transformation becomes a natural logarithm, effectively a special case of the Box-Cox transformation.
+
+**Interpretation of the Lambda Parameter**
+
+The value of :math:`\lambda` determines the shape of the transformation:
+
+- :math:`\lambda = 1`: The transformation does nothing; the data remains unchanged.
+
+- :math:`\lambda = 0.5`: A square-root transformation.
+
+- :math:`\lambda = 0`: A logarithmic transformation.
+
+- :math:`\lambda < 0`: An inverse transformation, which is often helpful when working with highly skewed data.
+
+Selecting the optimal value of :math:`\lambda` to achieve approximate normality or homoscedasticity is typically done using maximum likelihood estimation (MLE), where the goal is to find the value of :math:`\lambda` that maximizes the likelihood of observing the transformed data under a normal distribution.
+
+Properties and Benefits
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Box-Cox transformation has two key properties:
+
+1. **Variance Stabilization**: By choosing an appropriate :math:`\lambda`, the variance of :math:`y(\lambda)` can be made more constant across levels of :math:`y`. This is particularly useful in regression analysis, as homoscedasticity is often a critical assumption.
+
+2. **Normalization**: The transformation makes the distribution of :math:`y(\lambda)` closer to normality. This allows statistical techniques that assume normality to be more applicable to real-world, skewed data.
+
+**Likelihood Function**
+
+The likelihood function for the Box-Cox transformation is derived from the assumption that the transformed data follows a normal distribution. For a dataset with observations :math:`y_i`, the likelihood function is given by:
+
+.. math::
+
+    L(\lambda) = -\frac{n}{2} \ln (s^2) + (\lambda - 1) \sum_{i=1}^{n} \ln(y_i),
+
+where:
+
+- :math:`n` is the number of observations,
+- :math:`s^2` is the sample variance of the transformed data.
+
+Maximizing this likelihood function provides the MLE for :math:`\lambda`, which can be estimated using iterative methods.
+
+Practical Considerations
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In practice, implementing the Box-Cox transformation requires a few considerations:
+
+- **Positive-Only Data**: The transformation is only defined for positive values. For datasets with zero or negative values, a constant can be added to make all observations positive before applying the transformation.
+- **Interpretability**: The transformed data may lose interpretability in its original scale. For some applications, this trade-off is justified to meet model assumptions.
+- **Inverse Transformation**: If interpretability is a concern, the inverse of the Box-Cox transformation can be applied to transform results back to the original scale.
+
+Applications in Modeling
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In regression modeling, the Box-Cox transformation can improve both the accuracy 
+and validity of predictions. For example, in Ordinary Least Squares (OLS) 
+regression, the transformation reduces heteroscedasticity and normalizes residuals,
+leading to more reliable parameter estimates. Similarly, in time series analysis, 
+the Box-Cox transformation can stabilize variance, making models such as ARIMA more effective.
+
+The Box-Cox transformation is a flexible and powerful technique for addressing 
+non-normality and heteroscedasticity in data. By choosing an appropriate :math:`\lambda`, 
+practitioners can transform data to better meet the assumptions of various statistical methods, 
+enhancing the reliability of their models and inferences.
+
+.. _Confidence_Intervals_for_Lambda: 
+
+Confidence Intervals for Lambda
+"""""""""""""""""""""""""""""""""
+
+In practice, it is often helpful to assess the stability of the estimated 
+transformation parameter :math:`\lambda` by constructing a confidence interval 
+(CI). The CI provides a range of values within which the true value of :math:`\lambda` 
+is likely to fall, offering insights into the sensitivity of the transformation.
+
+To construct a confidence interval for :math:`\lambda`, the following approach can be used:
+
+1. **Alpha Level**: Select an alpha level, commonly 0.05, for a 95% confidence 
+interval, or adjust as needed. The alpha level represents the probability of 
+observing a value outside this interval if the estimate were repeated multiple times.
+
+2. **Profile Likelihood Method**: One approach is to use the profile likelihood
+method, where a range of :math:`\lambda` values are tested, and those with 
+likelihoods close to the maximum likelihood estimate (MLE) are retained within 
+the interval. The confidence interval is defined as the set of :math:`\lambda` 
+values for which the likelihood ratio statistic:
+
+   .. math::
+
+       \text{LR}(\lambda) = 2 \left( L(\hat{\lambda}) - L(\lambda) \right)
+
+   is less than the chi-square value at the chosen confidence level (e.g., 3.84 for a 95% CI with one degree of freedom).
+
+3. **Interpretation**: A narrow CI around :math:`\lambda` suggests that the transformation is relatively stable, while a wide interval might indicate sensitivity, signaling that the data may benefit from an alternative transformation or modeling approach.
+
+These confidence intervals provide a more robust understanding of the transformation’s impact, as well as the degree of transformation needed to meet model assumptions.
+
+
 
 Partial Dependence Foundations
 --------------------------------

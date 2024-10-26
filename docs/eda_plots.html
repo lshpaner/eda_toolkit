@@ -63,6 +63,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html">Gaussian Assumption for Normality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#box-cox-transformation">Box-Cox Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
@@ -95,6 +96,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id5">Explanation</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#data-fraction-usage">Data Fraction Usage</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
@@ -584,7 +586,7 @@ standard deviation lines. You can display one, none, or all of these simultaneou
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame containing the feature to analyze.</p></li>
 <li><p><strong>feature_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the feature (column) to analyze.</p></li>
 <li><p><strong>data_fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Fraction of the data to analyze. Default is <code class="docutils literal notranslate"><span class="pre">1</span></code> (full dataset). Useful for large datasets where a sample can represent the population. If <code class="docutils literal notranslate"><span class="pre">apply_as_new_col_to_df=True</span></code>, the full dataset is always used.</p></li>
-<li><p><strong>scale_conversion</strong> – <p>Type of conversion to apply to the feature. Options include:</p>
+<li><p><strong>scale_conversion</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Type of conversion to apply to the feature. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (no conversion). Options include:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">'abs'</span></code>: Absolute values</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'log'</span></code>: Natural logarithm values</p></li>
@@ -603,13 +605,6 @@ standard deviation lines. You can display one, none, or all of these simultaneou
 <li><p><code class="docutils literal notranslate"><span class="pre">'power'</span></code>: Power transformation (Yeo-Johnson)</p></li>
 </ul>
 </p></li>
-</ul>
-</dd>
-</dl>
-<p>Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (no conversion).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
 <li><p><strong>scale_conversion_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – <p>Additional keyword arguments to pass to the scaling functions, such as:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">'alpha'</span></code> for Box-Cox transformation (returns lambda confidence interval)</p></li>
@@ -673,7 +668,7 @@ Displays the feature’s descriptive statistics, quartile information, and outli
 <p><code class="docutils literal notranslate"><span class="pre">boxcox</span></code> is just one of the many options available for transforming data in the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function, providing versatility to handle different scaling needs.</p>
 </section>
 <section id="box-cox-transformation-example-1">
-<h2>Box-Cox Transformation Example 1<a class="headerlink" href="#box-cox-transformation-example-1" title="Link to this heading"></a></h2>
+<span id="box-cox-example-1"></span><h2>Box-Cox Transformation Example 1<a class="headerlink" href="#box-cox-transformation-example-1" title="Link to this heading"></a></h2>
 <p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
 function to apply a <strong>Box-Cox transformation</strong> to the <code class="docutils literal notranslate"><span class="pre">age</span></code> column in a DataFrame.
 The <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function provides a flexible way to preprocess data by applying
@@ -684,7 +679,7 @@ options (such as <code class="docutils literal notranslate"><span class="pre">'m
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
-    <span class="n">data_fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
     <span class="n">scale_conversion</span><span class="o">=</span><span class="s2">&quot;boxcox&quot;</span><span class="p">,</span>
     <span class="n">apply_cutoff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">lower_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -694,7 +689,7 @@ options (such as <code class="docutils literal notranslate"><span class="pre">'m
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>            <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>             <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
 <span class="o">+------------------------------+--------------------+</span>
 <span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">age</span>                <span class="o">|</span>
 <span class="o">+------------------------------+--------------------+</span>
@@ -856,14 +851,15 @@ options (such as <code class="docutils literal notranslate"><span class="pre">'m
 </section>
 </section>
 <section id="box-cox-transformation-example-2">
-<h2>Box-Cox Transformation Example 2<a class="headerlink" href="#box-cox-transformation-example-2" title="Link to this heading"></a></h2>
+<span id="box-cox-example-2"></span><h2>Box-Cox Transformation Example 2<a class="headerlink" href="#box-cox-transformation-example-2" title="Link to this heading"></a></h2>
 <p>In this second example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we apply the Box-Cox
 transformation to the <code class="docutils literal notranslate"><span class="pre">age</span></code> column in a DataFrame, but this time with custom
 keyword arguments passed through the <code class="docutils literal notranslate"><span class="pre">scale_conversion_kws</span></code>. Specifically, we
-provide an <code class="docutils literal notranslate"><span class="pre">alpha</span></code> value of <cite>0.8</cite>, influencing the confidence interval for the
-transformation. Additionally, we customize the visual appearance of the plots by
-specifying keyword arguments for the boxplot, KDE, and histogram plots. These
-customizations allow for greater control over the visual output.</p>
+provide an <code class="docutils literal notranslate"><span class="pre">alpha</span></code> value of <cite>0.8</cite>, <a class="reference internal" href="theoretical_overview.html#confidence-intervals-for-lambda"><span class="std std-ref">influencing the confidence interval for the
+transformation</span></a>. Additionally, we customize the
+visual appearance of the plots by specifying keyword arguments for the boxplot,
+KDE, and histogram plots. These customizations allow for greater control over the
+visual output.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -883,7 +879,7 @@ customizations allow for greater control over the visual output.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>                <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>             <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
 <span class="o">+------------------------------+--------------------+</span>
 <span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">age</span>                <span class="o">|</span>
 <span class="o">+------------------------------+--------------------+</span>
@@ -915,7 +911,11 @@ customizations allow for greater control over the visual output.</p>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/age_boxcox_custom_plots.svg"><img alt="Box-Cox Transformation W/ Data Doctor" class="align-center" src="_images/age_boxcox_custom_plots.svg" style="width: 900px;" />
 </a>
-</div><div style="height: 50px;"></div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</div><div style="height: 50px;"></div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The theoretical overview section provides a detailed framework for a <a class="reference internal" href="theoretical_overview.html#box-cox-transformation"><span class="std std-ref">Box-Cox transformation</span></a>.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 <style type="text/css">
@@ -1064,6 +1064,27 @@ any desired keyword arguments based on the correct version of Python you’re us
 <li><p><strong>Plot Saving</strong>: The <code class="docutils literal notranslate"><span class="pre">save_plot</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, and the plot will be saved as an SVG file at the specified location.</p></li>
 </ol>
 </section>
+</section>
+<section id="data-fraction-usage">
+<h2>Data Fraction Usage<a class="headerlink" href="#data-fraction-usage" title="Link to this heading"></a></h2>
+<p>In the <strong>Box-Cox transformation</strong> examples, you may notice a difference in the values for <code class="docutils literal notranslate"><span class="pre">data_fraction</span></code>:</p>
+<ul class="simple">
+<li><p>In <a class="reference internal" href="#box-cox-example-2"><span class="std std-ref">Box-Cox Example 1</span></a>, we set <code class="docutils literal notranslate"><span class="pre">data_fraction=0.6</span></code>.</p></li>
+<li><p>In <a class="reference internal" href="#box-cox-example-2"><span class="std std-ref">Box-Cox Example 2</span></a>, we used the full data with <code class="docutils literal notranslate"><span class="pre">data_fraction=1</span></code>.</p></li>
+</ul>
+<p>Despite using a <code class="docutils literal notranslate"><span class="pre">data_fraction</span></code> of <cite>0.6</cite> in Example 1, the function still processed
+the entire dataset. The purpose of the <code class="docutils literal notranslate"><span class="pre">data_fraction</span></code> parameter is to allow
+users to select a smaller subset of the data for sampling and transformation while
+ensuring the final operation is applied to the full scope of data.</p>
+<p>This behavior is intentional, as it serves to:</p>
+<p>1. <strong>Ensure Reproducibility</strong>: By using a consistent <code class="docutils literal notranslate"><span class="pre">random_state</span></code>, the sampled
+subset can reliably represent the dataset, regardless of <code class="docutils literal notranslate"><span class="pre">data_fraction</span></code>.</p>
+<p>2. <strong>Preserve Sampling Assumptions</strong>: Applying the desired operation (e.g., transformations)
+on the full data aligns the sample with the larger population and allows a seamless projection
+of the sample properties to the entire dataset.</p>
+<p>Thus, while <code class="docutils literal notranslate"><span class="pre">data_fraction</span></code> provides a way to adjust the percentage of data
+used for sampling, the function will always apply the transformation across the
+full dataset, balancing performance efficiency with statistical integrity.</p>
 </section>
 </section>
 <section id="stacked-crosstab-plots">
