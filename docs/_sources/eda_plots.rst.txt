@@ -707,7 +707,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
        apply_as_new_col_to_df=True,
    )
 
-.. code-block:: python
+.. code-block:: bash
 
                  DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
@@ -929,7 +929,7 @@ visual output.
         hist_kws={"color": "blue"},
     )
 
-.. code-block:: python
+.. code-block:: bash
 
                  DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
@@ -1221,7 +1221,7 @@ DataFrame, you can print the shape of ``sampled_df`` as follows:
         f"The sampled dataframe has {sampled_df.shape[0]} rows and {sampled_df.shape[1]} columns."
     )
 
-.. code-block:: python
+.. code-block:: bash
 
     The sampled dataframe has 29305 rows and 16 columns.
 
