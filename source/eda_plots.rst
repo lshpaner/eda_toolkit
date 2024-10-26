@@ -864,10 +864,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
     </table>
     </div>
 
-
-
 \
-
 
 .. note::
 
@@ -1334,6 +1331,60 @@ We can also inspect the first five rows of the ``sampled_df`` dataframe below:
 
 
 \
+
+
+Logit Transformation Example
+-------------------------------
+
+In this example, we demonstrate the usage of the ``data_doctor`` function to 
+apply a **logit transformation** to a feature in a DataFrame. The **logit transformation** 
+is used when dealing with data bounded between 0 and 1, as it maps values within 
+this range to an unbounded scale in log-odds terms, making it particularly useful 
+in fields such as logistic regression.
+
+The ``data_doctor`` function provides a range of scaling options, and in this case, 
+we use the **logit transformation** to illustrate how the transformation is applied. 
+However, it’s important to note that if the feature contains values outside the (0, 1) 
+range, the function will raise a ``ValueError``. This is because the logit function 
+is undefined for values less than or equal to 0 and greater than or equal to 1. 
+
+.. code-block:: python
+
+    data_doctor(
+        df=df,
+        feature_name="age",
+        data_fraction=1,
+        scale_conversion="logit",
+        apply_cutoff=False,
+        lower_cutoff=None,
+        upper_cutoff=None,
+        show_plot=True,
+        apply_as_new_col_to_df=True,
+        random_state=111,
+    )
+
+.. error::
+
+    ``ValueError: Logit transformation requires values to be between 0 and 1. Consider using a scaling method such as min-max scaling first.``
+
+If you attempt to apply this transformation to data outside the (0, 1) range, 
+such as an unscaled numerical feature, the function will halt and display an 
+error message advising you to use an appropriate scaling method first.
+
+If you encounter this error, it is recommended to first scale your data using a 
+method like **min-max scaling** to bring it within the (0, 1) range before 
+applying the logit transformation.
+
+
+In this example:
+
+- ``df=df``: Specifies the DataFrame containing the feature.
+- ``feature_name="feature_proportion"``: The feature we are transforming should be bounded between 0 and 1.
+- ``scale_conversion="logit"``: Sets the transformation to logit. Ensure that ``feature_proportion`` values are within (0, 1) before applying.
+- ``show_plot=True``: Generates a plot of the transformed feature.
+
+
+
 
 
 
