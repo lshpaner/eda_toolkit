@@ -101,6 +101,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#retaining-a-sample-for-analysis">Retaining a Sample for Analysis</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#logit-transformation-example">Logit Transformation Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
@@ -1233,6 +1234,50 @@ DataFrame, you can print the shape of <code class="docutils literal notranslate"
 </table>
 </div><p></p>
 </section>
+</section>
+<section id="logit-transformation-example">
+<h2>Logit Transformation Example<a class="headerlink" href="#logit-transformation-example" title="Link to this heading"></a></h2>
+<p>In this example, we demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function to
+apply a <strong>logit transformation</strong> to a feature in a DataFrame. The <strong>logit transformation</strong>
+is used when dealing with data bounded between 0 and 1, as it maps values within
+this range to an unbounded scale in log-odds terms, making it particularly useful
+in fields such as logistic regression.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function provides a range of scaling options, and in this case,
+we use the <strong>logit transformation</strong> to illustrate how the transformation is applied.
+However, it’s important to note that if the feature contains values outside the (0, 1)
+range, the function will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. This is because the logit function
+is undefined for values less than or equal to 0 and greater than or equal to 1.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
+    <span class="n">data_fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">scale_conversion</span><span class="o">=</span><span class="s2">&quot;logit&quot;</span><span class="p">,</span>
+    <span class="n">apply_cutoff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">lower_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">upper_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">apply_as_new_col_to_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition error">
+<p class="admonition-title">Error</p>
+<p><code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">Logit</span> <span class="pre">transformation</span> <span class="pre">requires</span> <span class="pre">values</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">between</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">1.</span> <span class="pre">Consider</span> <span class="pre">using</span> <span class="pre">a</span> <span class="pre">scaling</span> <span class="pre">method</span> <span class="pre">such</span> <span class="pre">as</span> <span class="pre">min-max</span> <span class="pre">scaling</span> <span class="pre">first.</span></code></p>
+</div>
+<p>If you attempt to apply this transformation to data outside the (0, 1) range,
+such as an unscaled numerical feature, the function will halt and display an
+error message advising you to use an appropriate scaling method first.</p>
+<p>If you encounter this error, it is recommended to first scale your data using a
+method like <strong>min-max scaling</strong> to bring it within the (0, 1) range before
+applying the logit transformation.</p>
+<p>In this example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">df=df</span></code>: Specifies the DataFrame containing the feature.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_name=&quot;feature_proportion&quot;</span></code>: The feature we are transforming should be bounded between 0 and 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale_conversion=&quot;logit&quot;</span></code>: Sets the transformation to logit. Ensure that <code class="docutils literal notranslate"><span class="pre">feature_proportion</span></code> values are within (0, 1) before applying.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">show_plot=True</span></code>: Generates a plot of the transformed feature.</p></li>
+</ul>
 </section>
 </section>
 <section id="stacked-crosstab-plots">
