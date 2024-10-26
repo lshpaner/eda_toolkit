@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html">Gaussian Assumption for Normality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#box-cox-transformation">Box-Cox Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
@@ -96,7 +97,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#id5">Explanation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#data-fraction-usage">Data Fraction Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-fraction-usage">Data Fraction Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#retaining-a-sample-for-analysis">Retaining a Sample for Analysis</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
@@ -1085,6 +1089,147 @@ of the sample properties to the entire dataset.</p>
 <p>Thus, while <code class="docutils literal notranslate"><span class="pre">data_fraction</span></code> provides a way to adjust the percentage of data
 used for sampling, the function will always apply the transformation across the
 full dataset, balancing performance efficiency with statistical integrity.</p>
+<section id="retaining-a-sample-for-analysis">
+<h3>Retaining a Sample for Analysis<a class="headerlink" href="#retaining-a-sample-for-analysis" title="Link to this heading"></a></h3>
+<p>To sample the exact subset used in the <code class="docutils literal notranslate"><span class="pre">data_fraction=0.6</span></code> calculation, you
+can directly sample from the DataFrame with a consistent random state for
+reproducibility. This method allows you to work with a representative subset of
+the data while preserving the original distribution characteristics.</p>
+<p>To sample 60% of the data using the exact logic of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function,
+use the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sampled_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">111</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">random_state</span></code> parameter ensures that the sampled data remains consistent
+across runs. After creating this subset, you can apply the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
+function to <code class="docutils literal notranslate"><span class="pre">sampled_df</span></code> as shown below to perform the Box-Cox transformation
+on the <code class="docutils literal notranslate"><span class="pre">age</span></code> column:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">sampled_df</span><span class="p">,</span>
+    <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
+    <span class="n">data_fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">scale_conversion</span><span class="o">=</span><span class="s2">&quot;boxcox&quot;</span><span class="p">,</span>
+    <span class="n">apply_cutoff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">lower_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">upper_cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">show_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">apply_as_new_col_to_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>By setting <code class="docutils literal notranslate"><span class="pre">data_fraction=1</span></code> within the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function, you ensure
+that it operates on the entire <code class="docutils literal notranslate"><span class="pre">sampled_df</span></code>, which now consists of the selected
+60% subset. To confirm that the sampled data is indeed 60% of the original
+DataFrame, you can print the shape of <code class="docutils literal notranslate"><span class="pre">sampled_df</span></code> as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;The sampled dataframe has </span><span class="si">{</span><span class="n">sampled_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> rows and </span><span class="si">{</span><span class="n">sampled_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> columns.&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>We can also inspect the first five rows of the <code class="docutils literal notranslate"><span class="pre">sampled_df</span></code> dataframe below:</p>
+<style type="text/css">
+.tg-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+  overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+  font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+.tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+.tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+.tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+.tg .tg-lightpink{background-color:#FFCCCC; border-width: 0px;} /* Remove borders and apply solid pink color */
+</style>
+<div class="tg-wrap">
+<table class="tg">
+  <thead>
+    <tr>
+      <th class="tg-zv4m"></th>
+      <th class="tg-aw21">age</th>
+      <th class="tg-aw21">workclass</th>
+      <th class="tg-aw21">education</th>
+      <th class="tg-aw21">education-num</th>
+      <th class="tg-aw21">marital-status</th>
+      <th class="tg-aw21">occupation</th>
+      <th class="tg-aw21">relationship</th>
+      <th class="tg-aw21 tg-lightpink">age_boxcox</th> <!-- Highlighted column -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-aw21">census_id</td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo"></td>
+      <td class="tg-8jgo tg-lightpink"></td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">408117383</td>
+      <td class="tg-8jgo">40</td>
+      <td class="tg-8jgo">Private</td>
+      <td class="tg-8jgo">Some-college</td>
+      <td class="tg-8jgo">10</td>
+      <td class="tg-8jgo">Married-civ-spouse</td>
+      <td class="tg-8jgo">Machine-op-inspct</td>
+      <td class="tg-8jgo">Husband</td>
+      <td class="tg-8jgo tg-lightpink">4.355015</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">669717925</td>
+      <td class="tg-8jgo">58</td>
+      <td class="tg-8jgo">Private</td>
+      <td class="tg-8jgo">HS-grad</td>
+      <td class="tg-8jgo">9</td>
+      <td class="tg-8jgo">Married-civ-spouse</td>
+      <td class="tg-8jgo">Exec-managerial</td>
+      <td class="tg-8jgo">Husband</td>
+      <td class="tg-8jgo tg-lightpink">5.086108</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">399428377</td>
+      <td class="tg-8jgo">41</td>
+      <td class="tg-8jgo">Private</td>
+      <td class="tg-8jgo">HS-grad</td>
+      <td class="tg-8jgo">9</td>
+      <td class="tg-8jgo">Separated</td>
+      <td class="tg-8jgo">Machine-op-inspct</td>
+      <td class="tg-8jgo">Not-in-family</td>
+      <td class="tg-8jgo tg-lightpink">5.037743</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">961427355</td>
+      <td class="tg-8jgo">73</td>
+      <td class="tg-8jgo">NaN</td>
+      <td class="tg-8jgo">Some-college</td>
+      <td class="tg-8jgo">10</td>
+      <td class="tg-8jgo">Married-civ-spouse</td>
+      <td class="tg-8jgo">NaN</td>
+      <td class="tg-8jgo">Husband</td>
+      <td class="tg-8jgo tg-lightpink">4.216561</td>
+    </tr>
+    <tr>
+      <td class="tg-zv4m">458295720</td>
+      <td class="tg-8jgo">19</td>
+      <td class="tg-8jgo">Private</td>
+      <td class="tg-8jgo">HS-grad</td>
+      <td class="tg-8jgo">9</td>
+      <td class="tg-8jgo">Never-married</td>
+      <td class="tg-8jgo">Farming-fishing</td>
+      <td class="tg-8jgo">Not-in-family</td>
+      <td class="tg-8jgo tg-lightpink">5.520438</td>
+    </tr>
+  </tbody>
+</table>
+</div><p></p>
+</section>
 </section>
 </section>
 <section id="stacked-crosstab-plots">
