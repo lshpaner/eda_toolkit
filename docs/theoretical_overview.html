@@ -77,6 +77,10 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#logit-transformation">Logit Transformation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-and-assumptions">Purpose and Assumptions</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
@@ -317,6 +321,28 @@ values for which the likelihood ratio statistic:</p>
 </ol>
 <p>These confidence intervals provide a more robust understanding of the transformation’s impact, as well as the degree of transformation needed to meet model assumptions.</p>
 </section>
+</section>
+</section>
+<section id="logit-transformation">
+<h1>Logit Transformation<a class="headerlink" href="#logit-transformation" title="Link to this heading"></a></h1>
+<p>The logit transformation is used to map values from the range <span class="math notranslate nohighlight">\((0, 1)\)</span> to the entire real number line <span class="math notranslate nohighlight">\((-\infty, +\infty)\)</span>.
+It is defined mathematically as:</p>
+<div class="math notranslate nohighlight">
+\[\text{logit}(p) = \ln\left(\frac{p}{1 - p}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(p\)</span> is a value in the range <span class="math notranslate nohighlight">\((0, 1)\)</span>. In other words, for each value <span class="math notranslate nohighlight">\(p\)</span>, the transformation is calculated
+by taking the natural logarithm of the odds <span class="math notranslate nohighlight">\(p / (1 - p)\)</span>.</p>
+<section id="purpose-and-assumptions">
+<span id="logit-assumptions"></span><h2>Purpose and Assumptions<a class="headerlink" href="#purpose-and-assumptions" title="Link to this heading"></a></h2>
+<p>The logit function is particularly useful in scenarios where data is constrained between 0 and 1, such as probabilities
+or proportions. However, to apply this transformation, <strong>all values must strictly lie within the open interval</strong> <span class="math notranslate nohighlight">\((0, 1)\)</span>.
+Values equal to 0 or 1 result in undefined values <span class="math notranslate nohighlight">\((-\infty, +\infty\)</span> respectively) since the logarithm of zero is undefined.</p>
+<p>In the code implementation, a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised if any values in the target feature fall outside the
+interval <span class="math notranslate nohighlight">\((0, 1)\)</span>. If your data does not meet this condition, consider applying a <strong>Min-Max scaling</strong> first to transform
+the data to the appropriate range.</p>
+<p><strong>Example</strong></p>
+<p>If <span class="math notranslate nohighlight">\(p = 0.5\)</span>, then:</p>
+<div class="math notranslate nohighlight">
+\[\text{logit}(0.5) = \ln\left(\frac{0.5}{1 - 0.5}\right) = \ln(1) = 0\]</div>
 </section>
 </section>
 <section id="partial-dependence-foundations">

@@ -1175,6 +1175,164 @@ used for sampling, the function will always apply the transformation across the
 full dataset, balancing performance efficiency with statistical integrity.
 
 
+Retaining a Sample for Analysis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To sample the exact subset used in the ``data_fraction=0.6`` calculation, you 
+can directly sample from the DataFrame with a consistent random state for 
+reproducibility. This method allows you to work with a representative subset of 
+the data while preserving the original distribution characteristics.
+
+To sample 60% of the data using the exact logic of the ``data_doctor`` function, 
+use the following code:
+
+.. code-block:: python
+
+    sampled_df = df.sample(frac=0.6, random_state=111)
+
+The ``random_state`` parameter ensures that the sampled data remains consistent 
+across runs. After creating this subset, you can apply the ``data_doctor`` 
+function to ``sampled_df`` as shown below to perform the Box-Cox transformation 
+on the ``age`` column:
+
+.. code-block:: python
+
+    data_doctor(
+        df=sampled_df,
+        feature_name="age",
+        data_fraction=1,
+        scale_conversion="boxcox",
+        apply_cutoff=False,
+        lower_cutoff=None,
+        upper_cutoff=None,
+        show_plot=True,
+        apply_as_new_col_to_df=True,
+        random_state=111,
+    )
+
+By setting ``data_fraction=1`` within the ``data_doctor`` function, you ensure 
+that it operates on the entire ``sampled_df``, which now consists of the selected 
+60% subset. To confirm that the sampled data is indeed 60% of the original 
+DataFrame, you can print the shape of ``sampled_df`` as follows:
+
+.. code-block:: python
+
+    print(
+        f"The sampled dataframe has {sampled_df.shape[0]} rows and {sampled_df.shape[1]} columns."
+    )
+
+
+We can also inspect the first five rows of the ``sampled_df`` dataframe below:
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+    .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+    .tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-lightpink{background-color:#FFCCCC; border-width: 0px;} /* Remove borders and apply solid pink color */
+    </style>
+    <div class="tg-wrap">
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-zv4m"></th>
+          <th class="tg-aw21">age</th>
+          <th class="tg-aw21">workclass</th>
+          <th class="tg-aw21">education</th>
+          <th class="tg-aw21">education-num</th>
+          <th class="tg-aw21">marital-status</th>
+          <th class="tg-aw21">occupation</th>
+          <th class="tg-aw21">relationship</th>
+          <th class="tg-aw21 tg-lightpink">age_boxcox</th> <!-- Highlighted column -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-aw21">census_id</td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo tg-lightpink"></td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">408117383</td>
+          <td class="tg-8jgo">40</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">Some-college</td>
+          <td class="tg-8jgo">10</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Machine-op-inspct</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">4.355015</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">669717925</td>
+          <td class="tg-8jgo">58</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">HS-grad</td>
+          <td class="tg-8jgo">9</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Exec-managerial</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">5.086108</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">399428377</td>
+          <td class="tg-8jgo">41</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">HS-grad</td>
+          <td class="tg-8jgo">9</td>
+          <td class="tg-8jgo">Separated</td>
+          <td class="tg-8jgo">Machine-op-inspct</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">5.037743</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">961427355</td>
+          <td class="tg-8jgo">73</td>
+          <td class="tg-8jgo">NaN</td>
+          <td class="tg-8jgo">Some-college</td>
+          <td class="tg-8jgo">10</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">NaN</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">4.216561</td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">458295720</td>
+          <td class="tg-8jgo">19</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">HS-grad</td>
+          <td class="tg-8jgo">9</td>
+          <td class="tg-8jgo">Never-married</td>
+          <td class="tg-8jgo">Farming-fishing</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">5.520438</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+\
+
+
+
 Stacked Crosstab Plots
 =======================
 

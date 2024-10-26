@@ -288,6 +288,41 @@ values for which the likelihood ratio statistic:
 These confidence intervals provide a more robust understanding of the transformation’s impact, as well as the degree of transformation needed to meet model assumptions.
 
 
+Logit Transformation
+------------------------
+
+The logit transformation is used to map values from the range :math:`(0, 1)` to the entire real number line :math:`(-\infty, +\infty)`. 
+It is defined mathematically as:
+
+.. math::
+
+    \text{logit}(p) = \ln\left(\frac{p}{1 - p}\right)
+
+where :math:`p` is a value in the range :math:`(0, 1)`. In other words, for each value :math:`p`, the transformation is calculated 
+by taking the natural logarithm of the odds :math:`p / (1 - p)`.
+
+.. _Logit_Assumptions:
+
+Purpose and Assumptions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The logit function is particularly useful in scenarios where data is constrained between 0 and 1, such as probabilities 
+or proportions. However, to apply this transformation, **all values must strictly lie within the open interval** :math:`(0, 1)`. 
+Values equal to 0 or 1 result in undefined values :math:`(-\infty, +\infty` respectively) since the logarithm of zero is undefined.
+
+In the code implementation, a ``ValueError`` is raised if any values in the target feature fall outside the 
+interval :math:`(0, 1)`. If your data does not meet this condition, consider applying a **Min-Max scaling** first to transform 
+the data to the appropriate range.
+
+**Example**
+
+If :math:`p = 0.5`, then:
+
+.. math::
+
+    \text{logit}(0.5) = \ln\left(\frac{0.5}{1 - 0.5}\right) = \ln(1) = 0
+
+
 
 Partial Dependence Foundations
 --------------------------------
