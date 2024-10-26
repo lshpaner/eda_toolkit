@@ -1221,6 +1221,10 @@ DataFrame, you can print the shape of ``sampled_df`` as follows:
         f"The sampled dataframe has {sampled_df.shape[0]} rows and {sampled_df.shape[1]} columns."
     )
 
+.. code-block:: python
+
+    The sampled dataframe has 29305 rows and 16 columns.
+
 
 We can also inspect the first five rows of the ``sampled_df`` dataframe below:
 
