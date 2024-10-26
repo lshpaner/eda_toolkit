@@ -883,7 +883,7 @@ Explanation
 - ``apply_cutoff=False``: We are not applying any outlier cutoff in this example.
 - ``lower_cutoff=None`` and ``upper_cutoff=None``: These are left as ``None`` since we are not applying outlier cutoffs in this case.
 - ``show_plot=True``: This option will generate a plot to visualize the distribution of the ``age`` column before and after the transformation.
-- ``apply_as_new_col_to_df=True``: This tells the function to apply the transformation and create a new column in the DataFrame. The new column will be named ``age_boxcox``, where "boxcox" indicates the type of transformation applied.
+- ``apply_as_new_col_to_df=True``: This tells the function to apply the transformation and create a new column in the DataFrame. The new column will be named ``age_boxcox``, where ``"boxcox"`` indicates the type of transformation applied.
 
 1. **Box-Cox Transformation**: This transformation normalizes the data by making the distribution more Gaussian-like, which can be beneficial for certain statistical models.
    
