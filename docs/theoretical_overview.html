@@ -67,6 +67,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#box-cox-transformation">Box-Cox Transformation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mathematical-definition">Mathematical Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#properties-and-benefits">Properties and Benefits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#practical-considerations">Practical Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#applications-in-modeling">Applications in Modeling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#confidence-intervals-for-lambda">Confidence Intervals for Lambda</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
@@ -204,6 +214,111 @@ a variable <span class="math notranslate nohighlight">\(X\)</span>, the standard
 </ul>
 <p>The closer the value of <span class="math notranslate nohighlight">\(r\)</span> is to <span class="math notranslate nohighlight">\(\pm 1\)</span>, the stronger the linear relationship between the two variables.</p>
 </section>
+<section id="box-cox-transformation">
+<span id="id1"></span><h1>Box-Cox Transformation<a class="headerlink" href="#box-cox-transformation" title="Link to this heading"></a></h1>
+<p>The Box-Cox transformation is a powerful technique for stabilizing variance and
+making data more closely follow a normal distribution. Developed by statisticians
+George Box and David Cox in 1964, the transformation is particularly useful in
+linear regression models where assumptions of normality and homoscedasticity are
+necessary. This document provides an accessible overview of the theoretical
+concepts underlying the Box-Cox transformation.</p>
+<p>Many statistical methods assume that data is normally distributed and that the
+variance remains constant across observations (homoscedasticity). However,
+real-world data often violates these assumptions, especially when dealing with
+positive-only, skewed distributions (e.g., income, expenditure, biological measurements).
+The Box-Cox transformation is a family of power transformations designed to address
+these issues by “normalizing” the data and stabilizing variance.</p>
+<section id="mathematical-definition">
+<h2>Mathematical Definition<a class="headerlink" href="#mathematical-definition" title="Link to this heading"></a></h2>
+<p>The Box-Cox transformation is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}y(\lambda) =
+\begin{cases}
+  \frac{y^{\lambda} - 1}{\lambda}, &amp; \text{if } \lambda \neq 0 \\
+  \ln(y), &amp; \text{if } \lambda = 0
+\end{cases}\end{split}\]</div>
+<p>Here:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(y(\lambda)\)</span> is the transformed variable,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y\)</span> is the original variable (positive and continuous),</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda\)</span> is the transformation parameter.</p></li>
+</ul>
+<p>When <span class="math notranslate nohighlight">\(\lambda = 0\)</span>, the transformation becomes a natural logarithm, effectively a special case of the Box-Cox transformation.</p>
+<p><strong>Interpretation of the Lambda Parameter</strong></p>
+<p>The value of <span class="math notranslate nohighlight">\(\lambda\)</span> determines the shape of the transformation:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\lambda = 1\)</span>: The transformation does nothing; the data remains unchanged.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda = 0.5\)</span>: A square-root transformation.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda = 0\)</span>: A logarithmic transformation.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda &lt; 0\)</span>: An inverse transformation, which is often helpful when working with highly skewed data.</p></li>
+</ul>
+<p>Selecting the optimal value of <span class="math notranslate nohighlight">\(\lambda\)</span> to achieve approximate normality or homoscedasticity is typically done using maximum likelihood estimation (MLE), where the goal is to find the value of <span class="math notranslate nohighlight">\(\lambda\)</span> that maximizes the likelihood of observing the transformed data under a normal distribution.</p>
+</section>
+<section id="properties-and-benefits">
+<h2>Properties and Benefits<a class="headerlink" href="#properties-and-benefits" title="Link to this heading"></a></h2>
+<p>The Box-Cox transformation has two key properties:</p>
+<ol class="arabic simple">
+<li><p><strong>Variance Stabilization</strong>: By choosing an appropriate <span class="math notranslate nohighlight">\(\lambda\)</span>, the variance of <span class="math notranslate nohighlight">\(y(\lambda)\)</span> can be made more constant across levels of <span class="math notranslate nohighlight">\(y\)</span>. This is particularly useful in regression analysis, as homoscedasticity is often a critical assumption.</p></li>
+<li><p><strong>Normalization</strong>: The transformation makes the distribution of <span class="math notranslate nohighlight">\(y(\lambda)\)</span> closer to normality. This allows statistical techniques that assume normality to be more applicable to real-world, skewed data.</p></li>
+</ol>
+<p><strong>Likelihood Function</strong></p>
+<p>The likelihood function for the Box-Cox transformation is derived from the assumption that the transformed data follows a normal distribution. For a dataset with observations <span class="math notranslate nohighlight">\(y_i\)</span>, the likelihood function is given by:</p>
+<div class="math notranslate nohighlight">
+\[L(\lambda) = -\frac{n}{2} \ln (s^2) + (\lambda - 1) \sum_{i=1}^{n} \ln(y_i),\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span> is the number of observations,</p></li>
+<li><p><span class="math notranslate nohighlight">\(s^2\)</span> is the sample variance of the transformed data.</p></li>
+</ul>
+<p>Maximizing this likelihood function provides the MLE for <span class="math notranslate nohighlight">\(\lambda\)</span>, which can be estimated using iterative methods.</p>
+</section>
+<section id="practical-considerations">
+<h2>Practical Considerations<a class="headerlink" href="#practical-considerations" title="Link to this heading"></a></h2>
+<p>In practice, implementing the Box-Cox transformation requires a few considerations:</p>
+<ul class="simple">
+<li><p><strong>Positive-Only Data</strong>: The transformation is only defined for positive values. For datasets with zero or negative values, a constant can be added to make all observations positive before applying the transformation.</p></li>
+<li><p><strong>Interpretability</strong>: The transformed data may lose interpretability in its original scale. For some applications, this trade-off is justified to meet model assumptions.</p></li>
+<li><p><strong>Inverse Transformation</strong>: If interpretability is a concern, the inverse of the Box-Cox transformation can be applied to transform results back to the original scale.</p></li>
+</ul>
+</section>
+<section id="applications-in-modeling">
+<h2>Applications in Modeling<a class="headerlink" href="#applications-in-modeling" title="Link to this heading"></a></h2>
+<p>In regression modeling, the Box-Cox transformation can improve both the accuracy
+and validity of predictions. For example, in Ordinary Least Squares (OLS)
+regression, the transformation reduces heteroscedasticity and normalizes residuals,
+leading to more reliable parameter estimates. Similarly, in time series analysis,
+the Box-Cox transformation can stabilize variance, making models such as ARIMA more effective.</p>
+<p>The Box-Cox transformation is a flexible and powerful technique for addressing
+non-normality and heteroscedasticity in data. By choosing an appropriate <span class="math notranslate nohighlight">\(\lambda\)</span>,
+practitioners can transform data to better meet the assumptions of various statistical methods,
+enhancing the reliability of their models and inferences.</p>
+<section id="confidence-intervals-for-lambda">
+<span id="id2"></span><h3>Confidence Intervals for Lambda<a class="headerlink" href="#confidence-intervals-for-lambda" title="Link to this heading"></a></h3>
+<p>In practice, it is often helpful to assess the stability of the estimated
+transformation parameter <span class="math notranslate nohighlight">\(\lambda\)</span> by constructing a confidence interval
+(CI). The CI provides a range of values within which the true value of <span class="math notranslate nohighlight">\(\lambda\)</span>
+is likely to fall, offering insights into the sensitivity of the transformation.</p>
+<p>To construct a confidence interval for <span class="math notranslate nohighlight">\(\lambda\)</span>, the following approach can be used:</p>
+<p>1. <strong>Alpha Level</strong>: Select an alpha level, commonly 0.05, for a 95% confidence
+interval, or adjust as needed. The alpha level represents the probability of
+observing a value outside this interval if the estimate were repeated multiple times.</p>
+<p>2. <strong>Profile Likelihood Method</strong>: One approach is to use the profile likelihood
+method, where a range of <span class="math notranslate nohighlight">\(\lambda\)</span> values are tested, and those with
+likelihoods close to the maximum likelihood estimate (MLE) are retained within
+the interval. The confidence interval is defined as the set of <span class="math notranslate nohighlight">\(\lambda\)</span>
+values for which the likelihood ratio statistic:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\text{LR}(\lambda) = 2 \left( L(\hat{\lambda}) - L(\lambda) \right)\]</div>
+<p>is less than the chi-square value at the chosen confidence level (e.g., 3.84 for a 95% CI with one degree of freedom).</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p><strong>Interpretation</strong>: A narrow CI around <span class="math notranslate nohighlight">\(\lambda\)</span> suggests that the transformation is relatively stable, while a wide interval might indicate sensitivity, signaling that the data may benefit from an alternative transformation or modeling approach.</p></li>
+</ol>
+<p>These confidence intervals provide a more robust understanding of the transformation’s impact, as well as the degree of transformation needed to meet model assumptions.</p>
+</section>
+</section>
+</section>
 <section id="partial-dependence-foundations">
 <h1>Partial Dependence Foundations<a class="headerlink" href="#partial-dependence-foundations" title="Link to this heading"></a></h1>
 <p>Let <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> represent the complete set of input features for a machine
@@ -249,7 +364,7 @@ influence of the features in <span class="math notranslate nohighlight">\(\mathb
 <li><p><strong>Two Features PDP:</strong> When plotting <span class="math notranslate nohighlight">\(\text{PD}(X_j, X_k)\)</span>, the result is a 3D surface plot (or a contour plot) that shows the combined marginal effect of <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span> on the predicted outcome. The surface represents the expected value of the prediction as <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span> vary, while all other features are averaged out.</p></li>
 </ul>
 <p><strong>3D Partial Dependence Plots</strong></p>
-<p>For a more comprehensive analysis, especially when exploring interactions between two features, <a class="reference internal" href="eda_plots.html#id17"><span class="std std-ref">3D Partial Dependence Plots</span></a> are invaluable. The partial dependence function for two features in a 3D context is:</p>
+<p>For a more comprehensive analysis, especially when exploring interactions between two features, <a class="reference internal" href="eda_plots.html#id18"><span class="std std-ref">3D Partial Dependence Plots</span></a> are invaluable. The partial dependence function for two features in a 3D context is:</p>
 <div class="math notranslate nohighlight">
 \[\text{PD}(X_j, X_k) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, X_k, \mathbf{X}_{C_i})\]</div>
 <p>Here, the function <span class="math notranslate nohighlight">\(f(X_j, X_k, \mathbf{X}_{C_i})\)</span> is evaluated across a grid of values for <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span>. The resulting 3D surface plot represents how the model’s prediction changes over the joint range of these two features.</p>

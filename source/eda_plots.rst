@@ -576,7 +576,7 @@ Feature Scaling and Outliers
     :param data_fraction: Fraction of the data to analyze. Default is ``1`` (full dataset). Useful for large datasets where a sample can represent the population. If ``apply_as_new_col_to_df=True``, the full dataset is always used.
     :type data_fraction: float, optional
 
-    :param scale_conversion: Type of conversion to apply to the feature. Options include:
+    :param scale_conversion: Type of conversion to apply to the feature. Defaults to ``None`` (no conversion). Options include:
     
         - ``'abs'``: Absolute values
         - ``'log'``: Natural logarithm values
@@ -593,9 +593,6 @@ Feature Scaling and Outliers
         - ``'arcsinh'``: Inverse hyperbolic sine
         - ``'square'``: Squaring the values
         - ``'power'``: Power transformation (Yeo-Johnson)
-
-    Defaults to ``None`` (no conversion).
-
     :type scale_conversion: str, optional
     :param scale_conversion_kws: Additional keyword arguments to pass to the scaling functions, such as:
 
@@ -682,6 +679,8 @@ The ``scale_conversion`` parameter accepts several options for data scaling, pro
 
 ``boxcox`` is just one of the many options available for transforming data in the ``data_doctor`` function, providing versatility to handle different scaling needs.
 
+.. _Box_Cox_Example_1:
+
 Box-Cox Transformation Example 1
 ----------------------------------
 
@@ -699,7 +698,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
    data_doctor(
        df=df,
        feature_name="age",
-       data_fraction=1,
+       data_fraction=0.6,
        scale_conversion="boxcox",
        apply_cutoff=False,
        lower_cutoff=None,
@@ -710,7 +709,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
 
 .. code-block:: python
 
-                DATA DOCTOR SUMMARY REPORT             
+                 DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
     | Feature                      | age                |
     +------------------------------+--------------------+
@@ -895,16 +894,19 @@ Explanation
 4. The ``show_plot=True`` parameter will generate a plot that visualizes the distribution of the original ``age`` data alongside the transformed ``age_boxcox`` data. This can help you assess how the Box-Cox transformation has affected the data distribution.
 
 
+.. _Box_Cox_Example_2:
+
 Box-Cox Transformation Example 2
 ----------------------------------
 
 In this second example from the US Census dataset [1]_, we apply the Box-Cox 
 transformation to the ``age`` column in a DataFrame, but this time with custom 
 keyword arguments passed through the ``scale_conversion_kws``. Specifically, we 
-provide an ``alpha`` value of `0.8`, influencing the confidence interval for the 
-transformation. Additionally, we customize the visual appearance of the plots by 
-specifying keyword arguments for the boxplot, KDE, and histogram plots. These 
-customizations allow for greater control over the visual output.
+provide an ``alpha`` value of `0.8`, :ref:`influencing the confidence interval for the 
+transformation <Confidence_Intervals_for_Lambda>`. Additionally, we customize the 
+visual appearance of the plots by specifying keyword arguments for the boxplot, 
+KDE, and histogram plots. These customizations allow for greater control over the 
+visual output.
 
 
 .. code-block:: python 
@@ -929,7 +931,7 @@ customizations allow for greater control over the visual output.
 
 .. code-block:: python
 
-                    DATA DOCTOR SUMMARY REPORT             
+                 DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
     | Feature                      | age                |
     +------------------------------+--------------------+
@@ -975,6 +977,11 @@ customizations allow for greater control over the visual output.
 .. raw:: html
    
    <div style="height: 50px;"></div>
+
+
+.. note::
+
+    The theoretical overview section provides a detailed framework for a :ref:`Box-Cox transformation <Box_Cox_Transformation>`.  
 
 .. code-block:: python
 
@@ -1138,6 +1145,34 @@ Explanation
 4. **Custom Plot Visuals**: The KDE, histogram, and boxplot are customized with blue colors, and specific keyword arguments are provided for the boxplot appearance based on Python version. These changes allow for finer control over the visual aesthetics of the resulting plots.
 
 5. **Plot Saving**: The ``save_plot`` parameter is set to ``True``, and the plot will be saved as an SVG file at the specified location.
+
+
+Data Fraction Usage
+----------------------
+
+In the **Box-Cox transformation** examples, you may notice a difference in the values for ``data_fraction``:
+
+- In :ref:`Box-Cox Example 1 <Box_Cox_Example_2>`, we set ``data_fraction=0.6``.
+
+- In :ref:`Box-Cox Example 2 <Box_Cox_Example_2>`, we used the full data with ``data_fraction=1``.
+
+Despite using a ``data_fraction`` of `0.6` in Example 1, the function still processed 
+the entire dataset. The purpose of the ``data_fraction`` parameter is to allow 
+users to select a smaller subset of the data for sampling and transformation while 
+ensuring the final operation is applied to the full scope of data.
+
+This behavior is intentional, as it serves to:
+
+1. **Ensure Reproducibility**: By using a consistent ``random_state``, the sampled 
+subset can reliably represent the dataset, regardless of ``data_fraction``.
+
+2. **Preserve Sampling Assumptions**: Applying the desired operation (e.g., transformations) 
+on the full data aligns the sample with the larger population and allows a seamless projection 
+of the sample properties to the entire dataset.
+
+Thus, while ``data_fraction`` provides a way to adjust the percentage of data 
+used for sampling, the function will always apply the transformation across the 
+full dataset, balancing performance efficiency with statistical integrity.
 
 
 Stacked Crosstab Plots
