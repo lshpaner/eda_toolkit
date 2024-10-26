@@ -1152,7 +1152,7 @@ Data Fraction Usage
 
 In the **Box-Cox transformation** examples, you may notice a difference in the values for ``data_fraction``:
 
-- In :ref:`Box-Cox Example 1 <Box_Cox_Example_2>`, we set ``data_fraction=0.6``.
+- In :ref:`Box-Cox Example 1 <Box_Cox_Example_1>`, we set ``data_fraction=0.6``.
 
 - In :ref:`Box-Cox Example 2 <Box_Cox_Example_2>`, we used the full data with ``data_fraction=1``.
 
