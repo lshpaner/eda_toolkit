@@ -288,6 +288,109 @@ values for which the likelihood ratio statistic:
 These confidence intervals provide a more robust understanding of the transformation’s impact, as well as the degree of transformation needed to meet model assumptions.
 
 
+The Yeo-Johnson Transformation
+------------------------------
+
+For a feature :math:`y`, the Yeo-Johnson transformation :math:`Y` is defined as:
+
+.. math::
+
+    Y = 
+    \begin{cases} 
+    \frac{((y + 1)^{\lambda} - 1)}{\lambda} & \text{if } y \geq 0, \lambda \neq 0 \\
+    \ln(y + 1) & \text{if } y \geq 0, \lambda = 0 \\
+    -\frac{((-y + 1)^{2 - \lambda} - 1)}{2 - \lambda} & \text{if } y < 0, \lambda \neq 2 \\
+    -\ln(-y + 1) & \text{if } y < 0, \lambda = 2 
+    \end{cases}
+
+**Breakdown of the Conditions**
+
+1. For Positive Values of :math:`y` (:math:`y \geq 0`):
+    - When :math:`\lambda \neq 0`: The transformation behaves similarly to the Box-Cox transformation with :math:`(y + 1)^{\lambda}`.
+    - When :math:`\lambda = 0`: The transformation simplifies to the natural log, :math:`\ln(y + 1)`.
+
+2. For Negative Values of :math:`y` (:math:`y < 0`):
+    - When :math:`\lambda \neq 2`: A reflected transformation is applied, :math:`-(−y + 1)^{2 - \lambda}`, to manage negative values smoothly.
+    - When :math:`\lambda = 2`: The transformation simplifies to :math:`- \ln(-y + 1)`, making it suitable for negative inputs while preserving continuity.
+
+**Why It Works**
+
+The Yeo-Johnson transformation adjusts data to make it more normally distributed. By allowing transformations for both positive and negative values, it offers flexibility across various distributions. The parameter :math:`\lambda` is typically optimized to best approximate normality.
+
+**When to Use It**
+
+Yeo-Johnson is particularly useful for datasets containing zero or negative values. It’s often effective for linear models that assume normally distributed data, making it a robust alternative when Box-Cox cannot be applied.
+
+
+Median and IQR Scaling
+------------------------------
+
+``RobustScaler`` in ``scikit-learn`` is a scaling method that reduces the impact 
+of outliers in your data by using the **median** and **interquartile range (IQR)** 
+instead of the mean and standard deviation, which are more sensitive to extreme values. 
+Here's a mathematical breakdown of how it works:
+
+Centering Data Using the Median
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The formula for scaling each feature :math:`x` in the dataset using ``RobustScaler`` is:
+
+.. math::
+
+   x_{\text{scaled}} = \frac{x - \text{Median}(x)}{\text{IQR}(x)}
+
+where:
+
+- :math:`\text{Median}(x)` is the median of the feature :math:`x`.
+- :math:`\text{IQR}(x) = Q_3 - Q_1`, the interquartile range, is the difference between the 75th percentile (:math:`Q_3`) and the 25th percentile (:math:`Q_1`) of the feature. This range represents the spread of the middle 50% of values, which is less sensitive to extreme values than the total range.
+
+Explanation of Each Component
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Median** (:math:`\text{Median}(x)`): This is the 50th percentile, or the central value of the feature. It acts as the "center" of the data, but unlike the mean, it is robust to outliers.
+- **Interquartile Range (IQR)**: By dividing by the IQR, the ``RobustScaler`` standardizes the spread of the data based on the range of the middle 50% of values, making it less influenced by extreme values. Essentially, the values are scaled to fall within a range close to -1 to 1 for the majority of samples.
+
+Example Calculation
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Suppose you have a feature :math:`x = [1, 2, 3, 4, 5, 100]`. Here’s how the scaling would work:
+
+1. **Calculate the Median**:
+
+   .. math::
+
+      \text{Median}(x) = 3.5
+
+2. **Calculate the Interquartile Range (IQR)**:
+
+   - First, find :math:`Q_1` (25th percentile) and :math:`Q_3` (75th percentile):
+     - :math:`Q_1 = 2`, :math:`Q_3 = 5`
+   - Then, :math:`\text{IQR}(x) = Q_3 - Q_1 = 5 - 2 = 3`
+
+
+\
+
+3. **Apply the Scaling Formula**:
+
+   - For each :math:`x` value, subtract the median and divide by the IQR:
+
+   .. math::
+
+      x_{\text{scaled}} = \frac{x - 3.5}{3}
+
+This results in values that are centered around 0 and scaled according to the 
+interquartile range, rather than the full range or mean and standard deviation. 
+For our example, the outlier (100) will be downscaled effectively, reducing its 
+influence on the data’s range and making the scaling robust to such outliers.
+
+The ``RobustScaler`` is particularly useful when dealing with data with significant 
+outliers, as it centers the data around the median and scales according to the 
+IQR, allowing for better handling of extreme values than traditional 
+standardization methods.
+
+
+.. _Logit_Assumptions:
+
 Logit Transformation
 ------------------------
 
@@ -301,7 +404,6 @@ It is defined mathematically as:
 where :math:`p` is a value in the range :math:`(0, 1)`. In other words, for each value :math:`p`, the transformation is calculated 
 by taking the natural logarithm of the odds :math:`p / (1 - p)`.
 
-.. _Logit_Assumptions:
 
 Purpose and Assumptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
