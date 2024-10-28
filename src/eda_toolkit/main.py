@@ -3238,7 +3238,7 @@ def data_doctor(
                             `box_violin`).
         If an invalid plot type is provided, a `ValueError` is raised.
 
-    figsize : tuple, optional (default=(18, 6))
+    figsize : tuple or list, optional (default=(18, 6))
         Specifies the figure size for the plots. This applies to all plot types, 
         including single plots (when `plot_type` is set to "kde", "hist", or 
         "box_violin") and multi-plot layout when `plot_type` is "all".
@@ -3356,7 +3356,7 @@ def data_doctor(
             )
 
     # If conversion will be applied to a new column, set sample_frac to 1
-    if apply_as_new_col_to_df == True:
+    if apply_as_new_col_to_df:
         data_fraction = 1  # change the sample fraction value to 100 percent, to
 
     # Define valid scale conversions
@@ -3396,7 +3396,7 @@ def data_doctor(
         random_state=random_state,
     )[feature_name]
 
-    # New column name options when apply_as_new_col_to_df == True
+    # New column name options when apply_as_new_col_to_df
     if apply_as_new_col_to_df:
         if scale_conversion is None and apply_cutoff:
             new_col_name = feature_name + "_w_cutoff"
