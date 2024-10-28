@@ -3749,7 +3749,8 @@ def data_doctor(
             fig.text(
                 0.5,
                 -0.05,  # Position below the plot
-                f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+                f"Lower cutoff: {round(lower_cutoff, 2)} | "
+                f"Upper cutoff: {round(upper_cutoff, 2)}",
                 ha="center",
                 fontsize=label_fontsize,
             )
