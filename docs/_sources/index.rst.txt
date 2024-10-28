@@ -31,19 +31,18 @@ Table of Contents
 
    getting_started
 
+.. toctree::
+   :maxdepth: 4
+   :caption: Theoretical Overview
+
+   theoretical_overview
 
 .. toctree::
    :maxdepth: 4
    :caption: Data Management
 
    data_management
-
-.. toctree::
-   :maxdepth: 4
-   :caption: Theoretical Overview
-
-   theoretical_overview
-   
+ 
 .. toctree::
    :maxdepth: 4
    :caption: Plotting Heuristics
