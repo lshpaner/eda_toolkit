@@ -563,7 +563,7 @@ statistical overlays to provide deeper insights into the data.
 Feature Scaling and Outliers
 =============================
 
-.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, plot_type="all", xlim=None, kde_ylim=None, hist_ylim=None, box_violin_ylim=None, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None)
+.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, plot_type="all", figsize=(18, 6), xlim=None, kde_ylim=None, hist_ylim=None, box_violin_ylim=None, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None)
 
     Analyze and transform a specific feature in a DataFrame, with options for scaling, applying cutoffs, and visualizing the results. This function also allows for creating a new column with the transformed data if specified. Plots can be saved in PNG or SVG format with filenames that incorporate the `plot_type`, `feature_name`, and `scale_conversion`.
 
@@ -624,6 +624,9 @@ Feature Scaling and Outliers
 
         Default is ``"all"``. If an invalid plot type is provided, a ``ValueError`` is raised.
     :type plot_type: str, optional
+
+    :param figsize: Specifies the figure size for the plots. Applies to both multi-plot (``plot_type="all"``) and single-plot modes. Accepts either a tuple or list, with default set to ``(18, 6)``.
+    :type figsize: tuple or list, optional
 
     :param xlim: Limits for the x-axis in all plots, specified as ``(xmin, xmax)``.
     :type xlim: tuple or list, optional
