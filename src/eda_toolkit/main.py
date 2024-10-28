@@ -3166,6 +3166,7 @@ def data_doctor(
     label_fontsize=12,
     tick_fontsize=10,
     random_state=None,
+    figsize=(18, 6), 
 ):
     """
     Analyze and transform a specific feature in a DataFrame, with options for
@@ -3236,6 +3237,11 @@ def data_doctor(
             - 'box_violin': Boxplot or violin plot only (specified by
                             `box_violin`).
         If an invalid plot type is provided, a `ValueError` is raised.
+
+    figsize : tuple, optional (default=(18, 6))
+        Specifies the figure size for the plots. This applies to all plot types, 
+        including single plots (when `plot_type` is set to "kde", "hist", or 
+        "box_violin") and multi-plot layout when `plot_type` is "all".
 
     xlim : tuple or list, optional
         Limits for the x-axis in all plots, specified as (xmin, xmax).
@@ -3656,10 +3662,10 @@ def data_doctor(
     # Conditionally create subplots if plot_type is "all"
     if plot_type == "all":
         fig, axes = plt.subplots(
-            2, 3, figsize=(18, 6), gridspec_kw={"height_ratios": [10, 1]}
+            2, 3, figsize=figsize, gridspec_kw={"height_ratios": [10, 1]}
         )
     else:
-        fig, ax = plt.subplots(figsize=(8, 6))  # Single plot when not "all"
+        fig, ax = plt.subplots(figsize=figsize)  # Single plot when not "all"
 
     # Plot based on plot_type
     if show_plot:
