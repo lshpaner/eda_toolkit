@@ -77,6 +77,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#median-and-iqr-scaling">Median and IQR Scaling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#centering-data-using-the-median">Centering Data Using the Median</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#explanation-of-each-component">Explanation of Each Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-calculation">Example Calculation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#logit-transformation">Logit Transformation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#purpose-and-assumptions">Purpose and Assumptions</a></li>
 </ul>
@@ -323,8 +330,103 @@ values for which the likelihood ratio statistic:</p>
 </section>
 </section>
 </section>
+<section id="the-yeo-johnson-transformation">
+<h1>The Yeo-Johnson Transformation<a class="headerlink" href="#the-yeo-johnson-transformation" title="Link to this heading"></a></h1>
+<p>For a feature <span class="math notranslate nohighlight">\(y\)</span>, the Yeo-Johnson transformation <span class="math notranslate nohighlight">\(Y\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}Y =
+\begin{cases}
+\frac{((y + 1)^{\lambda} - 1)}{\lambda} &amp; \text{if } y \geq 0, \lambda \neq 0 \\
+\ln(y + 1) &amp; \text{if } y \geq 0, \lambda = 0 \\
+-\frac{((-y + 1)^{2 - \lambda} - 1)}{2 - \lambda} &amp; \text{if } y &lt; 0, \lambda \neq 2 \\
+-\ln(-y + 1) &amp; \text{if } y &lt; 0, \lambda = 2
+\end{cases}\end{split}\]</div>
+<p><strong>Breakdown of the Conditions</strong></p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>For Positive Values of <span class="math notranslate nohighlight">\(y\)</span> (<span class="math notranslate nohighlight">\(y \geq 0\)</span>):</dt><dd><ul class="simple">
+<li><p>When <span class="math notranslate nohighlight">\(\lambda \neq 0\)</span>: The transformation behaves similarly to the Box-Cox transformation with <span class="math notranslate nohighlight">\((y + 1)^{\lambda}\)</span>.</p></li>
+<li><p>When <span class="math notranslate nohighlight">\(\lambda = 0\)</span>: The transformation simplifies to the natural log, <span class="math notranslate nohighlight">\(\ln(y + 1)\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>For Negative Values of <span class="math notranslate nohighlight">\(y\)</span> (<span class="math notranslate nohighlight">\(y &lt; 0\)</span>):</dt><dd><ul class="simple">
+<li><p>When <span class="math notranslate nohighlight">\(\lambda \neq 2\)</span>: A reflected transformation is applied, <span class="math notranslate nohighlight">\(-(−y + 1)^{2 - \lambda}\)</span>, to manage negative values smoothly.</p></li>
+<li><p>When <span class="math notranslate nohighlight">\(\lambda = 2\)</span>: The transformation simplifies to <span class="math notranslate nohighlight">\(- \ln(-y + 1)\)</span>, making it suitable for negative inputs while preserving continuity.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+<p><strong>Why It Works</strong></p>
+<p>The Yeo-Johnson transformation adjusts data to make it more normally distributed. By allowing transformations for both positive and negative values, it offers flexibility across various distributions. The parameter <span class="math notranslate nohighlight">\(\lambda\)</span> is typically optimized to best approximate normality.</p>
+<p><strong>When to Use It</strong></p>
+<p>Yeo-Johnson is particularly useful for datasets containing zero or negative values. It’s often effective for linear models that assume normally distributed data, making it a robust alternative when Box-Cox cannot be applied.</p>
+</section>
+<section id="median-and-iqr-scaling">
+<h1>Median and IQR Scaling<a class="headerlink" href="#median-and-iqr-scaling" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> is a scaling method that reduces the impact
+of outliers in your data by using the <strong>median</strong> and <strong>interquartile range (IQR)</strong>
+instead of the mean and standard deviation, which are more sensitive to extreme values.
+Here’s a mathematical breakdown of how it works:</p>
+<section id="centering-data-using-the-median">
+<h2>Centering Data Using the Median<a class="headerlink" href="#centering-data-using-the-median" title="Link to this heading"></a></h2>
+<p>The formula for scaling each feature <span class="math notranslate nohighlight">\(x\)</span> in the dataset using <code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> is:</p>
+<div class="math notranslate nohighlight">
+\[x_{\text{scaled}} = \frac{x - \text{Median}(x)}{\text{IQR}(x)}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\text{Median}(x)\)</span> is the median of the feature <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{IQR}(x) = Q_3 - Q_1\)</span>, the interquartile range, is the difference between the 75th percentile (<span class="math notranslate nohighlight">\(Q_3\)</span>) and the 25th percentile (<span class="math notranslate nohighlight">\(Q_1\)</span>) of the feature. This range represents the spread of the middle 50% of values, which is less sensitive to extreme values than the total range.</p></li>
+</ul>
+</section>
+<section id="explanation-of-each-component">
+<h2>Explanation of Each Component<a class="headerlink" href="#explanation-of-each-component" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Median</strong> (<span class="math notranslate nohighlight">\(\text{Median}(x)\)</span>): This is the 50th percentile, or the central value of the feature. It acts as the “center” of the data, but unlike the mean, it is robust to outliers.</p></li>
+<li><p><strong>Interquartile Range (IQR)</strong>: By dividing by the IQR, the <code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> standardizes the spread of the data based on the range of the middle 50% of values, making it less influenced by extreme values. Essentially, the values are scaled to fall within a range close to -1 to 1 for the majority of samples.</p></li>
+</ul>
+</section>
+<section id="example-calculation">
+<h2>Example Calculation<a class="headerlink" href="#example-calculation" title="Link to this heading"></a></h2>
+<p>Suppose you have a feature <span class="math notranslate nohighlight">\(x = [1, 2, 3, 4, 5, 100]\)</span>. Here’s how the scaling would work:</p>
+<ol class="arabic">
+<li><p><strong>Calculate the Median</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\text{Median}(x) = 3.5\]</div>
+</li>
+<li><p><strong>Calculate the Interquartile Range (IQR)</strong>:</p>
+<ul class="simple">
+<li><p>First, find <span class="math notranslate nohighlight">\(Q_1\)</span> (25th percentile) and <span class="math notranslate nohighlight">\(Q_3\)</span> (75th percentile):
+- <span class="math notranslate nohighlight">\(Q_1 = 2\)</span>, <span class="math notranslate nohighlight">\(Q_3 = 5\)</span></p></li>
+<li><p>Then, <span class="math notranslate nohighlight">\(\text{IQR}(x) = Q_3 - Q_1 = 5 - 2 = 3\)</span></p></li>
+</ul>
+</li>
+</ol>
+<p></p>
+<ol class="arabic" start="3">
+<li><p><strong>Apply the Scaling Formula</strong>:</p>
+<ul class="simple">
+<li><p>For each <span class="math notranslate nohighlight">\(x\)</span> value, subtract the median and divide by the IQR:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[x_{\text{scaled}} = \frac{x - 3.5}{3}\]</div>
+</li>
+</ol>
+<p>This results in values that are centered around 0 and scaled according to the
+interquartile range, rather than the full range or mean and standard deviation.
+For our example, the outlier (100) will be downscaled effectively, reducing its
+influence on the data’s range and making the scaling robust to such outliers.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> is particularly useful when dealing with data with significant
+outliers, as it centers the data around the median and scales according to the
+IQR, allowing for better handling of extreme values than traditional
+standardization methods.</p>
+</section>
+</section>
 <section id="logit-transformation">
-<h1>Logit Transformation<a class="headerlink" href="#logit-transformation" title="Link to this heading"></a></h1>
+<span id="logit-assumptions"></span><h1>Logit Transformation<a class="headerlink" href="#logit-transformation" title="Link to this heading"></a></h1>
 <p>The logit transformation is used to map values from the range <span class="math notranslate nohighlight">\((0, 1)\)</span> to the entire real number line <span class="math notranslate nohighlight">\((-\infty, +\infty)\)</span>.
 It is defined mathematically as:</p>
 <div class="math notranslate nohighlight">
@@ -332,7 +434,7 @@ It is defined mathematically as:</p>
 <p>where <span class="math notranslate nohighlight">\(p\)</span> is a value in the range <span class="math notranslate nohighlight">\((0, 1)\)</span>. In other words, for each value <span class="math notranslate nohighlight">\(p\)</span>, the transformation is calculated
 by taking the natural logarithm of the odds <span class="math notranslate nohighlight">\(p / (1 - p)\)</span>.</p>
 <section id="purpose-and-assumptions">
-<span id="logit-assumptions"></span><h2>Purpose and Assumptions<a class="headerlink" href="#purpose-and-assumptions" title="Link to this heading"></a></h2>
+<h2>Purpose and Assumptions<a class="headerlink" href="#purpose-and-assumptions" title="Link to this heading"></a></h2>
 <p>The logit function is particularly useful in scenarios where data is constrained between 0 and 1, such as probabilities
 or proportions. However, to apply this transformation, <strong>all values must strictly lie within the open interval</strong> <span class="math notranslate nohighlight">\((0, 1)\)</span>.
 Values equal to 0 or 1 result in undefined values <span class="math notranslate nohighlight">\((-\infty, +\infty\)</span> respectively) since the logarithm of zero is undefined.</p>
@@ -390,7 +492,7 @@ influence of the features in <span class="math notranslate nohighlight">\(\mathb
 <li><p><strong>Two Features PDP:</strong> When plotting <span class="math notranslate nohighlight">\(\text{PD}(X_j, X_k)\)</span>, the result is a 3D surface plot (or a contour plot) that shows the combined marginal effect of <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span> on the predicted outcome. The surface represents the expected value of the prediction as <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span> vary, while all other features are averaged out.</p></li>
 </ul>
 <p><strong>3D Partial Dependence Plots</strong></p>
-<p>For a more comprehensive analysis, especially when exploring interactions between two features, <a class="reference internal" href="eda_plots.html#id18"><span class="std std-ref">3D Partial Dependence Plots</span></a> are invaluable. The partial dependence function for two features in a 3D context is:</p>
+<p>For a more comprehensive analysis, especially when exploring interactions between two features, <a class="reference internal" href="eda_plots.html#id17"><span class="std std-ref">3D Partial Dependence Plots</span></a> are invaluable. The partial dependence function for two features in a 3D context is:</p>
 <div class="math notranslate nohighlight">
 \[\text{PD}(X_j, X_k) = \frac{1}{n} \sum_{i=1}^{n} f(X_j, X_k, \mathbf{X}_{C_i})\]</div>
 <p>Here, the function <span class="math notranslate nohighlight">\(f(X_j, X_k, \mathbf{X}_{C_i})\)</span> is evaluated across a grid of values for <span class="math notranslate nohighlight">\(X_j\)</span> and <span class="math notranslate nohighlight">\(X_k\)</span>. The resulting 3D surface plot represents how the model’s prediction changes over the joint range of these two features.</p>
