@@ -1413,8 +1413,65 @@ In this example:
 - ``show_plot=True``: Generates a plot of the transformed feature.
 
 
+Outliers With RobustScaler Example
+-----------------------------------
 
+In this example from the US Census dataset [1]_, we apply the RobustScaler 
+transformation to the age column in a DataFrame to address potential outliers. 
+The ``data_doctor`` function enables users to apply transformations with specific 
+configurations via the ``scale_conversion_kws`` parameter, making it ideal for 
+refining how outliers affect scaling.
 
+For this example, we set the following custom keyword arguments:
+
+- Disable centering: By setting ``with_centering=False``, the transformation scales based only on the range, without shifting the median to zero.
+- Adjust quantile range: We specify a narrower ``quantile_range`` of (`10.0, 90.0`) to reduce the influence of extreme values on scaling.
+
+The following code demonstrates this transformation:
+
+.. code-block:: python
+
+    data_doctor(
+        df=sampled_df,
+        feature_name='age',
+        data_fraction=0.4,
+        scale_conversion="robust",
+        apply_as_new_col_to_df=True,
+        scale_conversion_kws={
+            "with_centering": False,  # Disable centering
+            "quantile_range": (10.0, 90.0)  # Use a custom quantile range
+        }
+    )
+
+.. code-block:: bash
+
+                 DATA DOCTOR SUMMARY REPORT             
+    +------------------------------+--------------------+
+    | Feature                      | age                |
+    +------------------------------+--------------------+
+    | Statistic                    | Value              |
+    +------------------------------+--------------------+
+    | Min                          | 0.4722             |
+    | Max                          | 2.5000             |
+    | Mean                         | 1.0724             |
+    | Median                       | 1.0278             |
+    | Std Dev                      | 0.3809             |
+    +------------------------------+--------------------+
+    | Quartile                     | Value              |
+    +------------------------------+--------------------+
+    | Q1 (25%)                     | 0.7778             |
+    | Q2 (Median)                  | 1.0278             |
+    | IQR                          | 0.5556             |
+    | Q3 (75%)                     | 1.3333             |
+    | Q4 (Max)                     | 2.5000             |
+    +------------------------------+--------------------+
+    | Outlier Bound                | Value              |
+    +------------------------------+--------------------+
+    | Lower Bound                  | -2.0000            |
+    | Upper Bound                  | 2.5556             |
+    +------------------------------+--------------------+
+
+    New Column Name: age_robust
 
 
 Stacked Crosstab Plots

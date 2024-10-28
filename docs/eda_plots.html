@@ -98,6 +98,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#logit-transformation-example">Logit Transformation Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#outliers-with-robustscaler-example">Outliers With RobustScaler Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
@@ -137,9 +138,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#d-plots-ca-housing-example">2D Plots - CA Housing Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id17">3D Partial Dependence Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id18">3D Partial Dependence Plots</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#plot_3d_pdp"><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id19">3D Plots - CA Housing Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">3D Plots - CA Housing Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#static-plot">Static Plot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#interactive-plot">Interactive Plot</a></li>
 </ul>
@@ -233,8 +234,8 @@ to understand how specific variables influence predictions.</p></li>
 Kernel Density Estimate (KDE) plots, histograms, or a combination of both for
 specified columns within a DataFrame. This function is particularly useful for
 visualizing the distribution of numerical data across various categories or groups.
-It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id21" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
-matplotlib <a class="footnote-reference brackets" href="#id22" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
+It leverages the powerful seaborn library <a class="footnote-reference brackets" href="#id22" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for plotting, which is built on top of
+matplotlib <a class="footnote-reference brackets" href="#id23" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and provides a high-level interface for drawing attractive and informative
 statistical graphics.</p>
 <p><strong>Key Features and Parameters</strong></p>
 <ul class="simple">
@@ -687,7 +688,7 @@ Displays the feature’s descriptive statistics, quartile information, and outli
 </section>
 <section id="box-cox-transformation-example-1">
 <span id="box-cox-example-1"></span><h2>Box-Cox Transformation Example 1<a class="headerlink" href="#box-cox-transformation-example-1" title="Link to this heading"></a></h2>
-<p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id20" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
+<p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
 function to apply a <strong>Box-Cox transformation</strong> to the <code class="docutils literal notranslate"><span class="pre">age</span></code> column in a DataFrame.
 The <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function provides a flexible way to preprocess data by applying
 various scaling techniques. In this case, we apply the Box-Cox transformation <strong>without any tuning</strong>
@@ -869,7 +870,7 @@ Box<span class="w"> </span>Cox<span class="w"> </span>lambda:<span class="w"> </
 </section>
 <section id="box-cox-transformation-example-2">
 <span id="box-cox-example-2"></span><h2>Box-Cox Transformation Example 2<a class="headerlink" href="#box-cox-transformation-example-2" title="Link to this heading"></a></h2>
-<p>In this second example from the US Census dataset <a class="footnote-reference brackets" href="#id20" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we apply the Box-Cox
+<p>In this second example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we apply the Box-Cox
 transformation to the <code class="docutils literal notranslate"><span class="pre">age</span></code> column in a DataFrame, but this time with custom
 keyword arguments passed through the <code class="docutils literal notranslate"><span class="pre">scale_conversion_kws</span></code>. Specifically, we
 provide an <code class="docutils literal notranslate"><span class="pre">alpha</span></code> value of <cite>0.8</cite>, <a class="reference internal" href="theoretical_overview.html#confidence-intervals-for-lambda"><span class="std std-ref">influencing the confidence interval for the
@@ -1292,6 +1293,62 @@ applying the logit transformation.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">show_plot=True</span></code>: Generates a plot of the transformed feature.</p></li>
 </ul>
 </section>
+<section id="outliers-with-robustscaler-example">
+<h2>Outliers With RobustScaler Example<a class="headerlink" href="#outliers-with-robustscaler-example" title="Link to this heading"></a></h2>
+<p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we apply the RobustScaler
+transformation to the age column in a DataFrame to address potential outliers.
+The <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function enables users to apply transformations with specific
+configurations via the <code class="docutils literal notranslate"><span class="pre">scale_conversion_kws</span></code> parameter, making it ideal for
+refining how outliers affect scaling.</p>
+<p>For this example, we set the following custom keyword arguments:</p>
+<ul class="simple">
+<li><p>Disable centering: By setting <code class="docutils literal notranslate"><span class="pre">with_centering=False</span></code>, the transformation scales based only on the range, without shifting the median to zero.</p></li>
+<li><p>Adjust quantile range: We specify a narrower <code class="docutils literal notranslate"><span class="pre">quantile_range</span></code> of (<cite>10.0, 90.0</cite>) to reduce the influence of extreme values on scaling.</p></li>
+</ul>
+<p>The following code demonstrates this transformation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">sampled_df</span><span class="p">,</span>
+    <span class="n">feature_name</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span>
+    <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">scale_conversion</span><span class="o">=</span><span class="s2">&quot;robust&quot;</span><span class="p">,</span>
+    <span class="n">apply_as_new_col_to_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">scale_conversion_kws</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;with_centering&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Disable centering</span>
+        <span class="s2">&quot;quantile_range&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">)</span>  <span class="c1"># Use a custom quantile range</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">             </span>DATA<span class="w"> </span>DOCTOR<span class="w"> </span>SUMMARY<span class="w"> </span>REPORT
++------------------------------+--------------------+
+<span class="p">|</span><span class="w"> </span>Feature<span class="w">                      </span><span class="p">|</span><span class="w"> </span>age<span class="w">                </span><span class="p">|</span>
++------------------------------+--------------------+
+<span class="p">|</span><span class="w"> </span>Statistic<span class="w">                    </span><span class="p">|</span><span class="w"> </span>Value<span class="w">              </span><span class="p">|</span>
++------------------------------+--------------------+
+<span class="p">|</span><span class="w"> </span>Min<span class="w">                          </span><span class="p">|</span><span class="w"> </span><span class="m">0</span>.4722<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Max<span class="w">                          </span><span class="p">|</span><span class="w"> </span><span class="m">2</span>.5000<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Mean<span class="w">                         </span><span class="p">|</span><span class="w"> </span><span class="m">1</span>.0724<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Median<span class="w">                       </span><span class="p">|</span><span class="w"> </span><span class="m">1</span>.0278<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Std<span class="w"> </span>Dev<span class="w">                      </span><span class="p">|</span><span class="w"> </span><span class="m">0</span>.3809<span class="w">             </span><span class="p">|</span>
++------------------------------+--------------------+
+<span class="p">|</span><span class="w"> </span>Quartile<span class="w">                     </span><span class="p">|</span><span class="w"> </span>Value<span class="w">              </span><span class="p">|</span>
++------------------------------+--------------------+
+<span class="p">|</span><span class="w"> </span>Q1<span class="w"> </span><span class="o">(</span><span class="m">25</span>%<span class="o">)</span><span class="w">                     </span><span class="p">|</span><span class="w"> </span><span class="m">0</span>.7778<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Q2<span class="w"> </span><span class="o">(</span>Median<span class="o">)</span><span class="w">                  </span><span class="p">|</span><span class="w"> </span><span class="m">1</span>.0278<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>IQR<span class="w">                          </span><span class="p">|</span><span class="w"> </span><span class="m">0</span>.5556<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Q3<span class="w"> </span><span class="o">(</span><span class="m">75</span>%<span class="o">)</span><span class="w">                     </span><span class="p">|</span><span class="w"> </span><span class="m">1</span>.3333<span class="w">             </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Q4<span class="w"> </span><span class="o">(</span>Max<span class="o">)</span><span class="w">                     </span><span class="p">|</span><span class="w"> </span><span class="m">2</span>.5000<span class="w">             </span><span class="p">|</span>
++------------------------------+--------------------+
+<span class="p">|</span><span class="w"> </span>Outlier<span class="w"> </span>Bound<span class="w">                </span><span class="p">|</span><span class="w"> </span>Value<span class="w">              </span><span class="p">|</span>
++------------------------------+--------------------+
+<span class="p">|</span><span class="w"> </span>Lower<span class="w"> </span>Bound<span class="w">                  </span><span class="p">|</span><span class="w"> </span>-2.0000<span class="w">            </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Upper<span class="w"> </span>Bound<span class="w">                  </span><span class="p">|</span><span class="w"> </span><span class="m">2</span>.5556<span class="w">             </span><span class="p">|</span>
++------------------------------+--------------------+
+
+New<span class="w"> </span>Column<span class="w"> </span>Name:<span class="w"> </span>age_robust
+</pre></div>
+</div>
+</section>
 </section>
 <section id="stacked-crosstab-plots">
 <h1>Stacked Crosstab Plots<a class="headerlink" href="#stacked-crosstab-plots" title="Link to this heading"></a></h1>
@@ -1366,7 +1423,7 @@ choose between regular or normalized plots.</p>
 <p>The provided code snippet demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function to generate stacked bar plots and corresponding crosstabs for different
 columns in a DataFrame. Here’s a detailed breakdown of the code using the census
-dataset as an example <a class="footnote-reference brackets" href="#id20" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+dataset as an example <a class="footnote-reference brackets" href="#id21" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>First, the <code class="docutils literal notranslate"><span class="pre">func_col</span></code> list is defined, specifying the columns <code class="docutils literal notranslate"><span class="pre">[&quot;sex&quot;,</span> <span class="pre">&quot;income&quot;]</span></code>
 to be analyzed. These columns will be used in the loop to generate separate plots.
 The <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> is then defined, with each entry corresponding to a
@@ -1732,7 +1789,7 @@ DataFrames by assigning them to their own vriables. For example:</p>
 </section>
 <section id="pivoted-stacked-bar-plots-example">
 <h2>Pivoted Stacked Bar Plots Example<a class="headerlink" href="#pivoted-stacked-bar-plots-example" title="Link to this heading"></a></h2>
-<p>Using the census dataset <a class="footnote-reference brackets" href="#id20" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
+<p>Using the census dataset <a class="footnote-reference brackets" href="#id21" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create horizontal stacked bar plots, set the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to
 <code class="docutils literal notranslate"><span class="pre">&quot;barh&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span> <span class="pre">function</span></code>. This option pivots the
 standard vertical stacked bar plot into a horizontal orientation, making it easier
 to compare categories when there are many labels on the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code>.</p>
@@ -1741,7 +1798,7 @@ to compare categories when there are many labels on the <code class="docutils li
 </div><div style="height: 50px;"></div></section>
 <section id="non-normalized-stacked-bar-plots-example">
 <h2>Non-Normalized Stacked Bar Plots Example<a class="headerlink" href="#non-normalized-stacked-bar-plots-example" title="Link to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id20" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
+<p>In the census data <a class="footnote-reference brackets" href="#id21" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to create stacked bar plots without the normalized versions,
 set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code>
 function. This option removes the display of normalized plots beneath the regular
 versions. Alternatively, setting the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code> will display
@@ -1752,7 +1809,7 @@ for income by age.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="regular-non-stacked-bar-plots-example">
 <h2>Regular Non-Stacked Bar Plots Example<a class="headerlink" href="#regular-non-stacked-bar-plots-example" title="Link to this heading"></a></h2>
-<p>In the census data <a class="footnote-reference brackets" href="#id20" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
+<p>In the census data <a class="footnote-reference brackets" href="#id21" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, to generate regular (non-stacked) bar plots without
 displaying their normalized versions, set the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>
 in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function and enable <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> by setting
 it to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This configuration removes any stacked elements and prevents the
@@ -1839,7 +1896,7 @@ clear visual analysis of how these metrics vary within the dataset.</p>
 <p>This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, a grid of plots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.</p>
 <section id="box-plots-grid-example">
 <h2>Box Plots Grid Example<a class="headerlink" href="#box-plots-grid-example" title="Link to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id20" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, the box_violin_plot function is employed to create a grid of
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id21" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, the box_violin_plot function is employed to create a grid of
 boxplots, comparing different metrics against the <code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code> column in the
 DataFrame. The <code class="docutils literal notranslate"><span class="pre">metrics_comp</span></code> parameter is set to [<code class="docutils literal notranslate"><span class="pre">&quot;age_group&quot;</span></code>], meaning
 that the comparison will be based on different age groups. The <code class="docutils literal notranslate"><span class="pre">metrics_list</span></code> is
@@ -1886,7 +1943,7 @@ metrics across different age groups, with all plots saved for future reference o
 </div><div style="height: 50px;"></div></section>
 <section id="violin-plots-grid-example">
 <h2>Violin Plots Grid Example<a class="headerlink" href="#violin-plots-grid-example" title="Link to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id20" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id21" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
 <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>. This adjustment will generate violin plots instead
 of boxplots while maintaining all other settings.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
@@ -1912,7 +1969,7 @@ of boxplots while maintaining all other settings.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="pivoted-violin-plots-grid-example">
 <h2>Pivoted Violin Plots Grid Example<a class="headerlink" href="#pivoted-violin-plots-grid-example" title="Link to this heading"></a></h2>
-<p>In this example with the US census data <a class="footnote-reference brackets" href="#id20" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
+<p>In this example with the US census data <a class="footnote-reference brackets" href="#id21" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
 to pivot the plot, changing the orientation of the axes while keeping the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels upright.
 This adjustment flips the axes, providing a different perspective on the data distribution.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
@@ -2030,7 +2087,7 @@ size, and markers.</p>
 
 <section id="regression-centric-scatter-plots-example">
 <h3>Regression-Centric Scatter Plots Example<a class="headerlink" href="#regression-centric-scatter-plots-example" title="Link to this heading"></a></h3>
-<p>In this US census data <a class="footnote-reference brackets" href="#id20" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function is
+<p>In this US census data <a class="footnote-reference brackets" href="#id21" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function is
 configured to display the Pearson correlation coefficient and a best fit line
 on each scatter plot. The correlation coefficient is shown in the plot title,
 controlled by the <code class="docutils literal notranslate"><span class="pre">show_correlation=True</span></code> parameter, which provides a measure
@@ -2219,7 +2276,7 @@ This function does not return any value but generates and optionally saves a cor
 
 <section id="triangular-correlation-matrix-example">
 <h2>Triangular Correlation Matrix Example<a class="headerlink" href="#triangular-correlation-matrix-example" title="Link to this heading"></a></h2>
-<p>The provided code filters the census <a class="footnote-reference brackets" href="#id20" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> to include only numeric columns using
+<p>The provided code filters the census <a class="footnote-reference brackets" href="#id21" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> to include only numeric columns using
 <code class="docutils literal notranslate"><span class="pre">select_dtypes(np.number)</span></code>. It then utilizes the <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code> function
 to generate a right triangular correlation matrix, which only displays the
 upper half of the correlation matrix. The heatmap is customized with specific
@@ -2264,7 +2321,7 @@ the strength and direction of the correlations.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="full-correlation-matrix-example">
 <h2>Full Correlation Matrix Example<a class="headerlink" href="#full-correlation-matrix-example" title="Link to this heading"></a></h2>
-<p>In this modified census <a class="footnote-reference brackets" href="#id20" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the key changes are the use of the viridis colormap
+<p>In this modified census <a class="footnote-reference brackets" href="#id21" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the key changes are the use of the viridis colormap
 and the decision to plot the full correlation matrix instead of just the upper
 triangle. By setting <code class="docutils literal notranslate"><span class="pre">cmap=&quot;viridis&quot;</span></code>, the heatmap will use a different color
 scheme, which can provide better visual contrast or align with specific aesthetic
@@ -2306,7 +2363,7 @@ outcome of a model. PDPs can be generated in both 2D and 3D, depending on
 whether you want to analyze the effect of one feature or the interaction between
 two features on the model’s predictions.</p>
 <section id="d-partial-dependence-plots">
-<span id="id15"></span><h2>2D Partial Dependence Plots<a class="headerlink" href="#d-partial-dependence-plots" title="Link to this heading"></a></h2>
+<span id="id16"></span><h2>2D Partial Dependence Plots<a class="headerlink" href="#d-partial-dependence-plots" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code> function generates 2D partial dependence plots for individual features or pairs of features. These plots are essential for examining the marginal effect of features on the predicted outcome.</p>
 <ul class="simple">
 <li><p><strong>Grid and Individual Plots</strong>: Generate all 2D partial dependence plots in a grid layout or as separate individual plots, offering flexibility in presentation.</p></li>
@@ -2355,7 +2412,7 @@ This function generates partial dependence plots and displays them. It does not 
 <section id="d-plots-ca-housing-example">
 <h3>2D Plots - CA Housing Example<a class="headerlink" href="#d-plots-ca-housing-example" title="Link to this heading"></a></h3>
 <p>Consider a scenario where you have a machine learning model predicting median
-house values in California. <a class="footnote-reference brackets" href="#id23" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> Suppose you want to understand how non-location
+house values in California. <a class="footnote-reference brackets" href="#id24" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> Suppose you want to understand how non-location
 features like the average number of occupants per household (<code class="docutils literal notranslate"><span class="pre">AveOccup</span></code>) and the
 age of the house (<code class="docutils literal notranslate"><span class="pre">HouseAge</span></code>) jointly influence house values. A 2D partial
 dependence plot allows you to visualize this relationship in two ways: either as
@@ -2438,8 +2495,8 @@ the California housing dataset:</p>
 </a>
 </div><div style="height: 50px;"></div></section>
 </section>
-<section id="id17">
-<span id="id18"></span><h2>3D Partial Dependence Plots<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<section id="id18">
+<span id="id19"></span><h2>3D Partial Dependence Plots<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> function extends the concept of partial dependence to three dimensions, allowing you to visualize the interaction between two features and their combined effect on the model’s predictions.</p>
 <ul class="simple">
 <li><p><strong>Interactive and Static 3D Plots</strong>: Generate static 3D plots using Matplotlib or interactive 3D plots using Plotly. The function also allows for generating both types simultaneously.</p></li>
@@ -2515,8 +2572,8 @@ This function generates 3D partial dependence plots and displays or saves them. 
 </dl>
 </dd></dl>
 
-<section id="id19">
-<h3>3D Plots - CA Housing Example<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<section id="id20">
+<h3>3D Plots - CA Housing Example<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <p>Consider a scenario where you have a machine learning model predicting median
 house values in California.[4]_ Suppose you want to understand how non-location
 features like the average number of occupants per household (<code class="docutils literal notranslate"><span class="pre">AveOccup</span></code>) and the
@@ -2659,21 +2716,21 @@ generating a static plot using Matplotlib.</p>
 </ul>
 <p>By adjusting these parameters, you can customize the behavior and appearance of your 3D Partial Dependence Plots according to your needs, whether for static or interactive visualization.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id20" role="doc-footnote">
+<aside class="footnote brackets" id="id21" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>,<a role="doc-backlink" href="#id5">3</a>,<a role="doc-backlink" href="#id6">4</a>,<a role="doc-backlink" href="#id7">5</a>,<a role="doc-backlink" href="#id8">6</a>,<a role="doc-backlink" href="#id9">7</a>,<a role="doc-backlink" href="#id10">8</a>,<a role="doc-backlink" href="#id11">9</a>,<a role="doc-backlink" href="#id12">10</a>,<a role="doc-backlink" href="#id13">11</a>,<a role="doc-backlink" href="#id14">12</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>,<a role="doc-backlink" href="#id5">3</a>,<a role="doc-backlink" href="#id6">4</a>,<a role="doc-backlink" href="#id7">5</a>,<a role="doc-backlink" href="#id8">6</a>,<a role="doc-backlink" href="#id9">7</a>,<a role="doc-backlink" href="#id10">8</a>,<a role="doc-backlink" href="#id11">9</a>,<a role="doc-backlink" href="#id12">10</a>,<a role="doc-backlink" href="#id13">11</a>,<a role="doc-backlink" href="#id14">12</a>,<a role="doc-backlink" href="#id15">13</a>)</span>
 <p>Kohavi, R. (1996). <em>Census Income</em>. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id21" role="doc-footnote">
+<aside class="footnote brackets" id="id22" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
 <p>Waskom, M. (2021). <em>Seaborn: Statistical Data Visualization</em>. <em>Journal of Open Source Software</em>, 6(60), 3021. <a class="reference external" href="https://doi.org/10.21105/joss.03021">https://doi.org/10.21105/joss.03021</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id22" role="doc-footnote">
+<aside class="footnote brackets" id="id23" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
 <p>Hunter, J. D. (2007). <em>Matplotlib: A 2D Graphics Environment</em>. <em>Computing in Science &amp; Engineering</em>, 9(3), 90-95. <a class="reference external" href="https://doi.org/10.1109/MCSE.2007.55">https://doi.org/10.1109/MCSE.2007.55</a>.</p>
 </aside>
-<aside class="footnote brackets" id="id23" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id16">4</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id24" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id17">4</a><span class="fn-bracket">]</span></span>
 <p>Pace, R. K., &amp; Barry, R. (1997). <em>Sparse Spatial Autoregressions</em>. <em>Statistics &amp; Probability Letters</em>, 33(3), 291-297. <a class="reference external" href="https://doi.org/10.1016/S0167-7152(96)00140-X">https://doi.org/10.1016/S0167-7152(96)00140-X</a>.</p>
 </aside>
 </aside>
