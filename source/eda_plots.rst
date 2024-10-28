@@ -563,9 +563,9 @@ statistical overlays to provide deeper insights into the data.
 Feature Scaling and Outliers
 =============================
 
-.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None)
+.. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, plot_type="all", xlim=None, kde_ylim=None, hist_ylim=None, box_violin_ylim=None, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None)
 
-    Analyze and transform a specific feature in a DataFrame, with options for scaling, applying cutoffs, and visualizing the results. The function also allows for creating a new column with the transformed data if specified. Plots can be saved in PNG or SVG format if required.
+    Analyze and transform a specific feature in a DataFrame, with options for scaling, applying cutoffs, and visualizing the results. This function also allows for creating a new column with the transformed data if specified. Plots can be saved in PNG or SVG format with filenames that incorporate the `plot_type`, `feature_name`, and `scale_conversion`.
 
     :param df: The DataFrame containing the feature to analyze.
     :type df: pandas.DataFrame
@@ -594,6 +594,7 @@ Feature Scaling and Outliers
         - ``'square'``: Squaring the values
         - ``'power'``: Power transformation (Yeo-Johnson)
     :type scale_conversion: str, optional
+
     :param scale_conversion_kws: Additional keyword arguments to pass to the scaling functions, such as:
 
         - ``'alpha'`` for Box-Cox transformation (returns lambda confidence interval)
@@ -613,6 +614,28 @@ Feature Scaling and Outliers
 
     :param show_plot: Whether to display plots of the transformed feature: KDE plot, histogram, and boxplot/violinplot. Default is ``True``.
     :type show_plot: bool, optional
+
+    :param plot_type: Specifies the type of plot(s) to produce. Options are:
+    
+        - ``'all'``: Generates KDE, histogram, and boxplot/violinplot.
+        - ``'kde'``: KDE plot only.
+        - ``'hist'``: Histogram plot only.
+        - ``'box_violin'``: Boxplot or violin plot only (specified by ``box_violin``).
+
+        Default is ``"all"``. If an invalid plot type is provided, a ``ValueError`` is raised.
+    :type plot_type: str, optional
+
+    :param xlim: Limits for the x-axis in all plots, specified as ``(xmin, xmax)``.
+    :type xlim: tuple or list, optional
+
+    :param kde_ylim: Limits for the y-axis in the KDE plot, specified as ``(ymin, ymax)``.
+    :type kde_ylim: tuple or list, optional
+
+    :param hist_ylim: Limits for the y-axis in the histogram plot, specified as ``(ymin, ymax)``.
+    :type hist_ylim: tuple or list, optional
+
+    :param box_violin_ylim: Limits for the y-axis in the boxplot or violin plot, specified as ``(ymin, ymax)``.
+    :type box_violin_ylim: tuple or list, optional
 
     :param save_plot: Whether to save the plots as PNG and/or SVG images. If ``True``, the user must specify at least one of ``image_path_png`` or ``image_path_svg``, otherwise a ``ValueError`` is raised.
     :type save_plot: bool, optional
@@ -652,9 +675,14 @@ Feature Scaling and Outliers
         - If Box-Cox transformation is applied to non-positive values.
         - If ``save_plot=True`` but neither ``image_path_png`` nor ``image_path_svg`` is provided.
         - If an invalid option is provided for ``box_violin``.
+        - If an invalid option is provided for ``plot_type``.
 
     :returns: ``None`` 
         Displays the feature's descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame. For Box-Cox, either the lambda or its confidence interval is displayed.
+
+    :notes: 
+        When saving plots, the filename will include the ``feature_name``, ``scale_conversion``, and ``plot_type`` to allow easy identification. For example, if ``feature_name`` is ``"age"``, ``scale_conversion`` is ``"boxcox"``, and ``plot_type`` is ``"kde"``, the filename will be: ``age_boxcox_kde.png`` or ``age_boxcox_kde.svg``.
+
 
 Available Scale Conversions
 -----------------------------
@@ -705,6 +733,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
        upper_cutoff=None,
        show_plot=True,
        apply_as_new_col_to_df=True,
+       random_state=111,
    )
 
 .. code-block:: bash
@@ -870,8 +899,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
 
     Notice that the :ref:`unique identifiers <Adding_Unique_Identifiers>` function was also applied on the dataframe to generate randomized census IDs for the rows of the data.
 
-Explanation
-^^^^^^^^^^^^^
+**Explanation**
 
 - ``df=df``: We are passing ``df`` as the input DataFrame.
 - ``feature_name="age"``: The feature we are transforming is ``age``.
@@ -919,11 +947,11 @@ visual output.
         show_plot=True,
         apply_as_new_col_to_df=True,
         scale_conversion_kws={"alpha": 0.8},
-        box_violin_kws={
-            "boxprops": dict(facecolor="none", edgecolor="blue")
-        },
+        box_violin="violinplot",
+        box_violin_kws={"color": "lightblue"},
         kde_kws={"fill": True, "color": "blue"},
-        hist_kws={"color": "blue"},
+        hist_kws={"color": "green"},
+        random_state=111,
     )
 
 .. code-block:: bash
@@ -962,7 +990,7 @@ visual output.
 
    <div class="no-click">
 
-.. image:: ../assets/age_boxcox_custom_plots.svg
+.. image:: ../assets/age_boxcox_ex_2.svg
    :alt: Box-Cox Transformation W/ Data Doctor
    :align: center
    :width: 900px
@@ -1115,8 +1143,7 @@ In later Python versions (e.g., 3.11),
 this can be done more easily with ``fill=True``. Therefore, it is important to pass 
 any desired keyword arguments based on the correct version of Python you're using.
 
-Explanation
-^^^^^^^^^^^^^
+**Explanation**
 
 - ``df=df``: We are passing ``df`` as the input DataFrame.
 - ``feature_name="age"``: The feature we are transforming is ``age``.
@@ -1342,11 +1369,13 @@ is used when dealing with data bounded between 0 and 1, as it maps values within
 this range to an unbounded scale in log-odds terms, making it particularly useful 
 in fields such as logistic regression.
 
-The ``data_doctor`` function provides a range of scaling options, and in this case, 
-we use the **logit transformation** to illustrate how the transformation is applied. 
-However, it’s important to note that if the feature contains values outside the (0, 1) 
-range, the function will raise a ``ValueError``. This is because the logit function 
-is undefined for values less than or equal to 0 and greater than or equal to 1. 
+.. note::
+
+    The ``data_doctor`` function provides a range of scaling options, and in this case, 
+    we use the **logit transformation** to illustrate how the transformation is applied. 
+    However, it’s important to note that if the feature contains values outside the (0, 1) 
+    range, the function will raise a ``ValueError``. This is because the :ref:`logit function 
+    is undefined for values less than or equal to 0 and greater than or equal to 1 <Logit_Assumptions>`. 
 
 .. code-block:: python
 
