@@ -321,6 +321,7 @@ The Yeo-Johnson transformation adjusts data to make it more normally distributed
 
 Yeo-Johnson is particularly useful for datasets containing zero or negative values. It’s often effective for linear models that assume normally distributed data, making it a robust alternative when Box-Cox cannot be applied.
 
+.. _Robust_Scaler:
 
 Median and IQR Scaling
 ------------------------------
