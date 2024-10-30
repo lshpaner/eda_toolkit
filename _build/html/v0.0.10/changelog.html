@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; EDA Toolkit 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.js" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=a0ccc04e"></script>
+      <script src="_static/custom.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="Citing EDA Toolkit" href="citations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            EDA Toolkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Welcome to the EDA Toolkit Python Library Documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#description">Description</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Management</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data_management.html">Data Management Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_management.html#data-management-techniques">Data Management Techniques</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Plotting and Theoretical Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-10">Version 0.0.10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-9">Version 0.0.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8">Version 0.0.8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8c">Version 0.0.8c</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8b">Version 0.0.8b</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-8a">Version 0.0.8a</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-7">Version 0.0.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-6">Version 0.0.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-5">Version 0.0.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-4">Version 0.0.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-3">Version 0.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">Version 0.0.1b0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EDA Toolkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" />
+</a>
+</div><div style="height: 100px;"></div><p></p>
+<section id="id1">
+<h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-10">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.10/index.html">Version 0.0.10</a><a class="headerlink" href="#version-0-0-10" title="Link to this heading"></a></h2>
+<p><strong>Legend Handling</strong></p>
+<ul class="simple">
+<li><p>The legend is now displayed only if there are valid legend handles (<code class="docutils literal notranslate"><span class="pre">len(handles)</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>) and if <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p>The check <code class="docutils literal notranslate"><span class="pre">ax.get_legend().remove()</span></code> ensures that unnecessary legends are removed if they are empty or if <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+<p><strong>Error Handling</strong>
+- Error handling in the <code class="docutils literal notranslate"><span class="pre">except</span></code> block has been enhanced to ensure that any exceptions related to legends or labels are managed properly. The legend handling logic still respects the <code class="docutils literal notranslate"><span class="pre">show_legend</span></code> flag even in cases where exceptions occur.</p>
+<p>This update prevents empty legend squares from appearing and maintains the intended default behavior of showing legends only when they contain relevant content.</p>
+</section>
+<section id="version-0-0-9">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.9/index.html">Version 0.0.9</a><a class="headerlink" href="#version-0-0-9" title="Link to this heading"></a></h2>
+<p><strong>Bug Fixes and Minor Improvements</strong></p>
+<p>Improved error messages and validation checks across multiple functions to prevent common pitfalls and ensure smoother user experience.</p>
+<p><strong>Visualization Enhancements</strong></p>
+<p><strong>DataFrame Columns:</strong> Added a <code class="docutils literal notranslate"><span class="pre">background_color</span></code> variable to <code class="docutils literal notranslate"><span class="pre">dataframe_columns`</span></code>,
+allowing the user to enter a string representing a color name, or hex value.
+Try/Except on the output, in case the end user has a deprecated version of Pandas,
+where the styler would use <code class="docutils literal notranslate"><span class="pre">hide()</span></code> instead of <code class="docutils literal notranslate"><span class="pre">hide_index()</span></code>. The highlighted
+columns allow for easier null versus unique value analysis.</p>
+<p>The docstring now clearly describes the purpose of the function—analyzing
+DataFrame columns to provide summary statistics.</p>
+<p><strong>Args:</strong></p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">df</span></code> argument is specified as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">background_color</span></code> argument is marked as optional, with a brief description of its role.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">return_df</span></code> argument is also marked as optional, explaining what it controls.</p></li>
+</ul>
+<p><strong>Returns:</strong> The return type is specified as <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>, with a clear explanation of the difference based on the <code class="docutils literal notranslate"><span class="pre">return_df</span></code> flag.</p>
+<p><strong>KDE Distribution Plots:</strong> Improved <code class="docutils literal notranslate"><span class="pre">kde_distributions()</span></code> with enhanced options for log scaling, mean/median plotting, custom standard deviation lines, and better handling of legends and scientific notation.</p>
+<p><strong>Scatter Plots:</strong> Enhanced <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot()</span></code> with support for hue-based coloring, best fit lines, correlation display, and flexible grid plotting options.</p>
+</section>
+<section id="version-0-0-8">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.8/index.html">Version 0.0.8</a><a class="headerlink" href="#version-0-0-8" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="eda_plots.html#stacked_crosstab_plot" title="stacked_crosstab_plot"><code class="xref py py-class docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code></a></p>
+<ul class="simple">
+<li><p><strong>Flexible `save_formats` Input</strong>:
+- <cite>save_formats</cite> now accepts a string, tuple, or list for specifying formats (e.g., <cite>“png”</cite>, <cite>(“png”, “svg”)</cite>, or <cite>[“png”, “svg”]</cite>).
+- Single strings or tuples are automatically converted to lists for consistent processing.</p></li>
+<li><p><strong>Dynamic Error Handling</strong>:
+- Added checks to ensure a valid path is provided for each format in <cite>save_formats</cite>.
+- Raises a <cite>ValueError</cite> if a format is specified without a corresponding path, with a clear, dynamic error message.</p></li>
+<li><p><strong>Improved Plot Saving Logic</strong>:
+- Updated logic allows saving plots in one format (e.g., only <cite>“png”</cite> or <cite>“svg”</cite>) without requiring the other.
+- Simplified and more intuitive path handling for saving plots.</p></li>
+</ul>
+<p><a class="reference internal" href="eda_plots.html#plot_3d_pdp" title="plot_3d_pdp"><code class="xref py py-class docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code></a></p>
+<p>This update introduces several key changes to the <cite>plot_3d_pdp</cite> function, simplifying the function’s interface and improving usability, while maintaining the flexibility needed for diverse visualization needs.</p>
+<p><strong>1. Parameter Changes</strong></p>
+<ul class="simple">
+<li><p><strong>Removed Parameters:</strong></p>
+<ul>
+<li><p>The parameters <code class="docutils literal notranslate"><span class="pre">x_label_plotly</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label_plotly</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label_plotly</span></code> have been removed. These parameters previously allowed custom axis labels specifically for the Plotly plot, defaulting to the general <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code>. Removing these parameters simplifies the function signature while maintaining flexibility.</p></li>
+</ul>
+</li>
+<li><p><strong>Default Values for Labels:</strong></p>
+<ul>
+<li><p>The parameters <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code> are now optional, with <code class="docutils literal notranslate"><span class="pre">None</span></code> as the default. If not provided, these labels will automatically default to the names of the features in the <code class="docutils literal notranslate"><span class="pre">feature_names_list</span></code>. This change makes the function more user-friendly, particularly for cases where default labels are sufficient.</p></li>
+</ul>
+</li>
+<li><p><strong>Changes in Default Values for View Angles:</strong></p>
+<ul>
+<li><p>The default values for camera positioning parameters have been updated: <code class="docutils literal notranslate"><span class="pre">horizontal</span></code> is now <code class="docutils literal notranslate"><span class="pre">-1.25</span></code>, <code class="docutils literal notranslate"><span class="pre">depth</span></code> is now <code class="docutils literal notranslate"><span class="pre">1.25</span></code>, and <code class="docutils literal notranslate"><span class="pre">vertical</span></code> is now <code class="docutils literal notranslate"><span class="pre">1.25</span></code>. These adjustments refine the default 3D view perspective for the Plotly plot, providing a more intuitive starting view.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>2. Plot Generation Logic</strong></p>
+<ul class="simple">
+<li><p><strong>Conditionally Checking Labels:</strong></p>
+<ul>
+<li><p>The function now checks whether <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code> are provided. If these are <code class="docutils literal notranslate"><span class="pre">None</span></code>, the function will automatically assign default labels based on the <code class="docutils literal notranslate"><span class="pre">feature_names_list</span></code>. This enhancement reduces the need for users to manually specify labels, making the function more adaptive.</p></li>
+</ul>
+</li>
+<li><p><strong>Camera Position Adjustments:</strong></p>
+<ul>
+<li><p>The camera positions for the Plotly plot are now adjusted by multiplying <code class="docutils literal notranslate"><span class="pre">horizontal</span></code>, <code class="docutils literal notranslate"><span class="pre">depth</span></code>, and <code class="docutils literal notranslate"><span class="pre">vertical</span></code> by <code class="docutils literal notranslate"><span class="pre">zoom_out_factor</span></code>. This change allows for more granular control over the 3D view, enhancing the interactivity and flexibility of the Plotly visualizations.</p></li>
+</ul>
+</li>
+<li><p><strong>Surface Plot Coordinates Adjustments:</strong></p>
+<ul>
+<li><p>The order of the coordinates for the Plotly plot’s surface has been changed from <code class="docutils literal notranslate"><span class="pre">ZZ,</span> <span class="pre">XX,</span> <span class="pre">YY[::-1]</span></code> to <code class="docutils literal notranslate"><span class="pre">ZZ,</span> <span class="pre">XX,</span> <span class="pre">YY</span></code>. This adjustment ensures the proper alignment of axes and grids, resulting in more accurate visual representations.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>3. Code Simplifications</strong></p>
+<ul class="simple">
+<li><p><strong>Removed Complexity:</strong></p>
+<ul>
+<li><p>By removing the <code class="docutils literal notranslate"><span class="pre">x_label_plotly</span></code>, <code class="docutils literal notranslate"><span class="pre">y_label_plotly</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label_plotly</span></code> parameters, the code is now simpler and easier to maintain. This change reduces potential confusion and streamlines the function for users who do not need distinct labels for Matplotlib and Plotly plots.</p></li>
+</ul>
+</li>
+<li><p><strong>Fallback Mechanism for Grid Values:</strong></p>
+<ul>
+<li><p>The function continues to implement a fallback mechanism when extracting grid values, ensuring compatibility with various versions of scikit-learn. This makes the function robust across different environments.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>4. Style Adjustments</strong></p>
+<ul class="simple">
+<li><p><strong>Label Formatting:</strong></p>
+<ul>
+<li><p>The new version consistently uses <code class="docutils literal notranslate"><span class="pre">y_label</span></code>, <code class="docutils literal notranslate"><span class="pre">x_label</span></code>, and <code class="docutils literal notranslate"><span class="pre">z_label</span></code> for axis labels in the Matplotlib plot, aligning the formatting across different plot types.</p></li>
+</ul>
+</li>
+<li><p><strong>Color Bar Adjustments:</strong></p>
+<ul>
+<li><p>The color bar configuration in the Matplotlib plot has been slightly adjusted with a shrink value of <code class="docutils literal notranslate"><span class="pre">0.6</span></code> and a pad value of <code class="docutils literal notranslate"><span class="pre">0.02</span></code>. These adjustments result in a more refined visual appearance, particularly in cases where space is limited.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>5. Potential Use Case Differences</strong></p>
+<ul class="simple">
+<li><p><strong>Simplified Interface:</strong></p>
+<ul>
+<li><p>The updated function is more streamlined for users who prefer a simplified interface without the need for separate label customizations for Plotly and Matplotlib plots. This makes it easier to use in common scenarios.</p></li>
+</ul>
+</li>
+<li><p><strong>Less Granular Control:</strong></p>
+<ul>
+<li><p>Users who need more granular control, particularly for presentations or specific formatting, may find the older version more suitable. The removal of the <code class="docutils literal notranslate"><span class="pre">*_plotly</span></code> label parameters means that all plots now use the same labels across Matplotlib and Plotly.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>6. Matplotlib Plot Adjustments</strong></p>
+<ul class="simple">
+<li><p><strong>Wireframe and Surface Plot Enhancements:</strong></p>
+<ul>
+<li><p>The logic for plotting wireframes and surface plots in Matplotlib remains consistent with previous versions, with subtle enhancements to color and layout management to improve overall aesthetics.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Summary</strong></p>
+<ul class="simple">
+<li><p>Version <code class="docutils literal notranslate"><span class="pre">0.0.8d</span></code> of the <cite>plot_3d_pdp</cite> function introduces simplifications that reduce the number of parameters and streamline the plotting process. While some customizability has been removed, the function remains flexible enough for most use cases and is easier to use.</p></li>
+<li><p>Key updates include adjusted default camera views for 3D plots, removal of Plotly-specific label parameters, and improved automatic labeling and plotting logic.</p></li>
+</ul>
+<p><strong>Decision Point</strong></p>
+<ul class="simple">
+<li><p>This update may be especially useful for users who prefer a cleaner and more straightforward interface. However, those requiring detailed customizations may want to continue using the older version, depending on their specific needs.</p></li>
+</ul>
+</section>
+<section id="version-0-0-8c">
+<h2>Version 0.0.8c<a class="headerlink" href="#version-0-0-8c" title="Link to this heading"></a></h2>
+<p>Version 0.0.8c is a follow-up release to version 0.0.8b. This update includes minor enhancements and refinements based on feedback and additional testing. It serves as an incremental step towards improving the stability and functionality of the toolkit.</p>
+<p><strong>Key Updates in 0.0.8c:</strong></p>
+<ul class="simple">
+<li><p><strong>Bug Fixes:</strong> Addressed minor issues identified in version <code class="docutils literal notranslate"><span class="pre">0.0.8b</span></code> to ensure smoother performance and better user experience.</p></li>
+<li><p><strong>Additional Testing:</strong> Incorporated further tests to validate the changes introduced in previous versions and to prepare for future stable releases.</p></li>
+<li><p><strong>Refinements:</strong> Made small enhancements to existing features based on user feedback and internal testing results.</p></li>
+</ul>
+<p><strong>Summary of Changes</strong></p>
+<ol class="arabic simple">
+<li><p>New Features &amp; Enhancements</p></li>
+</ol>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> Function:</p>
+<ul>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">show_modebar</span></code> Parameter: Introduced a new boolean parameter, <code class="docutils literal notranslate"><span class="pre">show_modebar</span></code>, to allow users to toggle the visibility of the mode bar in Plotly interactive plots.</p></li>
+<li><p>Custom Margins and Layout Adjustments:</p>
+<ul>
+<li><p>Added parameters for <code class="docutils literal notranslate"><span class="pre">left_margin</span></code>, <code class="docutils literal notranslate"><span class="pre">right_margin</span></code>, and <code class="docutils literal notranslate"><span class="pre">top_margin</span></code> to provide users with more control over the plot layout in Plotly.</p></li>
+<li><p>Adjusted default values and added options for better customization of the Plotly color bar (<code class="docutils literal notranslate"><span class="pre">cbar_x</span></code>, <code class="docutils literal notranslate"><span class="pre">cbar_thickness</span></code>) and title positioning (<code class="docutils literal notranslate"><span class="pre">title_x</span></code>, <code class="docutils literal notranslate"><span class="pre">title_y</span></code>).</p></li>
+</ul>
+</li>
+<li><p>Plotly Configuration:</p>
+<ul>
+<li><p>Enhanced the configuration options to allow users to enable or disable zoom functionality (<code class="docutils literal notranslate"><span class="pre">enable_zoom</span></code>) in the interactive Plotly plots.</p></li>
+<li><p>Updated the code to reflect these new parameters, allowing for greater flexibility in the appearance and interaction with the Plotly plots.</p></li>
+</ul>
+</li>
+<li><p>Error Handling:</p>
+<ul>
+<li><p>Added input validation for <code class="docutils literal notranslate"><span class="pre">html_file_path</span></code> and <code class="docutils literal notranslate"><span class="pre">html_file_name</span></code> to ensure these are provided when necessary based on the selected <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code> Function:</p>
+<ul>
+<li><p>Introduced <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> Parameter:</p>
+<ul>
+<li><p>Added a new <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> parameter to allow users to specify a prefix for filenames when saving grid plots. This change streamlines the naming process for saved plots and improves file organization.</p></li>
+</ul>
+</li>
+<li><p>Enhanced Plot Type Flexibility:</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter now includes an option to generate both grid and individual plots (<code class="docutils literal notranslate"><span class="pre">both</span></code>). This feature allows users to create a combination of both layout styles in one function call.</p></li>
+<li><p>Updated input validation and logic to handle this new option effectively.</p></li>
+</ul>
+</li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> Parameter:</p>
+<ul>
+<li><p>Introduced a new parameter, <code class="docutils literal notranslate"><span class="pre">save_plots</span></code>, to control the saving of plots. Users can specify whether to save all plots, only individual plots, only grid plots, or none.</p></li>
+</ul>
+</li>
+<li><p>Custom Margins and Layout Adjustments:</p>
+<ul>
+<li><p>Included the <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> parameter in the validation process to ensure paths are provided when needed for saving the plots.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Documentation Updates</p></li>
+</ol>
+<ul class="simple">
+<li><p>Docstrings:</p>
+<ul>
+<li><p>Updated docstrings for both functions to reflect the new parameters and enhancements, providing clearer and more comprehensive guidance for users.</p></li>
+<li><p>Detailed the use of new parameters such as <code class="docutils literal notranslate"><span class="pre">show_modebar</span></code>, <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code>, <code class="docutils literal notranslate"><span class="pre">save_plots</span></code>, and others, ensuring that the function documentation is up-to-date with the latest changes.</p></li>
+</ul>
+</li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p>Refactoring &amp; Code Cleanup</p></li>
+</ol>
+<ul class="simple">
+<li><p>Code Structure:</p>
+<ul>
+<li><p>Improved the code structure to maintain clarity and readability, particularly around the new functionality.</p></li>
+<li><p>Consolidated the layout configuration settings for the Plotly plots into a more flexible and user-friendly format, making it easier for users to customize their plots.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="version-0-0-8b">
+<h2>Version 0.0.8b<a class="headerlink" href="#version-0-0-8b" title="Link to this heading"></a></h2>
+<p>Version 0.0.8b is an exact replica of version <code class="docutils literal notranslate"><span class="pre">0.0.8a</span></code>. The purpose of this
+beta release was to test whether releasing it as the latest version would update
+its status on PyPI to reflect it as the latest release. However, it continues to
+be identified as a pre-release on PyPI.</p>
+</section>
+<section id="version-0-0-8a">
+<h2>Version 0.0.8a<a class="headerlink" href="#version-0-0-8a" title="Link to this heading"></a></h2>
+<p>Version 0.0.8a introduces significant enhancements and new features to improve
+the usability and functionality of the EDA Toolkit.</p>
+<p><strong>New Features:</strong></p>
+<ol class="arabic simple">
+<li><p>Optional <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> Function</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function has been updated to make the <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> argument optional. If the user does not provide a <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code>, the function will now automatically generate a default prefix based on the <code class="docutils literal notranslate"><span class="pre">col</span></code> and <code class="docutils literal notranslate"><span class="pre">func_col</span></code> parameters. This change streamlines the process of generating plots by reducing the number of required arguments.</p></li>
+<li><p><strong>Key Improvement:</strong></p>
+<ul>
+<li><p>Users can now omit the <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> argument, and the function will still produce appropriately named plot files, enhancing ease of use.</p></li>
+<li><p>Backward compatibility is maintained, allowing users who prefer to specify a custom <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> to continue doing so without any issues.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Introduction of 3D and 2D Partial Dependence Plot Functions</strong></p>
+<ul class="simple">
+<li><p>Two new functions, <code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code>, have been added to the toolkit, expanding the visualization capabilities for machine learning models.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code>: Generates 3D partial dependence plots for two features, supporting both static visualizations (using Matplotlib) and interactive plots (using Plotly). The function offers extensive customization options, including labels, color maps, and saving formats.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code>: Creates 2D partial dependence plots for specified features with flexible layout options (grid or individual plots) and customization of figure size, font size, and saving formats.</p></li>
+</ul>
+</li>
+<li><p><strong>Key Features:</strong></p>
+<ul>
+<li><p><strong>Compatibility:</strong> Both functions are compatible with various versions of scikit-learn, ensuring broad usability.</p></li>
+<li><p><strong>Customization:</strong> Extensive options for customizing visual elements, including figure size, font size, and color maps.</p></li>
+<li><p><strong>Interactive 3D Plots:</strong> The <code class="docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code> function supports interactive visualizations, providing an enhanced user experience for exploring model predictions in 3D space.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Impact:</strong></p>
+<ul class="simple">
+<li><p>These updates improve the user experience by reducing the complexity of function calls and introducing powerful new tools for model interpretation.</p></li>
+<li><p>The optional <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code> enhancement simplifies plot generation while maintaining the flexibility to define custom filenames.</p></li>
+<li><p>The new partial dependence plot functions offer robust visualization options, making it easier to analyze and interpret the influence of specific features in machine learning models.</p></li>
+</ul>
+</section>
+<section id="version-0-0-7">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.7/index.html">Version 0.0.7</a><a class="headerlink" href="#version-0-0-7" title="Link to this heading"></a></h2>
+<p><strong>Added Function for Customizable Correlation Matrix Visualization</strong></p>
+<p>This release introduces a new function, <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code>, which allows users to
+generate both full and upper triangular correlation heatmaps with a high degree
+of customization. The function includes options to annotate the heatmap, save the
+plots, and pass additional parameters to <code class="docutils literal notranslate"><span class="pre">seaborn.heatmap()</span></code>.</p>
+<p><strong>Summary of Changes</strong></p>
+<ul class="simple">
+<li><p><strong>New Function</strong>: <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code>.</p>
+<ul>
+<li><p><strong>Functionality</strong>:
+- Generates a correlation heatmap for a given DataFrame.
+- Supports both full and upper triangular correlation matrices based on the <code class="docutils literal notranslate"><span class="pre">triangular</span></code> parameter.
+- Allows users to customize various aspects of the plot, including colormap, figure size, axis label rotation, and more.
+- Accepts additional keyword arguments via <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> to pass directly to <code class="docutils literal notranslate"><span class="pre">seaborn.heatmap()</span></code>.
+- Includes validation to ensure the <code class="docutils literal notranslate"><span class="pre">triangular</span></code>, <code class="docutils literal notranslate"><span class="pre">annot</span></code>, and <code class="docutils literal notranslate"><span class="pre">save_plots</span></code> parameters are boolean values.
+- Raises an exception if <code class="docutils literal notranslate"><span class="pre">save_plots=True</span></code> but neither <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> nor <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code> is specified.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Full correlation matrix example</span>
+<span class="n">flex_corr_matrix</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">my_dataframe</span><span class="p">,</span> <span class="n">triangular</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Upper triangular correlation matrix example</span>
+<span class="n">flex_corr_matrix</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">my_dataframe</span><span class="p">,</span> <span class="n">triangular</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Contingency table df to object type</strong></p>
+<p>Convert all columns in the DataFrame to object type to prevent issues with numerical columns.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="version-0-0-6">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.6/index.html">Version 0.0.6</a><a class="headerlink" href="#version-0-0-6" title="Link to this heading"></a></h2>
+<p><strong>Added validation for Plot Type Parameter in KDE Distributions Function</strong></p>
+<p>This release adds a validation step for the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">kde_distributions</span></code> function. The allowed values for <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> are <code class="docutils literal notranslate"><span class="pre">&quot;hist&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kde&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>. If an invalid value is provided, the function will now raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> with a clear message indicating the accepted values. This change improves the robustness of the function and helps prevent potential errors due to incorrect parameter values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Validate plot_type parameter</span>
+<span class="n">valid_plot_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span> <span class="s2">&quot;kde&quot;</span><span class="p">,</span> <span class="s2">&quot;both&quot;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">plot_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_plot_types</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Invalid plot_type value. Expected one of </span><span class="si">{</span><span class="n">valid_plot_types</span><span class="si">}</span><span class="s2">, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;got &#39;</span><span class="si">{</span><span class="n">plot_type</span><span class="si">}</span><span class="s2">&#39; instead.&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="version-0-0-5">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.5/index.html">Version 0.0.5</a><a class="headerlink" href="#version-0-0-5" title="Link to this heading"></a></h2>
+<p><strong>Ensure Consistent Font Size and Text Wrapping Across Plot Elements</strong></p>
+<p>This PR addresses inconsistencies in font sizes and text wrapping across various plot elements in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function. The following updates have been implemented to ensure uniformity and improve the readability of plots:</p>
+<ol class="arabic simple">
+<li><p><strong>Title Font Size and Text Wrapping:</strong>
+- Added a <code class="docutils literal notranslate"><span class="pre">text_wrap</span></code> parameter to control the wrapping of plot titles.
+- Ensured that title font sizes are consistent with axis label font sizes by explicitly setting the font size using <code class="docutils literal notranslate"><span class="pre">ax.set_title()</span></code> after plot generation.</p></li>
+<li><p><strong>Legend Font Size Consistency:</strong>
+- Incorporated <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code> into the legend font size by directly setting the font size of the legend text using <code class="docutils literal notranslate"><span class="pre">plt.setp(legend.get_texts(),</span> <span class="pre">fontsize=label_fontsize)</span></code>.
+- This ensures that the legend labels are consistent with the title and axis labels.</p></li>
+</ol>
+<p><strong>Testing</strong></p>
+<ul class="simple">
+<li><p>Verified that titles now wrap correctly and match the specified <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code>.</p></li>
+<li><p>Confirmed that legend text scales according to <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code>, ensuring consistent font sizes across all plot elements.</p></li>
+</ul>
+</section>
+<section id="version-0-0-4">
+<h2>Version 0.0.4<a class="headerlink" href="#version-0-0-4" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Stable release</strong></p>
+<ul>
+<li><p>No new updates to the codebase.</p></li>
+<li><p>Updated the project <code class="docutils literal notranslate"><span class="pre">description</span></code> variable in <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> to re-emphasize key elements of the library.</p></li>
+<li><p>Minor README cleanup:</p>
+<ul>
+<li><p>Added icons for sections that did not have them.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="version-0-0-3">
+<h2>Version 0.0.3<a class="headerlink" href="#version-0-0-3" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Stable release</strong></p>
+<ul>
+<li><p>Updated logo size, fixed citation title, and made minor README cleanup:</p>
+<ul>
+<li><p>Added an additional section for documentation, cleaned up verbiage, moved acknowledgments section before licensing and support.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="version-0-0-2">
+<h2>Version 0.0.2<a class="headerlink" href="#version-0-0-2" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>First stable release</strong></dt><dd><ul>
+<li><p>No new updates to the codebase; minimal documentation updates to README and <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> files.</p></li>
+<li><p>Added logo, badges, and Zenodo-certified citation to README.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="version-0-0-1rc0">
+<h2>Version 0.0.1rc0<a class="headerlink" href="#version-0-0-1rc0" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>No new updates to the codebase; minimal documentation updates to README and <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> files.</p></li>
+</ul>
+</section>
+<section id="version-0-0-1b0">
+<h2>Version 0.0.1b0<a class="headerlink" href="#version-0-0-1b0" title="Link to this heading"></a></h2>
+<p><strong>New Scatter Fit Plot and Additional Updates</strong></p>
+<ul class="simple">
+<li><p>Added new <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot()</span></code>, removed unused <code class="docutils literal notranslate"><span class="pre">data_types()</span></code>, and added comment section headers.</p></li>
+</ul>
+<p><strong>Added xlim and ylim Inputs to KDE Distribution</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">kde_distribution()</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">xlim</span></code> and <code class="docutils literal notranslate"><span class="pre">ylim</span></code> inputs to allow users to customize axes limits in <code class="docutils literal notranslate"><span class="pre">kde_distribution()</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>Added xlim and ylim Params to Stacked Crosstab Plot</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot()</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">xlim</span></code> and <code class="docutils literal notranslate"><span class="pre">ylim</span></code> input parameters to <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot()</span></code> to give users more flexibility in controlling axes limits.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>Added x and y Limits to Box and Violin Plots</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">box_violin_plot()</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Changed function name from <code class="docutils literal notranslate"><span class="pre">metrics_box_violin()</span></code> to <code class="docutils literal notranslate"><span class="pre">box_violin_plot()</span></code>.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">xlim</span></code> and <code class="docutils literal notranslate"><span class="pre">ylim</span></code> inputs to control x and y-axis limits of <code class="docutils literal notranslate"><span class="pre">box_violin_plot()</span></code> (formerly <code class="docutils literal notranslate"><span class="pre">metrics_box_violin</span></code>).</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>Added Ability to Remove Stacks from Plots, Plot All or One at a Time</strong></p>
+<p><strong>Key Changes</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Plot Type Parameter</strong>
+- <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>: This parameter allows the user to choose between <code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code> plot types.</p></li>
+<li><p><strong>Remove Stacks Parameter</strong>
+- <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code>: This parameter, when set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, generates a regular bar plot using only the <code class="docutils literal notranslate"><span class="pre">col</span></code> parameter instead of a stacked bar plot. It only works when <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is set to “regular”. If <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> while <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is anything other than “regular”, the function will raise an exception.</p></li>
+</ol>
+<p><strong>Explanation of Changes</strong></p>
+<ul class="simple">
+<li><p><strong>Plot Type Parameter</strong></p>
+<ul>
+<li><p>Provides flexibility to the user, allowing specification of the type of plot to generate:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;regular&quot;</span></code>: Standard bar plot.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;normalized&quot;</span></code>: Normalized bar plot.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>: Both regular and normalized bar plots.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Remove Stacks Parameter</strong>
+- <code class="docutils literal notranslate"><span class="pre">remove_stacks</span></code>: Generates a regular bar plot using only the <code class="docutils literal notranslate"><span class="pre">col</span></code> parameter, removing the stacking of the bars. Applicable only when <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is set to “regular”. An exception is raised if used with any other <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>.</p></li>
+</ul>
+<p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
+</section>
+<section id="id8">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<p><strong>Refined KDE Distributions</strong></p>
+<p><strong>Key Changes</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Alpha Transparency for Histogram Fill</strong>
+- Added a <code class="docutils literal notranslate"><span class="pre">fill_alpha</span></code> parameter to control the transparency of the histogram bars’ fill color.
+- Default value is <code class="docutils literal notranslate"><span class="pre">0.6</span></code>. An exception is raised if <code class="docutils literal notranslate"><span class="pre">fill=False</span></code> and <code class="docutils literal notranslate"><span class="pre">fill_alpha</span></code> is specified.</p></li>
+<li><p><strong>Custom Font Sizes</strong>
+- Introduced <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code> and <code class="docutils literal notranslate"><span class="pre">tick_fontsize</span></code> parameters to control font size of axis labels and tick marks independently.</p></li>
+<li><p><strong>Scientific Notation Toggle</strong>
+- Added a <code class="docutils literal notranslate"><span class="pre">disable_sci_notation</span></code> parameter to enable or disable scientific notation on axes.</p></li>
+<li><p><strong>Improved Error Handling</strong>
+- Added validation for the <code class="docutils literal notranslate"><span class="pre">stat</span></code> parameter to ensure valid options are accepted.
+- Added checks for proper usage of <code class="docutils literal notranslate"><span class="pre">fill_alpha</span></code> and <code class="docutils literal notranslate"><span class="pre">hist_edgecolor</span></code> when <code class="docutils literal notranslate"><span class="pre">fill</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>General Enhancements</strong>
+- Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
+</ol>
+</section>
+<section id="id9">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<p><strong>Enhanced KDE Distributions Function</strong></p>
+<p><strong>Added Parameters</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Grid Figsize and Single Figsize</strong>
+- Control the size of the overall grid figure and individual figures separately.</p></li>
+<li><p><strong>Hist Color and KDE Color`</strong>
+- Allow customization of histogram and KDE plot colors.</p></li>
+<li><p><strong>Edge Color</strong>
+- Allows customization of histogram bar edges.</p></li>
+<li><p><strong>Hue</strong>
+- Allows grouping data by a column.</p></li>
+<li><p><strong>Fill</strong>
+- Controls whether to fill histogram bars with color.</p></li>
+<li><p><strong>Y-axis Label`</strong>
+- Customizable y-axis label.</p></li>
+<li><p><strong>Log-Scaling</strong>
+- Specifies which variables to apply log scale.</p></li>
+<li><p><strong>Bins and Bin Width</strong>
+- Control the number and width of bins.</p></li>
+<li><p><strong>``stat``:</strong>
+- Allows different statistics for the histogram (<code class="docutils literal notranslate"><span class="pre">count</span></code>, <code class="docutils literal notranslate"><span class="pre">density</span></code>, <code class="docutils literal notranslate"><span class="pre">frequency</span></code>, <code class="docutils literal notranslate"><span class="pre">probability</span></code>, <code class="docutils literal notranslate"><span class="pre">proportion</span></code>, <code class="docutils literal notranslate"><span class="pre">percent</span></code>).</p></li>
+</ol>
+<p><strong>Improvements</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Validation and Error Handling</strong>
+- Checks for invalid <code class="docutils literal notranslate"><span class="pre">log_scale_vars</span></code> and throws a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if any are found.
+- Throws a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">edgecolor</span></code> is changed while <code class="docutils literal notranslate"><span class="pre">fill</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+- Issues a <code class="docutils literal notranslate"><span class="pre">PerformanceWarning</span></code> if both <code class="docutils literal notranslate"><span class="pre">bins</span></code> and <code class="docutils literal notranslate"><span class="pre">binwidth</span></code> are specified, warning of potential performance impacts.</p></li>
+<li><p><strong>Customizable Y-Axis Label</strong>
+- Allows users to specify custom y-axis labels.</p></li>
+<li><p><strong>Warning for KDE with Count</strong>
+- Issues a warning if KDE is used with <code class="docutils literal notranslate"><span class="pre">stat='count'</span></code>, as it may produce misleading plots.</p></li>
+</ol>
+<p><strong>Updated Function to Ensure Unique IDs and Index Check</strong></p>
+<ul class="simple">
+<li><p>Ensured that each generated ID in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> starts with a non-zero digit.</p></li>
+<li><p>Added a check to verify that the DataFrame index is unique.</p></li>
+<li><p>Printed a warning message if duplicate index entries are found.</p></li>
+</ul>
+<p>These changes improve the robustness of the function, ensuring that the IDs generated are always unique and valid, and provide necessary feedback when the DataFrame index is not unique.</p>
+<p><strong>Check for Unique Indices</strong>
+- Before generating IDs, the function now checks if the DataFrame index is unique.
+- If duplicates are found, a warning is printed along with the list of duplicate index entries.</p>
+<p><strong>Generate Non-Zero Starting IDs</strong></p>
+<ul class="simple">
+<li><p>The ID generation process is updated to ensure that the first digit of each ID is always non-zero.</p></li>
+</ul>
+<p><strong>Ensure Unique IDs</strong></p>
+<ul class="simple">
+<li><p>A set is used to store the generated IDs, ensuring all IDs are unique before adding them to the DataFrame.</p></li>
+</ul>
+<p><strong>Fix Int Conversion for Numeric Columns, Reset Decimal Places</strong></p>
+<ul class="simple">
+<li><p>Fixed integer conversion issue for numeric columns when <code class="docutils literal notranslate"><span class="pre">decimal_places=0</span></code> in the <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> function.</p></li>
+<li><p>Reset <code class="docutils literal notranslate"><span class="pre">decimal_places</span></code> default value to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+</ul>
+<p>These changes ensure correct formatting and avoid errors during conversion.</p>
+<p><strong>Contingency Table Updates</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Error Handling for Columns</strong>
+- Added a check to ensure at least one column is specified.
+- Updated the function to accept a single column as a string or multiple columns as a list.
+- Raised a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if no columns are provided or if <code class="docutils literal notranslate"><span class="pre">cols</span></code> is not correctly specified.</p></li>
+<li><p><strong>Function Parameters</strong>
+- Changed parameters from <code class="docutils literal notranslate"><span class="pre">col1</span></code> and <code class="docutils literal notranslate"><span class="pre">col2</span></code> to a single parameter <code class="docutils literal notranslate"><span class="pre">cols</span></code> which can be either a string or a list.</p></li>
+<li><p><strong>Error Handling</strong>
+- Renamed <code class="docutils literal notranslate"><span class="pre">SortBy</span></code> to <code class="docutils literal notranslate"><span class="pre">sort_by</span></code> to standardize nomenclature.
+- Added a check to ensure <code class="docutils literal notranslate"><span class="pre">sort_by</span></code> is either 0 or 1.
+- Raised a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">sort_by</span></code> is not 0 or 1.</p></li>
+</ol>
+<ol class="arabic simple" start="5">
+<li><p><strong>Sorting Logic</strong>
+- Updated the sorting logic to handle the new <code class="docutils literal notranslate"><span class="pre">cols</span></code> parameter structure.</p></li>
+<li><p><strong>Handling Categorical Data</strong>
+- Modified code to convert categorical columns to strings to avoid issues with <code class="docutils literal notranslate"><span class="pre">fillna(&quot;&quot;)</span></code>.</p></li>
+<li><p><strong>Handling Missing Values</strong>
+- Added <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">df.fillna('')</span></code> to fill NA values within the function to account for missing data.</p></li>
+<li><p><strong>Improved Function Documentation</strong>
+- Updated function documentation to reflect new parameters and error handling.</p></li>
+</ol>
+</section>
+<section id="id10">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<p><strong>Contingency Table Updates</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
+</ul>
+<p><strong>Compatibility Enhancement</strong></p>
+<ol class="arabic simple">
+<li><p>Added a version check for <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7</span></code> and above.</p>
+<ul class="simple">
+<li><p>Conditional import of <code class="docutils literal notranslate"><span class="pre">datetime</span></code> to handle different Python versions.</p></li>
+</ul>
+</li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">datetime</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="citations.html" class="btn btn-neutral float-left" title="Citing EDA Toolkit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Leonid Shpaner, Oscar Gil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
