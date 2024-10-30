@@ -366,7 +366,7 @@ values for which the likelihood ratio statistic:</p>
 <p>Yeo-Johnson is particularly useful for datasets containing zero or negative values. It’s often effective for linear models that assume normally distributed data, making it a robust alternative when Box-Cox cannot be applied.</p>
 </section>
 <section id="median-and-iqr-scaling">
-<h1>Median and IQR Scaling<a class="headerlink" href="#median-and-iqr-scaling" title="Link to this heading"></a></h1>
+<span id="robust-scaler"></span><h1>Median and IQR Scaling<a class="headerlink" href="#median-and-iqr-scaling" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> is a scaling method that reduces the impact
 of outliers in your data by using the <strong>median</strong> and <strong>interquartile range (IQR)</strong>
 instead of the mean and standard deviation, which are more sensitive to extreme values.
