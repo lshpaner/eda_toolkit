@@ -3229,14 +3229,16 @@ def data_doctor(
         Whether to display plots of the transformed feature: KDE, histogram, and
         boxplot/violinplot.
 
-    plot_type : str, optional (default="all")
+    plot_type : str, list, or tuple, optional (default="all")
         Specifies the type of plot(s) to produce. Options are:
             - 'all': Generates KDE, histogram, and boxplot/violinplot.
             - 'kde': KDE plot only.
             - 'hist': Histogram plot only.
             - 'box_violin': Boxplot or violin plot only (specified by
                             `box_violin`).
-        If an invalid plot type is provided, a `ValueError` is raised.
+        If a list or tuple is provided (e.g., `plot_type=["kde", "hist"]`), 
+        the specified plots are displayed in a single row with sufficient 
+        spacing. A `ValueError` is raised if an invalid plot type is included.
 
     figsize : tuple or list, optional (default=(18, 6))
         Specifies the figure size for the plots. This applies to all plot types, 
@@ -3336,12 +3338,17 @@ def data_doctor(
 
     Notes:
     ------
-    When saving plots, the filename will include the `feature_name`,
-    `scale_conversion`, and `plot_type` to allow easy identification. For
-    example, if `feature_name` is "age", `scale_conversion` is "boxcox", and
-    `plot_type` is "kde", the filename will be: `age_boxcox_kde.png` or
-    `age_boxcox_kde.svg`.
+    - When saving plots, the filename will include the `feature_name`,
+      `scale_conversion`, and `plot_type` to allow easy identification. For
+      example, if `feature_name` is "age", `scale_conversion` is "boxcox", and
+      `plot_type` is "kde", the filename will be: `age_boxcox_kde.png` or
+      `age_boxcox_kde.svg`.
+    
+    - The cutoff values (if applied) are displayed as text at the bottom of
+      the figure. If `plot_type="all"`, the text is displayed in a separate row.
+      For custom plot lists, the text appears centered below the figure.
     """
+
 
     # Suppress warnings for division by zero, or invalid values in subtract
     np.seterr(divide="ignore", invalid="ignore")
@@ -3651,98 +3658,116 @@ def data_doctor(
     lower_cutoff = round(np.min(feature_), 4)
     upper_cutoff = round(np.max(feature_), 4)
 
-    # Ensure the plot_type is one of the allowed options
-    valid_plot_types = ["all", "kde", "hist", "box_violin"]
-    if plot_type not in valid_plot_types:
+    # Convert plot_type to a list if it’s a single string
+    if isinstance(plot_type, str):
+        if plot_type == "all":
+            plot_type = ["kde", "hist", "box_violin"]
+        else:
+            plot_type = [plot_type]
+    elif not isinstance(plot_type, (list, tuple)):
+        raise ValueError("plot_type must be a string, list, or tuple.")
+
+    # Verify that all plot types are valid
+    valid_plot_types = ["kde", "hist", "box_violin"]
+    invalid_plots = [ptype for ptype in plot_type if ptype not in valid_plot_types]
+    if invalid_plots:
         raise ValueError(
-            f"Invalid plot_type '{plot_type}'. "
+            f"Invalid plot type(s) {invalid_plots}. "
             f"Valid options are: {valid_plot_types}"
         )
 
-    # Conditionally create subplots if plot_type is "all"
-    if plot_type == "all":
-        fig, axes = plt.subplots(
-            2, 3, figsize=figsize, gridspec_kw={"height_ratios": [10, 1]}
-        )
-    else:
-        fig, ax = plt.subplots(figsize=figsize)  # Single plot when not "all"
 
-    # Plot based on plot_type
+    # Determine layout based on the number of specified plot types
+    n_plots = len(plot_type)
+    n_rows = 1 if n_plots <= 3 else 2
+    n_cols = n_plots if n_plots <= 3 else (n_plots + 1) // 2
+
+    # Increase figure size slightly to create more space
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(figsize[0] + 2, figsize[1] + 2), squeeze=False)
+
+    # Flatten axes for easy indexing if there are multiple rows/columns
+    axes = axes.flatten()
+
+    # Plot based on specified plot types
     if show_plot:
-        if plot_type in ["all", "kde"]:
-            kde_ax = axes[0, 0] if plot_type == "all" else ax
-            sns.kdeplot(
-                x=feature_,
-                ax=kde_ax,
-                clip=(lower_cutoff, upper_cutoff),
-                warn_singular=False,
-                **(kde_kws or {}),
-            )
-            kde_ax.set_title(
-                f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
-                fontsize=label_fontsize,
-            )
-            kde_ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-            kde_ax.set_ylabel("Density", fontsize=label_fontsize)
-            kde_ax.tick_params(axis="both", labelsize=tick_fontsize)
-            if xlim:
-                kde_ax.set_xlim(xlim)
-            if kde_ylim:
-                kde_ax.set_ylim(kde_ylim)
-
-        if plot_type in ["all", "hist"]:
-            hist_ax = axes[0, 1] if plot_type == "all" else ax
-            sns.histplot(x=feature_, ax=hist_ax, **(hist_kws or {}))
-            hist_ax.set_title(
-                f"Histplot: {feature_name} (Scale: {scale_conversion})",
-                fontsize=label_fontsize,
-            )
-            hist_ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-            hist_ax.set_ylabel("Count", fontsize=label_fontsize)
-            hist_ax.tick_params(axis="both", labelsize=tick_fontsize)
-            if xlim:
-                hist_ax.set_xlim(xlim)
-            if hist_ylim:
-                hist_ax.set_ylim(hist_ylim)
-
-        if plot_type in ["all", "box_violin"]:
-            box_violin_ax = axes[0, 2] if plot_type == "all" else ax
-            if box_violin == "boxplot":
-                sns.boxplot(
+        for i, ptype in enumerate(plot_type):
+            ax = axes[i]
+            if ptype == "kde":
+                sns.kdeplot(
                     x=feature_,
-                    ax=box_violin_ax,
-                    **(box_violin_kws or {}),
+                    ax=ax,
+                    clip=(lower_cutoff, upper_cutoff),
+                    warn_singular=False,
+                    **(kde_kws or {}),
                 )
-                box_violin_ax.set_title(
-                    f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+                ax.set_title(
+                    f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
                     fontsize=label_fontsize,
+                    pad=25  # Increased padding between title and plot
                 )
-            elif box_violin == "violinplot":
-                sns.violinplot(
-                    x=feature_,
-                    ax=box_violin_ax,
-                    **(box_violin_kws or {}),
-                )
-                box_violin_ax.set_title(
-                    f"Violinplot: {feature_name} (Scale: {scale_conversion})",
-                    fontsize=label_fontsize,
-                )
-            box_violin_ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-            box_violin_ax.set_ylabel("", fontsize=label_fontsize)
-            box_violin_ax.tick_params(axis="both", labelsize=tick_fontsize)
-            if xlim:
-                box_violin_ax.set_xlim(xlim)
-            if box_violin_ylim:
-                box_violin_ax.set_ylim(box_violin_ylim)
+                ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+                ax.set_ylabel("Density", fontsize=label_fontsize)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+                if xlim:
+                    ax.set_xlim(xlim)
+                if kde_ylim:
+                    ax.set_ylim(kde_ylim)
 
-        # Display the cutoff text universally
-        if plot_type == "all":
-            # Use dedicated row for text when in subplot mode
+            elif ptype == "hist":
+                sns.histplot(x=feature_, ax=ax, **(hist_kws or {}))
+                ax.set_title(
+                    f"Histplot: {feature_name} (Scale: {scale_conversion})",
+                    fontsize=label_fontsize,
+                    pad=25  # Increased padding
+                )
+                ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+                ax.set_ylabel("Count", fontsize=label_fontsize)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+                if xlim:
+                    ax.set_xlim(xlim)
+                if hist_ylim:
+                    ax.set_ylim(hist_ylim)
+
+            elif ptype == "box_violin":
+                if box_violin == "boxplot":
+                    sns.boxplot(
+                        x=feature_,
+                        ax=ax,
+                        **(box_violin_kws or {}),
+                    )
+                    ax.set_title(
+                        f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25  # Increased padding
+                    )
+                elif box_violin == "violinplot":
+                    sns.violinplot(
+                        x=feature_,
+                        ax=ax,
+                        **(box_violin_kws or {}),
+                    )
+                    ax.set_title(
+                        f"Violinplot: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25  # Increased padding
+                    )
+                ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+                ax.set_ylabel("", fontsize=label_fontsize)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+                if xlim:
+                    ax.set_xlim(xlim)
+                if box_violin_ylim:
+                    ax.set_ylim(box_violin_ylim)
+
+    # Display the cutoff text universally
+    if plot_type == ["kde", "hist", "box_violin"]:  # When using "all" configuration
+        # Check if we have a 2D grid of axes or a single row
+        if n_rows > 1:
+            # Use dedicated row for text when in subplot mode with multiple rows
             axes[1, 0].text(
                 0,
                 0.5,
-                f"Lower cutoff: {round(lower_cutoff, 2)} | "
-                f"Upper cutoff: {round(upper_cutoff, 2)}",
+                f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
                 fontsize=label_fontsize,
                 ha="left",
                 va="center",
@@ -3751,53 +3776,60 @@ def data_doctor(
             axes[1, 1].axis("off")
             axes[1, 2].axis("off")
         else:
-            # Display text below the single plot
+            # If only a single row of plots, add text below the plots in that row
             fig.text(
                 0.5,
                 -0.05,  # Position below the plot
-                f"Lower cutoff: {round(lower_cutoff, 2)} | "
-                f"Upper cutoff: {round(upper_cutoff, 2)}",
+                f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
                 ha="center",
                 fontsize=label_fontsize,
             )
+    else:
+        # Display text below the single plot row when using custom configuration
+        fig.text(
+            0.5,
+            -0.05,  # Position below the plot
+            f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+            ha="center",
+            fontsize=label_fontsize,
+        )
+    # Apply layout adjustments to prevent overlaps without affecting inter-plot spacing
+    plt.tight_layout(pad=3.0, w_pad=1.5, h_pad=3.0)
 
-        plt.tight_layout()
+    # Check if the user-specified plot type is valid
+    if box_violin not in ["boxplot", "violinplot"]:
+        raise ValueError(
+            f"Invalid plot type '{box_violin}'. "
+            f"Valid options are 'boxplot' or 'violinplot'."
+        )
 
-        # Check if the user-specified plot type is valid
-        if box_violin not in ["boxplot", "violinplot"]:
-            raise ValueError(
-                f"Invalid plot type '{box_violin}'. "
-                f"Valid options are 'boxplot' or 'violinplot'."
-            )
+    # Check if save_plots=True but no image path is provided
+    if save_plot and not image_path_png and not image_path_svg:
+        raise ValueError(
+            "You must provide either 'image_path_png' or 'image_path_svg' "
+            "when 'save_plots=True'."
+        )
 
-        # Check if save_plots=True but no image path is provided
-        if save_plot and not image_path_png and not image_path_svg:
-            raise ValueError(
-                "You must provide either 'image_path_png' or 'image_path_svg' "
-                "when 'save_plots=True'."
-            )
+    # Save the plots if save_plots is True and the paths are provided
+    if save_plot:
+        # Generate a default filename based on the feature name, scale
+        # conversion, and plot type
+        default_filename = (
+            f"{feature_name}_"
+            f"{scale_conversion if scale_conversion else 'original'}_"
+            f"{plot_type}"
+        )
 
-        # Save the plots if save_plots is True and the paths are provided
-        if save_plot:
-            # Generate a default filename based on the feature name, scale
-            # conversion, and plot type
-            default_filename = (
-                f"{feature_name}_"
-                f"{scale_conversion if scale_conversion else 'original'}_"
-                f"{plot_type}"
-            )
+        # Save as PNG if path is provided
+        if image_path_png:
+            png_filename = f"{image_path_png}/{default_filename}.png"
+            plt.savefig(png_filename, format="png")
+            print(f"Plot saved as PNG at {png_filename}")
 
-            # Save as PNG if path is provided
-            if image_path_png:
-                png_filename = f"{image_path_png}/{default_filename}.png"
-                plt.savefig(png_filename, format="png")
-                print(f"Plot saved as PNG at {png_filename}")
-
-            # Save as SVG if path is provided
-            if image_path_svg:
-                svg_filename = f"{image_path_svg}/{default_filename}.svg"
-                plt.savefig(svg_filename, format="svg")
-                print(f"Plot saved as SVG at {svg_filename}")
-
+        # Save as SVG if path is provided
+        if image_path_svg:
+            svg_filename = f"{image_path_svg}/{default_filename}.svg"
+            plt.savefig(svg_filename, format="svg")
+            print(f"Plot saved as SVG at {svg_filename}")
 
 ################################################################################
