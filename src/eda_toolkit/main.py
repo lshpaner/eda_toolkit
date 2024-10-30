@@ -3166,7 +3166,7 @@ def data_doctor(
     label_fontsize=12,
     tick_fontsize=10,
     random_state=None,
-    figsize=(18, 6), 
+    figsize=(18, 6),
 ):
     """
     Analyze and transform a specific feature in a DataFrame, with options for
@@ -3236,13 +3236,13 @@ def data_doctor(
             - 'hist': Histogram plot only.
             - 'box_violin': Boxplot or violin plot only (specified by
                             `box_violin`).
-        If a list or tuple is provided (e.g., `plot_type=["kde", "hist"]`), 
-        the specified plots are displayed in a single row with sufficient 
+        If a list or tuple is provided (e.g., `plot_type=["kde", "hist"]`),
+        the specified plots are displayed in a single row with sufficient
         spacing. A `ValueError` is raised if an invalid plot type is included.
 
     figsize : tuple or list, optional (default=(18, 6))
-        Specifies the figure size for the plots. This applies to all plot types, 
-        including single plots (when `plot_type` is set to "kde", "hist", or 
+        Specifies the figure size for the plots. This applies to all plot types,
+        including single plots (when `plot_type` is set to "kde", "hist", or
         "box_violin") and multi-plot layout when `plot_type` is "all".
 
     xlim : tuple or list, optional
@@ -3339,20 +3339,18 @@ def data_doctor(
     Notes:
     ------
     - When saving plots, the filename will include the `feature_name`,
-      `scale_conversion`, and each selected `plot_type` to allow easy 
-      identification. If `plot_type` includes 'box_violin', the filename will 
-      reflect the user's specific choice of either 'boxplot' or 'violinplot' as 
-      set in `box_violin`. For example, if `feature_name` is "age", 
-      `scale_conversion` is "boxcox", and `plot_type` is ["kde", "hist", 
-      "box_violin"] with `box_violin` set to "boxplot", the filename will be: 
+      `scale_conversion`, and each selected `plot_type` to allow easy
+      identification. If `plot_type` includes 'box_violin', the filename will
+      reflect the user's specific choice of either 'boxplot' or 'violinplot' as
+      set in `box_violin`. For example, if `feature_name` is "age",
+      `scale_conversion` is "boxcox", and `plot_type` is ["kde", "hist",
+      "box_violin"] with `box_violin` set to "boxplot", the filename will be:
       `age_boxcox_kde_hist_boxplot.png` or `age_boxcox_kde_hist_boxplot.svg`.
 
-    
     - The cutoff values (if applied) are displayed as text at the bottom of
       the figure. If `plot_type="all"`, the text is displayed in a separate row.
       For custom plot lists, the text appears centered below the figure.
     """
-
 
     # Suppress warnings for division by zero, or invalid values in subtract
     np.seterr(divide="ignore", invalid="ignore")
@@ -3680,14 +3678,15 @@ def data_doctor(
             f"Valid options are: {valid_plot_types}"
         )
 
-
     # Determine layout based on the number of specified plot types
     n_plots = len(plot_type)
     n_rows = 1 if n_plots <= 3 else 2
     n_cols = n_plots if n_plots <= 3 else (n_plots + 1) // 2
 
     # Increase figure size slightly to create more space
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(figsize[0] + 2, figsize[1] + 2), squeeze=False)
+    fig, axes = plt.subplots(
+        n_rows, n_cols, figsize=(figsize[0] + 2, figsize[1] + 2), squeeze=False
+    )
 
     # Flatten axes for easy indexing if there are multiple rows/columns
     axes = axes.flatten()
@@ -3707,7 +3706,7 @@ def data_doctor(
                 ax.set_title(
                     f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
                     fontsize=label_fontsize,
-                    pad=25  # Increased padding between title and plot
+                    pad=25,  # Increased padding between title and plot
                 )
                 ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
                 ax.set_ylabel("Density", fontsize=label_fontsize)
@@ -3722,7 +3721,7 @@ def data_doctor(
                 ax.set_title(
                     f"Histplot: {feature_name} (Scale: {scale_conversion})",
                     fontsize=label_fontsize,
-                    pad=25  # Increased padding
+                    pad=25,  # Increased padding
                 )
                 ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
                 ax.set_ylabel("Count", fontsize=label_fontsize)
@@ -3742,7 +3741,7 @@ def data_doctor(
                     ax.set_title(
                         f"Boxplot: {feature_name} (Scale: {scale_conversion})",
                         fontsize=label_fontsize,
-                        pad=25  # Increased padding
+                        pad=25,  # Increased padding
                     )
                 elif box_violin == "violinplot":
                     sns.violinplot(
@@ -3753,7 +3752,7 @@ def data_doctor(
                     ax.set_title(
                         f"Violinplot: {feature_name} (Scale: {scale_conversion})",
                         fontsize=label_fontsize,
-                        pad=25  # Increased padding
+                        pad=25,  # Increased padding
                     )
                 ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
                 ax.set_ylabel("", fontsize=label_fontsize)
@@ -3764,14 +3763,15 @@ def data_doctor(
                     ax.set_ylim(box_violin_ylim)
 
     # Display the cutoff text universally
-    if plot_type == ["kde", "hist", "box_violin"]:  # When using "all" configuration
-        # Check if we have a 2D grid of axes or a single row
+    if plot_type == ["kde", "hist", "box_violin"]:  # When using "all"
+        # configuration. Check if we have a 2D grid of axes or a single row
         if n_rows > 1:
             # Use dedicated row for text when in subplot mode with multiple rows
             axes[1, 0].text(
                 0,
                 0.5,
-                f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+                f"Lower cutoff: {round(lower_cutoff, 2)} |"
+                f"Upper cutoff: {round(upper_cutoff, 2)}",
                 fontsize=label_fontsize,
                 ha="left",
                 va="center",
@@ -3784,7 +3784,8 @@ def data_doctor(
             fig.text(
                 0.5,
                 -0.05,  # Position below the plot
-                f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+                f"Lower cutoff: {round(lower_cutoff, 2)} | "
+                f"Upper cutoff: {round(upper_cutoff, 2)}",
                 ha="center",
                 fontsize=label_fontsize,
             )
@@ -3793,11 +3794,12 @@ def data_doctor(
         fig.text(
             0.5,
             -0.05,  # Position below the plot
-            f"Lower cutoff: {round(lower_cutoff, 2)} | Upper cutoff: {round(upper_cutoff, 2)}",
+            f"Lower cutoff: {round(lower_cutoff, 2)} | "
+            f"Upper cutoff: {round(upper_cutoff, 2)}",
             ha="center",
             fontsize=label_fontsize,
         )
-    # Apply layout adjustments to prevent overlaps without affecting inter-plot spacing
+    # Apply layout adj. to prevent overlaps without affecting inter-plot spacing
     plt.tight_layout(pad=3.0, w_pad=1.5, h_pad=3.0)
 
     # Check if the user-specified plot type is valid
@@ -3820,9 +3822,14 @@ def data_doctor(
         adjusted_plot_type = [
             box_violin if ptype == "box_violin" else ptype for ptype in plot_type
         ]
-        
-        # Generate a filename based on the feature name, scale conversion, and selected plot types
-        plot_type_str = "_".join(adjusted_plot_type) if isinstance(plot_type, (list, tuple)) else adjusted_plot_type[0]
+
+        # Generate a filename based on the feature name, scale conversion, and
+        # selected plot types
+        plot_type_str = (
+            "_".join(adjusted_plot_type)
+            if isinstance(plot_type, (list, tuple))
+            else adjusted_plot_type[0]
+        )
         default_filename = (
             f"{feature_name}_"
             f"{scale_conversion if scale_conversion else 'original'}_"
@@ -3840,7 +3847,6 @@ def data_doctor(
             svg_filename = f"{image_path_svg}/{default_filename}.svg"
             plt.savefig(svg_filename, format="svg")
             print(f"Plot saved as SVG at {svg_filename}")
-
 
 
 ################################################################################
