@@ -3338,6 +3338,15 @@ def data_doctor(
 
     Notes:
     ------
+    - Outlier Bound Calculation: The function calculates the lower and upper
+      bounds for outliers using the Interquartile Range (IQR) method. The bounds
+      are computed as:
+        - `outlier_lower_bound = max(0, Q1 - 1.5 * IQR)`
+        - `outlier_upper_bound = Q3 + 1.5 * IQR`
+      where Q1 and Q3 are the 25th and 75th percentiles of the feature,
+      respectively. The lower bound is clamped to zero if it results in a
+      negative value, ensuring that it aligns with positive-only datasets.
+
     - When saving plots, the filename will include the `feature_name`,
       `scale_conversion`, and each selected `plot_type` to allow easy
       identification. If `plot_type` includes 'box_violin', the filename will
@@ -3599,17 +3608,12 @@ def data_doctor(
     print(f"| {'Q3 (75%)':<28} | {np.quantile(feature_, 0.75):<18.4f} |")
     print(f"| {'Q4 (Max)':<28} | {np.quantile(feature_, 1):<18.4f} |")
 
-    # Calculate outlier bounds based on the original logic
-    outlier_lower_bound = (
-        np.quantile(feature_, 0.25)
-        - 1.5 * np.quantile(feature_, 0.75)
-        - np.quantile(feature_, 0.25)
-    )
-    outlier_upper_bound = (
-        np.quantile(feature_, 0.75)
-        + 1.5 * np.quantile(feature_, 0.75)
-        - np.quantile(feature_, 0.25)
-    )
+    Q1 = np.quantile(feature_, 0.25)
+    Q3 = np.quantile(feature_, 0.75)
+    IQR = Q3 - Q1
+
+    outlier_lower_bound = Q1 - 1.5 * IQR
+    outlier_upper_bound = Q3 + 1.5 * IQR
 
     # Header for the outlier section
     print(f"+{'-'*30}+{'-'*20}+")
