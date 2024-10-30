@@ -1482,10 +1482,10 @@ The following code demonstrates this transformation:
 
    <div class="no-click">
 
-.. image:: ../assets/age_robust_box.svg
+.. image:: ../assets/age_robust_boxplot_hist.svg
    :alt: Box-Cox Transformation W/ Data Doctor
    :align: center
-   :width: 350px
+   :width: 900px
 
 .. raw:: html
 
