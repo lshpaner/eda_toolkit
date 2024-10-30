@@ -565,7 +565,12 @@ Feature Scaling and Outliers
 
 .. function:: data_doctor(df, feature_name, data_fraction=1, scale_conversion=None, scale_conversion_kws=None, apply_cutoff=False, lower_cutoff=None, upper_cutoff=None, show_plot=True, plot_type="all", figsize=(18, 6), xlim=None, kde_ylim=None, hist_ylim=None, box_violin_ylim=None, save_plot=False, image_path_png=None, image_path_svg=None, apply_as_new_col_to_df=False, kde_kws=None, hist_kws=None, box_violin_kws=None, box_violin="boxplot", label_fontsize=12, tick_fontsize=10, random_state=None)
 
-    Analyze and transform a specific feature in a DataFrame, with options for scaling, applying cutoffs, and visualizing the results. This function also allows for creating a new column with the transformed data if specified. Plots can be saved in PNG or SVG format with filenames that incorporate the `plot_type`, `feature_name`, and `scale_conversion`.
+    Analyze and transform a specific feature in a DataFrame, with options for
+    scaling, applying cutoffs, and visualizing the results. This function also
+    allows for the creation of a new column with the transformed data if
+    specified. Plots can be saved in PNG or SVG format with filenames that
+    incorporate the ``plot_type``, ``feature_name``, ``scale_conversion``, and
+    ``cutoff`` if cutoffs are applied.
 
     :param df: The DataFrame containing the feature to analyze.
     :type df: pandas.DataFrame
@@ -573,60 +578,63 @@ Feature Scaling and Outliers
     :param feature_name: The name of the feature (column) to analyze.
     :type feature_name: str
 
-    :param data_fraction: Fraction of the data to analyze. Default is ``1`` (full dataset). Useful for large datasets where a sample can represent the population. If ``apply_as_new_col_to_df=True``, the full dataset is always used.
+    :param data_fraction: Fraction of the data to analyze. Default is ``1`` (full dataset). Useful for large datasets where a sample can represent the population. If ``apply_as_new_col_to_df=True``, the full dataset is used (``data_fraction=1``).
     :type data_fraction: float, optional
 
-    :param scale_conversion: Type of conversion to apply to the feature. Defaults to ``None`` (no conversion). Options include:
+    :param scale_conversion: Type of conversion to apply to the feature. Options include:
     
         - ``'abs'``: Absolute values
-        - ``'log'``: Natural logarithm values
-        - ``'sqrt'``: Square root values
-        - ``'cbrt'``: Cube root values
-        - ``'stdrz'``: Standardized values (z-score)
+        - ``'log'``: Natural logarithm
+        - ``'sqrt'``: Square root
+        - ``'cbrt'``: Cube root
+        - ``'reciprocal'``: Reciprocal transformation
+        - ``'stdrz'``: Standardized (z-score)
         - ``'minmax'``: Min-Max scaling
-        - ``'boxcox'``: Box-Cox transformation (positive values only; supports ``lmbda`` or ``alpha``)
+        - ``'boxcox'``: Box-Cox transformation (positive values only; supports
+          ``lmbda`` for specific lambda or ``alpha`` for confidence interval)
         - ``'robust'``: Robust scaling (median and IQR)
         - ``'maxabs'``: Max-abs scaling
-        - ``'reciprocal'``: Reciprocal transformation
         - ``'exp'``: Exponential transformation
         - ``'logit'``: Logit transformation (values between 0 and 1)
         - ``'arcsinh'``: Inverse hyperbolic sine
         - ``'square'``: Squaring the values
-        - ``'power'``: Power transformation (Yeo-Johnson)
+        - ``'power'``: Power transformation (Yeo-Johnson).
     :type scale_conversion: str, optional
 
     :param scale_conversion_kws: Additional keyword arguments to pass to the scaling functions, such as:
-
-        - ``'alpha'`` for Box-Cox transformation (returns lambda confidence interval)
-        - ``'lmbda'`` for a specific Box-Cox lambda value
-        - ``'quantile_range'`` for robust scaling.
     
+        - ``'alpha'`` for Box-Cox transformation (returns a confidence interval
+          for lambda)
+        - ``'lmbda'`` for a specific Box-Cox transformation value
+        - ``'quantile_range'`` for robust scaling.
     :type scale_conversion_kws: dict, optional
 
-    :param apply_cutoff: Whether to apply upper and/or lower cutoffs to the feature. Default is ``False``.
-    :type apply_cutoff: bool, optional
+    :param apply_cutoff: Whether to apply upper and/or lower cutoffs to the feature.
+    :type apply_cutoff: bool, optional (default=False)
 
-    :param lower_cutoff: Lower bound to apply if ``apply_cutoff`` is ``True``.
+    :param lower_cutoff: Lower bound to apply if ``apply_cutoff=True``.
     :type lower_cutoff: float, optional
 
-    :param upper_cutoff: Upper bound to apply if ``apply_cutoff`` is ``True``.
+    :param upper_cutoff: Upper bound to apply if ``apply_cutoff=True``.
     :type upper_cutoff: float, optional
 
-    :param show_plot: Whether to display plots of the transformed feature: KDE plot, histogram, and boxplot/violinplot. Default is ``True``.
-    :type show_plot: bool, optional
+    :param show_plot: Whether to display plots of the transformed feature: KDE, histogram, and boxplot/violinplot.
+    :type show_plot: bool, optional (default=True)
 
     :param plot_type: Specifies the type of plot(s) to produce. Options are:
     
         - ``'all'``: Generates KDE, histogram, and boxplot/violinplot.
         - ``'kde'``: KDE plot only.
         - ``'hist'``: Histogram plot only.
-        - ``'box_violin'``: Boxplot or violin plot only (specified by ``box_violin``).
+        - ``'box_violin'``: Boxplot or violin plot only (specified by
+          ``box_violin``).
+        If a list or tuple is provided (e.g., ``plot_type=["kde", "hist"]``),
+        the specified plots are displayed in a single row with sufficient
+        spacing. A ``ValueError`` is raised if an invalid plot type is included.
+    :type plot_type: str, list, or tuple, optional (default="all")
 
-        Default is ``"all"``. If an invalid plot type is provided, a ``ValueError`` is raised.
-    :type plot_type: str, optional
-
-    :param figsize: Specifies the figure size for the plots. Applies to both multi-plot (``plot_type="all"``) and single-plot modes. Accepts either a tuple or list, with default set to ``(18, 6)``.
-    :type figsize: tuple or list, optional
+    :param figsize: Specifies the figure size for the plots. This applies to all plot types, including single plots (when ``plot_type`` is set to "kde", "hist", or "box_violin") and multi-plot layout when ``plot_type`` is "all".
+    :type figsize: tuple or list, optional (default=(18, 6))
 
     :param xlim: Limits for the x-axis in all plots, specified as ``(xmin, xmax)``.
     :type xlim: tuple or list, optional
@@ -641,37 +649,45 @@ Feature Scaling and Outliers
     :type box_violin_ylim: tuple or list, optional
 
     :param save_plot: Whether to save the plots as PNG and/or SVG images. If ``True``, the user must specify at least one of ``image_path_png`` or ``image_path_svg``, otherwise a ``ValueError`` is raised.
-    :type save_plot: bool, optional
+    :type save_plot: bool, optional (default=False)
 
-    :param image_path_png: Directory path to save the plot as a PNG file.
+    :param image_path_png: Directory path to save the plot as a PNG file. Only used if ``save_plot=True``.
     :type image_path_png: str, optional
 
-    :param image_path_svg: Directory path to save the plot as an SVG file.
+    :param image_path_svg: Directory path to save the plot as an SVG file. Only used if ``save_plot=True``.
     :type image_path_svg: str, optional
 
-    :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If ``True``, the new column will be named as ``<feature_name>_<scale_conversion>`` or ``<feature_name>_w_cutoff`` if only cutoffs are applied. For Box-Cox, the lambda or confidence interval will be displayed. Default is ``False``.
-    :type apply_as_new_col_to_df: bool, optional
+    :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If True, the new column name is generated based on the feature name and the transformation applied:
+    
+        - ``<feature_name>_<scale_conversion>``: If a transformation is applied.
+        - ``<feature_name>_w_cutoff``: If only cutoffs are applied.
+        For Box-Cox transformation, if ``alpha`` is specified, the confidence interval for lambda is displayed. If ``lmbda`` is specified, the lambda value is displayed.
+    :type apply_as_new_col_to_df: bool, optional (default=False)
 
-    :param kde_kws: Additional keyword arguments for the KDE plot (seaborn.kdeplot).
+    :param kde_kws: Additional keyword arguments to pass to the KDE plot (``seaborn.kdeplot``).
     :type kde_kws: dict, optional
 
-    :param hist_kws: Additional keyword arguments for the histogram plot (seaborn.histplot).
+    :param hist_kws: Additional keyword arguments to pass to the histogram plot (``seaborn.histplot``).
     :type hist_kws: dict, optional
 
-    :param box_violin_kws: Additional keyword arguments for either boxplot or violinplot.
+    :param box_violin_kws: Additional keyword arguments to pass to either boxplot or violinplot.
     :type box_violin_kws: dict, optional
 
-    :param box_violin: Plot type for the third plot, can be ``'boxplot'`` or ``'violinplot'``. Default is ``'boxplot'``.
-    :type box_violin: str, optional
+    :param box_violin: Specifies whether to plot a ``boxplot`` or ``violinplot`` if ``plot_type`` is set to ``box_violin``.
+    :type box_violin: str, optional (default="boxplot")
 
-    :param label_fontsize: Font size for the axis labels and plot titles. Default is ``12``.
-    :type label_fontsize: int, optional
+    :param label_fontsize: Font size for the axis labels and plot titles.
+    :type label_fontsize: int, optional (default=12)
 
-    :param tick_fontsize: Font size for the tick labels on both axes. Default is ``10``.
-    :type tick_fontsize: int, optional
+    :param tick_fontsize: Font size for the tick labels on both axes.
+    :type tick_fontsize: int, optional (default=10)
 
     :param random_state: Seed for reproducibility when sampling the data.
     :type random_state: int, optional
+
+    :returns: ``None`` 
+        Displays the feature's descriptive statistics, quartile information,
+        and outlier details. If a new column is created, confirms the addition to the DataFrame. For Box-Cox, either the lambda or its confidence interval is displayed.
 
     :raises ValueError: 
         - If an invalid ``scale_conversion`` is provided.
@@ -679,12 +695,10 @@ Feature Scaling and Outliers
         - If ``save_plot=True`` but neither ``image_path_png`` nor ``image_path_svg`` is provided.
         - If an invalid option is provided for ``box_violin``.
         - If an invalid option is provided for ``plot_type``.
-
-    :returns: ``None`` 
-        Displays the feature's descriptive statistics, quartile information, and outlier details. If a new column is created, confirms the addition to the DataFrame. For Box-Cox, either the lambda or its confidence interval is displayed.
+        - If the length of transformed data does not match the original feature length.
 
     :notes: 
-        When saving plots, the filename will include the ``feature_name``, ``scale_conversion``, and ``plot_type`` to allow easy identification. For example, if ``feature_name`` is ``"age"``, ``scale_conversion`` is ``"boxcox"``, and ``plot_type`` is ``"kde"``, the filename will be: ``age_boxcox_kde.png`` or ``age_boxcox_kde.svg``.
+        When saving plots, the filename will include the ``feature_name``, ``scale_conversion``, each selected ``plot_type``, and, if cutoffs are applied, ``"_cutoff"``. For example, if ``feature_name`` is ``"age"``, ``scale_conversion`` is ``"boxcox"``, and ``plot_type`` is ``"kde"``, with cutoffs applied, the filename will be: ``age_boxcox_kde_cutoff.png`` or ``age_boxcox_kde_cutoff.svg``.
 
 
 Available Scale Conversions
@@ -739,43 +753,41 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
        random_state=111,
    )
 
-.. code-block:: bash
+::
 
-                 DATA DOCTOR SUMMARY REPORT             
+                DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
     | Feature                      | age                |
     +------------------------------+--------------------+
     | Statistic                    | Value              |
     +------------------------------+--------------------+
-    | Min                          | 3.6664             |
-    | Max                          | 6.8409             |
-    | Mean                         | 5.0163             |
-    | Median                       | 5.0333             |
-    | Std Dev                      | 0.6761             |
+    | Min                          |             3.6664 |
+    | Max                          |             6.8409 |
+    | Mean                         |             5.0163 |
+    | Median                       |             5.0333 |
+    | Std Dev                      |             0.6761 |
     +------------------------------+--------------------+
     | Quartile                     | Value              |
     +------------------------------+--------------------+
-    | Q1 (25%)                     | 4.5219             |
-    | Q2 (Median)                  | 5.0333             |
-    | IQR                          | 1.0119             |
-    | Q3 (75%)                     | 5.5338             |
-    | Q4 (Max)                     | 6.8409             |
+    | Q1 (25%)                     |             4.5219 |
+    | Q2 (50% = Median)            |             5.0333 |
+    | Q3 (75%)                     |             5.5338 |
+    | IQR                          |             1.0119 |
     +------------------------------+--------------------+
     | Outlier Bound                | Value              |
     +------------------------------+--------------------+
-    | Lower Bound                  | -8.3007            |
-    | Upper Bound                  | 9.3126             |
+    | Lower Bound                  |             3.0040 |
+    | Upper Bound                  |             7.0517 |
     +------------------------------+--------------------+
 
     New Column Name: age_boxcox
-
-    Box Cox lambda: 0.1748
+    Box-Cox Lambda: 0.1748
 
 .. raw:: html
 
    <div class="no-click">
 
-.. image:: ../assets/age_boxcox.svg
+.. image:: ../assets/age_boxcox_kde_hist_boxplot.svg
    :alt: Box-Cox Transformation W/ Data Doctor
    :align: center
    :width: 900px
@@ -917,7 +929,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
    
 2. **No Outlier Handling**: In this example, we are not applying any cutoffs to remove or modify outliers. This means the function will process the entire range of values in the ``age`` column without making adjustments for extreme values.
 
-3. **New Column Creation**: By setting ``apply_as_new_col_to_df=True``, a new column named ``age_boxcox`` will be created in the ``df2`` DataFrame, where the transformed values will be stored. This allows us to keep the original ``age`` column intact while adding the transformed data as a new feature.
+3. **New Column Creation**: By setting ``apply_as_new_col_to_df=True``, a new column named ``age_boxcox`` will be created in the ``df`` DataFrame, where the transformed values will be stored. This allows us to keep the original ``age`` column intact while adding the transformed data as a new feature.
 
 4. The ``show_plot=True`` parameter will generate a plot that visualizes the distribution of the original ``age`` data alongside the transformed ``age_boxcox`` data. This can help you assess how the Box-Cox transformation has affected the data distribution.
 
@@ -957,43 +969,42 @@ visual output.
         random_state=111,
     )
 
-.. code-block:: bash
+:: 
 
-                 DATA DOCTOR SUMMARY REPORT             
+                DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
     | Feature                      | age                |
     +------------------------------+--------------------+
     | Statistic                    | Value              |
     +------------------------------+--------------------+
-    | Min                          | 3.6664             |
-    | Max                          | 6.8409             |
-    | Mean                         | 5.0163             |
-    | Median                       | 5.0333             |
-    | Std Dev                      | 0.6761             |
+    | Min                          |             3.6664 |
+    | Max                          |             6.8409 |
+    | Mean                         |             5.0163 |
+    | Median                       |             5.0333 |
+    | Std Dev                      |             0.6761 |
     +------------------------------+--------------------+
     | Quartile                     | Value              |
     +------------------------------+--------------------+
-    | Q1 (25%)                     | 4.5219             |
-    | Q2 (Median)                  | 5.0333             |
-    | IQR                          | 1.0119             |
-    | Q3 (75%)                     | 5.5338             |
-    | Q4 (Max)                     | 6.8409             |
+    | Q1 (25%)                     |             4.5219 |
+    | Q2 (50% = Median)            |             5.0333 |
+    | Q3 (75%)                     |             5.5338 |
+    | IQR                          |             1.0119 |
     +------------------------------+--------------------+
     | Outlier Bound                | Value              |
     +------------------------------+--------------------+
-    | Lower Bound                  | -8.3007            |
-    | Upper Bound                  | 9.3126             |
+    | Lower Bound                  |             3.0040 |
+    | Upper Bound                  |             7.0517 |
     +------------------------------+--------------------+
 
     New Column Name: age_boxcox
-    Box-Cox C.I. for Lambda: (0.17168590895749103, 0.1778798368446025)
+    Box-Cox C.I. for Lambda: (0.1717, 0.1779)
 
 
 .. raw:: html
 
    <div class="no-click">
 
-.. image:: ../assets/age_boxcox_ex_2.svg
+.. image:: ../assets/age_boxcox_kde_hist_violinplot.svg
    :alt: Box-Cox Transformation W/ Data Doctor
    :align: center
    :width: 900px
@@ -1003,7 +1014,7 @@ visual output.
    </div>
 
 .. raw:: html
-   
+
    <div style="height: 50px;"></div>
 
 
@@ -1129,7 +1140,7 @@ while the ``alpha`` value provides a confidence interval for the resulting trans
 
 .. code-block:: python
 
-    Box-Cox C.I. for Lambda: (0.17168590895749103, 0.1778798368446025)
+    Box-Cox C.I. for Lambda: (0.1717, 0.1779)
 
 This allows for tailored visualizations with consistent styling across multiple plot types.
 
@@ -1417,6 +1428,252 @@ In this example:
 - ``show_plot=True``: Generates a plot of the transformed feature.
 
 
+Plain Outliers Example
+--------------------------------
+
+Observed Outliers Sans Cutoffs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this example, we examine the final weight (``fnlwgt``) feature from the US Census 
+dataset [1]_, focusing on detecting outliers without applying any scaling 
+transformations. The ``data_doctor`` function is used with minimal configuration 
+to visualize where outliers are present in the raw data.
+
+By enabling ``apply_cutoff=True`` and selecting ``plot_type=["box_violin", "hist"]``, 
+we can clearly identify outliers both visually and numerically. This basic setup 
+highlights the outliers without altering the data distribution, making it easy 
+to see extreme values that could affect further analysis.
+
+The following code demonstrates this:
+
+.. code-block:: python
+
+    data_doctor(
+        df=df,
+        feature_name="fnlwgt",
+        data_fraction=0.6,
+        plot_type=["box_violin", "hist"],
+        hist_kws={"color": "gray"},
+        figsize=(8, 4),
+        image_path_svg=image_path_svg,
+        save_plot=True,
+        random_state=111,
+    )
+
+:: 
+
+                DATA DOCTOR SUMMARY REPORT             
+    +------------------------------+--------------------+
+    | Feature                      | fnlwgt             |
+    +------------------------------+--------------------+
+    | Statistic                    | Value              |
+    +------------------------------+--------------------+
+    | Min                          |        12,285.0000 |
+    | Max                          |     1,484,705.0000 |
+    | Mean                         |       189,181.3719 |
+    | Median                       |       177,955.0000 |
+    | Std Dev                      |       105,417.5713 |
+    +------------------------------+--------------------+
+    | Quartile                     | Value              |
+    +------------------------------+--------------------+
+    | Q1 (25%)                     |       117,292.0000 |
+    | Q2 (50% = Median)            |       177,955.0000 |
+    | Q3 (75%)                     |       236,769.0000 |
+    | IQR                          |       119,477.0000 |
+    +------------------------------+--------------------+
+    | Outlier Bound                | Value              |
+    +------------------------------+--------------------+
+    | Lower Bound                  |       -61,923.5000 |
+    | Upper Bound                  |       415,984.5000 |
+    +------------------------------+--------------------+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/fnlwgt_None_boxplot_hist.svg
+   :alt: Outlier Detection W/ Data Doctor
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div style="height: 20px;"></div>
+
+In this visualization, the boxplot and histogram display outliers prominently, 
+showing you exactly where the extreme values lie. This setup serves as a baseline 
+view of the raw data, making it useful for assessing the initial distribution 
+before any scaling or transformation is applied.
+
+
+Treated Outliers With Cutoffs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this scenario, we address the extreme values observed in the ``fnlwgt`` feature 
+by applying a visual cutoff based on the distribution seen in the previous example. 
+Here, we set an approximate upper cutoff of **400,000** to limit the impact of outliers 
+without any additional scaling or transformation. By using apply_cutoff=True along 
+with ``upper_cutoff=400000``, we effectively cap the extreme values.
+
+This example also demonstrates how you can further customize the visualization by 
+specifying additional histogram keyword arguments with ``hist_kws``. Here, we use 
+``bins=20`` to adjust the bin size, creating a smoother view of the feature's 
+distribution within the cutoff limits.
+
+In the resulting visualization, you will see that the boxplot and histogram have a 
+controlled range due to the applied upper cutoff, limiting the influence of extreme 
+outliers on the visual representation. This treatment provides a clearer view of the 
+primary distribution, allowing for a more focused analysis on the bulk of the data 
+without outliers distorting the scale.
+
+The following code demonstrates this configuration:
+
+.. code-block:: python
+
+    data_doctor(
+        df=df,
+        feature_name="fnlwgt",
+        data_fraction=0.6,
+        apply_as_new_col_to_df=True,
+        apply_cutoff=True,
+        upper_cutoff=400000,
+        plot_type=["box_violin", "hist"],
+        hist_kws={"color": "gray", "bins": 20},
+        figsize=(8, 4),
+        image_path_svg=image_path_svg,
+        save_plot=True,
+        random_state=111,
+    )
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/fnlwgt_None_boxplot_hist_cutoff.svg
+   :alt: Outlier Detection W/ Data Doctor
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div style="height: 20px;"></div>
+
+.. raw:: html
+
+    <style type="text/css">
+    .tg-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:monospace, sans-serif !important;font-size:11px !important;
+      font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
+    .tg .tg-zv4m{border-color:#ffffff;text-align:left;vertical-align:top}
+    .tg .tg-8jgo{border-color:#ffffff;text-align:center;vertical-align:top}
+    .tg .tg-aw21{border-color:#ffffff;font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-lightpink{background-color:#FFCCCC; border-width: 0px;} /* Remove borders and apply solid pink color */
+    </style>
+    <div class="tg-wrap">
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-zv4m"></th>
+          <th class="tg-aw21">age</th>
+          <th class="tg-aw21">workclass</th>
+          <th class="tg-aw21">fnlwgt</th>
+          <th class="tg-aw21">education</th>
+          <th class="tg-aw21">marital-status</th>
+          <th class="tg-aw21">occupation</th>
+          <th class="tg-aw21">relationship</th>
+          <th class="tg-aw21 tg-lightpink">fnlwgt_w_cutoff</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-aw21">census_id</td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo"></td>
+          <td class="tg-8jgo tg-lightpink"></td>
+        </tr>
+        <tr>
+          <td class="tg-zv4m">582248222</td>
+          <td class="tg-8jgo">39</td>
+          <td class="tg-8jgo">State-gov	</td>
+          <td class="tg-8jgo">77516</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">Never-married</td>
+          <td class="tg-8jgo">Adm-clerical</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">132222</td> <!-- New cell with data -->
+        </tr>
+        <tr>
+          <td class="tg-zv4m">561810758</td>
+          <td class="tg-8jgo">50</td>
+          <td class="tg-8jgo">Self-emp-not-inc</td>
+          <td class="tg-8jgo">83311</td>
+          <td class="tg-8jgo">Bachelors</td>
+           <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Exec-managerial</td>
+          <td class="tg-8jgo">Husband</td>
+           <td class="tg-8jgo tg-lightpink">68624</td> <!-- New cell with data -->
+        </tr>
+        <tr>
+          <td class="tg-zv4m">598098459</td>
+          <td class="tg-8jgo">38</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">215646</td>
+          <td class="tg-8jgo">HS-grad</td>
+          <td class="tg-8jgo">Divorced</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Not-in-family</td>
+          <td class="tg-8jgo tg-lightpink">161880</td> 
+        </tr>
+        <tr>
+          <td class="tg-zv4m">776705221</td>
+          <td class="tg-8jgo">53</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">234721</td>
+          <td class="tg-8jgo">11th</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Handlers-cleaners</td>
+          <td class="tg-8jgo">Husband</td>
+          <td class="tg-8jgo tg-lightpink">73402</td> 
+        </tr>
+        <tr>
+          <td class="tg-zv4m">479262902</td>
+          <td class="tg-8jgo">28</td>
+          <td class="tg-8jgo">Private</td>
+          <td class="tg-8jgo">338409</td>
+          <td class="tg-8jgo">Bachelors</td>
+          <td class="tg-8jgo">Married-civ-spouse</td>
+          <td class="tg-8jgo">Prof-specialty</td>
+          <td class="tg-8jgo">Wife</td>
+          <td class="tg-8jgo tg-lightpink">97261</td> <!-- New cell with data -->
+        </tr>
+        <tr>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+\
+
 RobustScaler Outliers Example
 --------------------------------
 
@@ -1429,7 +1686,7 @@ refining how outliers affect scaling.
 For this example, we set the following custom keyword arguments:
 
 - Disable centering: By setting ``with_centering=False``, the transformation scales based only on the range, without shifting the median to zero.
-- Adjust quantile range: We specify a narrower ``quantile_range`` of (`10.0, 90.0`) to reduce the influence of extreme values on scaling.
+- Adjust quantile range: We specify a narrower ``quantile_range`` of (10.0, 90.0) to reduce the influence of extreme values on scaling.
 
 The following code demonstrates this transformation:
 
@@ -1444,10 +1701,11 @@ The following code demonstrates this transformation:
         scale_conversion_kws={
             "with_centering": False,  # Disable centering
             "quantile_range": (10.0, 90.0)  # Use a custom quantile range
-        }
+        },
+        random_state=111,
     )
 
-.. code-block:: bash
+:: 
 
                  DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
@@ -1471,8 +1729,8 @@ The following code demonstrates this transformation:
     +------------------------------+--------------------+
     | Outlier Bound                | Value              |
     +------------------------------+--------------------+
-    | Lower Bound                  | -2.0000            |
-    | Upper Bound                  | 2.5556             |
+    | Lower Bound                  | -0.0556            |
+    | Upper Bound                  | 2.1667             |
     +------------------------------+--------------------+
 
     New Column Name: age_robust
@@ -1494,6 +1752,8 @@ The following code demonstrates this transformation:
 .. raw:: html
    
    <div style="height: 50px;"></div>
+
+
 
 
 Stacked Crosstab Plots
