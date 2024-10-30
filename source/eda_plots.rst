@@ -1676,11 +1676,11 @@ The following code demonstrates this configuration:
 
 \
 
-RobustScaler Outliers Example
+RobustScaler Outliers Examples
 --------------------------------
 
-In this example from the US Census dataset [1]_, we apply the RobustScaler 
-transformation to the age column in a DataFrame to address potential outliers. 
+In this example from the US Census dataset [1]_, we apply the :ref:`RobustScaler 
+transformation <Robust_Scaler>` to the age column in a DataFrame to address potential outliers. 
 The ``data_doctor`` function enables users to apply transformations with specific 
 configurations via the ``scale_conversion_kws`` parameter, making it ideal for 
 refining how outliers affect scaling.
