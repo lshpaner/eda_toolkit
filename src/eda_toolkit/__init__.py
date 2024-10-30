@@ -31,10 +31,10 @@ University of San Diego for providing an exceptional learning environment and
 supporting our educational endeavors.
 
 
-Version: 0.0.11a3
+Version: 0.0.12
 """
 
-__version__ = "0.0.11a3"
+__version__ = "0.0.12"
 __author__ = "Leonid Shpaner, Oscar Gil"
 __email__ = "lshpaner@ucla.edu; info@oscargildata.com"
 
