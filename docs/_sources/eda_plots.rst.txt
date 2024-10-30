@@ -628,6 +628,7 @@ Feature Scaling and Outliers
         - ``'hist'``: Histogram plot only.
         - ``'box_violin'``: Boxplot or violin plot only (specified by
           ``box_violin``).
+
         If a list or tuple is provided (e.g., ``plot_type=["kde", "hist"]``),
         the specified plots are displayed in a single row with sufficient
         spacing. A ``ValueError`` is raised if an invalid plot type is included.
@@ -657,10 +658,11 @@ Feature Scaling and Outliers
     :param image_path_svg: Directory path to save the plot as an SVG file. Only used if ``save_plot=True``.
     :type image_path_svg: str, optional
 
-    :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If True, the new column name is generated based on the feature name and the transformation applied:
+    :param apply_as_new_col_to_df: Whether to create a new column in the DataFrame with the transformed values. If ``True``, the new column name is generated based on the feature name and the transformation applied:
     
         - ``<feature_name>_<scale_conversion>``: If a transformation is applied.
         - ``<feature_name>_w_cutoff``: If only cutoffs are applied.
+        
         For Box-Cox transformation, if ``alpha`` is specified, the confidence interval for lambda is displayed. If ``lmbda`` is specified, the lambda value is displayed.
     :type apply_as_new_col_to_df: bool, optional (default=False)
 
