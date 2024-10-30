@@ -98,7 +98,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#logit-transformation-example">Logit Transformation Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#outliers-with-robustscaler-example">Outliers With RobustScaler Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#robustscaler-outliers-example">RobustScaler Outliers Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#stacked-crosstab-plots">Stacked Crosstab Plots</a><ul>
@@ -876,7 +876,7 @@ transformation to the <code class="docutils literal notranslate"><span class="pr
 keyword arguments passed through the <code class="docutils literal notranslate"><span class="pre">scale_conversion_kws</span></code>. Specifically, we
 provide an <code class="docutils literal notranslate"><span class="pre">alpha</span></code> value of <cite>0.8</cite>, <a class="reference internal" href="theoretical_overview.html#confidence-intervals-for-lambda"><span class="std std-ref">influencing the confidence interval for the
 transformation</span></a>. Additionally, we customize the
-visual appearance of the plots by specifying keyword arguments for the boxplot,
+visual appearance of the plots by specifying keyword arguments for the violinplot,
 KDE, and histogram plots. These customizations allow for greater control over the
 visual output.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
@@ -932,7 +932,8 @@ Box-Cox<span class="w"> </span>C.I.<span class="w"> </span><span class="k">for</
 </a>
 </div><div style="height: 50px;"></div><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The theoretical overview section provides a detailed framework for a <a class="reference internal" href="theoretical_overview.html#box-cox-transformation"><span class="std std-ref">Box-Cox transformation</span></a>.</p>
+<p>Note that this example specifies The theoretical overview section provides a
+detailed framework for a <a class="reference internal" href="theoretical_overview.html#box-cox-transformation"><span class="std std-ref">Box-Cox transformation</span></a>.</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -1294,8 +1295,8 @@ applying the logit transformation.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">show_plot=True</span></code>: Generates a plot of the transformed feature.</p></li>
 </ul>
 </section>
-<section id="outliers-with-robustscaler-example">
-<h2>Outliers With RobustScaler Example<a class="headerlink" href="#outliers-with-robustscaler-example" title="Link to this heading"></a></h2>
+<section id="robustscaler-outliers-example">
+<h2>RobustScaler Outliers Example<a class="headerlink" href="#robustscaler-outliers-example" title="Link to this heading"></a></h2>
 <p>In this example from the US Census dataset <a class="footnote-reference brackets" href="#id21" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we apply the RobustScaler
 transformation to the age column in a DataFrame to address potential outliers.
 The <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function enables users to apply transformations with specific
@@ -1308,9 +1309,9 @@ refining how outliers affect scaling.</p>
 </ul>
 <p>The following code demonstrates this transformation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
-    <span class="n">df</span><span class="o">=</span><span class="n">sampled_df</span><span class="p">,</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span>
-    <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
     <span class="n">scale_conversion</span><span class="o">=</span><span class="s2">&quot;robust&quot;</span><span class="p">,</span>
     <span class="n">apply_as_new_col_to_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">scale_conversion_kws</span><span class="o">=</span><span class="p">{</span>
@@ -1349,7 +1350,9 @@ refining how outliers affect scaling.</p>
 New<span class="w"> </span>Column<span class="w"> </span>Name:<span class="w"> </span>age_robust
 </pre></div>
 </div>
-</section>
+<div class="no-click"><a class="reference internal image-reference" href="_images/age_robust_box.svg"><img alt="Box-Cox Transformation W/ Data Doctor" class="align-center" src="_images/age_robust_box.svg" style="width: 350px;" />
+</a>
+</div><div style="height: 50px;"></div></section>
 </section>
 <section id="stacked-crosstab-plots">
 <h1>Stacked Crosstab Plots<a class="headerlink" href="#stacked-crosstab-plots" title="Link to this heading"></a></h1>
