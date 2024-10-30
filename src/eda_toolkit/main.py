@@ -3339,10 +3339,14 @@ def data_doctor(
     Notes:
     ------
     - When saving plots, the filename will include the `feature_name`,
-      `scale_conversion`, and `plot_type` to allow easy identification. For
-      example, if `feature_name` is "age", `scale_conversion` is "boxcox", and
-      `plot_type` is "kde", the filename will be: `age_boxcox_kde.png` or
-      `age_boxcox_kde.svg`.
+      `scale_conversion`, and each selected `plot_type` to allow easy 
+      identification. If `plot_type` includes 'box_violin', the filename will 
+      reflect the user's specific choice of either 'boxplot' or 'violinplot' as 
+      set in `box_violin`. For example, if `feature_name` is "age", 
+      `scale_conversion` is "boxcox", and `plot_type` is ["kde", "hist", 
+      "box_violin"] with `box_violin` set to "boxplot", the filename will be: 
+      `age_boxcox_kde_hist_boxplot.png` or `age_boxcox_kde_hist_boxplot.svg`.
+
     
     - The cutoff values (if applied) are displayed as text at the bottom of
       the figure. If `plot_type="all"`, the text is displayed in a separate row.
@@ -3810,14 +3814,19 @@ def data_doctor(
             "when 'save_plots=True'."
         )
 
-    # Save the plots if save_plots is True and the paths are provided
+    # Save the plots if save_plot is True and the paths are provided
     if save_plot:
-        # Generate a default filename based on the feature name, scale
-        # conversion, and plot type
+        # Adjust plot_type for custom labeling of boxplot or violinplot
+        adjusted_plot_type = [
+            box_violin if ptype == "box_violin" else ptype for ptype in plot_type
+        ]
+        
+        # Generate a filename based on the feature name, scale conversion, and selected plot types
+        plot_type_str = "_".join(adjusted_plot_type) if isinstance(plot_type, (list, tuple)) else adjusted_plot_type[0]
         default_filename = (
             f"{feature_name}_"
             f"{scale_conversion if scale_conversion else 'original'}_"
-            f"{plot_type}"
+            f"{plot_type_str}"
         )
 
         # Save as PNG if path is provided
@@ -3831,5 +3840,7 @@ def data_doctor(
             svg_filename = f"{image_path_svg}/{default_filename}.svg"
             plt.savefig(svg_filename, format="svg")
             print(f"Plot saved as SVG at {svg_filename}")
+
+
 
 ################################################################################
