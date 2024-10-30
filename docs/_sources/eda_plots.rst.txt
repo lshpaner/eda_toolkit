@@ -932,7 +932,7 @@ transformation to the ``age`` column in a DataFrame, but this time with custom
 keyword arguments passed through the ``scale_conversion_kws``. Specifically, we 
 provide an ``alpha`` value of `0.8`, :ref:`influencing the confidence interval for the 
 transformation <Confidence_Intervals_for_Lambda>`. Additionally, we customize the 
-visual appearance of the plots by specifying keyword arguments for the boxplot, 
+visual appearance of the plots by specifying keyword arguments for the violinplot, 
 KDE, and histogram plots. These customizations allow for greater control over the 
 visual output.
 
@@ -1009,7 +1009,8 @@ visual output.
 
 .. note::
 
-    The theoretical overview section provides a detailed framework for a :ref:`Box-Cox transformation <Box_Cox_Transformation>`.  
+    Note that this example specifies The theoretical overview section provides a 
+    detailed framework for a :ref:`Box-Cox transformation <Box_Cox_Transformation>`.  
 
 .. code-block:: python
 
@@ -1416,8 +1417,8 @@ In this example:
 - ``show_plot=True``: Generates a plot of the transformed feature.
 
 
-Outliers With RobustScaler Example
------------------------------------
+RobustScaler Outliers Example
+--------------------------------
 
 In this example from the US Census dataset [1]_, we apply the RobustScaler 
 transformation to the age column in a DataFrame to address potential outliers. 
@@ -1435,9 +1436,9 @@ The following code demonstrates this transformation:
 .. code-block:: python
 
     data_doctor(
-        df=sampled_df,
+        df=df,
         feature_name='age',
-        data_fraction=0.4,
+        data_fraction=0.6,
         scale_conversion="robust",
         apply_as_new_col_to_df=True,
         scale_conversion_kws={
@@ -1475,6 +1476,24 @@ The following code demonstrates this transformation:
     +------------------------------+--------------------+
 
     New Column Name: age_robust
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/age_robust_box.svg
+   :alt: Box-Cox Transformation W/ Data Doctor
+   :align: center
+   :width: 350px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
 
 
 Stacked Crosstab Plots
