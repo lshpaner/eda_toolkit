@@ -3173,7 +3173,8 @@ def data_doctor(
     scaling, applying cutoffs, and visualizing the results. This function also
     allows for the creation of a new column with the transformed data if
     specified. Plots can be saved in PNG or SVG format with filenames that
-    incorporate the `plot_type`, `feature_name`, and `scale_conversion`.
+    incorporate the `plot_type`, `feature_name`, `scale_conversion`, and
+    `cutoff` if cutoffs are applied.
 
     Parameters:
     -----------
@@ -3338,27 +3339,21 @@ def data_doctor(
 
     Notes:
     ------
-    - Outlier Bound Calculation: The function calculates the lower and upper
-      bounds for outliers using the Interquartile Range (IQR) method. The bounds
-      are computed as:
-        - `outlier_lower_bound = max(0, Q1 - 1.5 * IQR)`
-        - `outlier_upper_bound = Q3 + 1.5 * IQR`
-      where Q1 and Q3 are the 25th and 75th percentiles of the feature,
-      respectively. The lower bound is clamped to zero if it results in a
-      negative value, ensuring that it aligns with positive-only datasets.
-
     - When saving plots, the filename will include the `feature_name`,
       `scale_conversion`, and each selected `plot_type` to allow easy
       identification. If `plot_type` includes 'box_violin', the filename will
       reflect the user's specific choice of either 'boxplot' or 'violinplot' as
-      set in `box_violin`. For example, if `feature_name` is "age",
+      set in `box_violin`. Additionally, if `apply_cutoff=True`, "cutoff" is
+      appended to the filename. For example, if `feature_name` is "age",
       `scale_conversion` is "boxcox", and `plot_type` is ["kde", "hist",
       "box_violin"] with `box_violin` set to "boxplot", the filename will be:
-      `age_boxcox_kde_hist_boxplot.png` or `age_boxcox_kde_hist_boxplot.svg`.
+      `age_boxcox_kde_hist_boxplot_cutoff.png` or
+      `age_boxcox_kde_hist_boxplot_cutoff.svg`.
 
     - The cutoff values (if applied) are displayed as text at the bottom of
-      the figure. If `plot_type="all"`, the text is displayed in a separate row.
-      For custom plot lists, the text appears centered below the figure.
+      the figure, with thousands separators for readability. If `plot_type="all"`,
+      the text is displayed in a separate row. For custom plot lists, the text
+      appears centered below the figure.
     """
 
     # Suppress warnings for division by zero, or invalid values in subtract
@@ -3589,38 +3584,51 @@ def data_doctor(
     # Header for the statistical section
     print(f"| {'Statistic':<28} | {'Value':<18} |")
     print(f"+{'-'*30}+{'-'*20}+")
-    print(f"| {'Min':<28} | {np.min(feature_):<18.4f} |")
-    print(f"| {'Max':<28} | {np.max(feature_):<18.4f} |")
-    print(f"| {'Mean':<28} | {np.mean(feature_):<18.4f} |")
-    print(f"| {'Median':<28} | {np.median(feature_):<18.4f} |")
-    print(f"| {'Std Dev':<28} | {np.std(feature_):<18.4f} |")
+    print(f"| {'Min':<28} | {np.min(feature_):>18,.4f} |")
+    print(f"| {'Max':<28} | {np.max(feature_):>18,.4f} |")
+    print(f"| {'Mean':<28} | {np.mean(feature_):>18,.4f} |")
+    print(f"| {'Median':<28} | {np.median(feature_):>18,.4f} |")
+    print(f"| {'Std Dev':<28} | {np.std(feature_):>18,.4f} |")
 
     # Header for the quartiles section
     print(f"+{'-'*30}+{'-'*20}+")
     print(f"| {'Quartile':<28} | {'Value':<18} |")
     print(f"+{'-'*30}+{'-'*20}+")
-    print(f"| {'Q1 (25%)':<28} | {np.quantile(feature_, 0.25):<18.4f} |")
-    print(f"| {'Q2 (Median)':<28} | {np.quantile(feature_, 0.50):<18.4f} |")
+    print(f"| {'Q1 (25%)':<28} | {np.quantile(feature_, 0.25):>18,.4f} |")
+    print(f"| {'Q2 (50% = Median)':<28} | {np.quantile(feature_, 0.50):>18,.4f} |")
+    print(f"| {'Q3 (75%)':<28} | {np.quantile(feature_, 0.75):>18,.4f} |")
     print(
         f"| {'IQR':<28} | "
-        f"{(np.quantile(feature_, 0.75) - np.quantile(feature_, 0.25)):<18.4f} |"
+        f"{(np.quantile(feature_, 0.75) - np.quantile(feature_, 0.25)):>18,.4f} |"
     )
-    print(f"| {'Q3 (75%)':<28} | {np.quantile(feature_, 0.75):<18.4f} |")
-    print(f"| {'Q4 (Max)':<28} | {np.quantile(feature_, 1):<18.4f} |")
 
+    # Calculate the first quartile (25th percentile) of the feature's values.
     Q1 = np.quantile(feature_, 0.25)
+
+    # Calculate the third quartile (75th percentile) of the feature's values.
     Q3 = np.quantile(feature_, 0.75)
+
+    # Compute the Interquartile Range (IQR) by subtracting Q1 from Q3.
+    # The IQR represents the middle 50% of the data, providing a measure of
+    # variability.
     IQR = Q3 - Q1
 
+    # Calculate the lower bound for outliers using the IQR method.
+    # This boundary is set at 1.5 * IQR below the first quartile (Q1).
+    # Values below this bound are considered potential outliers.
     outlier_lower_bound = Q1 - 1.5 * IQR
+
+    # Calculate the upper bound for outliers using the IQR method.
+    # This boundary is set at 1.5 * IQR above the third quartile (Q3).
+    # Values above this bound are considered potential outliers.
     outlier_upper_bound = Q3 + 1.5 * IQR
 
     # Header for the outlier section
     print(f"+{'-'*30}+{'-'*20}+")
     print(f"| {'Outlier Bound':<28} | {'Value':<18} |")
     print(f"+{'-'*30}+{'-'*20}+")
-    print(f"| {'Lower Bound':<28} | {outlier_lower_bound:<18.4f} |")
-    print(f"| {'Upper Bound':<28} | {outlier_upper_bound:<18.4f} |")
+    print(f"| {'Lower Bound':<28} | {outlier_lower_bound:>18,.4f} |")
+    print(f"| {'Upper Bound':<28} | {outlier_upper_bound:>18,.4f} |")
     print(f"+{'-'*30}+{'-'*20}+")
 
     # Add column to dataframe along with data
@@ -3644,7 +3652,10 @@ def data_doctor(
             if "alpha" in scale_conversion_kws:
                 # Confidence interval is available, so print it
                 if "conf_interval" in locals():
-                    print(f"Box-Cox C.I. for Lambda: {conf_interval}")
+                    print(
+                        f"Box-Cox C.I. for Lambda: ({conf_interval[0]:.4f}, "
+                        f"{conf_interval[1]:.4f})"
+                    )
             else:
                 # No alpha, so we print the single lambda value
                 if "box_cox_lmbda" in locals():
@@ -3699,6 +3710,14 @@ def data_doctor(
     if show_plot:
         for i, ptype in enumerate(plot_type):
             ax = axes[i]
+
+            # Check if x-axis values are large (in the hundreds of thousands or above)
+            if feature_.max() >= 100_000:
+                ax.xaxis.set_major_formatter(mticker.ScalarFormatter(useMathText=True))
+                ax.ticklabel_format(
+                    style="sci", axis="x", scilimits=(5, 5)
+                )  # Set only for 100,000+
+
             if ptype == "kde":
                 sns.kdeplot(
                     x=feature_,
@@ -3788,8 +3807,8 @@ def data_doctor(
             fig.text(
                 0.5,
                 -0.05,  # Position below the plot
-                f"Lower cutoff: {round(lower_cutoff, 2)} | "
-                f"Upper cutoff: {round(upper_cutoff, 2)}",
+                f"Lower cutoff: {lower_cutoff:,.0f} | "
+                f"Upper cutoff: {upper_cutoff:,.0f}",
                 ha="center",
                 fontsize=label_fontsize,
             )
@@ -3798,8 +3817,8 @@ def data_doctor(
         fig.text(
             0.5,
             -0.05,  # Position below the plot
-            f"Lower cutoff: {round(lower_cutoff, 2)} | "
-            f"Upper cutoff: {round(upper_cutoff, 2)}",
+            f"Lower cutoff: {lower_cutoff:,.0f} | "
+            f"Upper cutoff: {upper_cutoff:,.0f}",
             ha="center",
             fontsize=label_fontsize,
         )
@@ -3834,22 +3853,34 @@ def data_doctor(
             if isinstance(plot_type, (list, tuple))
             else adjusted_plot_type[0]
         )
+
+        # Add 'cutoff' to filename if cutoff is applied
+        cutoff_str = "_cutoff" if apply_cutoff else ""
+
         default_filename = (
             f"{feature_name}_"
             f"{scale_conversion if scale_conversion else 'original'}_"
-            f"{plot_type_str}"
+            f"{plot_type_str}{cutoff_str}"
         )
 
         # Save as PNG if path is provided
         if image_path_png:
             png_filename = f"{image_path_png}/{default_filename}.png"
-            plt.savefig(png_filename, format="png")
+            plt.savefig(
+                png_filename,
+                format="png",
+                bbox_inches="tight",
+            )
             print(f"Plot saved as PNG at {png_filename}")
 
         # Save as SVG if path is provided
         if image_path_svg:
             svg_filename = f"{image_path_svg}/{default_filename}.svg"
-            plt.savefig(svg_filename, format="svg")
+            plt.savefig(
+                svg_filename,
+                format="svg",
+                bbox_inches="tight",
+            )
             print(f"Plot saved as SVG at {svg_filename}")
 
 
