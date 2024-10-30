@@ -24,6 +24,65 @@
 Changelog
 =========
 
+`Version 0.0.12`_
+----------------------
+
+.. _Version 0.0.12: https://lshpaner.github.io/eda_toolkit/v0.0.12/index.html
+
+New Features
+^^^^^^^^^^^^^^^^^^
+
+- Added ``data_doctor`` function:
+  
+  A versatile tool designed to facilitate detailed feature analysis, outlier detection, and data transformation within a DataFrame.
+  
+  **Key Capabilities**:
+  
+  - **Outlier Detection**:
+    
+    - Detects and highlights outliers visually using boxplots, histograms, and other visualization options.
+    - Allows cutoffs to be applied directly, offering a configurable approach for handling extreme values.
+  
+  - **Data Transformation**:
+    
+    - Supports a range of scaling transformations, including absolute, log, square root, min-max, robust, and Box-Cox transformations, among others.
+    - Configurable via ``scale_conversion`` and ``scale_conversion_kws`` parameters to customize transformation approaches based on user needs.
+  
+  - **Visualization Options**:
+    
+    - Provides flexible visualization choices, including KDE plots, histograms, and box/violin plots.
+    - Allows users to specify multiple plot types in a single call (e.g., ``plot_type=["hist", "kde"]``), facilitating comprehensive visual exploration of feature distributions.
+  
+  - **Customizable Display**:
+    
+    - Adds text annotations, such as cutoff values, below plots, and enables users to adjust various styling parameters like ``label_fontsize``, ``tick_fontsize``, and ``figsize``.
+  
+  - **Output Control**:
+    
+    - Offers options to save plots directly to PNG or SVG formats, with file names reflecting key transformations and cutoff information for easy identification.
+
+Improvements
+^^^^^^^^^^^^^^^^^^
+
+- **Enhanced** ``add_ids`` **function**:
+   
+  - **Switched to NumPy for Random Seed Handling**:
+    
+    - Updated from ``random.seed(seed)`` (Python's ``random`` module) to ``np.random.seed(seed)``, providing better control and reproducibility within NumPy’s ecosystem.
+  
+  - **Improved ID Generation Method**:
+    
+    - Replaced the previous approach, which used a ``while`` loop and ``random.choice``, with ``np.random.choice`` and vectorized operations, significantly improving efficiency.
+  
+  - **Enhanced Efficiency**:
+    
+    - Eliminated the ``while`` loop for unique ID generation, using a vectorized approach with NumPy arrays.
+    - Generated the first digit (non-zero) and the remaining digits in a single step with NumPy, reducing computational overhead and enhancing scalability.
+
+  
+The updated implementation removes custom logic for ID generation, leveraging NumPy's built-in array operations for a more concise and readable codebase.
+
+
 `Version 0.0.11`_
 ----------------------
 
