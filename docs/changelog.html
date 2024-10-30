@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDA Toolkit 0.0.11 documentation</title>
+  <title>Changelog &mdash; EDA Toolkit 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=0c446633"></script>
+      <script src="_static/documentation_options.js?v=3bbcec59"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -86,6 +86,11 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-12">Version 0.0.12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#improvements">Improvements</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-11">Version 0.0.11</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-10">Version 0.0.10</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-9">Version 0.0.9</a></li>
@@ -101,9 +106,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id10">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id11">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -137,6 +142,74 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-12">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.12/index.html">Version 0.0.12</a><a class="headerlink" href="#version-0-0-12" title="Link to this heading"></a></h2>
+<section id="new-features">
+<h3>New Features<a class="headerlink" href="#new-features" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code> function:</p>
+<p>A versatile tool designed to facilitate detailed feature analysis, outlier detection, and data transformation within a DataFrame.</p>
+<p><strong>Key Capabilities</strong>:</p>
+<ul class="simple">
+<li><p><strong>Outlier Detection</strong>:</p>
+<ul>
+<li><p>Detects and highlights outliers visually using boxplots, histograms, and other visualization options.</p></li>
+<li><p>Allows cutoffs to be applied directly, offering a configurable approach for handling extreme values.</p></li>
+</ul>
+</li>
+<li><p><strong>Data Transformation</strong>:</p>
+<ul>
+<li><p>Supports a range of scaling transformations, including absolute, log, square root, min-max, robust, and Box-Cox transformations, among others.</p></li>
+<li><p>Configurable via <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> and <code class="docutils literal notranslate"><span class="pre">scale_conversion_kws</span></code> parameters to customize transformation approaches based on user needs.</p></li>
+</ul>
+</li>
+<li><p><strong>Visualization Options</strong>:</p>
+<ul>
+<li><p>Provides flexible visualization choices, including KDE plots, histograms, and box/violin plots.</p></li>
+<li><p>Allows users to specify multiple plot types in a single call (e.g., <code class="docutils literal notranslate"><span class="pre">plot_type=[&quot;hist&quot;,</span> <span class="pre">&quot;kde&quot;]</span></code>), facilitating comprehensive visual exploration of feature distributions.</p></li>
+</ul>
+</li>
+<li><p><strong>Customizable Display</strong>:</p>
+<ul>
+<li><p>Adds text annotations, such as cutoff values, below plots, and enables users to adjust various styling parameters like <code class="docutils literal notranslate"><span class="pre">label_fontsize</span></code>, <code class="docutils literal notranslate"><span class="pre">tick_fontsize</span></code>, and <code class="docutils literal notranslate"><span class="pre">figsize</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Output Control</strong>:</p>
+<ul>
+<li><p>Offers options to save plots directly to PNG or SVG formats, with file names reflecting key transformations and cutoff information for easy identification.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="improvements">
+<h3>Improvements<a class="headerlink" href="#improvements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Enhanced</strong> <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> <strong>function</strong>:</p>
+<ul>
+<li><p><strong>Switched to NumPy for Random Seed Handling</strong>:</p>
+<ul>
+<li><p>Updated from <code class="docutils literal notranslate"><span class="pre">random.seed(seed)</span></code> (Python’s <code class="docutils literal notranslate"><span class="pre">random</span></code> module) to <code class="docutils literal notranslate"><span class="pre">np.random.seed(seed)</span></code>, providing better control and reproducibility within NumPy’s ecosystem.</p></li>
+</ul>
+</li>
+<li><p><strong>Improved ID Generation Method</strong>:</p>
+<ul>
+<li><p>Replaced the previous approach, which used a <code class="docutils literal notranslate"><span class="pre">while</span></code> loop and <code class="docutils literal notranslate"><span class="pre">random.choice</span></code>, with <code class="docutils literal notranslate"><span class="pre">np.random.choice</span></code> and vectorized operations, significantly improving efficiency.</p></li>
+</ul>
+</li>
+<li><p><strong>Enhanced Efficiency</strong>:</p>
+<ul>
+<li><p>Eliminated the <code class="docutils literal notranslate"><span class="pre">while</span></code> loop for unique ID generation, using a vectorized approach with NumPy arrays.</p></li>
+<li><p>Generated the first digit (non-zero) and the remaining digits in a single step with NumPy, reducing computational overhead and enhancing scalability.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>The updated implementation removes custom logic for ID generation, leveraging NumPy’s built-in array operations for a more concise and readable codebase.</p>
+</section>
+</section>
 <section id="version-0-0-11">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.11/index.html">Version 0.0.11</a><a class="headerlink" href="#version-0-0-11" title="Link to this heading"></a></h2>
 <p><strong>Description</strong></p>
@@ -606,8 +679,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id9">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<section id="id10">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -625,8 +698,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id10">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -708,8 +781,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id11">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<section id="id12">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
