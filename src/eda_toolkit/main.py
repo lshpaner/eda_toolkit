@@ -59,71 +59,87 @@ def add_ids(
     set_as_index=False,
 ):
     """
-    Add a column of unique IDs with specified number of digits to the dataframe.
-
-    This function generates a unique ID with the specified number of digits for
-    each row in the dataframe. The new IDs are added as a new column with the
-    specified column name. Optionally, the new ID column can be set as the index
-    or placed as the first column in the dataframe.
+    Add a column of unique IDs with specified number of digits to the DataFrame.
+    Ensures that all generated IDs are unique, even for large datasets.
 
     Parameters:
     -----------
     df : pd.DataFrame
-        The dataframe to add IDs to.
-
-    id_colname : str, optional (default="ID")
-        The name of the new column for the IDs.
-
-    num_digits : int, optional (default=9)
-        The number of digits for the unique IDs.
-
+        The DataFrame to which IDs will be added.
+    id_colname : str, optional
+        The name of the new column for the unique IDs (default is "ID").
+    num_digits : int, optional
+        The number of digits for the unique IDs (default is 9). The first digit
+        will always be non-zero to ensure proper formatting.
     seed : int, optional
-        The seed for the random number generator. Defaults to None.
-
-    set_as_index : bool, optional (default=False)
-        Whether to set the new ID column as the index. Defaults to False.
+        Seed for the random number generator to ensure reproducibility
+        (default is None).
+    set_as_index : bool, optional
+        If True, the generated ID column will be set as the index of the
+        DataFrame (default is False).
 
     Returns:
     --------
     pd.DataFrame
-        The updated dataframe with the new ID column.
+        The updated DataFrame with a new column of unique IDs. If `set_as_index`
+        is True, the new ID column will replace the existing index.
 
     Notes:
     ------
-    - If the dataframe index is not unique, a warning is printed.
-    - The function does not check if the number of rows exceeds the number of
-      unique IDs that can be generated with the specified number of digits.
-    - The first digit of the generated IDs is ensured to be non-zero.
+    - The function ensures IDs are unique by handling potential collisions during
+      generation, even for large datasets.
+    - The first digit of each generated ID is guaranteed to be non-zero.
+    - If `set_as_index` is False, the ID column will be added as the first column
+      in the DataFrame.
     """
 
-    # Check for unique indices
-    if df.index.duplicated().any():
-        print("Warning: DataFrame index is not unique.")
-        print(
-            "Duplicate index entries:",
-            df.index[df.index.duplicated()].tolist(),
-        )
+    # Check if the DataFrame index is unique
+    if df.index.is_unique:
+        print("The DataFrame index is unique.")
     else:
-        print("DataFrame index is unique.")
+        print("Warning: The DataFrame index is not unique.")
+        print("Duplicate index entries:", df.index[df.index.duplicated()].tolist())
+
+    # Calculate the total pool size of possible unique IDs
+    pool_size = 9 * (10 ** (num_digits - 1))  # First digit is non-zero
+    n_rows = len(df)
+
+    # Check if the number of rows exceeds or approaches the pool size
+    if n_rows > pool_size:
+        raise ValueError(
+            f"The number of rows ({n_rows}) exceeds the total pool of possible "
+            f"unique IDs ({pool_size}). Increase the number of digits to avoid "
+            f"this issue."
+        )
+    elif n_rows > pool_size * 0.9:
+        print(
+            f"Warning: The number of rows ({n_rows}) is approaching the pool of "
+            f"possible unique IDs ({pool_size}). Consider increasing the number "
+            f"of digits."
+        )
 
     # Set the random seed for reproducibility
     np.random.seed(seed)
 
-    # Number of rows in the dataframe
-    n_rows = len(df)
+    # Initialize a set to track generated IDs for uniqueness
+    unique_ids = set()
+    ids = []
 
-    # Generate the first digit (non-zero)
-    first_digits = np.random.choice(list("123456789"), size=n_rows)
+    while len(ids) < n_rows:
+        # Generate random IDs
+        first_digits = np.random.choice(list("123456789"), size=n_rows - len(ids))
+        other_digits = np.random.choice(
+            list("0123456789"), size=(n_rows - len(ids), num_digits - 1)
+        )
+        batch_ids = [fd + "".join(od) for fd, od in zip(first_digits, other_digits)]
 
-    # Generate the remaining digits
-    other_digits = np.random.choice(list("0123456789"), size=(n_rows, num_digits - 1))
+        # Filter out duplicates and add unique IDs
+        for id_ in batch_ids:
+            if id_ not in unique_ids:
+                ids.append(id_)
+                unique_ids.add(id_)
 
-    # Concatenate first digit with other digits and join as strings
-    ids = np.array(
-        [fd + "".join(od) for fd, od in zip(first_digits, other_digits)],
-    )
-
-    # Assign the generated IDs to the dataframe
+    # Assign the unique IDs to the DataFrame
     df[id_colname] = ids
 
     if set_as_index:
