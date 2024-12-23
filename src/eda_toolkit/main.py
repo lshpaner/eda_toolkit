@@ -2078,7 +2078,6 @@ def stacked_crosstab_plot(
                         print(f"Plot saved as {full_path}")
 
             plt.show()
-            plt.close(fig)  # Ensure plot is closed after showing
 
     # Generate crosstabs if output is "both" or "crosstabs_only"
     if output in ["both", "crosstabs_only"]:
@@ -2127,6 +2126,7 @@ def stacked_crosstab_plot(
             # Process counter
             legend_counter += 1
             # Display results
+            print()
             print("Crosstab for " + col_results)
             print()
             print(crosstab_df)
@@ -2153,7 +2153,7 @@ def box_violin_plot(
     n_cols=None,  # Allow users to define the number of columns
     image_path_png=None,  # Make image paths optional
     image_path_svg=None,  # Make image paths optional
-    save_plots=None,  # Parameter to control saving plots
+    save_plots=False,  # Parameter to control saving plots
     show_legend=True,  # Parameter to toggle legend
     plot_type="boxplot",  # Parameter to specify plot type
     xlabel_rot=0,  # Parameter to rotate x-axis labels
@@ -2199,8 +2199,10 @@ def box_violin_plot(
     image_path_svg : str, optional
         Directory path to save .svg images.
 
-    save_plots : str, optional
-        String, "all", "individual", or "grid" to control saving plots.
+    save_plots : bool, optional
+        If True, saves the plots specified by `show_plot`. The plots to be saved
+        ("individual", "grid", or "both") are determined by the `show_plot`
+        parameter. Defaults to False.
 
     show_legend : bool, optional (default=True)
         True if showing the legend in the plots.
@@ -2288,12 +2290,9 @@ def box_violin_plot(
             "'grid', or 'both'."
         )
 
-    # Check for valid save_plots values
-    if save_plots not in [None, "all", "individual", "grid"]:
-        raise ValueError(
-            "Invalid `save_plots` value selected. Choose from 'all', "
-            "'individual', 'grid', or None."
-        )
+    # Check for valid save_plots value
+    if not isinstance(save_plots, bool):
+        raise ValueError("`save_plots` must be a boolean value (True or False).")
 
     # Check if save_plots is set without image paths
     if save_plots and not (image_path_png or image_path_svg):
@@ -2337,9 +2336,9 @@ def box_violin_plot(
     if grid_figsize is None:
         grid_figsize = (5 * n_cols, 5 * n_rows)
 
-    # Determine saving options based on save_plots value
-    save_individual = save_plots in ["all", "individual"]
-    save_grid = save_plots in ["all", "grid"]
+    # Determine saving options based on `show_plot`
+    save_individual = save_plots and show_plot in ["individual", "both"]
+    save_grid = save_plots and show_plot in ["grid", "both"]
 
     def get_palette(n_colors):
         """
@@ -2427,9 +2426,8 @@ def box_violin_plot(
                             bbox_inches="tight",
                         )
 
-                if show_plot in ["individual", "both"]:
+                if show_plot in ["individual", "both", "grid"]:
                     plt.show()  # Display the plot
-                plt.close()
 
     # Save and/or show the entire grid if required
     if save_grid or show_plot in ["grid", "both"]:
@@ -2508,7 +2506,6 @@ def box_violin_plot(
 
         if show_plot in ["grid", "both"]:
             plt.show()  # Display the plot
-        plt.close(fig)
 
 
 ################################################################################
