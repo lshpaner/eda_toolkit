@@ -140,6 +140,9 @@ dmypy.json
 # Directories to be ignored
 Data/
 data_splits/
+data/
+images/
+data_output/
 mlruns/
 Images/
 --stdin*/
