@@ -381,11 +381,12 @@ def dataframe_columns(
     stop_time = (
         datetime.now() if sys.version_info >= (3, 7) else datetime.datetime.now()
     )
+    print()
     print(
         "Total seconds of processing time:",
         (stop_time - start_time).total_seconds(),
     )
-
+    print()
     if sort_cols_alpha:
         result_df = pd.DataFrame(columns_value_counts).sort_values(by="column")
     else:
@@ -829,6 +830,9 @@ def contingency_table(
     # Convert single column to list
     if isinstance(cols, str):
         cols = [cols]
+
+    # Ensure df is an independent copy to avoid SettingWithCopyWarning
+    df = df.copy(deep=True)
 
     # Convert categorical columns to string to avoid fillna issue
     for col in cols:

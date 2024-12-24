@@ -30,7 +30,6 @@ Additionally, `eda_toolkit` depends on the following packages, which will be aut
 - `scikit-learn`: version `1.0.2` or higher, but capped at `1.5.2`
 - `seaborn`: version `0.12.2` or higher, but capped below `0.13.0`
 - `xlsxwriter`: version `3.2.0` (Exact version required)
-- `scipy`: version `1.7.3` or higher, but capped at `1.11.1`
 
 
 ## 💾 Installation
@@ -82,7 +81,7 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
   month        = aug,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {0.0.12},
+  version      = {0.0.13},
   doi          = {10.5281/zenodo.13162633},
   url          = {https://doi.org/10.5281/zenodo.13162633}
 }
