@@ -25,6 +25,7 @@ parts/
 sdist/
 var/
 wheels/
+wheel_contents/
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
@@ -114,6 +115,10 @@ celerybeat-schedule
 env/
 venv/
 edatoolkit_venv/
+edatoolkit_venv374/
+edatoolkit_venv38/
+edatoolkit_venv39/
+edatoolkit_venv310/
 ENV/
 env.bak/
 venv.bak/
@@ -140,6 +145,9 @@ dmypy.json
 # Directories to be ignored
 Data/
 data_splits/
+data/
+images/
+data_output/
 mlruns/
 Images/
 --stdin*/

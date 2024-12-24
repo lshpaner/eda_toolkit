@@ -1,14 +1,14 @@
-""" 
+# Import package modules
+from .main import *
+from .ml_eda import *
+from .art import *
 
-+--------------------------------------------------------------------------------+
-|  _____   ____       _              _____                   _   _      _   _    |
-| | ____| |  _ \     / \            |_   _|   ___     ___   | | | | __ (_) | |_  |
-| |  _|   | | | |   / _ \    _____    | |    / _ \   / _ \  | | | |/ / | | | __| |
-| | |___  | |_| |  / ___ \  |_____|   | |   | (_) | | (_) | | | |   <  | | | |_  |
-| |_____| |____/  /_/   \_\           |_|    \___/   \___/  |_| |_|\_\ |_|  \__| |
-|                                                                                |
-+--------------------------------------------------------------------------------+                                                                                                                                                            
+import os
+import sys
+import builtins
 
+# Detailed Documentation
+detailed_doc = """
 Welcome to EDA Toolkit, a collection of utility functions designed to streamline 
 your exploratory data analysis (EDA) tasks. This repository offers tools for 
 directory management, some data preprocessing, reporting, visualizations, and 
@@ -17,6 +17,8 @@ analysis.
 
 PyPI: https://pypi.org/project/eda-toolkit/
 Documentation: https://lshpaner.github.io/eda_toolkit
+
+Authors: Leonid Shpaner, Oscar Gil
 
 Acknowledgements
 
@@ -31,13 +33,34 @@ University of San Diego for providing an exceptional learning environment and
 supporting our educational endeavors.
 
 
-Version: 0.0.12
+Version: 0.0.13
 """
 
-__version__ = "0.0.12"
+# Assign only the detailed documentation to __doc__
+__doc__ = detailed_doc
+
+# Metadata
+__version__ = "0.0.13"
 __author__ = "Leonid Shpaner, Oscar Gil"
 __email__ = "lshpaner@ucla.edu; info@oscargildata.com"
 
 
-from .main import *
-from .ml_eda import *
+# Define the custom help function
+def custom_help(obj=None):
+    """
+    Custom help function to dynamically include ASCII art in help() output.
+    """
+    if (
+        obj is None or obj is sys.modules[__name__]
+    ):  # When `help()` is called for this module
+        print(eda_toolkit_logo)  # Print ASCII art first
+        print(detailed_doc)  # Print the detailed documentation
+    else:
+        original_help(obj)  # Use the original help for other objects
+
+
+# Backup the original help function
+original_help = builtins.help
+
+# Override the global help function in builtins
+builtins.help = custom_help
