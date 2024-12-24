@@ -8,7 +8,6 @@ import scipy.stats as stats
 import random
 import itertools  # Import itertools for combinations
 from itertools import combinations
-from IPython.display import display
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
@@ -22,6 +21,7 @@ import sys
 import warnings
 from sklearn.inspection import partial_dependence, PartialDependenceDisplay
 from sklearn.preprocessing import PowerTransformer, RobustScaler
+from tqdm import tqdm
 
 if sys.version_info >= (3, 7):
     from datetime import datetime
@@ -59,71 +59,99 @@ def add_ids(
     set_as_index=False,
 ):
     """
-    Add a column of unique IDs with specified number of digits to the dataframe.
+    Add a column of unique IDs with a specified number of digits to the DataFrame.
 
-    This function generates a unique ID with the specified number of digits for
-    each row in the dataframe. The new IDs are added as a new column with the
-    specified column name. Optionally, the new ID column can be set as the index
-    or placed as the first column in the dataframe.
+    This function ensures all generated IDs are unique, even for large datasets,
+    by tracking and resolving potential collisions during ID generation.
 
     Parameters:
     -----------
     df : pd.DataFrame
-        The dataframe to add IDs to.
-
-    id_colname : str, optional (default="ID")
-        The name of the new column for the IDs.
-
-    num_digits : int, optional (default=9)
-        The number of digits for the unique IDs.
-
+        The DataFrame to which IDs will be added.
+    id_colname : str, optional
+        The name of the new column for the unique IDs (default is "ID").
+    num_digits : int, optional
+        The number of digits for the unique IDs (default is 9). The first digit
+        will always be non-zero to ensure proper formatting.
     seed : int, optional
-        The seed for the random number generator. Defaults to None.
-
-    set_as_index : bool, optional (default=False)
-        Whether to set the new ID column as the index. Defaults to False.
+        Seed for the random number generator to ensure reproducibility
+        (default is None).
+    set_as_index : bool, optional
+        If True, the generated ID column will be set as the index of the
+        DataFrame (default is False).
 
     Returns:
     --------
     pd.DataFrame
-        The updated dataframe with the new ID column.
+        The updated DataFrame with a new column of unique IDs. If `set_as_index`
+        is True, the new ID column will replace the existing index.
+
+    Raises:
+    -------
+    ValueError
+        If the number of rows in the DataFrame exceeds the pool of possible
+        unique IDs for the specified `num_digits`.
 
     Notes:
     ------
-    - If the dataframe index is not unique, a warning is printed.
-    - The function does not check if the number of rows exceeds the number of
-      unique IDs that can be generated with the specified number of digits.
-    - The first digit of the generated IDs is ensured to be non-zero.
+    - The function ensures all IDs are unique by resolving potential collisions
+      during generation, even for large datasets.
+    - The total pool size of unique IDs is determined by `9 * (10^(num_digits - 1))`,
+      since the first digit must be non-zero.
+    - If `set_as_index` is False, the ID column will be added as the first column
+      in the DataFrame.
+    - Warnings are printed if the number of rows in the DataFrame approaches the
+      pool size of possible unique IDs, recommending increasing `num_digits`.
+    - Setting a random seed ensures reproducibility of the generated IDs.
     """
 
-    # Check for unique indices
-    if df.index.duplicated().any():
-        print("Warning: DataFrame index is not unique.")
-        print(
-            "Duplicate index entries:",
-            df.index[df.index.duplicated()].tolist(),
-        )
+    # Check if the DataFrame index is unique
+    if df.index.is_unique:
+        print("The DataFrame index is unique.")
     else:
-        print("DataFrame index is unique.")
+        print("Warning: The DataFrame index is not unique.")
+        print("Duplicate index entries:", df.index[df.index.duplicated()].tolist())
+
+    # Calculate the total pool size of possible unique IDs
+    pool_size = 9 * (10 ** (num_digits - 1))  # First digit is non-zero
+    n_rows = len(df)
+
+    # Check if the number of rows exceeds or approaches the pool size
+    if n_rows > pool_size:
+        raise ValueError(
+            f"The number of rows ({n_rows}) exceeds the total pool of possible "
+            f"unique IDs ({pool_size}). Increase the number of digits to avoid "
+            f"this issue."
+        )
+    elif n_rows > pool_size * 0.9:
+        print(
+            f"Warning: The number of rows ({n_rows}) is approaching the pool of "
+            f"possible unique IDs ({pool_size}). Consider increasing the number "
+            f"of digits."
+        )
 
     # Set the random seed for reproducibility
     np.random.seed(seed)
 
-    # Number of rows in the dataframe
-    n_rows = len(df)
+    # Initialize a set to track generated IDs for uniqueness
+    unique_ids = set()
+    ids = []
 
-    # Generate the first digit (non-zero)
-    first_digits = np.random.choice(list("123456789"), size=n_rows)
+    while len(ids) < n_rows:
+        # Generate random IDs
+        first_digits = np.random.choice(list("123456789"), size=n_rows - len(ids))
+        other_digits = np.random.choice(
+            list("0123456789"), size=(n_rows - len(ids), num_digits - 1)
+        )
+        batch_ids = [fd + "".join(od) for fd, od in zip(first_digits, other_digits)]
 
-    # Generate the remaining digits
-    other_digits = np.random.choice(list("0123456789"), size=(n_rows, num_digits - 1))
+        # Filter out duplicates and add unique IDs
+        for id_ in batch_ids:
+            if id_ not in unique_ids:
+                ids.append(id_)
+                unique_ids.add(id_)
 
-    # Concatenate first digit with other digits and join as strings
-    ids = np.array(
-        [fd + "".join(od) for fd, od in zip(first_digits, other_digits)],
-    )
-
-    # Assign the generated IDs to the dataframe
+    # Assign the unique IDs to the DataFrame
     df[id_colname] = ids
 
     if set_as_index:
@@ -142,13 +170,13 @@ def add_ids(
 ################################################################################
 
 
-def strip_trailing_period(
-    df,
-    column_name,
-):
+def strip_trailing_period(df, column_name):
     """
-    Strip the trailing period from floats in a specified column of a DataFrame,
-    if present.
+    Remove trailing periods from values in a specified column of a DataFrame.
+
+    This function processes values in the specified column to remove trailing
+    periods, handling both strings and numeric values (including those represented
+    as strings). The function preserves the original data type wherever possible.
 
     Parameters:
     -----------
@@ -156,21 +184,45 @@ def strip_trailing_period(
         The DataFrame containing the column to be processed.
 
     column_name : str
-        The name of the column containing floats with potential trailing periods.
+        The name of the column containing values with potential trailing periods.
 
     Returns:
     --------
-    pd.DataFrame
-        The updated DataFrame with the trailing periods removed from the
-        specified column.
+    The updated DataFrame with trailing periods removed from the specified column.
+
+    Notes:
+    ------
+    - For string values, trailing periods are stripped directly.
+    - For numeric values represented as strings (e.g., "1234."), the trailing
+      period is removed, and the value is converted back to a numeric type if
+      possible.
+    - NaN values are preserved and remain unprocessed.
+    - Non-string and non-numeric types are returned as-is.
+
+    Raises:
+    -------
+    ValueError
+        If the specified `column_name` does not exist in the DataFrame, pandas
+        will raise a `ValueError`.
     """
 
     def fix_value(value):
-        value_str = str(value)
-        if value_str.endswith("."):
-            value_str = value_str.rstrip(".")
-        return float(value_str)
+        # Process only if the value is not NaN
+        if pd.notnull(value):
+            # Handle strings
+            if isinstance(value, str) and value.endswith("."):
+                return value.rstrip(".")
+            # Handle floats represented as strings
+            value_str = str(value)
+            if value_str.endswith("."):
+                value_str = value_str.rstrip(".")
+                try:
+                    return float(value_str)  # Convert back to float if possible
+                except ValueError:
+                    return value_str  # Fallback to string if conversion fails
+        return value  # Return as is for NaN or other types
 
+    # Apply the fix_value function to the specified column
     df[column_name] = df[column_name].apply(fix_value)
 
     return df
@@ -233,49 +285,57 @@ def dataframe_columns(
     Analyze DataFrame columns to provide summary statistics such as data type,
     null counts, unique values, and most frequent values.
 
-    Args:
-        df (pandas.DataFrame): The DataFrame to analyze.
-        background_color (str, optional): Hex color code or color name for
-                                          background styling in the output
-                                          DataFrame. Applies to specific columns
-                                          such as unique value totals and
-                                          percentages. Defaults to None.
-        return_df (bool, optional): If True, returns the plain DataFrame with
-                                    the summary statistics. If False, returns a
-                                    styled DataFrame for visual presentation.
-                                    Defaults to False.
-        sort_cols_alpha (bool, optional): If True, sorts columns in alphabetical
-                                          order before returning the DataFrame.
-                                          Applies to both plain and styled
-                                          outputs. Defaults to False.
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame to analyze.
 
-    Raises:
-        None.
+    background_color : str, optional
+        Hex color code or color name for background styling in the output
+        DataFrame. Applies to specific columns such as unique value totals
+        and percentages. Defaults to None.
+
+    return_df : bool, optional
+        If True, returns the plain DataFrame with the summary statistics.
+        If False, returns a styled DataFrame for visual presentation
+        (default). In terminal environments, always returns the plain
+        DataFrame regardless of this setting.
+
+    sort_cols_alpha : bool, optional
+        If True, sorts columns in alphabetical order before returning the
+        DataFrame. Applies to both plain and styled outputs. Defaults to False.
 
     Returns:
-        pandas.DataFrame: If `return_df` is True, returns the plain DataFrame
-                          containing column summary statistics. If `return_df`
-                          is False, returns a styled DataFrame with optional
-                          background color for specific columns.
+    --------
+    pandas.DataFrame
+        - If `return_df` is True or the function is running in a terminal
+          environment, returns the plain DataFrame containing column summary
+          statistics.
+        - Otherwise, returns a styled DataFrame with optional background color
+          for specific columns, when running in a Jupyter Notebook.
 
-                          The DataFrame includes the following summary columns:
-                          - column: Column name
-                          - dtype: Data type of the column
-                          - null_total: Total number of null values
-                          - null_pct: Percentage of null values
-                          - unique_values_total: Total number of unique values
-                          - max_unique_value: The most frequent value
-                          - max_unique_value_total: Frequency of the most
-                                                    frequent value
-                          - max_unique_value_pct: Percentage of the most
-                                                  frequent value
+        The summary DataFrame includes the following columns:
+        - column: Column name
+        - dtype: Data type of the column
+        - null_total: Total number of null values
+        - null_pct: Percentage of null values
+        - unique_values_total: Total number of unique values
+        - max_unique_value: The most frequent value
+        - max_unique_value_total: Frequency of the most frequent value
+        - max_unique_value_pct: Percentage of the most frequent value
 
-                          If `sort_cols_alpha` is True, the columns will be
-                          sorted alphabetically in the output.
-
-    Example:
-        styled_df = dataframe_columns(df, background_color="#FFFF00")
-        plain_df = dataframe_columns(df, return_df=True)
+    Notes:
+    ------
+    - The function automatically detects whether it is running in a Jupyter
+      Notebook (using `ipykernel`) or a terminal environment and adjusts the
+      output accordingly.
+    - In Jupyter environments, it attempts to style the output using Pandas'
+      Styler. If `hide` is deprecated in the installed Pandas version, it uses
+      `hide_index` as a fallback.
+    - The function uses a `tqdm` progress bar to indicate the processing
+      status of columns.
+    - NaN values and empty strings are preprocessed to ensure consistent
+      handling in the summary statistics.
     """
 
     print("Shape: ", df.shape, "\n")
@@ -297,16 +357,10 @@ def dataframe_columns(
     )
     # Begin Process...
     columns_value_counts = []
-    for col in df.columns:
-        col_str = (
-            df[col]
-            .astype(str)
-            .replace("<NA>", "null")
-            .replace(
-                "NaT",
-                "null",
-            )
-        )
+
+    # Wrap the column iteration in tqdm for a progress bar
+    for col in tqdm(df.columns, desc="Processing columns"):
+        col_str = df[col].astype(str).replace("<NA>", "null").replace("NaT", "null")
         value_counts = col_str.value_counts()
         max_unique_value = value_counts.index[0]
         max_unique_value_total = value_counts.iloc[0]
@@ -327,31 +381,33 @@ def dataframe_columns(
     stop_time = (
         datetime.now() if sys.version_info >= (3, 7) else datetime.datetime.now()
     )
+    print()
     print(
         "Total seconds of processing time:",
         (stop_time - start_time).total_seconds(),
     )
-
+    print()
     if sort_cols_alpha:
         result_df = pd.DataFrame(columns_value_counts).sort_values(by="column")
     else:
         result_df = pd.DataFrame(columns_value_counts)
 
-    if return_df:
-        # Return the plain DataFrame
+    # Detect environment (Jupyter Notebook or terminal)
+    is_notebook_env = "ipykernel" in sys.modules
+
+    if return_df or not is_notebook_env:
+        # Return the plain DataFrame for terminal environments or if explicitly requested
         return result_df
     else:
+        ## Output, try/except, accounting for the potential of Python version with
+        ## the styler as hide_index() is deprecated since Pandas 1.4, in such cases,
+        ## hide() is used instead
+        # Return the styled DataFrame for Jupyter environments
         if sort_cols_alpha:
-            # Return the styled DataFrame
-
-            # Output, try/except, accounting for the potential of Python version with
-            # the styler as hide_index() is deprecated since Pandas 1.4, in such cases,
-            # hide() is used instead
-
+            # Sort the DataFrame alphabetically before styling
             try:
-                return (
-                    pd.DataFrame(columns_value_counts)
-                    .sort_values(by="column")
+                styled_result = (
+                    result_df.sort_values(by="column")
                     .style.hide()
                     .format(precision=2)
                     .set_properties(
@@ -361,13 +417,17 @@ def dataframe_columns(
                             "max_unique_value_total",
                             "max_unique_value_pct",
                         ],
-                        **{"background-color": background_color},
+                        **(
+                            {"background-color": background_color}
+                            if background_color
+                            else {}
+                        ),
                     )
                 )
-            except:
-                return (
-                    pd.DataFrame(columns_value_counts)
-                    .sort_values(by="column")
+            except AttributeError:
+                # Fallback for Pandas versions where `hide()` is deprecated
+                styled_result = (
+                    result_df.sort_values(by="column")
                     .style.hide_index()
                     .format(precision=2)
                     .set_properties(
@@ -377,16 +437,18 @@ def dataframe_columns(
                             "max_unique_value_total",
                             "max_unique_value_pct",
                         ],
-                        **{"background-color": background_color},
+                        **(
+                            {"background-color": background_color}
+                            if background_color
+                            else {}
+                        ),
                     )
                 )
-
         else:
-
+            # Do not sort columns alphabetically
             try:
-                return (
-                    pd.DataFrame(columns_value_counts)
-                    .style.hide()
+                styled_result = (
+                    result_df.style.hide()
                     .format(precision=2)
                     .set_properties(
                         subset=[
@@ -395,13 +457,17 @@ def dataframe_columns(
                             "max_unique_value_total",
                             "max_unique_value_pct",
                         ],
-                        **{"background-color": background_color},
+                        **(
+                            {"background-color": background_color}
+                            if background_color
+                            else {}
+                        ),
                     )
                 )
-            except:
-                return (
-                    pd.DataFrame(columns_value_counts)
-                    .style.hide_index()
+            except AttributeError:
+                # Fallback for Pandas versions where `hide()` is deprecated
+                styled_result = (
+                    result_df.style.hide_index()
                     .format(precision=2)
                     .set_properties(
                         subset=[
@@ -410,9 +476,15 @@ def dataframe_columns(
                             "max_unique_value_total",
                             "max_unique_value_pct",
                         ],
-                        **{"background-color": background_color},
+                        **(
+                            {"background-color": background_color}
+                            if background_color
+                            else {}
+                        ),
                     )
                 )
+
+        return styled_result
 
 
 ################################################################################
@@ -467,18 +539,30 @@ def summarize_all_combinations(
 
     df_copy = df.copy()
 
-    for i in range(min_length, len(variables) + 1):
-        for combination in combinations(variables, i):
-            all_combinations.append(combination)
-            for col in combination:
-                df_copy[col] = df_copy[col].astype(str)
+    # Calculate total number of combinations for smoother tqdm updates
+    total_combinations = sum(
+        len(list(combinations(variables, i)))
+        for i in range(min_length, len(variables) + 1)
+    )
 
-            count_df = (
-                df_copy.groupby(list(combination)).size().reset_index(name="Count")
-            )
-            count_df["Proportion"] = (count_df["Count"] / grand_total * 100).fillna(0)
+    # First tqdm for combination generation
+    with tqdm(total=total_combinations, desc="Generating combinations") as pbar:
+        for i in range(min_length, len(variables) + 1):
+            for combination in combinations(variables, i):
+                all_combinations.append(combination)
+                for col in combination:
+                    df_copy[col] = df_copy[col].astype(str)
 
-            summary_tables[tuple(combination)] = count_df
+                count_df = (
+                    df_copy.groupby(list(combination)).size().reset_index(name="Count")
+                )
+                count_df["Proportion"] = (count_df["Count"] / grand_total * 100).fillna(
+                    0
+                )
+                summary_tables[tuple(combination)] = count_df
+
+                # Update progress bar manually for smoother updates
+                pbar.update(1)
 
     sheet_names = [
         ("_".join(combination)[:31]) for combination in summary_tables.keys()
@@ -491,6 +575,8 @@ def summarize_all_combinations(
     )
 
     file_path = f"{data_path}/{data_name}"
+
+    # Writing to Excel with progress tracking
     with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
         # Write the Table of Contents (legend sheet)
         legend_df.to_excel(writer, sheet_name="Table of Contents", index=False)
@@ -499,7 +585,10 @@ def summarize_all_combinations(
         toc_worksheet = writer.sheets["Table of Contents"]
 
         # Add hyperlinks to the sheet names
-        for i, sheet_name in enumerate(sheet_names, start=2):
+        for i, sheet_name in enumerate(
+            tqdm(sheet_names, desc="Writing Table of Contents", leave=False),
+            start=2,
+        ):
             cell = f"A{i}"
             toc_worksheet.write_url(cell, f"#'{sheet_name}'!A1", string=sheet_name)
 
@@ -526,8 +615,12 @@ def summarize_all_combinations(
         # Define a format for left-aligned text in other sheets
         left_align_format = workbook.add_format({"align": "left"})
 
-        # Format the summary tables
-        for sheet_name, table in summary_tables.items():
+        # Third tqdm for writing summary tables
+        for sheet_name, table in tqdm(
+            summary_tables.items(),
+            desc="Writing summary tables",
+            leave=True,
+        ):
             sheet_name_str = "_".join(sheet_name)[
                 :31
             ]  # Ensure sheet name is <= 31 characters
@@ -556,7 +649,11 @@ def summarize_all_combinations(
                 )
                 worksheet.set_column(
                     col_num, col_num, max_length + 2, left_align_format
-                )  # Add extra space
+                )
+
+    # Add the Writing to Excel progress bar after everything else
+    with tqdm(desc="Finalizing Excel file", total=1, leave=True) as pbar:
+        pbar.update(1)
 
     print(f"Data saved to {file_path}")
 
@@ -642,35 +739,40 @@ def save_dataframes_to_excel(
             )
 
         # Write each DataFrame to its respective sheet
-        for sheet_name, df in df_dict.items():
-            # Round numeric columns to the specified number of decimal places
-            df = df.round(decimal_places)
-            if decimal_places == 0:
-                df = df.apply(
-                    lambda x: x.astype(int) if pd.api.types.is_numeric_dtype(x) else x
-                )
-            df.to_excel(writer, sheet_name=sheet_name, index=False)
-            worksheet = writer.sheets[sheet_name]
-
-            # Write header with custom format
-            for col_num, value in enumerate(df.columns.values):
-                worksheet.write(0, col_num, value, header_format)
-
-            # Auto-fit all columns with added space
-            for col_num, col_name in enumerate(df.columns):
-                max_length = max(
-                    df[col_name].astype(str).map(len).max(),
-                    len(col_name),
-                )
-                # Determine if the column is numeric by dtype
-                if pd.api.types.is_numeric_dtype(df[col_name]):
-                    worksheet.set_column(
-                        col_num, col_num, max_length + 2, cell_format_number
+        with tqdm(total=len(df_dict), desc="Saving DataFrames", leave=True) as pbar:
+            for sheet_name, df in df_dict.items():
+                # Round numeric columns to the specified number of decimal places
+                df = df.round(decimal_places)
+                if decimal_places == 0:
+                    df = df.apply(
+                        lambda x: (
+                            x.astype(int) if pd.api.types.is_numeric_dtype(x) else x
+                        )
                     )
-                else:
-                    worksheet.set_column(
-                        col_num, col_num, max_length + 2, cell_format_left
+                df.to_excel(writer, sheet_name=sheet_name, index=False)
+                worksheet = writer.sheets[sheet_name]
+
+                # Write header with custom format
+                for col_num, value in enumerate(df.columns.values):
+                    worksheet.write(0, col_num, value, header_format)
+
+                # Auto-fit all columns with added space
+                for col_num, col_name in enumerate(df.columns):
+                    max_length = max(
+                        df[col_name].astype(str).map(len).max(),
+                        len(col_name),
                     )
+                    # Determine if the column is numeric by dtype
+                    if pd.api.types.is_numeric_dtype(df[col_name]):
+                        worksheet.set_column(
+                            col_num, col_num, max_length + 2, cell_format_number
+                        )
+                    else:
+                        worksheet.set_column(
+                            col_num, col_num, max_length + 2, cell_format_left
+                        )
+
+                pbar.update(1)  # Update the progress bar for each sheet
 
     print(f"DataFrames saved to {file_path}")
 
@@ -728,6 +830,9 @@ def contingency_table(
     # Convert single column to list
     if isinstance(cols, str):
         cols = [cols]
+
+    # Ensure df is an independent copy to avoid SettingWithCopyWarning
+    df = df.copy(deep=True)
 
     # Convert categorical columns to string to avoid fillna issue
     for col in cols:
@@ -1720,6 +1825,8 @@ def stacked_crosstab_plot(
     # Default color settings
     if color is None:
         color = ["#00BFC4", "#F8766D"]  # Default colors
+    elif isinstance(color, str):
+        color = [color]  # Ensure a single color is passed as a list
 
     # Check if all required columns are present in the DataFrame
     missing_cols = [
@@ -1975,7 +2082,6 @@ def stacked_crosstab_plot(
                         print(f"Plot saved as {full_path}")
 
             plt.show()
-            plt.close(fig)  # Ensure plot is closed after showing
 
     # Generate crosstabs if output is "both" or "crosstabs_only"
     if output in ["both", "crosstabs_only"]:
@@ -2024,8 +2130,11 @@ def stacked_crosstab_plot(
             # Process counter
             legend_counter += 1
             # Display results
+            print()
             print("Crosstab for " + col_results)
-            display(crosstab_df)
+            print()
+            print(crosstab_df)
+            print()
             # Store the crosstab in the dictionary
             # Use col_results as the key
             crosstabs_dict[col_results] = crosstab_df
@@ -2048,7 +2157,7 @@ def box_violin_plot(
     n_cols=None,  # Allow users to define the number of columns
     image_path_png=None,  # Make image paths optional
     image_path_svg=None,  # Make image paths optional
-    save_plots=None,  # Parameter to control saving plots
+    save_plots=False,  # Parameter to control saving plots
     show_legend=True,  # Parameter to toggle legend
     plot_type="boxplot",  # Parameter to specify plot type
     xlabel_rot=0,  # Parameter to rotate x-axis labels
@@ -2094,8 +2203,10 @@ def box_violin_plot(
     image_path_svg : str, optional
         Directory path to save .svg images.
 
-    save_plots : str, optional
-        String, "all", "individual", or "grid" to control saving plots.
+    save_plots : bool, optional
+        If True, saves the plots specified by `show_plot`. The plots to be saved
+        ("individual", "grid", or "both") are determined by the `show_plot`
+        parameter. Defaults to False.
 
     show_legend : bool, optional (default=True)
         True if showing the legend in the plots.
@@ -2183,12 +2294,9 @@ def box_violin_plot(
             "'grid', or 'both'."
         )
 
-    # Check for valid save_plots values
-    if save_plots not in [None, "all", "individual", "grid"]:
-        raise ValueError(
-            "Invalid `save_plots` value selected. Choose from 'all', "
-            "'individual', 'grid', or None."
-        )
+    # Check for valid save_plots value
+    if not isinstance(save_plots, bool):
+        raise ValueError("`save_plots` must be a boolean value (True or False).")
 
     # Check if save_plots is set without image paths
     if save_plots and not (image_path_png or image_path_svg):
@@ -2232,9 +2340,9 @@ def box_violin_plot(
     if grid_figsize is None:
         grid_figsize = (5 * n_cols, 5 * n_rows)
 
-    # Determine saving options based on save_plots value
-    save_individual = save_plots in ["all", "individual"]
-    save_grid = save_plots in ["all", "grid"]
+    # Determine saving options based on `show_plot`
+    save_individual = save_plots and show_plot in ["individual", "both"]
+    save_grid = save_plots and show_plot in ["grid", "both"]
 
     def get_palette(n_colors):
         """
@@ -2322,9 +2430,8 @@ def box_violin_plot(
                             bbox_inches="tight",
                         )
 
-                if show_plot in ["individual", "both"]:
+                if show_plot in ["individual", "both", "grid"]:
                     plt.show()  # Display the plot
-                plt.close()
 
     # Save and/or show the entire grid if required
     if save_grid or show_plot in ["grid", "both"]:
@@ -2403,7 +2510,6 @@ def box_violin_plot(
 
         if show_plot in ["grid", "both"]:
             plt.show()  # Display the plot
-        plt.close(fig)
 
 
 ################################################################################
@@ -2711,8 +2817,8 @@ def scatter_fit_plot(
         )
         ax.legend(loc="best")
 
-    # Save and/or show individual plots if required
-    if save_individual or show_plot in ["individual", "both"]:
+    # Render and show individual plots
+    if show_plot in ["individual", "both"]:
         for x_var, y_var in combinations:
             plt.figure(figsize=individual_figsize)
             ax = sns.scatterplot(
@@ -2756,55 +2862,12 @@ def scatter_fit_plot(
             )
             ax.tick_params(axis="x", rotation=xlabel_rot)
             ax.tick_params(axis="both", labelsize=tick_fontsize)
+            plt.show()
 
-            if xlim:
-                ax.set_xlim(xlim)
-            if ylim:
-                ax.set_ylim(ylim)
-
-            if not show_legend and ax.legend_:
-                ax.legend().remove()
-
-            if save_individual:
-                safe_x_var = (
-                    x_var.replace(" ", "_")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("/", "_per_")
-                )
-                safe_y_var = (
-                    y_var.replace(" ", "_")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("/", "_per_")
-                )
-                if image_path_png:
-                    filename_png = f"scatter_{safe_x_var}_vs_{safe_y_var}.png"
-                    plt.savefig(
-                        os.path.join(image_path_png, filename_png),
-                        bbox_inches="tight",
-                    )
-                if image_path_svg:
-                    filename_svg = f"scatter_{safe_x_var}_vs_{safe_y_var}.svg"
-                    plt.savefig(
-                        os.path.join(image_path_svg, filename_svg),
-                        bbox_inches="tight",
-                    )
-
-            if show_plot in ["individual", "both"]:
-                plt.show()
-            plt.close()
-
-    # Save and/or show the entire grid if required
-    if save_grid or show_plot in ["grid", "both"]:
+    # Render and show grid plot
+    if show_plot in ["grid", "both"]:
         fig, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
-
-        # Flatten the axes array to simplify iteration
-        if n_rows * n_cols == 1:
-            axes = np.array([axes])
-        else:
-            axes = axes.flatten()
-
+        axes = axes.flatten()
         for i, ax in enumerate(axes):
             if i < num_plots:
                 x_var, y_var = combinations[i]
@@ -2812,13 +2875,13 @@ def scatter_fit_plot(
                     x=x_var if not rotate_plot else y_var,
                     y=y_var if not rotate_plot else x_var,
                     data=df,
+                    ax=ax,
                     color=scatter_color,
                     hue=hue,
+                    palette=hue_palette,
                     size=size,
                     sizes=sizes,
                     marker=marker,
-                    ax=ax,
-                    palette=hue_palette,
                     **kwargs,
                 )
                 if add_best_fit_line:
@@ -2840,43 +2903,83 @@ def scatter_fit_plot(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
                     fontsize=label_fontsize,
                 )
-                ax.set_xlabel(
-                    get_label(x_var) if not rotate_plot else get_label(y_var),
-                    fontsize=label_fontsize,
-                )
-                ax.set_ylabel(
-                    get_label(y_var) if not rotate_plot else get_label(x_var),
-                    fontsize=label_fontsize,
-                )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
-
-                if xlim:
-                    ax.set_xlim(xlim)
-                if ylim:
-                    ax.set_ylim(ylim)
-
-                if not show_legend and ax.legend_:
-                    ax.legend().remove()
             else:
-                ax.set_visible(False)
+                ax.axis("off")
 
         plt.tight_layout()
-        if save_grid:
+        plt.show()
+
+    # Save individual plots
+    if save_plots in ["all", "individual"]:
+        for x_var, y_var in tqdm(combinations, desc="Saving individual plots"):
+            fig, ax = plt.subplots(figsize=individual_figsize)
+            sns.scatterplot(
+                x=x_var if not rotate_plot else y_var,
+                y=y_var if not rotate_plot else x_var,
+                data=df,
+                ax=ax,
+                color=scatter_color if hue is None else None,
+                hue=hue,
+                palette=hue_palette,
+                size=size,
+                sizes=sizes,
+                marker=marker,
+                **kwargs,
+            )
+            if add_best_fit_line:
+                add_best_fit(
+                    ax,
+                    df[x_var],
+                    df[y_var],
+                    best_fit_linestyle,
+                    best_fit_linecolor,
+                )
+
+            ax.set_title(
+                f"{get_label(x_var)} vs. {get_label(y_var)}",
+                fontsize=label_fontsize,
+            )
+            ax.tick_params(axis="x", rotation=xlabel_rot)
+            ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+            safe_x_var = x_var.replace(" ", "_").replace("/", "_per_")
+            safe_y_var = y_var.replace(" ", "_").replace("/", "_per_")
             if image_path_png:
                 fig.savefig(
-                    os.path.join(image_path_png, "scatter_plots_grid.png"),
+                    os.path.join(
+                        image_path_png,
+                        f"scatter_{safe_x_var}_vs_{safe_y_var}.png",
+                    ),
                     bbox_inches="tight",
                 )
             if image_path_svg:
                 fig.savefig(
-                    os.path.join(image_path_svg, "scatter_plots_grid.svg"),
+                    os.path.join(
+                        image_path_svg,
+                        f"scatter_{safe_x_var}_vs_{safe_y_var}.svg",
+                    ),
                     bbox_inches="tight",
                 )
+            plt.close(fig)
 
-        if show_plot in ["grid", "both"]:
-            plt.show()
-        plt.close(fig)
+    # Save grid plot
+    if save_plots in ["all", "grid"]:
+        with tqdm(total=1, desc="Saving grid plot") as pbar:
+            grid_filename_png = "scatter_plots_grid.png"
+            grid_filename_svg = "scatter_plots_grid.svg"
+            if image_path_png:
+                fig.savefig(
+                    os.path.join(image_path_png, grid_filename_png),
+                    bbox_inches="tight",
+                )
+            if image_path_svg:
+                fig.savefig(
+                    os.path.join(image_path_svg, grid_filename_svg),
+                    bbox_inches="tight",
+                )
+            pbar.update(1)
 
 
 ################################################################################

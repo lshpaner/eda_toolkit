@@ -161,6 +161,8 @@ def plot_2d_pdp(
                 )
         if plot_type in ["grid", "both"]:
             plt.show()
+        else:
+            plt.close(fig)  # Close the figure if not displayed
 
     if plot_type in ["individual", "both"] or save_individual:
         # Generate individual plots for each feature
@@ -207,6 +209,8 @@ def plot_2d_pdp(
 
             if plot_type in ["individual", "both"]:
                 plt.show()
+            else:
+                plt.close(fig)  # Close the figure if not displayed
 
 
 ################################################################################
