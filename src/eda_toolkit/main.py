@@ -2551,43 +2551,48 @@ def scatter_fit_plot(
     **kwargs,  # Additional keyword arguments to pass to sns.scatterplot
 ):
     """
-    Create and save scatter plots or a grid of scatter plots for given
-    x_vars and y_vars, with an optional best fit line and customizable
-    point color, size, and markers.
+    Generate scatter plots or a grid of scatter plots with optional best-fit 
+    lines and customizable features.
+
+    This function creates scatter plots for specified x and y variables from a 
+    DataFrame. It supports individual plots, grid plots, or both, with extensive 
+    customization options, including axis limits, point colors, sizes, markers, 
+    and titles. The function can optionally add a best-fit line and show the 
+    Pearson correlation coefficient in the title.
 
     Parameters:
     -----------
     df : pandas.DataFrame
-        The DataFrame containing the data.
+        The DataFrame containing the data for the plots.
 
     x_vars : list of str or str, optional
-        List of variable names to plot on the x-axis. If a string is provided,
-        it will be converted into a list with one element.
+        List of variable names to plot on the x-axis. A single string will be 
+        converted into a list with one element.
 
     y_vars : list of str or str, optional
-        List of variable names to plot on the y-axis. If a string is provided,
-        it will be converted into a list with one element.
+        List of variable names to plot on the y-axis. A single string will be 
+        converted into a list with one element.
 
     n_rows : int, optional
-        Number of rows in the subplot grid. If not specified, it will be
-        calculated based on the number of plots and n_cols.
+        Number of rows in the grid layout. Calculated automatically if not 
+        provided.
 
     n_cols : int, optional
-        Number of columns in the subplot grid. If not specified, it will be
-        calculated based on the number of plots and max_cols.
+        Number of columns in the grid layout. Calculated automatically if not 
+        provided.
 
     max_cols : int, optional (default=4)
-        Maximum number of columns in the subplot grid.
+        Maximum number of columns in the grid layout.
 
     image_path_png : str, optional
-        Directory path to save PNG images of the scatter plots.
+        Directory path to save scatter plots as PNG files.
 
     image_path_svg : str, optional
-        Directory path to save SVG images of the scatter plots.
+        Directory path to save scatter plots as SVG files.
 
     save_plots : str, optional
-        Controls which plots to save: "all", "individual", or "grid".
-        If None, plots will not be saved.
+        Controls which plots to save: "all", "individual", or "grid". If None, 
+        plots will not be saved.
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
@@ -2596,117 +2601,107 @@ def scatter_fit_plot(
         Rotation angle for x-axis labels.
 
     show_plot : str, optional (default="both")
-        Controls plot display: "individual", "grid", or "both".
+        Determines the display mode of the plots: "individual", "grid", or "both".
 
     rotate_plot : bool, optional (default=False)
-        Whether to rotate (pivot) the plots.
+        If True, swaps the x and y axes in the plots.
 
     individual_figsize : tuple or list, optional (default=(6, 4))
-        Width and height of the figure for individual plots.
+        Dimensions (width, height) for individual plots.
 
     grid_figsize : tuple or list, optional
-        Width and height of the figure for grid plots.
-        If not specified, defaults to a calculated size based on the number of
-        rows and columns.
+        Dimensions (width, height) for the grid plot. Automatically calculated 
+        if not specified.
 
     label_fontsize : int, optional (default=12)
         Font size for axis labels.
 
     tick_fontsize : int, optional (default=10)
-        Font size for axis tick labels.
+        Font size for tick labels.
 
     text_wrap : int, optional (default=50)
-        The maximum width of the title text before wrapping.
+        Maximum width of plot titles before wrapping.
 
     add_best_fit_line : bool, optional (default=False)
-        Whether to add a best fit line to the scatter plots.
+        If True, adds a best-fit line to the scatter plots.
 
     scatter_color : str, optional (default="C0")
-        Color code for the scattered points.
+        Color of the scatter points.
 
     best_fit_linecolor : str, optional (default="red")
-        Color code for the best fit line.
+        Color of the best-fit line.
 
     best_fit_linestyle : str, optional (default="-")
-        Linestyle for the best fit line.
+        Line style for the best-fit line.
 
     hue : str, optional
-        Column name for the grouping variable that will produce points with
-        different colors.
+        Column name for grouping variable to color points differently.
 
     hue_palette : dict, list, or str, optional
-        Specifies colors for each hue level. Can be a dictionary mapping hue
-        levels to colors, a list of colors, or the name of a seaborn color
-        palette.
+        Palette for coloring points based on hue levels. Accepts a dictionary, 
+        list of colors, or seaborn color palette name.
 
     size : str, optional
-        Column name for the grouping variable that will produce points with
-        different sizes.
+        Column name for grouping variable to size points differently.
 
     sizes : dict, optional
-        Dictionary mapping sizes (smallest and largest) to min and max values.
+        Dictionary specifying minimum and maximum sizes for scatter points.
 
     marker : str, optional (default="o")
-        Marker style used for the scatter points.
+        Marker style for the scatter points.
 
     show_correlation : bool, optional (default=True)
-        Whether to display the Pearson correlation coefficient in the plot title.
+        If True, displays the Pearson correlation coefficient in the plot titles.
 
     xlim : tuple or list, optional
-        Limits for the x-axis as a tuple or list of (min, max).
+        Limits for the x-axis as (min, max).
 
     ylim : tuple or list, optional
-        Limits for the y-axis as a tuple or list of (min, max).
+        Limits for the y-axis as (min, max).
 
     all_vars : list of str, optional
-        If provided, automatically generates scatter plots for all combinations
-        of variables in this list, overriding x_vars and y_vars.
+        If provided, generates scatter plots for all combinations of variables 
+        in this list, overriding x_vars and y_vars.
 
     label_names : dict, optional
-        A dictionary to rename columns for display in the plot titles and labels.
+        A dictionary to rename columns for display in titles and labels.
 
     **kwargs : dict, optional
-        Additional keyword arguments to pass to sns.scatterplot.
+        Additional keyword arguments to pass to the seaborn scatterplot function.
 
     Returns:
     --------
     None
-        This function does not return any value but generates and optionally
-        saves scatter plots for the specified x_vars and y_vars.
+        This function generates and optionally saves scatter plots but does not 
+        return any values.
 
     Raises:
     -------
     ValueError
-        If `all_vars` is provided and either `x_vars` or `y_vars` is also
-        provided.
+        - If `all_vars` is provided alongside `x_vars` or `y_vars`.
+        - If neither `all_vars` nor both `x_vars` and `y_vars` are provided.
+        - If `hue_palette` is specified without `hue`.
+        - If `show_plot` is not one of ["individual", "grid", "both"].
+        - If `save_plots` is not one of [None, "all", "individual", "grid"].
+        - If `save_plots` is set without specifying `image_path_png` or 
+          `image_path_svg`.
+        - If `rotate_plot` is not a boolean value.
+        - If `individual_figsize` or `grid_figsize` is not a tuple or list of 
+          two numbers.
 
-    ValueError
-        If neither `all_vars` nor both `x_vars` and `y_vars` are provided.
-
-    ValueError
-        If `hue_palette` is specified without `hue`.
-
-    ValueError
-        If `show_plot` is not one of ["individual", "grid", "both"].
-
-    ValueError
-        If `save_plots` is not one of [None, "all", "individual", "grid"].
-
-    ValueError
-        If `save_plots` is set without specifying either `image_path_png` or
-        `image_path_svg`.
-
-    ValueError
-        If `rotate_plot` is not a boolean value.
-
-    ValueError
-        If `individual_figsize` is not a tuple or list of two numbers
-        (width, height).
-
-    ValueError
-        If `grid_figsize` is provided and is not a tuple or list of two numbers
-        (width, height).
-
+    Notes:
+    ------
+    - Automatically calculates grid dimensions based on the number of plots and 
+      `max_cols`.
+    - Supports displaying individual plots, grid plots, or both, with optional 
+      best-fit lines.
+    - The `all_vars` parameter generates scatter plots for all unique pairs of 
+      variables.
+    - The Pearson correlation coefficient can be displayed in the plot title 
+      using `show_correlation`.
+    - Uses **`tqdm`** to track progress when saving individual and grid plots, 
+      providing real-time feedback on the saving process.
+    - Plots can be saved in PNG and/or SVG formats if paths are specified.
     """
 
     # Ensure x_vars and y_vars are lists
