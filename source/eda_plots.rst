@@ -3648,7 +3648,7 @@ Interactive Plot
 
     plot_3d_pdp(
         model=model,
-        dataframe=X_test,  # Use the test dataset
+        dataframe=X_test, 
         feature_names_list=["HouseAge", "AveOccup"],
         x_label="House Age",
         y_label="Average Occupancy",
