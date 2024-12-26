@@ -2876,7 +2876,7 @@ using the California housing dataset:</p>
 
 <span class="n">plot_3d_pdp</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">dataframe</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
+    <span class="n">dataframe</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>  <span class="c1"># Use the test dataset</span>
     <span class="n">feature_names_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;HouseAge&quot;</span><span class="p">,</span> <span class="s2">&quot;AveOccup&quot;</span><span class="p">],</span>
     <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;House Age&quot;</span><span class="p">,</span>
     <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Average Occupancy&quot;</span><span class="p">,</span>
@@ -2886,8 +2886,8 @@ using the California housing dataset:</p>
     <span class="n">image_filename</span><span class="o">=</span><span class="s2">&quot;3d_pdp&quot;</span><span class="p">,</span>
     <span class="n">html_file_name</span><span class="o">=</span><span class="s2">&quot;3d_pdp.html&quot;</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;interactive&quot;</span><span class="p">,</span>
-    <span class="n">text_wrap</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
-    <span class="n">zoom_out_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">text_wrap</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">zoom_out_factor</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
     <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
     <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
     <span class="n">grid_resolution</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
@@ -2896,6 +2896,7 @@ using the California housing dataset:</p>
     <span class="n">title_x</span><span class="o">=</span><span class="mf">0.38</span><span class="p">,</span>
     <span class="n">top_margin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">right_margin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">left_margin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">cbar_x</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
     <span class="n">cbar_thickness</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
     <span class="n">show_modebar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>

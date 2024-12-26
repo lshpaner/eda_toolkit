@@ -3648,7 +3648,7 @@ Interactive Plot
 
     plot_3d_pdp(
         model=model,
-        dataframe=X_test, 
+        dataframe=X_test,  # Use the test dataset
         feature_names_list=["HouseAge", "AveOccup"],
         x_label="House Age",
         y_label="Average Occupancy",
@@ -3658,8 +3658,8 @@ Interactive Plot
         image_filename="3d_pdp",
         html_file_name="3d_pdp.html",
         plot_type="interactive",
-        text_wrap=40,
-        zoom_out_factor=1,
+        text_wrap=80,
+        zoom_out_factor=1.2,
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
         grid_resolution=30,
@@ -3668,6 +3668,7 @@ Interactive Plot
         title_x=0.38,
         top_margin=10,
         right_margin=50,
+        left_margin=50,
         cbar_x=0.9,
         cbar_thickness=25,
         show_modebar=False,
