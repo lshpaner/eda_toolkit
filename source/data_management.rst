@@ -55,7 +55,7 @@ already exists, it does nothing, thus preventing any errors related to
 missing directories.
 
 
-**Example Usage**
+**Implementation Example**
 
 In the example below, we demonstrate how to use the ``ensure_directory`` function 
 to verify and create directories as needed. This example sets up paths for data and 
@@ -75,7 +75,6 @@ directories do not exist, the function creates them.
 .. code-block:: python
 
     from eda_toolkit import ensure_directory 
-    
     import os # import operating system for dir
     
 
@@ -140,9 +139,10 @@ specified number of digits to a given dataframe. This is particularly useful for
 creating unique patient or record IDs in datasets. The function allows you to 
 specify a custom column name for the IDs, the number of digits for each ID, and 
 optionally set a seed for the random number generator to ensure reproducibility. 
-Additionally, you can choose whether to set the new ID column as the index of the dataframe.
+Additionally, you can choose whether to set the new ID column as the index of the 
+dataframe.
 
-**Example Usage**
+**Implementation Example**
 
 In the example below, we demonstrate how to use the ``add_ids`` function to add a 
 column of unique IDs to a dataframe. We start by importing the necessary libraries 
@@ -305,7 +305,7 @@ Trailing Period Removal
     useful when dealing with data that has been inconsistently formatted, ensuring 
     that all float values are correctly represented.
 
-**Example Usage**
+**Implementation Example**
 
 In the example below, we demonstrate how to use the ``strip_trailing_period`` function to clean a 
 column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame. 
@@ -411,7 +411,9 @@ We then use the ``strip_trailing_period`` function to remove any trailing period
 
 \
 
-`Note:` The last row shows 6 as an `int` with a trailing period with its conversion to `float`.
+.. note:: 
+    
+    The last row shows 6 as an ``int`` with a trailing period with its conversion to ``float``.
 
 
 \
@@ -424,11 +426,11 @@ Standardized Dates
 .. function:: parse_date_with_rule(date_str)
 
     This function takes a date string and standardizes it to the ``ISO 8601`` format
-    (``YYYY-MM-DD``). It assumes dates are provided in either `day/month/year` or
-    `month/day/year` format. The function first checks if the first part of the
+    (``YYYY-MM-DD``). It assumes dates are provided in either **day/month/year** or
+    **month/day/year** format. The function first checks if the first part of the
     date string (day or month) is greater than 12, which unambiguously indicates
-    a `day/month/year` format. If the first part is 12 or less, the function
-    attempts to parse the date as `month/day/year`, falling back to `day/month/year`
+    a **day/month/year** format. If the first part is 12 or less, the function
+    attempts to parse the date as **month/day/year**, falling back to **day/month/year**
     if the former raises a ``ValueError`` due to an impossible date (e.g., month
     being greater than 12).
 
@@ -442,7 +444,7 @@ Standardized Dates
                         cannot parse the date.
 
 
-**Example Usage**
+**Implementation Example**
 
 In the example below, we demonstrate how to use the ``parse_date_with_rule`` 
 function to standardize date strings. We start by importing the necessary library 
@@ -453,10 +455,8 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
 
     from eda_toolkit import parse_date_with_rule
 
-    # Sample date strings
     date_strings = ["15/04/2021", "04/15/2021", "01/12/2020", "12/01/2020"]
 
-    # Standardize the date strings
     standardized_dates = [parse_date_with_rule(date) for date in date_strings]
 
     print(standardized_dates)
@@ -544,7 +544,8 @@ Census Income Example
 """"""""""""""""""""""""""""""
 
 In the example below, we demonstrate how to use the ``dataframe_columns`` 
-function to analyze a DataFrame's columns.
+function to analyze a DataFrame's columns. You may notice a new variable, 
+``age_group``, is introduced. The logic for generating this variable is :ref:`provided here <Binning_Numerical_Columns>`.
 
 .. code-block:: python
 
@@ -828,24 +829,29 @@ in a DataFrame and save them to an Excel file.**
     :rtype: tuple(dict, list)
 
 .. note::
-    - The function will create an Excel file with a sheet for each combination
-        of the specified variables, as well as a "Table of Contents" sheet with
-        hyperlinks to each summary table.
+
+    - The function will create an Excel file with a sheet for each combination of the specified variables, as well as a "Table of Contents" sheet with hyperlinks to each summary table.
     - The sheet names are limited to 31 characters due to Excel's constraints.
 
 The function returns two outputs:
 
-1. ``summary_tables``: A dictionary where each key is a tuple representing a combination 
-of variables, and each value is a DataFrame containing the summary table for that combination. 
-Each summary table includes the count and proportion of occurrences for each unique combination of values.
+    1. ``summary_tables``: A dictionary where each key is a tuple representing a combination 
+    of variables, and each value is a DataFrame containing the summary table for that combination. 
+    Each summary table includes the count and proportion of occurrences for each unique combination of values.
 
-2. ``all_combinations``: A list of all generated combinations of the specified variables. 
-This is useful for understanding which combinations were analyzed and included in the summary tables.
+    2. ``all_combinations``: A list of all generated combinations of the specified variables. 
+    This is useful for understanding which combinations were analyzed and included in the summary tables.
 
-**Example Usage**
+**Implementation Example**
 
 Below, we use the ``summarize_all_combinations`` function to generate summary tables for the specified 
 variables from a DataFrame containing the census data [1]_.
+
+.. note:: 
+
+    Before proceeding with any further examples in this documentation, ensure that the ``age`` variable is binned into a new variable, ``age_group``.  
+    Detailed instructions for this process can be found under :ref:`Binning Numerical Columns <Binning_Numerical_Columns>`.
+
 
 .. code-block:: python
 
@@ -875,7 +881,7 @@ variables from a DataFrame containing the census data [1]_.
 
 **Output**
 
-.. code-blocK:: python 
+.. code-blocK:: text 
 
     [('age_group', 'workclass'),
     ('age_group', 'education'),
@@ -1042,10 +1048,11 @@ This section explains how to save multiple DataFrames to separate sheets in an E
     :type file_path: str
     :param df_dict: Dictionary where keys are sheet names and values are DataFrames to save.
     :type df_dict: dict
-    :param decimal_places: Number of decimal places to round numeric columns. Default is 0.
+    :param decimal_places: Number of decimal places to round numeric columns. Default is ``0``.
     :type decimal_places: int
 
 .. note::
+    
     - The function will autofit columns and left-align text.
     - Numeric columns will be formatted with the specified number of decimal places.
     - Headers will be bold and left-aligned without borders.
@@ -1057,7 +1064,7 @@ The function performs the following tasks:
 - Applies customized formatting to headers and cells.
 - Autofits columns based on the content length.
 
-**Example Usage**
+**Implementation Example**
 
 Below, we use the ``save_dataframes_to_excel`` function to save two DataFrames: 
 the original DataFrame and a filtered DataFrame with ages between `18` and `40`.
@@ -1066,7 +1073,6 @@ the original DataFrame and a filtered DataFrame with ages between `18` and `40`.
 
     from eda_toolkit import save_dataframes_to_excel
 
-    # Example usage
     file_name = "df_census.xlsx"  # Name of the output Excel file
     file_path = os.path.join(data_path, file_name) 
 
@@ -1110,7 +1116,7 @@ This section explains how to create contingency tables from one or more columns 
     :returns: A DataFrame containing the contingency table with the specified columns, a ``'Total'`` column representing the count of occurrences, and a ``'Percentage'`` column representing the percentage of the total count.
     :rtype: pandas.DataFrame
 
-**Example Usage**
+**Implementation Example**
 
 Below, we use the ``contingency_table`` function to create a contingency table 
 from the specified columns in a DataFrame containing census data [1]_
@@ -1119,7 +1125,6 @@ from the specified columns in a DataFrame containing census data [1]_
 
     from eda_toolkit import contingency_table
 
-    # Example usage
     contingency_table(
         df=df,
         cols=[
@@ -1131,6 +1136,13 @@ from the specified columns in a DataFrame containing census data [1]_
         sort_by=1,
     )
 
+.. note:: 
+
+    In the example below, we demonstrate how to use the ``dataframe_columns`` 
+    function to analyze a DataFrame's columns. You may notice a new variable, 
+    ``age_group``, is introduced. The logic for generating this variable is :ref:`provided here <Binning_Numerical_Columns>`.
+
+
 **Output**
 
 The output will be a contingency table with the specified columns, showing the 
@@ -1139,7 +1151,7 @@ table will be sorted by the ``'Total'`` column in descending order because ``sor
 is set to ``1``.
 
 
-.. code-block:: python
+.. code-block:: text
 
     
         age_group     workclass                race     sex  Total  Percentage
@@ -1173,13 +1185,13 @@ This section explains how to highlight specific columns in a DataFrame using the
     :type df: pandas.DataFrame
     :param columns: List of column names to be highlighted.
     :type columns: list of str
-    :param color: The background color to be applied for highlighting (default is `"yellow"`).
+    :param color: The background color to be applied for highlighting (default is ``"yellow"``).
     :type color: str, optional
 
     :returns: A Styler object with the specified columns highlighted.
     :rtype: pandas.io.formats.style.Styler
 
-**Example Usage**
+**Implementation Example**
 
 Below, we use the ``highlight_columns`` function to highlight the ``age`` and ``education`` 
 columns in the first 5 rows of the census [1]_ DataFrame with a pink background color.
@@ -1188,9 +1200,8 @@ columns in the first 5 rows of the census [1]_ DataFrame with a pink background 
 
     from eda_toolkit import highlight_columns
 
-    # Applying the highlight function
     highlighted_df = highlight_columns(
-        df=df,
+        df=df.head(),
         columns=["age", "education"],
         color="#F8C5C8",
     )
@@ -1302,6 +1313,8 @@ HTML file using the ``.render()`` method of the Styler object.
     </tbody></table></div>
 
 \
+
+.. _Binning_Numerical_Columns:
 
 Binning Numerical Columns
 ---------------------------
