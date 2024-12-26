@@ -1860,6 +1860,10 @@ The function also supports generating both regular and normalized stacked bar pl
     :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is ``True``. Otherwise, returns ``None``.
     :rtype: ``dict`` or ``None``
 
+    .. note::
+
+        To save images, you must specify the paths for ``image_path_png`` or ``image_path_svg`` along with the ``file_prefix``. 
+        Saving plots is triggered by providing a valid ``save_formats`` string.
 
 Stacked Bar Plots With Crosstabs Example
 -----------------------------------------
@@ -1911,11 +1915,13 @@ For example:
 
 .. important::
     
-    Ensure that the number of elements in ``func_col``, ``legend_labels_list``, 
-    and ``title`` are the same. Each item in ``func_col`` must have a corresponding 
-    list of labels in ``legend_labels_list`` and a title in ``title``. This 
-    consistency is essential for the function to correctly generate the plots 
-    with the appropriate labels and titles.
+    Ensure that ``func_col``, ``legend_labels_list``, and ``title`` have the 
+    same number of elements. Each item in ``func_col`` must correspond to a list 
+    of labels in ``legend_labels_list`` and a title in ``title`` to ensure the 
+    function generates plots with the correct labels and titles.
+
+    Additionally, in this example, remove trailing periods from the ``income`` 
+    column to correctly split its contents into two categories.
 
 
 In this example:
@@ -2276,8 +2282,8 @@ DataFrames by assigning them to their own vriables. For example:
 
 .. code-block:: python 
 
-    crosstab_age_sex = crosstabs_dict["sex"]
-    crosstab_age_income = crosstabs_dict["income"]
+    crosstab_age_sex = stacked_crosstabs["sex"]
+    crosstab_age_income = stacked_crosstabs["income"]
 
 
 Pivoted Stacked Bar Plots Example
@@ -2500,7 +2506,7 @@ metrics across different age groups, with all plots saved for future reference o
     box_violin_plot(
         df=df,
         metrics_list=age_boxplot_list,
-        metrics_boxplot_comp=metrics_comp,
+        metrics_comp=metrics_comp,
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
         save_plots="all",
@@ -2588,7 +2594,7 @@ This adjustment flips the axes, providing a different perspective on the data di
     box_violin_plot(
         df=df,
         metrics_list=age_boxplot_list,
-        metrics_boxplot_comp=metrics_comp,
+        metrics_comp=metrics_comp,
         show_plot="both",
         rotate_plot=True,
         show_legend=False,
@@ -3065,6 +3071,7 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
     :type kwargs: dict, optional
 
     :raises ValueError: 
+
         - If ``annot`` is not a boolean.
         - If ``cols`` is not a list.
         - If ``save_plots`` is not a boolean.
@@ -3073,6 +3080,11 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
 
     :returns: ``None``
         This function does not return any value but generates and optionally saves a correlation heatmap.
+
+.. note::
+
+    To save images, you must specify the paths for ``image_path_png`` or ``image_path_svg``. 
+    Saving plots is triggered by providing a valid ``save_formats`` string.
 
 
 Triangular Correlation Matrix Example
@@ -3647,7 +3659,7 @@ Interactive Plot
         html_file_name="3d_pdp.html",
         plot_type="interactive",
         text_wrap=40,
-        zoom_out_factor=0.5,
+        zoom_out_factor=1,
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
         grid_resolution=30,
@@ -3655,7 +3667,7 @@ Interactive Plot
         tick_fontsize=6,
         title_x=0.38,
         top_margin=10,
-        right_margin=250,
+        right_margin=50,
         cbar_x=0.9,
         cbar_thickness=25,
         show_modebar=False,
