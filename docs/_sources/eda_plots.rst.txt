@@ -22,8 +22,8 @@
 Creating Effective Visualizations
 ==================================
 
-This section explores key heuristics and methodologies for creating effective visualizations 
-using various plotting techniques available in the EDA Toolkit. 
+This section focuses on practical strategies and techniques for designing clear 
+and impactful visualizations using the diverse plotting tools provided in the EDA Toolkit.
 
 Heuristics for Visualizations
 ------------------------------
@@ -197,6 +197,14 @@ statistical graphics.
 
     :returns: ``None``
 
+.. admonition:: Notes
+
+    If you do not set ``n_rows`` or ``n_cols`` to any values, the function will 
+    automatically calculate and create a grid based on the number of variables being 
+    plotted, ensuring an optimal arrangement of the plots.
+
+    To save images, the paths for ``image_path_png`` or ``image_path_svg`` must be specified. 
+    The trigger for saving plots is the presence of ``image_filename`` as a string.
 
 \
 
@@ -224,11 +232,6 @@ while each individual plot is configured to be `4 inches` by `4 inches`
 bars with color, and the spacing between the subplots is managed using 
 ``w_pad=1`` and ``h_pad=1``, which add `1 inch` of padding both horizontally and 
 vertically.
-
-.. note:: 
-    If you do not set ``n_rows`` or ``n_cols`` to any values, the function will 
-    automatically calculate and create a grid based on the number of variables being 
-    plotted, ensuring an optimal arrangement of the plots.
 
 To handle longer titles, the ``text_wrap=50`` parameter ensures that the title 
 text wraps to a new line after `50 characters`. The ``bbox_inches="tight"`` setting 
@@ -262,7 +265,7 @@ respectively, ensuring that all text within the plots is legible and well-format
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4),  # Size of the overall grid figure
+        grid_figsize=(14, 4),  
         fill=True,
         fill_alpha=0.60,
         text_wrap=50,
@@ -270,9 +273,9 @@ respectively, ensuring that all text within the plots is legible and well-format
         vars_of_interest=vars_of_interest,
         y_axis_label="Density",
         bins=10,
-        plot_type="both", # Can also just plot KDE by itself by passing "kde"
-        label_fontsize=16,  # Font size for axis labels
-        tick_fontsize=14,  # Font size for tick labels
+        plot_type="both", 
+        label_fontsize=16,  
+        tick_fontsize=14,  
     )
 
 .. raw:: html
@@ -321,7 +324,7 @@ histogram representation without the KDE overlay.
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4),  # Size of the overall grid figure
+        grid_figsize=(14, 4), 
         fill=True,
         text_wrap=50,
         bbox_inches="tight",
@@ -329,8 +332,8 @@ histogram representation without the KDE overlay.
         y_axis_label="Density",
         bins=10,
         plot_type="hist",
-        label_fontsize=16,  # Font size for axis labels
-        tick_fontsize=14,  # Font size for tick labels
+        label_fontsize=16, 
+        tick_fontsize=14,  
     )
 
 
@@ -379,7 +382,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4),  # Size of the overall grid figure
+        grid_figsize=(14, 4),  
         text_wrap=50,
         hist_color="orange",
         bbox_inches="tight",
@@ -388,8 +391,8 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         bins=10,
         plot_type="hist",
         stat="Count",
-        label_fontsize=16,  # Font size for axis labels
-        tick_fontsize=14,  # Font size for tick labels
+        label_fontsize=16, 
+        tick_fontsize=14, 
     )
 
 .. raw:: html
@@ -440,7 +443,7 @@ the mean and median.
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4),  # Size of the overall grid figure
+        grid_figsize=(14, 4), 
         text_wrap=50,
         hist_color="brown",
         bbox_inches="tight",
@@ -450,8 +453,8 @@ the mean and median.
         fill_alpha=0.60,
         plot_type="hist",
         stat="Density",
-        label_fontsize=16,  # Font size for axis labels
-        tick_fontsize=14,  # Font size for tick labels
+        label_fontsize=16,  
+        tick_fontsize=14,  
         plot_mean=True,
         plot_median=True,
         mean_color="blue",
@@ -523,13 +526,11 @@ statistical overlays to provide deeper insights into the data.
         fill_alpha=0.40,
         plot_type="both",
         stat="Density",
-        label_fontsize=16,  # Font size for axis labels
-        tick_fontsize=14,  # Font size for tick labels
+        label_fontsize=16, 
+        tick_fontsize=14,  
         plot_mean=True,
         plot_median=True,
         mean_color="blue",
-        image_path_svg=image_path_svg,
-        image_path_png=image_path_png,
         std_dev_levels=[
             1,
             2,
@@ -699,7 +700,8 @@ Feature Scaling and Outliers
         - If an invalid option is provided for ``plot_type``.
         - If the length of transformed data does not match the original feature length.
 
-    :notes: 
+    .. note::  
+        
         When saving plots, the filename will include the ``feature_name``, ``scale_conversion``, each selected ``plot_type``, and, if cutoffs are applied, ``"_cutoff"``. For example, if ``feature_name`` is ``"age"``, ``scale_conversion`` is ``"boxcox"``, and ``plot_type`` is ``"kde"``, with cutoffs applied, the filename will be: ``age_boxcox_kde_cutoff.png`` or ``age_boxcox_kde_cutoff.svg``.
 
 
@@ -742,6 +744,8 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
 
 .. code-block:: python
 
+   from eda_toolkit import data_doctor
+
    data_doctor(
        df=df,
        feature_name="age",
@@ -755,7 +759,7 @@ options (such as ``'minmax'``, ``'standard'``, ``'robust'``, etc.), depending on
        random_state=111,
    )
 
-::
+.. code-block:: text
 
                 DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
@@ -953,6 +957,8 @@ visual output.
 
 .. code-block:: python 
 
+    from eda_toolkit import data_doctor
+
     data_doctor(
         df=df,
         feature_name="age",
@@ -971,7 +977,7 @@ visual output.
         random_state=111,
     )
 
-:: 
+.. code-block:: text
 
                 DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
@@ -1140,7 +1146,7 @@ flexibility with customizable plot aesthetics and scaling techniques. The
 Box-Cox transformation is still applied without any tuning of the ``lambda`` parameter, 
 while the ``alpha`` value provides a confidence interval for the resulting transformation:
 
-.. code-block:: python
+.. code-block:: text
 
     Box-Cox C.I. for Lambda: (0.1717, 0.1779)
 
@@ -1237,6 +1243,8 @@ function to ``sampled_df`` as shown below to perform the Box-Cox transformation
 on the ``age`` column:
 
 .. code-block:: python
+
+    from eda_toolkit import data_doctor
 
     data_doctor(
         df=sampled_df,
@@ -1396,6 +1404,8 @@ in fields such as logistic regression.
 
 .. code-block:: python
 
+    from eda_toolkit import data_doctor
+
     data_doctor(
         df=df,
         feature_name="age",
@@ -1450,6 +1460,8 @@ The following code demonstrates this:
 
 .. code-block:: python
 
+    from eda_toolkit import data_doctor
+
     data_doctor(
         df=df,
         feature_name="fnlwgt",
@@ -1462,7 +1474,7 @@ The following code demonstrates this:
         random_state=111,
     )
 
-:: 
+.. code-block:: text
 
                 DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
@@ -1518,7 +1530,7 @@ Treated Outliers With Cutoffs
 In this scenario, we address the extreme values observed in the ``fnlwgt`` feature 
 by applying a visual cutoff based on the distribution seen in the previous example. 
 Here, we set an approximate upper cutoff of **400,000** to limit the impact of outliers 
-without any additional scaling or transformation. By using apply_cutoff=True along 
+without any additional scaling or transformation. By using ``apply_cutoff=True`` along 
 with ``upper_cutoff=400000``, we effectively cap the extreme values.
 
 This example also demonstrates how you can further customize the visualization by 
@@ -1535,6 +1547,8 @@ without outliers distorting the scale.
 The following code demonstrates this configuration:
 
 .. code-block:: python
+
+    from eda_toolkit import data_doctor
 
     data_doctor(
         df=df,
@@ -1694,6 +1708,8 @@ The following code demonstrates this transformation:
 
 .. code-block:: python
 
+    from eda_toolkit import data_doctor
+
     data_doctor(
         df=df,
         feature_name='age',
@@ -1707,7 +1723,7 @@ The following code demonstrates this transformation:
         random_state=111,
     )
 
-:: 
+.. code-block:: text
 
                  DATA DOCTOR SUMMARY REPORT             
     +------------------------------+--------------------+
@@ -1829,9 +1845,9 @@ The function also supports generating both regular and normalized stacked bar pl
     :type text_wrap: int, optional
     :param remove_stacks: If ``True``, removes stacks and creates a regular bar plot using only the ``col`` parameter. Only works when ``plot_type`` is set to ``'regular'``. Default is ``False``.
     :type remove_stacks: bool, optional
-    :param xlim: Limits for the ``x-axis`` as a tuple or list of (`min, max`).
+    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min, max``).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the ``y-axis`` as a tuple or list of (`min, max`).
+    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min, max``).
     :type ylim: tuple or list, optional
 
     :raises ValueError:
@@ -1873,6 +1889,7 @@ which will be displayed on top of each respective plot.
     inner list in ``legend_labels_list`` should contain the labels that will be 
     used in the legend of your plots.
 
+
 For example:
 
 .. code-block:: python
@@ -1911,18 +1928,17 @@ In this example:
 
 - ``title`` contains two elements: ``"Sex"`` and ``"Income"``, which will be used as the titles for the respective plots.
 
-.. note::
 
-    If you assign the function to a variable, the dictionary returned when 
-    ``return_dict=True`` will be suppressed in the output. However, the dictionary 
-    is still available within the assigned variable for further use.
+.. note:: 
+
+    Before proceeding with any further examples in this documentation, ensure that the ``age`` variable is binned into a new variable, ``age_group``.  
+    Detailed instructions for this process can be found under :ref:`Binning Numerical Columns <Binning_Numerical_Columns>`.
 
 
 .. code-block:: python
 
     from eda_toolkit import stacked_crosstab_plot
 
-    # Call the stacked_crosstab_plot function
     stacked_crosstabs = stacked_crosstab_plot(
         df=df,
         col="age_group",
@@ -1931,9 +1947,9 @@ In this example:
         title=title,
         kind="bar",
         width=0.8, 
-        rot=0, # axis rotation angle
+        rot=0, 
         custom_order=None,
-        color=["#00BFC4", "#F8766D"], # default color schema
+        color=["#00BFC4", "#F8766D"], 
         output="both",
         return_dict=True,
         x=14,
@@ -2739,7 +2755,7 @@ For users interested in understanding the strength of the relationship between v
     :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
     :type ylim: tuple or list, optional
 
-    :param all_vars: If provided, automatically generates scatter plots for all combinations of variables in this list, overriding `x_vars` and `y_vars`.
+    :param all_vars: If provided, automatically generates scatter plots for all combinations of variables in this list, overriding ``x_vars`` and ``y_vars``.
     :type all_vars: list of str, optional
 
     :param label_names: A dictionary to rename columns for display in the plot titles and labels.
@@ -3075,8 +3091,8 @@ options.
     redundancy in correlation matrices, as it excludes the lower half, 
     making it easier to focus on unique pairwise correlations. 
     
-The function also includes a labeled color bar, helping users quickly interpret 
-the strength and direction of the correlations.
+    The function also includes a labeled color bar, helping users quickly interpret 
+    the strength and direction of the correlations.
 
 .. code-block:: python
 
@@ -3127,14 +3143,14 @@ the strength and direction of the correlations.
 Full Correlation Matrix Example
 ----------------------------------
 
-In this modified census [1]_ example, the key changes are the use of the viridis colormap 
-and the decision to plot the full correlation matrix instead of just the upper 
-triangle. By setting ``cmap="viridis"``, the heatmap will use a different color 
-scheme, which can provide better visual contrast or align with specific aesthetic 
-preferences. Additionally, by setting ``triangular=False``, the full correlation 
-matrix is displayed, allowing users to view all pairwise correlations, including 
-both upper and lower halves of the matrix. This approach is beneficial when you 
-want a comprehensive view of all correlations in the dataset.
+In this modified census [1]_ example, the key changes are the use of the viridis 
+colormap and the decision to plot the full correlation matrix instead of just the 
+upper triangle. By setting ``cmap="viridis"``, the heatmap will use a different 
+color scheme, which can provide better visual contrast or align with specific 
+aesthetic preferences. Additionally, by setting ``triangular=False``, the full 
+correlation matrix is displayed, allowing users to view all pairwise correlations, 
+including both upper and lower halves of the matrix. This approach is beneficial 
+when you want a comprehensive view of all correlations in the dataset.
 
 .. code-block:: python
 
@@ -3322,8 +3338,6 @@ the California housing dataset:
 
 .. code-block:: python
 
-    # import the plot_2d_pdp function from 
-    # the eda_toolkit library
     from eda_toolkit import plot_2d_pdp
 
     # Feature names
@@ -3499,13 +3513,14 @@ The ``plot_3d_pdp`` function extends the concept of partial dependence to three 
     :type show_modebar: bool, optional
 
     :raises ValueError: 
-        - If `plot_type` is not one of ``"static"``, ``"interactive"``, or ``"both"``. 
-        - If `plot_type` is ``"interactive"`` or ``"both"`` and ``html_file_path`` or ``html_file_name`` are not provided.
+        - If ``plot_type`` is not one of ``"static"``, ``"interactive"``, or ``"both"``. 
+        - If ``plot_type`` is ``"interactive"`` or ``"both"`` and ``html_file_path`` or ``html_file_name`` are not provided.
 
     :returns: ``None`` 
         This function generates 3D partial dependence plots and displays or saves them. It does not return any values.
     
-    :notes:
+    .. note::
+
         - This function handles warnings related to scikit-learn's ``partial_dependence`` function, specifically a ``FutureWarning`` related to non-tuple sequences for multidimensional indexing. This warning is suppressed as it stems from the internal workings of scikit-learn in Python versions like 3.7.4.
         - To maintain compatibility with different versions of scikit-learn, the function attempts to use ``"values"`` for grid extraction in newer versions and falls back to ``"grid_values"`` for older versions.
 
@@ -3574,14 +3589,11 @@ Static Plot
 
 .. code-block:: python
 
-    # import the plot_3d_pdp function from 
-    # the eda_toolkit library
     from eda_toolkit import plot_3d_pdp
 
-    # Call the function to generate the plot
     plot_3d_pdp(
         model=model,
-        dataframe=X_test,  # Use the test dataset
+        dataframe=X_test,  
         feature_names_list=["HouseAge", "AveOccup"],
         x_label="House Age",
         y_label="Average Occupancy",
@@ -3620,14 +3632,11 @@ Interactive Plot
 
 .. code-block:: python
 
-    # import the plot_3d_pdp function from 
-    # the eda_toolkit library
     from eda_toolkit import plot_3d_pdp
 
-    # Call the function to generate the plot
     plot_3d_pdp(
         model=model,
-        dataframe=X_test,  # Use the test dataset
+        dataframe=X_test, 
         feature_names_list=["HouseAge", "AveOccup"],
         x_label="House Age",
         y_label="Average Occupancy",
