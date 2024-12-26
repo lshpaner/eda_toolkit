@@ -191,8 +191,8 @@
   <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" width="300px" /></a>
 </div><div style="height: 100px;"></div><section id="creating-effective-visualizations">
 <h1>Creating Effective Visualizations<a class="headerlink" href="#creating-effective-visualizations" title="Permalink to this heading"></a></h1>
-<p>This section explores key heuristics and methodologies for creating effective visualizations
-using various plotting techniques available in the EDA Toolkit.</p>
+<p>This section focuses on practical strategies and techniques for designing clear
+and impactful visualizations using the diverse plotting tools provided in the EDA Toolkit.</p>
 <section id="heuristics-for-visualizations">
 <h2>Heuristics for Visualizations<a class="headerlink" href="#heuristics-for-visualizations" title="Permalink to this heading"></a></h2>
 <p>When creating visualizations, there are several key heuristics to keep in mind:</p>
@@ -323,6 +323,14 @@ statistical graphics.</p>
 </dl>
 </dd></dl>
 
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>If you do not set <code class="docutils literal notranslate"><span class="pre">n_rows</span></code> or <code class="docutils literal notranslate"><span class="pre">n_cols</span></code> to any values, the function will
+automatically calculate and create a grid based on the number of variables being
+plotted, ensuring an optimal arrangement of the plots.</p>
+<p>To save images, the paths for <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> or <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code> must be specified.
+The trigger for saving plots is the presence of <code class="docutils literal notranslate"><span class="pre">image_filename</span></code> as a string.</p>
+</div>
 <p></p>
 <br><section id="kde-and-histograms-example">
 <h3>KDE and Histograms Example<a class="headerlink" href="#kde-and-histograms-example" title="Permalink to this heading"></a></h3>
@@ -340,12 +348,6 @@ while each individual plot is configured to be <cite>4 inches</cite> by <cite>4 
 bars with color, and the spacing between the subplots is managed using
 <code class="docutils literal notranslate"><span class="pre">w_pad=1</span></code> and <code class="docutils literal notranslate"><span class="pre">h_pad=1</span></code>, which add <cite>1 inch</cite> of padding both horizontally and
 vertically.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you do not set <code class="docutils literal notranslate"><span class="pre">n_rows</span></code> or <code class="docutils literal notranslate"><span class="pre">n_cols</span></code> to any values, the function will
-automatically calculate and create a grid based on the number of variables being
-plotted, ensuring an optimal arrangement of the plots.</p>
-</div>
 <p>To handle longer titles, the <code class="docutils literal notranslate"><span class="pre">text_wrap=50</span></code> parameter ensures that the title
 text wraps to a new line after <cite>50 characters</cite>. The <code class="docutils literal notranslate"><span class="pre">bbox_inches=&quot;tight&quot;</span></code> setting
 is used when saving the figure, ensuring that it is cropped to remove any excess
@@ -372,7 +374,7 @@ respectively, ensuring that all text within the plots is legible and well-format
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
     <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
     <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
@@ -380,9 +382,9 @@ respectively, ensuring that all text within the plots is legible and well-format
     <span class="n">vars_of_interest</span><span class="o">=</span><span class="n">vars_of_interest</span><span class="p">,</span>
     <span class="n">y_axis_label</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
     <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="c1"># Can also just plot KDE by itself by passing &quot;kde&quot;</span>
-    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Font size for axis labels</span>
-    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>  <span class="c1"># Font size for tick labels</span>
+    <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -411,7 +413,7 @@ histogram representation without the KDE overlay.</p>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
     <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
@@ -419,8 +421,8 @@ histogram representation without the KDE overlay.</p>
     <span class="n">y_axis_label</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
     <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span>
-    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Font size for axis labels</span>
-    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>  <span class="c1"># Font size for tick labels</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -449,7 +451,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
     <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">hist_color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span>
     <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
@@ -458,8 +460,8 @@ visualizing the raw counts in the dataset using orange-colored histograms.</p>
     <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span>
     <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;Count&quot;</span><span class="p">,</span>
-    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Font size for axis labels</span>
-    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>  <span class="c1"># Font size for tick labels</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -492,7 +494,7 @@ the mean and median.</p>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">n_rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">n_cols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Size of the overall grid figure</span>
+    <span class="n">grid_figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
     <span class="n">text_wrap</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">hist_color</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span>
     <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
@@ -502,8 +504,8 @@ the mean and median.</p>
     <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.60</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;hist&quot;</span><span class="p">,</span>
     <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
-    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Font size for axis labels</span>
-    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>  <span class="c1"># Font size for tick labels</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
     <span class="n">plot_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">plot_median</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">mean_color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
@@ -554,13 +556,11 @@ standard deviation lines. You can display one, none, or all of these simultaneou
     <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.40</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
     <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">,</span>
-    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>  <span class="c1"># Font size for axis labels</span>
-    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>  <span class="c1"># Font size for tick labels</span>
+    <span class="n">label_fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
     <span class="n">plot_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">plot_median</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">mean_color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
-    <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
-    <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
     <span class="n">std_dev_levels</span><span class="o">=</span><span class="p">[</span>
         <span class="mi">1</span><span class="p">,</span>
         <span class="mi">2</span><span class="p">,</span>
@@ -679,10 +679,11 @@ and outlier details. If a new column is created, confirms the addition to the Da
 </ul>
 </p>
 </dd>
-<dt class="field-even">Notes<span class="colon">:</span></dt>
-<dd class="field-even"><p>When saving plots, the filename will include the <code class="docutils literal notranslate"><span class="pre">feature_name</span></code>, <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code>, each selected <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>, and, if cutoffs are applied, <code class="docutils literal notranslate"><span class="pre">&quot;_cutoff&quot;</span></code>. For example, if <code class="docutils literal notranslate"><span class="pre">feature_name</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;boxcox&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;kde&quot;</span></code>, with cutoffs applied, the filename will be: <code class="docutils literal notranslate"><span class="pre">age_boxcox_kde_cutoff.png</span></code> or <code class="docutils literal notranslate"><span class="pre">age_boxcox_kde_cutoff.svg</span></code>.</p>
-</dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When saving plots, the filename will include the <code class="docutils literal notranslate"><span class="pre">feature_name</span></code>, <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code>, each selected <code class="docutils literal notranslate"><span class="pre">plot_type</span></code>, and, if cutoffs are applied, <code class="docutils literal notranslate"><span class="pre">&quot;_cutoff&quot;</span></code>. For example, if <code class="docutils literal notranslate"><span class="pre">feature_name</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;age&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">scale_conversion</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;boxcox&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;kde&quot;</span></code>, with cutoffs applied, the filename will be: <code class="docutils literal notranslate"><span class="pre">age_boxcox_kde_cutoff.png</span></code> or <code class="docutils literal notranslate"><span class="pre">age_boxcox_kde_cutoff.svg</span></code>.</p>
+</div>
 </dd></dl>
 
 <section id="available-scale-conversions">
@@ -716,7 +717,9 @@ various scaling techniques. In this case, we apply the Box-Cox transformation <s
 of the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> or <code class="docutils literal notranslate"><span class="pre">lambda</span></code> parameters, allowing the function to handle the transformation in a
 barebones approach. You can also choose other scaling conversions from the list of available
 options (such as <code class="docutils literal notranslate"><span class="pre">'minmax'</span></code>, <code class="docutils literal notranslate"><span class="pre">'standard'</span></code>, <code class="docutils literal notranslate"><span class="pre">'robust'</span></code>, etc.), depending on your needs.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">data_doctor</span>
+
+<span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
     <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
@@ -730,33 +733,33 @@ options (such as <code class="docutils literal notranslate"><span class="pre">'m
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>            <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">age</span>                <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Statistic</span>                    <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Min</span>                          <span class="o">|</span>             <span class="mf">3.6664</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Max</span>                          <span class="o">|</span>             <span class="mf">6.8409</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Mean</span>                         <span class="o">|</span>             <span class="mf">5.0163</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Median</span>                       <span class="o">|</span>             <span class="mf">5.0333</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Std</span> <span class="n">Dev</span>                      <span class="o">|</span>             <span class="mf">0.6761</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Quartile</span>                     <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Q1</span> <span class="p">(</span><span class="mi">25</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span>             <span class="mf">4.5219</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q2</span> <span class="p">(</span><span class="mi">50</span><span class="o">%</span> <span class="o">=</span> <span class="n">Median</span><span class="p">)</span>            <span class="o">|</span>             <span class="mf">5.0333</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q3</span> <span class="p">(</span><span class="mi">75</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span>             <span class="mf">5.5338</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">IQR</span>                          <span class="o">|</span>             <span class="mf">1.0119</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Outlier</span> <span class="n">Bound</span>                <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Lower</span> <span class="n">Bound</span>                  <span class="o">|</span>             <span class="mf">3.0040</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Upper</span> <span class="n">Bound</span>                  <span class="o">|</span>             <span class="mf">7.0517</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>            DATA DOCTOR SUMMARY REPORT
++------------------------------+--------------------+
+| Feature                      | age                |
++------------------------------+--------------------+
+| Statistic                    | Value              |
++------------------------------+--------------------+
+| Min                          |             3.6664 |
+| Max                          |             6.8409 |
+| Mean                         |             5.0163 |
+| Median                       |             5.0333 |
+| Std Dev                      |             0.6761 |
++------------------------------+--------------------+
+| Quartile                     | Value              |
++------------------------------+--------------------+
+| Q1 (25%)                     |             4.5219 |
+| Q2 (50% = Median)            |             5.0333 |
+| Q3 (75%)                     |             5.5338 |
+| IQR                          |             1.0119 |
++------------------------------+--------------------+
+| Outlier Bound                | Value              |
++------------------------------+--------------------+
+| Lower Bound                  |             3.0040 |
+| Upper Bound                  |             7.0517 |
++------------------------------+--------------------+
 
-<span class="n">New</span> <span class="n">Column</span> <span class="n">Name</span><span class="p">:</span> <span class="n">age_boxcox</span>
-<span class="n">Box</span><span class="o">-</span><span class="n">Cox</span> <span class="n">Lambda</span><span class="p">:</span> <span class="mf">0.1748</span>
+New Column Name: age_boxcox
+Box-Cox Lambda: 0.1748
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/age_boxcox_kde_hist_boxplot.svg"><img alt="Box-Cox Transformation W/ Data Doctor" class="align-center" src="_images/age_boxcox_kde_hist_boxplot.svg" width="900px" /></a>
@@ -896,7 +899,9 @@ transformation</span></a>. Additionally, we customize the
 visual appearance of the plots by specifying keyword arguments for the violinplot,
 KDE, and histogram plots. These customizations allow for greater control over the
 visual output.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">data_doctor</span>
+
+<span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
     <span class="n">data_fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -915,33 +920,33 @@ visual output.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>            <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">age</span>                <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Statistic</span>                    <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Min</span>                          <span class="o">|</span>             <span class="mf">3.6664</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Max</span>                          <span class="o">|</span>             <span class="mf">6.8409</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Mean</span>                         <span class="o">|</span>             <span class="mf">5.0163</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Median</span>                       <span class="o">|</span>             <span class="mf">5.0333</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Std</span> <span class="n">Dev</span>                      <span class="o">|</span>             <span class="mf">0.6761</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Quartile</span>                     <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Q1</span> <span class="p">(</span><span class="mi">25</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span>             <span class="mf">4.5219</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q2</span> <span class="p">(</span><span class="mi">50</span><span class="o">%</span> <span class="o">=</span> <span class="n">Median</span><span class="p">)</span>            <span class="o">|</span>             <span class="mf">5.0333</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q3</span> <span class="p">(</span><span class="mi">75</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span>             <span class="mf">5.5338</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">IQR</span>                          <span class="o">|</span>             <span class="mf">1.0119</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Outlier</span> <span class="n">Bound</span>                <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Lower</span> <span class="n">Bound</span>                  <span class="o">|</span>             <span class="mf">3.0040</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Upper</span> <span class="n">Bound</span>                  <span class="o">|</span>             <span class="mf">7.0517</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>            DATA DOCTOR SUMMARY REPORT
++------------------------------+--------------------+
+| Feature                      | age                |
++------------------------------+--------------------+
+| Statistic                    | Value              |
++------------------------------+--------------------+
+| Min                          |             3.6664 |
+| Max                          |             6.8409 |
+| Mean                         |             5.0163 |
+| Median                       |             5.0333 |
+| Std Dev                      |             0.6761 |
++------------------------------+--------------------+
+| Quartile                     | Value              |
++------------------------------+--------------------+
+| Q1 (25%)                     |             4.5219 |
+| Q2 (50% = Median)            |             5.0333 |
+| Q3 (75%)                     |             5.5338 |
+| IQR                          |             1.0119 |
++------------------------------+--------------------+
+| Outlier Bound                | Value              |
++------------------------------+--------------------+
+| Lower Bound                  |             3.0040 |
+| Upper Bound                  |             7.0517 |
++------------------------------+--------------------+
 
-<span class="n">New</span> <span class="n">Column</span> <span class="n">Name</span><span class="p">:</span> <span class="n">age_boxcox</span>
-<span class="n">Box</span><span class="o">-</span><span class="n">Cox</span> <span class="n">C</span><span class="o">.</span><span class="n">I</span><span class="o">.</span> <span class="k">for</span> <span class="n">Lambda</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.1717</span><span class="p">,</span> <span class="mf">0.1779</span><span class="p">)</span>
+New Column Name: age_boxcox
+Box-Cox C.I. for Lambda: (0.1717, 0.1779)
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/age_boxcox_kde_hist_violinplot.svg"><img alt="Box-Cox Transformation W/ Data Doctor" class="align-center" src="_images/age_boxcox_kde_hist_violinplot.svg" width="900px" /></a>
@@ -1058,7 +1063,7 @@ detailed framework for a <a class="reference internal" href="theoretical_overvie
 flexibility with customizable plot aesthetics and scaling techniques. The
 Box-Cox transformation is still applied without any tuning of the <code class="docutils literal notranslate"><span class="pre">lambda</span></code> parameter,
 while the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> value provides a confidence interval for the resulting transformation:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Box</span><span class="o">-</span><span class="n">Cox</span> <span class="n">C</span><span class="o">.</span><span class="n">I</span><span class="o">.</span> <span class="k">for</span> <span class="n">Lambda</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.1717</span><span class="p">,</span> <span class="mf">0.1779</span><span class="p">)</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Box-Cox C.I. for Lambda: (0.1717, 0.1779)
 </pre></div>
 </div>
 <p>This allows for tailored visualizations with consistent styling across multiple plot types.</p>
@@ -1133,7 +1138,9 @@ use the following code:</p>
 across runs. After creating this subset, you can apply the <code class="docutils literal notranslate"><span class="pre">data_doctor</span></code>
 function to <code class="docutils literal notranslate"><span class="pre">sampled_df</span></code> as shown below to perform the Box-Cox transformation
 on the <code class="docutils literal notranslate"><span class="pre">age</span></code> column:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">data_doctor</span>
+
+<span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">sampled_df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
     <span class="n">data_fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -1278,7 +1285,9 @@ However, it’s important to note that if the feature contains values outside th
 range, the function will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. This is because the <a class="reference internal" href="theoretical_overview.html#logit-assumptions"><span class="std std-ref">logit function
 is undefined for values less than or equal to 0 and greater than or equal to 1</span></a>.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">data_doctor</span>
+
+<span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;age&quot;</span><span class="p">,</span>
     <span class="n">data_fraction</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -1323,7 +1332,9 @@ we can clearly identify outliers both visually and numerically. This basic setup
 highlights the outliers without altering the data distribution, making it easy
 to see extreme values that could affect further analysis.</p>
 <p>The following code demonstrates this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">data_doctor</span>
+
+<span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;fnlwgt&quot;</span><span class="p">,</span>
     <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
@@ -1336,30 +1347,30 @@ to see extreme values that could affect further analysis.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>            <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">fnlwgt</span>             <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Statistic</span>                    <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Min</span>                          <span class="o">|</span>        <span class="mi">12</span><span class="p">,</span><span class="mf">285.0000</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Max</span>                          <span class="o">|</span>     <span class="mi">1</span><span class="p">,</span><span class="mi">484</span><span class="p">,</span><span class="mf">705.0000</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Mean</span>                         <span class="o">|</span>       <span class="mi">189</span><span class="p">,</span><span class="mf">181.3719</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Median</span>                       <span class="o">|</span>       <span class="mi">177</span><span class="p">,</span><span class="mf">955.0000</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Std</span> <span class="n">Dev</span>                      <span class="o">|</span>       <span class="mi">105</span><span class="p">,</span><span class="mf">417.5713</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Quartile</span>                     <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Q1</span> <span class="p">(</span><span class="mi">25</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span>       <span class="mi">117</span><span class="p">,</span><span class="mf">292.0000</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q2</span> <span class="p">(</span><span class="mi">50</span><span class="o">%</span> <span class="o">=</span> <span class="n">Median</span><span class="p">)</span>            <span class="o">|</span>       <span class="mi">177</span><span class="p">,</span><span class="mf">955.0000</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q3</span> <span class="p">(</span><span class="mi">75</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span>       <span class="mi">236</span><span class="p">,</span><span class="mf">769.0000</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">IQR</span>                          <span class="o">|</span>       <span class="mi">119</span><span class="p">,</span><span class="mf">477.0000</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Outlier</span> <span class="n">Bound</span>                <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Lower</span> <span class="n">Bound</span>                  <span class="o">|</span>       <span class="o">-</span><span class="mi">61</span><span class="p">,</span><span class="mf">923.5000</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">Upper</span> <span class="n">Bound</span>                  <span class="o">|</span>       <span class="mi">415</span><span class="p">,</span><span class="mf">984.5000</span> <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>            DATA DOCTOR SUMMARY REPORT
++------------------------------+--------------------+
+| Feature                      | fnlwgt             |
++------------------------------+--------------------+
+| Statistic                    | Value              |
++------------------------------+--------------------+
+| Min                          |        12,285.0000 |
+| Max                          |     1,484,705.0000 |
+| Mean                         |       189,181.3719 |
+| Median                       |       177,955.0000 |
+| Std Dev                      |       105,417.5713 |
++------------------------------+--------------------+
+| Quartile                     | Value              |
++------------------------------+--------------------+
+| Q1 (25%)                     |       117,292.0000 |
+| Q2 (50% = Median)            |       177,955.0000 |
+| Q3 (75%)                     |       236,769.0000 |
+| IQR                          |       119,477.0000 |
++------------------------------+--------------------+
+| Outlier Bound                | Value              |
++------------------------------+--------------------+
+| Lower Bound                  |       -61,923.5000 |
+| Upper Bound                  |       415,984.5000 |
++------------------------------+--------------------+
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/fnlwgt_None_boxplot_hist.svg"><img alt="Outlier Detection W/ Data Doctor" class="align-center" src="_images/fnlwgt_None_boxplot_hist.svg" width="900px" /></a>
@@ -1373,7 +1384,7 @@ before any scaling or transformation is applied.</p>
 <p>In this scenario, we address the extreme values observed in the <code class="docutils literal notranslate"><span class="pre">fnlwgt</span></code> feature
 by applying a visual cutoff based on the distribution seen in the previous example.
 Here, we set an approximate upper cutoff of <strong>400,000</strong> to limit the impact of outliers
-without any additional scaling or transformation. By using apply_cutoff=True along
+without any additional scaling or transformation. By using <code class="docutils literal notranslate"><span class="pre">apply_cutoff=True</span></code> along
 with <code class="docutils literal notranslate"><span class="pre">upper_cutoff=400000</span></code>, we effectively cap the extreme values.</p>
 <p>This example also demonstrates how you can further customize the visualization by
 specifying additional histogram keyword arguments with <code class="docutils literal notranslate"><span class="pre">hist_kws</span></code>. Here, we use
@@ -1385,7 +1396,9 @@ outliers on the visual representation. This treatment provides a clearer view of
 primary distribution, allowing for a more focused analysis on the bulk of the data
 without outliers distorting the scale.</p>
 <p>The following code demonstrates this configuration:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">data_doctor</span>
+
+<span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s2">&quot;fnlwgt&quot;</span><span class="p">,</span>
     <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
@@ -1520,7 +1533,9 @@ refining how outliers affect scaling.</p>
 <li><p>Adjust quantile range: We specify a narrower <code class="docutils literal notranslate"><span class="pre">quantile_range</span></code> of (10.0, 90.0) to reduce the influence of extreme values on scaling.</p></li>
 </ul>
 <p>The following code demonstrates this transformation:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_doctor</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">data_doctor</span>
+
+<span class="n">data_doctor</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">feature_name</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span>
     <span class="n">data_fraction</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
@@ -1534,33 +1549,33 @@ refining how outliers affect scaling.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>             <span class="n">DATA</span> <span class="n">DOCTOR</span> <span class="n">SUMMARY</span> <span class="n">REPORT</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Feature</span>                      <span class="o">|</span> <span class="n">age</span>                <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Statistic</span>                    <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Min</span>                          <span class="o">|</span> <span class="mf">0.4722</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">Max</span>                          <span class="o">|</span> <span class="mf">2.5000</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">Mean</span>                         <span class="o">|</span> <span class="mf">1.0724</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">Median</span>                       <span class="o">|</span> <span class="mf">1.0278</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">Std</span> <span class="n">Dev</span>                      <span class="o">|</span> <span class="mf">0.3809</span>             <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Quartile</span>                     <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Q1</span> <span class="p">(</span><span class="mi">25</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">0.7778</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q2</span> <span class="p">(</span><span class="n">Median</span><span class="p">)</span>                  <span class="o">|</span> <span class="mf">1.0278</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">IQR</span>                          <span class="o">|</span> <span class="mf">0.5556</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q3</span> <span class="p">(</span><span class="mi">75</span><span class="o">%</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">1.3333</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">Q4</span> <span class="p">(</span><span class="n">Max</span><span class="p">)</span>                     <span class="o">|</span> <span class="mf">2.5000</span>             <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Outlier</span> <span class="n">Bound</span>                <span class="o">|</span> <span class="n">Value</span>              <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
-<span class="o">|</span> <span class="n">Lower</span> <span class="n">Bound</span>                  <span class="o">|</span> <span class="o">-</span><span class="mf">0.0556</span>            <span class="o">|</span>
-<span class="o">|</span> <span class="n">Upper</span> <span class="n">Bound</span>                  <span class="o">|</span> <span class="mf">2.1667</span>             <span class="o">|</span>
-<span class="o">+------------------------------+--------------------+</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>             DATA DOCTOR SUMMARY REPORT
++------------------------------+--------------------+
+| Feature                      | age                |
++------------------------------+--------------------+
+| Statistic                    | Value              |
++------------------------------+--------------------+
+| Min                          | 0.4722             |
+| Max                          | 2.5000             |
+| Mean                         | 1.0724             |
+| Median                       | 1.0278             |
+| Std Dev                      | 0.3809             |
++------------------------------+--------------------+
+| Quartile                     | Value              |
++------------------------------+--------------------+
+| Q1 (25%)                     | 0.7778             |
+| Q2 (Median)                  | 1.0278             |
+| IQR                          | 0.5556             |
+| Q3 (75%)                     | 1.3333             |
+| Q4 (Max)                     | 2.5000             |
++------------------------------+--------------------+
+| Outlier Bound                | Value              |
++------------------------------+--------------------+
+| Lower Bound                  | -0.0556            |
+| Upper Bound                  | 2.1667             |
++------------------------------+--------------------+
 
-<span class="n">New</span> <span class="n">Column</span> <span class="n">Name</span><span class="p">:</span> <span class="n">age_robust</span>
+New Column Name: age_robust
 </pre></div>
 </div>
 <div class="no-click"><a class="reference internal image-reference" href="_images/age_robust_boxplot_hist.svg"><img alt="Box-Cox Transformation W/ Data Doctor" class="align-center" src="_images/age_robust_boxplot_hist.svg" width="900px" /></a>
@@ -1609,8 +1624,8 @@ choose between regular or normalized plots.</p>
 <li><p><strong>tick_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Font size for tick labels on the axes, default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
 <li><p><strong>text_wrap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The maximum width of the title text before wrapping, default is <code class="docutils literal notranslate"><span class="pre">50</span></code>.</p></li>
 <li><p><strong>remove_stacks</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, removes stacks and creates a regular bar plot using only the <code class="docutils literal notranslate"><span class="pre">col</span></code> parameter. Only works when <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is set to <code class="docutils literal notranslate"><span class="pre">'regular'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
-<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> as a tuple or list of (<cite>min, max</cite>).</p></li>
+<li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> as a tuple or list of (<code class="docutils literal notranslate"><span class="pre">min,</span> <span class="pre">max</span></code>).</p></li>
+<li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> as a tuple or list of (<code class="docutils literal notranslate"><span class="pre">min,</span> <span class="pre">max</span></code>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -1632,6 +1647,11 @@ choose between regular or normalized plots.</p>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To save images, you must specify the paths for <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> or <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code> along with the <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code>.
+Saving plots is triggered by providing a valid <code class="docutils literal notranslate"><span class="pre">save_formats</span></code> string.</p>
+</div>
 </dd></dl>
 
 <section id="stacked-bar-plots-with-crosstabs-example">
@@ -1677,11 +1697,12 @@ used in the legend of your plots.</p>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Ensure that the number of elements in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">title</span></code> are the same. Each item in <code class="docutils literal notranslate"><span class="pre">func_col</span></code> must have a corresponding
-list of labels in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> and a title in <code class="docutils literal notranslate"><span class="pre">title</span></code>. This
-consistency is essential for the function to correctly generate the plots
-with the appropriate labels and titles.</p>
+<p>Ensure that <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>, and <code class="docutils literal notranslate"><span class="pre">title</span></code> have the
+same number of elements. Each item in <code class="docutils literal notranslate"><span class="pre">func_col</span></code> must correspond to a list
+of labels in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> and a title in <code class="docutils literal notranslate"><span class="pre">title</span></code> to ensure the
+function generates plots with the correct labels and titles.</p>
+<p>Additionally, in this example, remove trailing periods from the <code class="docutils literal notranslate"><span class="pre">income</span></code>
+column to correctly split its contents into two categories.</p>
 </div>
 <p>In this example:</p>
 <ul>
@@ -1698,13 +1719,11 @@ with the appropriate labels and titles.</p>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you assign the function to a variable, the dictionary returned when
-<code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code> will be suppressed in the output. However, the dictionary
-is still available within the assigned variable for further use.</p>
+<p>Before proceeding with any further examples in this documentation, ensure that the <code class="docutils literal notranslate"><span class="pre">age</span></code> variable is binned into a new variable, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>.
+Detailed instructions for this process can be found under <a class="reference internal" href="data_management.html#binning-numerical-columns"><span class="std std-ref">Binning Numerical Columns</span></a>.</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">stacked_crosstab_plot</span>
 
-<span class="c1"># Call the stacked_crosstab_plot function</span>
 <span class="n">stacked_crosstabs</span> <span class="o">=</span> <span class="n">stacked_crosstab_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">col</span><span class="o">=</span><span class="s2">&quot;age_group&quot;</span><span class="p">,</span>
@@ -1713,9 +1732,9 @@ is still available within the assigned variable for further use.</p>
     <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
     <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
     <span class="n">width</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-    <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="c1"># axis rotation angle</span>
+    <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">custom_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#00BFC4&quot;</span><span class="p">,</span> <span class="s2">&quot;#F8766D&quot;</span><span class="p">],</span> <span class="c1"># default color schema</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#00BFC4&quot;</span><span class="p">,</span> <span class="s2">&quot;#F8766D&quot;</span><span class="p">],</span>
     <span class="n">output</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
     <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">x</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
@@ -1996,8 +2015,8 @@ font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
 </tbody></table></div><p></p>
 <p>When you set <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>, you can access these crosstabs as
 DataFrames by assigning them to their own vriables. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">crosstab_age_sex</span> <span class="o">=</span> <span class="n">crosstabs_dict</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span>
-<span class="n">crosstab_age_income</span> <span class="o">=</span> <span class="n">crosstabs_dict</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">crosstab_age_sex</span> <span class="o">=</span> <span class="n">stacked_crosstabs</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span>
+<span class="n">crosstab_age_income</span> <span class="o">=</span> <span class="n">stacked_crosstabs</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </section>
@@ -2138,7 +2157,7 @@ metrics across different age groups, with all plots saved for future reference o
 <span class="n">box_violin_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">metrics_list</span><span class="o">=</span><span class="n">age_boxplot_list</span><span class="p">,</span>
-    <span class="n">metrics_boxplot_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
+    <span class="n">metrics_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
     <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
     <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
     <span class="n">save_plots</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
@@ -2188,7 +2207,7 @@ This adjustment flips the axes, providing a different perspective on the data di
 <span class="n">box_violin_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">metrics_list</span><span class="o">=</span><span class="n">age_boxplot_list</span><span class="p">,</span>
-    <span class="n">metrics_boxplot_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
+    <span class="n">metrics_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
     <span class="n">show_plot</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
     <span class="n">rotate_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -2269,7 +2288,7 @@ size, and markers.</p>
 <li><p><strong>show_correlation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to display the Pearson correlation coefficient in the plot title. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>xlim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> as a tuple or list of (<code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>).</p></li>
 <li><p><strong>ylim</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – Limits for the <code class="docutils literal notranslate"><span class="pre">y-axis</span></code> as a tuple or list of (<code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>).</p></li>
-<li><p><strong>all_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – If provided, automatically generates scatter plots for all combinations of variables in this list, overriding <cite>x_vars</cite> and <cite>y_vars</cite>.</p></li>
+<li><p><strong>all_vars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – If provided, automatically generates scatter plots for all combinations of variables in this list, overriding <code class="docutils literal notranslate"><span class="pre">x_vars</span></code> and <code class="docutils literal notranslate"><span class="pre">y_vars</span></code>.</p></li>
 <li><p><strong>label_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – A dictionary to rename columns for display in the plot titles and labels.</p></li>
 <li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments to pass to <code class="docutils literal notranslate"><span class="pre">sns.scatterplot</span></code>.</p></li>
 </ul>
@@ -2479,6 +2498,11 @@ This function does not return any value but generates and optionally saves a cor
 </dl>
 </dd></dl>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To save images, you must specify the paths for <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> or <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code>.
+Saving plots is triggered by providing a valid <code class="docutils literal notranslate"><span class="pre">save_formats</span></code> string.</p>
+</div>
 <section id="triangular-correlation-matrix-example">
 <h2>Triangular Correlation Matrix Example<a class="headerlink" href="#triangular-correlation-matrix-example" title="Permalink to this heading"></a></h2>
 <p>The provided code filters the census <a class="footnote-reference brackets" href="#id22" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> to include only numeric columns using
@@ -2492,9 +2516,9 @@ options.</p>
 <p>This triangular matrix format is particularly useful for avoiding
 redundancy in correlation matrices, as it excludes the lower half,
 making it easier to focus on unique pairwise correlations.</p>
-</div>
 <p>The function also includes a labeled color bar, helping users quickly interpret
 the strength and direction of the correlations.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select only numeric data to pass into the function</span>
 <span class="n">df_num</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
 </pre></div>
@@ -2525,14 +2549,14 @@ the strength and direction of the correlations.</p>
 </div><div style="height: 50px;"></div></section>
 <section id="full-correlation-matrix-example">
 <h2>Full Correlation Matrix Example<a class="headerlink" href="#full-correlation-matrix-example" title="Permalink to this heading"></a></h2>
-<p>In this modified census <a class="footnote-reference brackets" href="#id22" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the key changes are the use of the viridis colormap
-and the decision to plot the full correlation matrix instead of just the upper
-triangle. By setting <code class="docutils literal notranslate"><span class="pre">cmap=&quot;viridis&quot;</span></code>, the heatmap will use a different color
-scheme, which can provide better visual contrast or align with specific aesthetic
-preferences. Additionally, by setting <code class="docutils literal notranslate"><span class="pre">triangular=False</span></code>, the full correlation
-matrix is displayed, allowing users to view all pairwise correlations, including
-both upper and lower halves of the matrix. This approach is beneficial when you
-want a comprehensive view of all correlations in the dataset.</p>
+<p>In this modified census <a class="footnote-reference brackets" href="#id22" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> example, the key changes are the use of the viridis
+colormap and the decision to plot the full correlation matrix instead of just the
+upper triangle. By setting <code class="docutils literal notranslate"><span class="pre">cmap=&quot;viridis&quot;</span></code>, the heatmap will use a different
+color scheme, which can provide better visual contrast or align with specific
+aesthetic preferences. Additionally, by setting <code class="docutils literal notranslate"><span class="pre">triangular=False</span></code>, the full
+correlation matrix is displayed, allowing users to view all pairwise correlations,
+including both upper and lower halves of the matrix. This approach is beneficial
+when you want a comprehensive view of all correlations in the dataset.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">flex_corr_matrix</span>
 
 <span class="n">flex_corr_matrix</span><span class="p">(</span>
@@ -2662,9 +2686,7 @@ the California housing dataset:</p>
 </pre></div>
 </div>
 <p><strong>Create 2D Partial Dependence Plot Grid</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the plot_2d_pdp function from</span>
-<span class="c1"># the eda_toolkit library</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_2d_pdp</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_2d_pdp</span>
 
 <span class="c1"># Feature names</span>
 <span class="n">names</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">feature_names</span>
@@ -2756,8 +2778,8 @@ the California housing dataset:</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – <ul class="simple">
-<li><p>If <cite>plot_type</cite> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;static&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;interactive&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
-<li><p>If <cite>plot_type</cite> is <code class="docutils literal notranslate"><span class="pre">&quot;interactive&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">html_file_path</span></code> or <code class="docutils literal notranslate"><span class="pre">html_file_name</span></code> are not provided.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;static&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;interactive&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;interactive&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">html_file_path</span></code> or <code class="docutils literal notranslate"><span class="pre">html_file_name</span></code> are not provided.</p></li>
 </ul>
 </p>
 </dd>
@@ -2765,13 +2787,14 @@ the California housing dataset:</p>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code>
 This function generates 3D partial dependence plots and displays or saves them. It does not return any values.</p>
 </dd>
-<dt class="field-even">Notes<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
 <li><p>This function handles warnings related to scikit-learn’s <code class="docutils literal notranslate"><span class="pre">partial_dependence</span></code> function, specifically a <code class="docutils literal notranslate"><span class="pre">FutureWarning</span></code> related to non-tuple sequences for multidimensional indexing. This warning is suppressed as it stems from the internal workings of scikit-learn in Python versions like 3.7.4.</p></li>
 <li><p>To maintain compatibility with different versions of scikit-learn, the function attempts to use <code class="docutils literal notranslate"><span class="pre">&quot;values&quot;</span></code> for grid extraction in newer versions and falls back to <code class="docutils literal notranslate"><span class="pre">&quot;grid_values&quot;</span></code> for older versions.</p></li>
 </ul>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
 <section id="id21">
@@ -2825,14 +2848,11 @@ using the California housing dataset:</p>
 </pre></div>
 </div>
 <p><strong>Create Static 3D Partial Dependence Plot</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the plot_3d_pdp function from</span>
-<span class="c1"># the eda_toolkit library</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_3d_pdp</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_3d_pdp</span>
 
-<span class="c1"># Call the function to generate the plot</span>
 <span class="n">plot_3d_pdp</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">dataframe</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>  <span class="c1"># Use the test dataset</span>
+    <span class="n">dataframe</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
     <span class="n">feature_names_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;HouseAge&quot;</span><span class="p">,</span> <span class="s2">&quot;AveOccup&quot;</span><span class="p">],</span>
     <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;House Age&quot;</span><span class="p">,</span>
     <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Average Occupancy&quot;</span><span class="p">,</span>
@@ -2852,14 +2872,11 @@ using the California housing dataset:</p>
 </div><div style="height: 50px;"></div></section>
 <section id="interactive-plot">
 <h3>Interactive Plot<a class="headerlink" href="#interactive-plot" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the plot_3d_pdp function from</span>
-<span class="c1"># the eda_toolkit library</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_3d_pdp</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_3d_pdp</span>
 
-<span class="c1"># Call the function to generate the plot</span>
 <span class="n">plot_3d_pdp</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">dataframe</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>  <span class="c1"># Use the test dataset</span>
+    <span class="n">dataframe</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span>
     <span class="n">feature_names_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;HouseAge&quot;</span><span class="p">,</span> <span class="s2">&quot;AveOccup&quot;</span><span class="p">],</span>
     <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;House Age&quot;</span><span class="p">,</span>
     <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Average Occupancy&quot;</span><span class="p">,</span>
@@ -2869,8 +2886,8 @@ using the California housing dataset:</p>
     <span class="n">image_filename</span><span class="o">=</span><span class="s2">&quot;3d_pdp&quot;</span><span class="p">,</span>
     <span class="n">html_file_name</span><span class="o">=</span><span class="s2">&quot;3d_pdp.html&quot;</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;interactive&quot;</span><span class="p">,</span>
-    <span class="n">text_wrap</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
-    <span class="n">zoom_out_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">text_wrap</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">zoom_out_factor</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
     <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
     <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
     <span class="n">grid_resolution</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
@@ -2878,7 +2895,8 @@ using the California housing dataset:</p>
     <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
     <span class="n">title_x</span><span class="o">=</span><span class="mf">0.38</span><span class="p">,</span>
     <span class="n">top_margin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">right_margin</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+    <span class="n">right_margin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">left_margin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">cbar_x</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
     <span class="n">cbar_thickness</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
     <span class="n">show_modebar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>

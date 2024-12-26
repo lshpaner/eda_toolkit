@@ -194,7 +194,7 @@ these directories exist before any read/write operations are performed. If
 the specified directory does not exist, the function creates it. If it
 already exists, it does nothing, thus preventing any errors related to
 missing directories.</p>
-<p><strong>Example Usage</strong></p>
+<p><strong>Implementation Example</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">ensure_directory</span></code> function
 to verify and create directories as needed. This example sets up paths for data and
 image directories, ensuring they exist before performing any operations that depend on them.</p>
@@ -207,7 +207,6 @@ directory, both located one level up from the current directory.</p>
 function, we then verify that these directories exist. If any of the specified
 directories do not exist, the function creates them.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
-
 <span class="kn">import</span> <span class="nn">os</span> <span class="c1"># import operating system for dir</span>
 
 
@@ -279,8 +278,9 @@ specified number of digits to a given dataframe. This is particularly useful for
 creating unique patient or record IDs in datasets. The function allows you to
 specify a custom column name for the IDs, the number of digits for each ID, and
 optionally set a seed for the random number generator to ensure reproducibility.
-Additionally, you can choose whether to set the new ID column as the index of the dataframe.</p>
-<p><strong>Example Usage</strong></p>
+Additionally, you can choose whether to set the new ID column as the index of the
+dataframe.</p>
+<p><strong>Implementation Example</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function to add a
 column of unique IDs to a dataframe. We start by importing the necessary libraries
 and creating a sample dataframe. We then use the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function to generate
@@ -304,7 +304,7 @@ column in the dataframe.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id8" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>First 5 Rows of Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id9" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>DataFrame<span class="w"> </span>index<span class="w"> </span>is<span class="w"> </span>unique.
 </pre></div>
 </div>
@@ -435,7 +435,7 @@ useful when dealing with data that has been inconsistently formatted, ensuring
 that all float values are correctly represented.</p>
 </dd></dl>
 
-<p><strong>Example Usage</strong></p>
+<p><strong>Implementation Example</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to clean a
 column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame.
 We then use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to remove any trailing periods from the specified column.</p>
@@ -529,7 +529,10 @@ We then use the <code class="docutils literal notranslate"><span class="pre">str
         </td>
     </tr>
 </table><p></p>
-<p><cite>Note:</cite> The last row shows 6 as an <cite>int</cite> with a trailing period with its conversion to <cite>float</cite>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The last row shows 6 as an <code class="docutils literal notranslate"><span class="pre">int</span></code> with a trailing period with its conversion to <code class="docutils literal notranslate"><span class="pre">float</span></code>.</p>
+</div>
 <p></p>
 </section>
 <section id="standardized-dates">
@@ -539,11 +542,11 @@ We then use the <code class="docutils literal notranslate"><span class="pre">str
 <dt class="sig sig-object py" id="parse_date_with_rule">
 <span class="sig-name descname"><span class="pre">parse_date_with_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#parse_date_with_rule" title="Permalink to this definition"></a></dt>
 <dd><p>This function takes a date string and standardizes it to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format
-(<code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>). It assumes dates are provided in either <cite>day/month/year</cite> or
-<cite>month/day/year</cite> format. The function first checks if the first part of the
+(<code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>). It assumes dates are provided in either <strong>day/month/year</strong> or
+<strong>month/day/year</strong> format. The function first checks if the first part of the
 date string (day or month) is greater than 12, which unambiguously indicates
-a <cite>day/month/year</cite> format. If the first part is 12 or less, the function
-attempts to parse the date as <cite>month/day/year</cite>, falling back to <cite>day/month/year</cite>
+a <strong>day/month/year</strong> format. If the first part is 12 or less, the function
+attempts to parse the date as <strong>month/day/year</strong>, falling back to <strong>day/month/year</strong>
 if the former raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> due to an impossible date (e.g., month
 being greater than 12).</p>
 <dl class="field-list simple">
@@ -563,17 +566,15 @@ cannot parse the date.</p>
 </dl>
 </dd></dl>
 
-<p><strong>Example Usage</strong></p>
+<p><strong>Implementation Example</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
 function to standardize date strings. We start by importing the necessary library
 and creating a sample list of date strings. We then use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
 function to parse and standardize each date string to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">parse_date_with_rule</span>
 
-<span class="c1"># Sample date strings</span>
 <span class="n">date_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;15/04/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;04/15/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;01/12/2020&quot;</span><span class="p">,</span> <span class="s2">&quot;12/01/2020&quot;</span><span class="p">]</span>
 
-<span class="c1"># Standardize the date strings</span>
 <span class="n">standardized_dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_date_with_rule</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">date_strings</span><span class="p">]</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">standardized_dates</span><span class="p">)</span>
@@ -657,14 +658,15 @@ background color for specific columns.</p>
 <section id="census-income-example">
 <h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Permalink to this heading"></a></h3>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
-function to analyze a DataFrame’s columns.</p>
+function to analyze a DataFrame’s columns. You may notice a new variable,
+<code class="docutils literal notranslate"><span class="pre">age_group</span></code>, is introduced. The logic for generating this variable is <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">provided here</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">dataframe_columns</span>
 
 <span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id8" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id9" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 
 <span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
@@ -934,24 +936,26 @@ in a DataFrame and save them to an Excel file.</strong></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><dl class="simple">
-<dt>The function will create an Excel file with a sheet for each combination</dt><dd><p>of the specified variables, as well as a “Table of Contents” sheet with
-hyperlinks to each summary table.</p>
-</dd>
-</dl>
-</li>
+<li><p>The function will create an Excel file with a sheet for each combination of the specified variables, as well as a “Table of Contents” sheet with hyperlinks to each summary table.</p></li>
 <li><p>The sheet names are limited to 31 characters due to Excel’s constraints.</p></li>
 </ul>
 </div>
 <p>The function returns two outputs:</p>
-<p>1. <code class="docutils literal notranslate"><span class="pre">summary_tables</span></code>: A dictionary where each key is a tuple representing a combination
+<blockquote>
+<div><p>1. <code class="docutils literal notranslate"><span class="pre">summary_tables</span></code>: A dictionary where each key is a tuple representing a combination
 of variables, and each value is a DataFrame containing the summary table for that combination.
 Each summary table includes the count and proportion of occurrences for each unique combination of values.</p>
 <p>2. <code class="docutils literal notranslate"><span class="pre">all_combinations</span></code>: A list of all generated combinations of the specified variables.
 This is useful for understanding which combinations were analyzed and included in the summary tables.</p>
-<p><strong>Example Usage</strong></p>
+</div></blockquote>
+<p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
-variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id8" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id9" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before proceeding with any further examples in this documentation, ensure that the <code class="docutils literal notranslate"><span class="pre">age</span></code> variable is binned into a new variable, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>.
+Detailed instructions for this process can be found under <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">Binning Numerical Columns</span></a>.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
@@ -978,132 +982,132 @@ variables from a DataFrame containing the census data <a class="footnote-referen
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;income&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;age_group&#39;</span><span class="p">,</span>
-<span class="s1">&#39;workclass&#39;</span><span class="p">,</span>
-<span class="s1">&#39;education&#39;</span><span class="p">,</span>
-<span class="s1">&#39;occupation&#39;</span><span class="p">,</span>
-<span class="s1">&#39;race&#39;</span><span class="p">,</span>
-<span class="s1">&#39;sex&#39;</span><span class="p">,</span>
-<span class="s1">&#39;income&#39;</span><span class="p">)]</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[(&#39;age_group&#39;, &#39;workclass&#39;),
+(&#39;age_group&#39;, &#39;education&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;),
+(&#39;age_group&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;),
+(&#39;workclass&#39;, &#39;race&#39;),
+(&#39;workclass&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;occupation&#39;),
+(&#39;education&#39;, &#39;race&#39;),
+(&#39;education&#39;, &#39;sex&#39;),
+(&#39;education&#39;, &#39;income&#39;),
+(&#39;occupation&#39;, &#39;race&#39;),
+(&#39;occupation&#39;, &#39;sex&#39;),
+(&#39;occupation&#39;, &#39;income&#39;),
+(&#39;race&#39;, &#39;sex&#39;),
+(&#39;race&#39;, &#39;income&#39;),
+(&#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;),
+(&#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;),
+(&#39;education&#39;, &#39;occupation&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;education&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;education&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;workclass&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;workclass&#39;, &#39;education&#39;, &#39;occupation&#39;, &#39;race&#39;, &#39;sex&#39;, &#39;income&#39;),
+(&#39;age_group&#39;,
+&#39;workclass&#39;,
+&#39;education&#39;,
+&#39;occupation&#39;,
+&#39;race&#39;,
+&#39;sex&#39;,
+&#39;income&#39;)]
 </pre></div>
 </div>
 <p>When applied to the US Census data, the output Excel file will contain summary tables for all possible combinations of the specified variables.
@@ -1123,7 +1127,7 @@ formatting.</strong></p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Full path to the output Excel file.</p></li>
 <li><p><strong>df_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Dictionary where keys are sheet names and values are DataFrames to save.</p></li>
-<li><p><strong>decimal_places</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of decimal places to round numeric columns. Default is 0.</p></li>
+<li><p><strong>decimal_places</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of decimal places to round numeric columns. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1144,12 +1148,11 @@ formatting.</strong></p>
 <li><p>Applies customized formatting to headers and cells.</p></li>
 <li><p>Autofits columns based on the content length.</p></li>
 </ul>
-<p><strong>Example Usage</strong></p>
+<p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> function to save two DataFrames:
 the original DataFrame and a filtered DataFrame with ages between <cite>18</cite> and <cite>40</cite>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
 
-<span class="c1"># Example usage</span>
 <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;df_census.xlsx&quot;</span>  <span class="c1"># Name of the output Excel file</span>
 <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
 
@@ -1199,12 +1202,11 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 </dl>
 </dd></dl>
 
-<p><strong>Example Usage</strong></p>
+<p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
-from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id8" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id9" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
 
-<span class="c1"># Example usage</span>
 <span class="n">contingency_table</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">cols</span><span class="o">=</span><span class="p">[</span>
@@ -1217,25 +1219,31 @@ from the specified columns in a DataFrame containing census data <a class="footn
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
+function to analyze a DataFrame’s columns. You may notice a new variable,
+<code class="docutils literal notranslate"><span class="pre">age_group</span></code>, is introduced. The logic for generating this variable is <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">provided here</span></a>.</p>
+</div>
 <p><strong>Output</strong></p>
 <p>The output will be a contingency table with the specified columns, showing the
 total counts and percentages of occurrences for each combination of values. The
 table will be sorted by the <code class="docutils literal notranslate"><span class="pre">'Total'</span></code> column in descending order because <code class="docutils literal notranslate"><span class="pre">sort_by</span></code>
 is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">age_group</span>     <span class="n">workclass</span>                <span class="n">race</span>     <span class="n">sex</span>  <span class="n">Total</span>  <span class="n">Percentage</span>
-<span class="mi">0</span>       <span class="mi">30</span><span class="o">-</span><span class="mi">39</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">5856</span>       <span class="mf">11.99</span>
-<span class="mi">1</span>       <span class="mi">18</span><span class="o">-</span><span class="mi">29</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">5623</span>       <span class="mf">11.51</span>
-<span class="mi">2</span>       <span class="mi">40</span><span class="o">-</span><span class="mi">49</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">4267</span>        <span class="mf">8.74</span>
-<span class="mi">3</span>       <span class="mi">18</span><span class="o">-</span><span class="mi">29</span>       <span class="n">Private</span>               <span class="n">White</span>  <span class="n">Female</span>   <span class="mi">3680</span>        <span class="mf">7.53</span>
-<span class="mi">4</span>       <span class="mi">50</span><span class="o">-</span><span class="mi">59</span>       <span class="n">Private</span>               <span class="n">White</span>    <span class="n">Male</span>   <span class="mi">2565</span>        <span class="mf">5.25</span>
-<span class="o">..</span>        <span class="o">...</span>           <span class="o">...</span>                 <span class="o">...</span>     <span class="o">...</span>    <span class="o">...</span>         <span class="o">...</span>
-<span class="mi">467</span>     <span class="mi">50</span><span class="o">-</span><span class="mi">59</span>   <span class="n">Federal</span><span class="o">-</span><span class="n">gov</span>               <span class="n">Other</span>    <span class="n">Male</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
-<span class="mi">468</span>     <span class="mi">50</span><span class="o">-</span><span class="mi">59</span>     <span class="n">Local</span><span class="o">-</span><span class="n">gov</span>  <span class="n">Asian</span><span class="o">-</span><span class="n">Pac</span><span class="o">-</span><span class="n">Islander</span>  <span class="n">Female</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
-<span class="mi">469</span>     <span class="mi">70</span><span class="o">-</span><span class="mi">79</span>  <span class="n">Self</span><span class="o">-</span><span class="n">emp</span><span class="o">-</span><span class="n">inc</span>               <span class="n">Black</span>    <span class="n">Male</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
-<span class="mi">470</span>     <span class="mi">80</span><span class="o">-</span><span class="mi">89</span>     <span class="n">Local</span><span class="o">-</span><span class="n">gov</span>  <span class="n">Asian</span><span class="o">-</span><span class="n">Pac</span><span class="o">-</span><span class="n">Islander</span>    <span class="n">Male</span>      <span class="mi">1</span>        <span class="mf">0.00</span>
-<span class="mi">471</span>                                                      <span class="mi">48842</span>      <span class="mf">100.00</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>    age_group     workclass                race     sex  Total  Percentage
+0       30-39       Private               White    Male   5856       11.99
+1       18-29       Private               White    Male   5623       11.51
+2       40-49       Private               White    Male   4267        8.74
+3       18-29       Private               White  Female   3680        7.53
+4       50-59       Private               White    Male   2565        5.25
+..        ...           ...                 ...     ...    ...         ...
+467     50-59   Federal-gov               Other    Male      1        0.00
+468     50-59     Local-gov  Asian-Pac-Islander  Female      1        0.00
+469     70-79  Self-emp-inc               Black    Male      1        0.00
+470     80-89     Local-gov  Asian-Pac-Islander    Male      1        0.00
+471                                                      48842      100.00
 
-<span class="p">[</span><span class="mi">472</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">6</span> <span class="n">columns</span><span class="p">]</span>
+[472 rows x 6 columns]
 </pre></div>
 </div>
 <p></p>
@@ -1252,7 +1260,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame to be styled.</p></li>
 <li><p><strong>columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – List of column names to be highlighted.</p></li>
-<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The background color to be applied for highlighting (default is <cite>“yellow”</cite>).</p></li>
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The background color to be applied for highlighting (default is <code class="docutils literal notranslate"><span class="pre">&quot;yellow&quot;</span></code>).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1264,14 +1272,13 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 </dl>
 </dd></dl>
 
-<p><strong>Example Usage</strong></p>
+<p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
-columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id8" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
+columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id9" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
 
-<span class="c1"># Applying the highlight function</span>
 <span class="n">highlighted_df</span> <span class="o">=</span> <span class="n">highlight_columns</span><span class="p">(</span>
-    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(),</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">],</span>
     <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#F8C5C8&quot;</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1378,7 +1385,7 @@ overflow:hidden;padding:0px 5px;word-break:normal;}
 </tbody></table></div><p></p>
 </section>
 <section id="binning-numerical-columns">
-<h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
+<span id="id7"></span><h2>Binning Numerical Columns<a class="headerlink" href="#binning-numerical-columns" title="Permalink to this heading"></a></h2>
 <p>Binning numerical columns is a technique used to convert continuous numerical
 data into discrete categories or “bins.” This is especially useful for simplifying
 analysis, creating categorical features from numerical data, or visualizing the
@@ -1392,7 +1399,7 @@ label to each age in the DataFrame. The <code class="docutils literal notranslat
 categorize the ages and assign them to a new column, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>. Adjust the bins
 and labels as needed for your specific data.</p>
 </div>
-<p>Below, we use the <code class="docutils literal notranslate"><span class="pre">age</span></code> column of the census data <a class="footnote-reference brackets" href="#id8" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> from the UCI Machine Learning Repository as an example:</p>
+<p>Below, we use the <code class="docutils literal notranslate"><span class="pre">age</span></code> column of the census data <a class="footnote-reference brackets" href="#id9" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> from the UCI Machine Learning Repository as an example:</p>
 <ol class="arabic">
 <li><p><strong>Bins Definition</strong>:
 The bins are defined by specifying the boundaries of each interval. For example,
@@ -1471,9 +1478,9 @@ when the upper bound is infinity (<code class="docutils literal notranslate"><sp
 </li>
 </ol>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id8" role="note">
+<aside class="footnote brackets" id="id9" role="note">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>,<a role="doc-backlink" href="#id6">5</a>,<a role="doc-backlink" href="#id7">6</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>,<a role="doc-backlink" href="#id6">5</a>,<a role="doc-backlink" href="#id8">6</a>)</span>
 <p>Kohavi, R. (1996). <em>Census Income</em>. UCI Machine Learning Repository. <a class="reference external" href="https://doi.org/10.24432/C5GP7S">https://doi.org/10.24432/C5GP7S</a>.</p>
 </aside>
 </aside>
