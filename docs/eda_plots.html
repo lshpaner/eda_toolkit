@@ -1647,6 +1647,11 @@ choose between regular or normalized plots.</p>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To save images, you must specify the paths for <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> or <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code> along with the <code class="docutils literal notranslate"><span class="pre">file_prefix</span></code>.
+Saving plots is triggered by providing a valid <code class="docutils literal notranslate"><span class="pre">save_formats</span></code> string.</p>
+</div>
 </dd></dl>
 
 <section id="stacked-bar-plots-with-crosstabs-example">
@@ -1692,11 +1697,12 @@ used in the legend of your plots.</p>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Ensure that the number of elements in <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">title</span></code> are the same. Each item in <code class="docutils literal notranslate"><span class="pre">func_col</span></code> must have a corresponding
-list of labels in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> and a title in <code class="docutils literal notranslate"><span class="pre">title</span></code>. This
-consistency is essential for the function to correctly generate the plots
-with the appropriate labels and titles.</p>
+<p>Ensure that <code class="docutils literal notranslate"><span class="pre">func_col</span></code>, <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code>, and <code class="docutils literal notranslate"><span class="pre">title</span></code> have the
+same number of elements. Each item in <code class="docutils literal notranslate"><span class="pre">func_col</span></code> must correspond to a list
+of labels in <code class="docutils literal notranslate"><span class="pre">legend_labels_list</span></code> and a title in <code class="docutils literal notranslate"><span class="pre">title</span></code> to ensure the
+function generates plots with the correct labels and titles.</p>
+<p>Additionally, in this example, remove trailing periods from the <code class="docutils literal notranslate"><span class="pre">income</span></code>
+column to correctly split its contents into two categories.</p>
 </div>
 <p>In this example:</p>
 <ul>
@@ -2009,8 +2015,8 @@ font-weight:normal;overflow:hidden;padding:0px 5px;word-break:normal;}
 </tbody></table></div><p></p>
 <p>When you set <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>, you can access these crosstabs as
 DataFrames by assigning them to their own vriables. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">crosstab_age_sex</span> <span class="o">=</span> <span class="n">crosstabs_dict</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span>
-<span class="n">crosstab_age_income</span> <span class="o">=</span> <span class="n">crosstabs_dict</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">crosstab_age_sex</span> <span class="o">=</span> <span class="n">stacked_crosstabs</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span>
+<span class="n">crosstab_age_income</span> <span class="o">=</span> <span class="n">stacked_crosstabs</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </section>
@@ -2151,7 +2157,7 @@ metrics across different age groups, with all plots saved for future reference o
 <span class="n">box_violin_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">metrics_list</span><span class="o">=</span><span class="n">age_boxplot_list</span><span class="p">,</span>
-    <span class="n">metrics_boxplot_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
+    <span class="n">metrics_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
     <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
     <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
     <span class="n">save_plots</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
@@ -2201,7 +2207,7 @@ This adjustment flips the axes, providing a different perspective on the data di
 <span class="n">box_violin_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">metrics_list</span><span class="o">=</span><span class="n">age_boxplot_list</span><span class="p">,</span>
-    <span class="n">metrics_boxplot_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
+    <span class="n">metrics_comp</span><span class="o">=</span><span class="n">metrics_comp</span><span class="p">,</span>
     <span class="n">show_plot</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
     <span class="n">rotate_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -2492,6 +2498,11 @@ This function does not return any value but generates and optionally saves a cor
 </dl>
 </dd></dl>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To save images, you must specify the paths for <code class="docutils literal notranslate"><span class="pre">image_path_png</span></code> or <code class="docutils literal notranslate"><span class="pre">image_path_svg</span></code>.
+Saving plots is triggered by providing a valid <code class="docutils literal notranslate"><span class="pre">save_formats</span></code> string.</p>
+</div>
 <section id="triangular-correlation-matrix-example">
 <h2>Triangular Correlation Matrix Example<a class="headerlink" href="#triangular-correlation-matrix-example" title="Permalink to this heading"></a></h2>
 <p>The provided code filters the census <a class="footnote-reference brackets" href="#id22" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> to include only numeric columns using
@@ -2876,7 +2887,7 @@ using the California housing dataset:</p>
     <span class="n">html_file_name</span><span class="o">=</span><span class="s2">&quot;3d_pdp.html&quot;</span><span class="p">,</span>
     <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;interactive&quot;</span><span class="p">,</span>
     <span class="n">text_wrap</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
-    <span class="n">zoom_out_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">zoom_out_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">image_path_png</span><span class="o">=</span><span class="n">image_path_png</span><span class="p">,</span>
     <span class="n">image_path_svg</span><span class="o">=</span><span class="n">image_path_svg</span><span class="p">,</span>
     <span class="n">grid_resolution</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
@@ -2884,7 +2895,7 @@ using the California housing dataset:</p>
     <span class="n">tick_fontsize</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
     <span class="n">title_x</span><span class="o">=</span><span class="mf">0.38</span><span class="p">,</span>
     <span class="n">top_margin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">right_margin</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+    <span class="n">right_margin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">cbar_x</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
     <span class="n">cbar_thickness</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
     <span class="n">show_modebar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
