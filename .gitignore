@@ -112,14 +112,9 @@ celerybeat-schedule
 # Environments
 .env
 .venv
+**/*venv*/
+eda_venv374/
 env/
-venv/
-edatoolkit_venv/
-edatoolkit_venv374/
-edatoolkit_venv38/
-edatoolkit_venv39/
-edatoolkit_venv310/
-ENV/
 env.bak/
 venv.bak/
 eda/
