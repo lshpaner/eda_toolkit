@@ -1,29 +1,32 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gaussian Assumption for Normality &mdash; EDA Toolkit 0.0.12 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.js" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=3bbcec59"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="_static/copybutton.js?v=a0ccc04e"></script>
-      <script src="_static/custom.js"></script>
-      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/custom.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -133,11 +136,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" style="width: 300px;" />
-</a>
+  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" width="300px" /></a>
 </div><div style="height: 100px;"></div><p></p>
 <section id="gaussian-assumption-for-normality">
-<h1>Gaussian Assumption for Normality<a class="headerlink" href="#gaussian-assumption-for-normality" title="Link to this heading"></a></h1>
+<h1>Gaussian Assumption for Normality<a class="headerlink" href="#gaussian-assumption-for-normality" title="Permalink to this heading"></a></h1>
 <p>The Gaussian (normal) distribution is a key assumption in many statistical methods. It is mathematically represented by the probability density function (PDF):</p>
 <div class="math notranslate nohighlight">
 \[f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]</div>
@@ -152,10 +154,9 @@
 <li><p>95% within <span class="math notranslate nohighlight">\(\mu \pm 2\sigma\)</span></p></li>
 <li><p>99.7% within <span class="math notranslate nohighlight">\(\mu \pm 3\sigma\)</span></p></li>
 </ul>
-<div class="no-click"><a class="reference internal image-reference" href="_images/normal_distribution.png"><img alt="KDE Distributions - KDE (+) Histograms (Density)" class="align-center" src="_images/normal_distribution.png" style="width: 950px;" />
-</a>
+<div class="no-click"><a class="reference internal image-reference" href="_images/normal_distribution.png"><img alt="KDE Distributions - KDE (+) Histograms (Density)" class="align-center" src="_images/normal_distribution.png" style="width: 950px;" /></a>
 </div><div style="height: 50px;"></div><section id="histograms-and-kernel-density-estimation-kde">
-<h2>Histograms and Kernel Density Estimation (KDE)<a class="headerlink" href="#histograms-and-kernel-density-estimation-kde" title="Link to this heading"></a></h2>
+<h2>Histograms and Kernel Density Estimation (KDE)<a class="headerlink" href="#histograms-and-kernel-density-estimation-kde" title="Permalink to this heading"></a></h2>
 <p><strong>Histograms</strong>:</p>
 <ul class="simple">
 <li><p>Visualize data distribution by binning values and counting frequencies.</p></li>
@@ -182,7 +183,7 @@
 </section>
 </section>
 <section id="pearson-correlation-coefficient">
-<h1>Pearson Correlation Coefficient<a class="headerlink" href="#pearson-correlation-coefficient" title="Link to this heading"></a></h1>
+<h1>Pearson Correlation Coefficient<a class="headerlink" href="#pearson-correlation-coefficient" title="Permalink to this heading"></a></h1>
 <p>The Pearson correlation coefficient, often denoted as <span class="math notranslate nohighlight">\(r\)</span>, is a measure of
 the linear relationship between two variables. It quantifies the degree to which
 a change in one variable is associated with a change in another variable. The
@@ -226,7 +227,7 @@ a variable <span class="math notranslate nohighlight">\(X\)</span>, the standard
 <p>The closer the value of <span class="math notranslate nohighlight">\(r\)</span> is to <span class="math notranslate nohighlight">\(\pm 1\)</span>, the stronger the linear relationship between the two variables.</p>
 </section>
 <section id="box-cox-transformation">
-<span id="id1"></span><h1>Box-Cox Transformation<a class="headerlink" href="#box-cox-transformation" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>Box-Cox Transformation<a class="headerlink" href="#box-cox-transformation" title="Permalink to this heading"></a></h1>
 <p>The Box-Cox transformation is a powerful technique for stabilizing variance and
 making data more closely follow a normal distribution. Developed by statisticians
 George Box and David Cox in 1964, the transformation is particularly useful in
@@ -240,7 +241,7 @@ positive-only, skewed distributions (e.g., income, expenditure, biological measu
 The Box-Cox transformation is a family of power transformations designed to address
 these issues by “normalizing” the data and stabilizing variance.</p>
 <section id="mathematical-definition">
-<h2>Mathematical Definition<a class="headerlink" href="#mathematical-definition" title="Link to this heading"></a></h2>
+<h2>Mathematical Definition<a class="headerlink" href="#mathematical-definition" title="Permalink to this heading"></a></h2>
 <p>The Box-Cox transformation is defined as follows:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}y(\lambda) =
@@ -266,7 +267,7 @@ these issues by “normalizing” the data and stabilizing variance.</p>
 <p>Selecting the optimal value of <span class="math notranslate nohighlight">\(\lambda\)</span> to achieve approximate normality or homoscedasticity is typically done using maximum likelihood estimation (MLE), where the goal is to find the value of <span class="math notranslate nohighlight">\(\lambda\)</span> that maximizes the likelihood of observing the transformed data under a normal distribution.</p>
 </section>
 <section id="properties-and-benefits">
-<h2>Properties and Benefits<a class="headerlink" href="#properties-and-benefits" title="Link to this heading"></a></h2>
+<h2>Properties and Benefits<a class="headerlink" href="#properties-and-benefits" title="Permalink to this heading"></a></h2>
 <p>The Box-Cox transformation has two key properties:</p>
 <ol class="arabic simple">
 <li><p><strong>Variance Stabilization</strong>: By choosing an appropriate <span class="math notranslate nohighlight">\(\lambda\)</span>, the variance of <span class="math notranslate nohighlight">\(y(\lambda)\)</span> can be made more constant across levels of <span class="math notranslate nohighlight">\(y\)</span>. This is particularly useful in regression analysis, as homoscedasticity is often a critical assumption.</p></li>
@@ -284,7 +285,7 @@ these issues by “normalizing” the data and stabilizing variance.</p>
 <p>Maximizing this likelihood function provides the MLE for <span class="math notranslate nohighlight">\(\lambda\)</span>, which can be estimated using iterative methods.</p>
 </section>
 <section id="practical-considerations">
-<h2>Practical Considerations<a class="headerlink" href="#practical-considerations" title="Link to this heading"></a></h2>
+<h2>Practical Considerations<a class="headerlink" href="#practical-considerations" title="Permalink to this heading"></a></h2>
 <p>In practice, implementing the Box-Cox transformation requires a few considerations:</p>
 <ul class="simple">
 <li><p><strong>Positive-Only Data</strong>: The transformation is only defined for positive values. For datasets with zero or negative values, a constant can be added to make all observations positive before applying the transformation.</p></li>
@@ -293,7 +294,7 @@ these issues by “normalizing” the data and stabilizing variance.</p>
 </ul>
 </section>
 <section id="applications-in-modeling">
-<h2>Applications in Modeling<a class="headerlink" href="#applications-in-modeling" title="Link to this heading"></a></h2>
+<h2>Applications in Modeling<a class="headerlink" href="#applications-in-modeling" title="Permalink to this heading"></a></h2>
 <p>In regression modeling, the Box-Cox transformation can improve both the accuracy
 and validity of predictions. For example, in Ordinary Least Squares (OLS)
 regression, the transformation reduces heteroscedasticity and normalizes residuals,
@@ -304,7 +305,7 @@ non-normality and heteroscedasticity in data. By choosing an appropriate <span c
 practitioners can transform data to better meet the assumptions of various statistical methods,
 enhancing the reliability of their models and inferences.</p>
 <section id="confidence-intervals-for-lambda">
-<span id="id2"></span><h3>Confidence Intervals for Lambda<a class="headerlink" href="#confidence-intervals-for-lambda" title="Link to this heading"></a></h3>
+<span id="id2"></span><h3>Confidence Intervals for Lambda<a class="headerlink" href="#confidence-intervals-for-lambda" title="Permalink to this heading"></a></h3>
 <p>In practice, it is often helpful to assess the stability of the estimated
 transformation parameter <span class="math notranslate nohighlight">\(\lambda\)</span> by constructing a confidence interval
 (CI). The CI provides a range of values within which the true value of <span class="math notranslate nohighlight">\(\lambda\)</span>
@@ -331,7 +332,7 @@ values for which the likelihood ratio statistic:</p>
 </section>
 </section>
 <section id="the-yeo-johnson-transformation">
-<h1>The Yeo-Johnson Transformation<a class="headerlink" href="#the-yeo-johnson-transformation" title="Link to this heading"></a></h1>
+<h1>The Yeo-Johnson Transformation<a class="headerlink" href="#the-yeo-johnson-transformation" title="Permalink to this heading"></a></h1>
 <p>For a feature <span class="math notranslate nohighlight">\(y\)</span>, the Yeo-Johnson transformation <span class="math notranslate nohighlight">\(Y\)</span> is defined as:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}Y =
@@ -366,13 +367,13 @@ values for which the likelihood ratio statistic:</p>
 <p>Yeo-Johnson is particularly useful for datasets containing zero or negative values. It’s often effective for linear models that assume normally distributed data, making it a robust alternative when Box-Cox cannot be applied.</p>
 </section>
 <section id="median-and-iqr-scaling">
-<span id="robust-scaler"></span><h1>Median and IQR Scaling<a class="headerlink" href="#median-and-iqr-scaling" title="Link to this heading"></a></h1>
+<span id="robust-scaler"></span><h1>Median and IQR Scaling<a class="headerlink" href="#median-and-iqr-scaling" title="Permalink to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> is a scaling method that reduces the impact
 of outliers in your data by using the <strong>median</strong> and <strong>interquartile range (IQR)</strong>
 instead of the mean and standard deviation, which are more sensitive to extreme values.
 Here’s a mathematical breakdown of how it works:</p>
 <section id="centering-data-using-the-median">
-<h2>Centering Data Using the Median<a class="headerlink" href="#centering-data-using-the-median" title="Link to this heading"></a></h2>
+<h2>Centering Data Using the Median<a class="headerlink" href="#centering-data-using-the-median" title="Permalink to this heading"></a></h2>
 <p>The formula for scaling each feature <span class="math notranslate nohighlight">\(x\)</span> in the dataset using <code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> is:</p>
 <div class="math notranslate nohighlight">
 \[x_{\text{scaled}} = \frac{x - \text{Median}(x)}{\text{IQR}(x)}\]</div>
@@ -383,14 +384,14 @@ Here’s a mathematical breakdown of how it works:</p>
 </ul>
 </section>
 <section id="explanation-of-each-component">
-<h2>Explanation of Each Component<a class="headerlink" href="#explanation-of-each-component" title="Link to this heading"></a></h2>
+<h2>Explanation of Each Component<a class="headerlink" href="#explanation-of-each-component" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>Median</strong> (<span class="math notranslate nohighlight">\(\text{Median}(x)\)</span>): This is the 50th percentile, or the central value of the feature. It acts as the “center” of the data, but unlike the mean, it is robust to outliers.</p></li>
 <li><p><strong>Interquartile Range (IQR)</strong>: By dividing by the IQR, the <code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code> standardizes the spread of the data based on the range of the middle 50% of values, making it less influenced by extreme values. Essentially, the values are scaled to fall within a range close to -1 to 1 for the majority of samples.</p></li>
 </ul>
 </section>
 <section id="example-calculation">
-<h2>Example Calculation<a class="headerlink" href="#example-calculation" title="Link to this heading"></a></h2>
+<h2>Example Calculation<a class="headerlink" href="#example-calculation" title="Permalink to this heading"></a></h2>
 <p>Suppose you have a feature <span class="math notranslate nohighlight">\(x = [1, 2, 3, 4, 5, 100]\)</span>. Here’s how the scaling would work:</p>
 <ol class="arabic">
 <li><p><strong>Calculate the Median</strong>:</p>
@@ -426,7 +427,7 @@ standardization methods.</p>
 </section>
 </section>
 <section id="logit-transformation">
-<span id="logit-assumptions"></span><h1>Logit Transformation<a class="headerlink" href="#logit-transformation" title="Link to this heading"></a></h1>
+<span id="logit-assumptions"></span><h1>Logit Transformation<a class="headerlink" href="#logit-transformation" title="Permalink to this heading"></a></h1>
 <p>The logit transformation is used to map values from the range <span class="math notranslate nohighlight">\((0, 1)\)</span> to the entire real number line <span class="math notranslate nohighlight">\((-\infty, +\infty)\)</span>.
 It is defined mathematically as:</p>
 <div class="math notranslate nohighlight">
@@ -434,7 +435,7 @@ It is defined mathematically as:</p>
 <p>where <span class="math notranslate nohighlight">\(p\)</span> is a value in the range <span class="math notranslate nohighlight">\((0, 1)\)</span>. In other words, for each value <span class="math notranslate nohighlight">\(p\)</span>, the transformation is calculated
 by taking the natural logarithm of the odds <span class="math notranslate nohighlight">\(p / (1 - p)\)</span>.</p>
 <section id="purpose-and-assumptions">
-<h2>Purpose and Assumptions<a class="headerlink" href="#purpose-and-assumptions" title="Link to this heading"></a></h2>
+<h2>Purpose and Assumptions<a class="headerlink" href="#purpose-and-assumptions" title="Permalink to this heading"></a></h2>
 <p>The logit function is particularly useful in scenarios where data is constrained between 0 and 1, such as probabilities
 or proportions. However, to apply this transformation, <strong>all values must strictly lie within the open interval</strong> <span class="math notranslate nohighlight">\((0, 1)\)</span>.
 Values equal to 0 or 1 result in undefined values <span class="math notranslate nohighlight">\((-\infty, +\infty\)</span> respectively) since the logarithm of zero is undefined.</p>
@@ -448,7 +449,7 @@ the data to the appropriate range.</p>
 </section>
 </section>
 <section id="partial-dependence-foundations">
-<h1>Partial Dependence Foundations<a class="headerlink" href="#partial-dependence-foundations" title="Link to this heading"></a></h1>
+<h1>Partial Dependence Foundations<a class="headerlink" href="#partial-dependence-foundations" title="Permalink to this heading"></a></h1>
 <p>Let <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> represent the complete set of input features for a machine
 learning model, where <span class="math notranslate nohighlight">\(\mathbf{X} = \{X_1, X_2, \dots, X_p\}\)</span>. Suppose we’re
 particularly interested in a subset of these features, denoted by <span class="math notranslate nohighlight">\(\mathbf{X}_S\)</span>.
