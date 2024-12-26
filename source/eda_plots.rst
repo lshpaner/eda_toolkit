@@ -1772,98 +1772,88 @@ The following code demonstrates this transformation:
    <div style="height: 50px;"></div>
 
 
-
-
 Stacked Crosstab Plots
 =======================
 
-**Generates stacked bar plots and crosstabs for specified columns in a DataFrame.**
+**Generate stacked or regular bar plots and crosstabs for specified columns in a DataFrame.**
 
-The ``stacked_crosstab_plot`` function is a versatile tool for generating stacked bar plots and contingency tables (crosstabs) from a pandas DataFrame. This function is particularly useful for visualizing categorical data across multiple columns, allowing users to easily compare distributions and relationships between variables. It offers extensive customization options, including control over plot appearance, color schemes, and the ability to save plots in multiple formats.
+The ``stacked_crosstab_plot`` function is a powerful tool for visualizing categorical data relationships through stacked bar plots and contingency tables (crosstabs). It supports extensive customization options, including plot appearance, color schemes, and saving output in multiple formats. Users can choose between regular or normalized plots and control whether the function returns the generated crosstabs as a dictionary.
 
-The function also supports generating both regular and normalized stacked bar plots, with the option to return the generated crosstabs as a dictionary for further analysis. 
-
-.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, label_fontsize=12, tick_fontsize=10, text_wrap=50, remove_stacks=False)
-
-    Generates stacked or regular bar plots and crosstabs for specified columns.
-
-    This function allows users to create stacked bar plots (or regular bar plots
-    if stacks are removed) and corresponding crosstabs for specific columns
-    in a DataFrame. It provides options to customize the appearance, including
-    font sizes for axis labels, tick labels, and title text wrapping, and to 
-    choose between regular or normalized plots.
+.. function:: stacked_crosstab_plot(df, col, func_col, legend_labels_list, title, kind="bar", width=0.9, rot=0, custom_order=None, image_path_png=None, image_path_svg=None, save_formats=None, color=None, output="both", return_dict=False, x=None, y=None, p=None, file_prefix=None, logscale=False, plot_type="both", show_legend=True, label_fontsize=12, tick_fontsize=10, text_wrap=50, remove_stacks=False, xlim=None, ylim=None)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
     :param col: The name of the column in the DataFrame to be analyzed.
     :type col: str
-    :param func_col: List of ground truth columns to be analyzed.
-    :type func_col: list
-    :param legend_labels_list: List of legend labels for each ground truth column.
-    :type legend_labels_list: list
-    :param title: List of titles for the plots.
-    :type title: list
-    :param kind: The kind of plot to generate (``'bar'`` or ``'barh'`` for horizontal bars), default is ``'bar'``.
+    :param func_col: List of columns in the DataFrame to generate the crosstabs and stack the bars in the plot.
+    :type func_col: list of str
+    :param legend_labels_list: List of legend labels corresponding to each column in ``func_col``.
+    :type legend_labels_list: list of list of str
+    :param title: List of titles for each plot generated.
+    :type title: list of str
+    :param kind: Type of plot to generate (``"bar"`` or ``"barh"`` for horizontal bars). Default is ``"bar"``.
     :type kind: str, optional
-    :param width: The width of the bars in the bar plot, default is ``0.9``.
+    :param width: Width of the bars in the bar plot. Default is ``0.9``.
     :type width: float, optional
-    :param rot: The rotation angle of the ``x-axis`` labels, default is ``0``.
+    :param rot: Rotation angle of the x-axis labels. Default is ``0``.
     :type rot: int, optional
-    :param custom_order: Specifies a custom order for the categories in the ``col``.
+    :param custom_order: Custom order for the categories in ``col``.
     :type custom_order: list, optional
-    :param image_path_png: Directory path where generated PNG plot images will be saved.
+    :param image_path_png: Directory path to save PNG plot images.
     :type image_path_png: str, optional
-    :param image_path_svg: Directory path where generated SVG plot images will be saved.
+    :param image_path_svg: Directory path to save SVG plot images.
     :type image_path_svg: str, optional
-    :param save_formats: List of file formats to save the plot images in. Valid formats are ``'png'`` and ``'svg'``. If not provided, defaults to an empty list and no images will be saved.
-    :type save_formats: list, optional
-    :param color: List of colors to use for the plots. If not provided, a default color scheme is used.
-    :type color: list, optional
+    :param save_formats: List of file formats to save the plots (e.g., ``["png", "svg"]``). Default is ``None``.
+    :type save_formats: list of str, optional
+    :param color: List of colors to use for the plots. Default is the seaborn color palette.
+    :type color: list of str, optional
     :param output: Specify the output type: ``"plots_only"``, ``"crosstabs_only"``, or ``"both"``. Default is ``"both"``.
     :type output: str, optional
-    :param return_dict: Specify whether to return the crosstabs dictionary, default is ``False``.
+    :param return_dict: Return the crosstabs as a dictionary. Default is ``False``.
     :type return_dict: bool, optional
-    :param x: The width of the figure.
+    :param x: Width of the figure in inches.
     :type x: int, optional
-    :param y: The height of the figure.
+    :param y: Height of the figure in inches.
     :type y: int, optional
-    :param p: The padding between the subplots.
+    :param p: Padding between subplots.
     :type p: int, optional
-    :param file_prefix: Prefix for the filename when output includes plots.
+    :param file_prefix: Prefix for filenames when saving plots.
     :type file_prefix: str, optional
-    :param logscale: Apply log scale to the ``y-axis``, default is ``False``.
+    :param logscale: Apply a logarithmic scale to the y-axis. Default is ``False``.
     :type logscale: bool, optional
-    :param plot_type: Specify the type of plot to generate: ``"both"``, ``"regular"``, ``"normalized"``. Default is ``"both"``.
+    :param plot_type: Type of plot to generate: ``"both"``, ``"regular"``, or ``"normalized"``. Default is ``"both"``.
     :type plot_type: str, optional
-    :param show_legend: Specify whether to show the legend, default is ``True``.
+    :param show_legend: Show the legend on the plot. Default is ``True``.
     :type show_legend: bool, optional
-    :param label_fontsize: Font size for axis labels, default is ``12``.
+    :param label_fontsize: Font size for axis labels. Default is ``12``.
     :type label_fontsize: int, optional
-    :param tick_fontsize: Font size for tick labels on the axes, default is ``10``.
+    :param tick_fontsize: Font size for tick labels. Default is ``10``.
     :type tick_fontsize: int, optional
-    :param text_wrap: The maximum width of the title text before wrapping, default is ``50``.
+    :param text_wrap: Maximum width of the title text before wrapping. Default is ``50``.
     :type text_wrap: int, optional
-    :param remove_stacks: If ``True``, removes stacks and creates a regular bar plot using only the ``col`` parameter. Only works when ``plot_type`` is set to ``'regular'``. Default is ``False``.
+    :param remove_stacks: Remove stacks and create a regular bar plot. Only works when ``plot_type`` is ``"regular"``. Default is ``False``.
     :type remove_stacks: bool, optional
-    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min, max``).
+    :param xlim: Tuple or list specifying limits of the x-axis (e.g., ``(min, max)``).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min, max``).
+    :param ylim: Tuple or list specifying limits of the y-axis (e.g., ``(min, max)``).
     :type ylim: tuple or list, optional
 
     :raises ValueError:
+        - If ``remove_stacks`` is ``True`` and ``plot_type`` is not ``"regular"``.
         - If ``output`` is not one of ``"both"``, ``"plots_only"``, or ``"crosstabs_only"``.
-        - If ``plot_type`` is not one of ``"both"``, ``"regular"``, ``"normalized"``.
-        - If ``remove_stacks`` is set to True and ``plot_type`` is not ``"regular"``.
-        - If the lengths of ``title``, ``func_col``, and ``legend_labels_list`` are not equal.
-    :raises KeyError: If any columns specified in ``col`` or ``func_col`` are missing in the DataFrame.
+        - If ``plot_type`` is not one of ``"both"``, ``"regular"``, or ``"normalized"``.
+        - If lengths of ``title``, ``func_col``, and ``legend_labels_list`` are unequal.
+    :raises KeyError: If any column in ``col`` or ``func_col`` is missing from the DataFrame.
 
     :returns: Dictionary of crosstabs DataFrames if ``return_dict`` is ``True``. Otherwise, returns ``None``.
-    :rtype: ``dict`` or ``None``
+    :rtype: dict or None
 
-    .. note::
+.. admonition:: Notes
 
-        To save images, you must specify the paths for ``image_path_png`` or ``image_path_svg`` along with the ``file_prefix``. 
-        Saving plots is triggered by providing a valid ``save_formats`` string.
+    - To save images, specify the paths in ``image_path_png`` or ``image_path_svg`` along with a valid ``file_prefix``.
+    - The ``save_formats`` parameter determines the file types for saved images.
+    - This function is ideal for analyzing and visualizing categorical data distributions.
+
 
 Stacked Bar Plots With Crosstabs Example
 -----------------------------------------

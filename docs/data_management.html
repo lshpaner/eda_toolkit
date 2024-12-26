@@ -238,39 +238,40 @@ directories do not exist, the function creates them.</p>
 </section>
 <section id="adding-unique-identifiers">
 <span id="id1"></span><h2>Adding Unique Identifiers<a class="headerlink" href="#adding-unique-identifiers" title="Permalink to this heading"></a></h2>
-<p><strong>Add a column of unique IDs with a specified number of digits to the dataframe.</strong></p>
+<p><strong>Add a column of unique IDs with a specified number of digits to the DataFrame.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="add_ids">
-<span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_as_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_colname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ID'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_as_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#add_ids" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The dataframe to add IDs to.</p></li>
-<li><p><strong>id_colname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The name of the new column for the IDs. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;ID&quot;</span></code>.</p></li>
-<li><p><strong>num_digits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The number of digits for the unique IDs. Defaults to <code class="docutils literal notranslate"><span class="pre">9</span></code>.</p></li>
-<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The seed for the random number generator. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>set_as_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to set the new ID column as the index. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame to which IDs will be added.</p></li>
+<li><p><strong>id_colname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – The name of the new column for the unique IDs. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;ID&quot;</span></code>.</p></li>
+<li><p><strong>num_digits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The number of digits for the unique IDs. Defaults to <code class="docutils literal notranslate"><span class="pre">9</span></code>. The first digit will always be non-zero to ensure proper formatting.</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The seed for the random number generator to ensure reproducibility. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>set_as_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the generated ID column will replace the existing index of the DataFrame. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated dataframe with the new ID column.</p>
+<dd class="field-even"><p>The updated DataFrame with a new column of unique IDs. If <code class="docutils literal notranslate"><span class="pre">set_as_index</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the new ID column replaces the existing index.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the number of rows in the DataFrame exceeds the pool of possible unique IDs for the specified <code class="docutils literal notranslate"><span class="pre">num_digits</span></code>.</p>
+</dd>
 </dl>
 </dd></dl>
 
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
 <ul class="simple">
-<li><p>If the dataframe index is not unique, a warning is printed.</p></li>
-<li><dl class="simple">
-<dt>The function does not check if the number of rows exceeds the number of</dt><dd><p>unique IDs that can be generated with the specified number of digits.</p>
-</dd>
-</dl>
-</li>
-<li><p>The first digit of the generated IDs is ensured to be non-zero.</p></li>
+<li><p>The function ensures all IDs are unique by resolving potential collisions during generation, even for large datasets.</p></li>
+<li><p>The total pool size of unique IDs is determined by <span class="math notranslate nohighlight">\(9 \times 10^{(\text{num_digits} - 1)}\)</span>, since the first digit must be non-zero.</p></li>
+<li><p>Warnings are printed if the number of rows in the DataFrame approaches the pool size of possible unique IDs, recommending increasing <code class="docutils literal notranslate"><span class="pre">num_digits</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">set_as_index</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the ID column will be added as the first column in the DataFrame.</p></li>
+<li><p>Setting a random seed ensures reproducibility of the generated IDs.</p></li>
 </ul>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function is used to append a column of unique identifiers with a
@@ -411,7 +412,7 @@ column in the dataframe.</p>
 </section>
 <section id="trailing-period-removal">
 <h2>Trailing Period Removal<a class="headerlink" href="#trailing-period-removal" title="Permalink to this heading"></a></h2>
-<p><strong>Strip the trailing period from floats in a specified column of a DataFrame, if present.</strong></p>
+<p><strong>Strip the trailing period from values in a specified column of a DataFrame, if present.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="strip_trailing_period">
 <span class="sig-name descname"><span class="pre">strip_trailing_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#strip_trailing_period" title="Permalink to this definition"></a></dt>
@@ -419,22 +420,34 @@ column in the dataframe.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame containing the column to be processed.</p></li>
-<li><p><strong>column_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the column containing floats with potential trailing periods.</p></li>
+<li><p><strong>column_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the column containing values with potential trailing periods.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated DataFrame with the trailing periods removed from the specified column.</p>
+<dd class="field-even"><p>The updated DataFrame with trailing periods removed from the specified column.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the specified <code class="docutils literal notranslate"><span class="pre">column_name</span></code> does not exist in the DataFrame, pandas will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
+</dd>
 </dl>
+</dd></dl>
+
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes:</p>
+<ul class="simple">
+<li><p>For string values, trailing periods are stripped directly.</p></li>
+<li><p>For numeric values represented as strings (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;1234.&quot;</span></code>), the trailing period is removed, and the value is converted back to a numeric type if possible.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NaN</span></code> values are preserved and remain unprocessed.</p></li>
+<li><p>Non-string and non-numeric types are returned as-is.</p></li>
+</ul>
+</div>
 <p>The <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function is designed to remove trailing periods
 from float values in a specified column of a DataFrame. This can be particularly
 useful when dealing with data that has been inconsistently formatted, ensuring
 that all float values are correctly represented.</p>
-</dd></dl>
-
 <p><strong>Implementation Example</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to clean a
 column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame.
@@ -613,48 +626,62 @@ entire column in a DataFrame.</p>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">date_column</span>     <span class="n">name</span>  <span class="n">amount</span> <span class="n">standardized_date</span>
-<span class="mi">0</span>   <span class="mi">31</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">2021</span>    <span class="n">Alice</span>  <span class="mf">100.00</span>        <span class="mi">2021</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span>
-<span class="mi">1</span>   <span class="mi">01</span><span class="o">/</span><span class="mi">01</span><span class="o">/</span><span class="mi">2022</span>      <span class="n">Bob</span>  <span class="mf">150.50</span>        <span class="mi">2022</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span>
-<span class="mi">2</span>   <span class="mi">12</span><span class="o">/</span><span class="mi">31</span><span class="o">/</span><span class="mi">2021</span>  <span class="n">Charlie</span>  <span class="mf">200.75</span>        <span class="mi">2021</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">31</span>
-<span class="mi">3</span>   <span class="mi">13</span><span class="o">/</span><span class="mi">02</span><span class="o">/</span><span class="mi">2022</span>    <span class="n">David</span>  <span class="mf">250.25</span>        <span class="mi">2022</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">13</span>
-<span class="mi">4</span>   <span class="mi">07</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2022</span>      <span class="n">Eve</span>  <span class="mf">300.00</span>        <span class="mi">2022</span><span class="o">-</span><span class="mi">04</span><span class="o">-</span><span class="mi">07</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>   date_column     name  amount standardized_date
+0   31/12/2021    Alice  100.00        2021-12-31
+1   01/01/2022      Bob  150.50        2022-01-01
+2   12/31/2021  Charlie  200.75        2021-12-31
+3   13/02/2022    David  250.25        2022-02-13
+4   07/04/2022      Eve  300.00        2022-04-07
 </pre></div>
 </div>
 </section>
 <section id="dataframe-analysis">
 <h2>DataFrame Analysis<a class="headerlink" href="#dataframe-analysis" title="Permalink to this heading"></a></h2>
-<p><strong>Analyze DataFrame columns, including dtype, null values, and unique value counts.</strong></p>
+<p><strong>Analyze DataFrame columns, including data type, null values, and unique value counts.</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> function provides a comprehensive summary of a DataFrame’s columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="dataframe_columns">
-<span class="sig-name descname"><span class="pre">dataframe_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataframe_columns" title="Permalink to this definition"></a></dt>
-<dd><p>Analyze DataFrame columns to provide summary statistics such as data type,
-null counts, unique values, and most frequent values.</p>
-<p>This function analyzes the columns of a DataFrame, providing details about the data type,
-the number and percentage of <code class="docutils literal notranslate"><span class="pre">null</span></code> values, the total number of unique values, and the most
-frequent unique value along with its count and percentage. It handles special cases such as
-converting date columns and replacing empty strings with Pandas <code class="docutils literal notranslate"><span class="pre">NA</span></code> values.</p>
-<dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">dataframe_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_cols_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataframe_columns" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The DataFrame to analyze.</p></li>
 <li><p><strong>background_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Hex color code or color name for background styling in the output
-DataFrame. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>return_df</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plain DataFrame with the summary statistics. If
-<code class="docutils literal notranslate"><span class="pre">False</span></code>, returns a styled DataFrame for visual presentation. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+DataFrame. Applies to specific columns, such as unique value totals
+and percentages. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>return_df</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plain DataFrame with summary statistics. If <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+returns a styled DataFrame for visual presentation. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>sort_cols_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, sorts the DataFrame columns alphabetically in the output.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">return_df</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plain DataFrame containing column summary
-statistics. If <code class="docutils literal notranslate"><span class="pre">return_df</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, returns a styled DataFrame with optional
-background color for specific columns.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">return_df</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> or running in a terminal environment, returns the plain
+DataFrame containing column summary statistics.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">return_df</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> and running in a Jupyter Notebook, returns a styled
+DataFrame with optional background styling.</p></li>
+</ul>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the DataFrame is empty or contains no columns.</p>
+</dd>
 </dl>
 </dd></dl>
 
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<ul class="simple">
+<li><p>Automatically detects whether the function is running in a Jupyter Notebook or terminal and adjusts the output accordingly.</p></li>
+<li><p>In Jupyter environments, uses Pandas’ Styler for visual presentation. If the installed Pandas version does not support <code class="docutils literal notranslate"><span class="pre">hide</span></code>, falls back to <code class="docutils literal notranslate"><span class="pre">hide_index</span></code>.</p></li>
+<li><p>Utilizes a <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar to show the status of column processing.</p></li>
+<li><p>Preprocesses columns to handle NaN values and replaces empty strings with Pandas’ <code class="docutils literal notranslate"><span class="pre">pd.NA</span></code> for consistency.</p></li>
+</ul>
+</div>
 <section id="census-income-example">
 <h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Permalink to this heading"></a></h3>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>

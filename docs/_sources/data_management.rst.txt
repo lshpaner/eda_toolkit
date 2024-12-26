@@ -110,29 +110,33 @@ directories do not exist, the function creates them.
 Adding Unique Identifiers
 --------------------------
 
-**Add a column of unique IDs with a specified number of digits to the dataframe.**
+**Add a column of unique IDs with a specified number of digits to the DataFrame.**
 
-.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=True)
+.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=False)
 
-    :param df: The dataframe to add IDs to.
+    :param df: The DataFrame to which IDs will be added.
     :type df: pd.DataFrame
-    :param id_colname: The name of the new column for the IDs. Defaults to ``"ID"``.
+    :param id_colname: The name of the new column for the unique IDs. Defaults to ``"ID"``.
     :type id_colname: str, optional
-    :param num_digits: The number of digits for the unique IDs. Defaults to ``9``.
+    :param num_digits: The number of digits for the unique IDs. Defaults to ``9``. The first digit will always be non-zero to ensure proper formatting.
     :type num_digits: int, optional
-    :param seed: The seed for the random number generator. Defaults to ``None``.
+    :param seed: The seed for the random number generator to ensure reproducibility. Defaults to ``None``.
     :type seed: int, optional
-    :param set_as_index: Whether to set the new ID column as the index. Defaults to ``False``.
+    :param set_as_index: If ``True``, the generated ID column will replace the existing index of the DataFrame. Defaults to ``False``.
     :type set_as_index: bool, optional
 
-    :returns: The updated dataframe with the new ID column.
+    :returns: The updated DataFrame with a new column of unique IDs. If ``set_as_index`` is ``True``, the new ID column replaces the existing index.
     :rtype: pd.DataFrame
 
-.. note::
-    - If the dataframe index is not unique, a warning is printed.
-    - The function does not check if the number of rows exceeds the number of 
-        unique IDs that can be generated with the specified number of digits.
-    - The first digit of the generated IDs is ensured to be non-zero.
+    :raises ValueError: If the number of rows in the DataFrame exceeds the pool of possible unique IDs for the specified ``num_digits``.
+
+.. admonition:: Notes
+
+    - The function ensures all IDs are unique by resolving potential collisions during generation, even for large datasets.
+    - The total pool size of unique IDs is determined by :math:`9 \times 10^{(\text{num_digits} - 1)}`, since the first digit must be non-zero.
+    - Warnings are printed if the number of rows in the DataFrame approaches the pool size of possible unique IDs, recommending increasing ``num_digits``.
+    - If ``set_as_index`` is ``False``, the ID column will be added as the first column in the DataFrame.
+    - Setting a random seed ensures reproducibility of the generated IDs.
 
 The ``add_ids`` function is used to append a column of unique identifiers with a 
 specified number of digits to a given dataframe. This is particularly useful for 
@@ -287,23 +291,32 @@ column in the dataframe.
 Trailing Period Removal
 -----------------------
 
-**Strip the trailing period from floats in a specified column of a DataFrame, if present.**
+**Strip the trailing period from values in a specified column of a DataFrame, if present.**
 
 .. function:: strip_trailing_period(df, column_name)
 
     :param df: The DataFrame containing the column to be processed.
     :type df: pd.DataFrame
-    :param column_name: The name of the column containing floats with potential trailing periods.
+    :param column_name: The name of the column containing values with potential trailing periods.
     :type column_name: str
 
-    :returns: The updated DataFrame with the trailing periods removed from the specified column.
+    :returns: The updated DataFrame with trailing periods removed from the specified column.
     :rtype: pd.DataFrame
 
+    :raises ValueError: If the specified ``column_name`` does not exist in the DataFrame, pandas will raise a ``ValueError``.
 
-    The ``strip_trailing_period`` function is designed to remove trailing periods 
-    from float values in a specified column of a DataFrame. This can be particularly 
-    useful when dealing with data that has been inconsistently formatted, ensuring 
-    that all float values are correctly represented.
+.. admonition:: Notes:
+
+    - For string values, trailing periods are stripped directly.
+    - For numeric values represented as strings (e.g., ``"1234."``), the trailing period is removed, and the value is converted back to a numeric type if possible.
+    - ``NaN`` values are preserved and remain unprocessed.
+    - Non-string and non-numeric types are returned as-is.
+
+
+The ``strip_trailing_period`` function is designed to remove trailing periods 
+from float values in a specified column of a DataFrame. This can be particularly 
+useful when dealing with data that has been inconsistently formatted, ensuring 
+that all float values are correctly represented.
 
 **Implementation Example**
 
@@ -500,7 +513,7 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
 
 **Output**
 
-.. code-block:: python
+.. code-block:: text
 
        date_column     name  amount standardized_date
     0   31/12/2021    Alice  100.00        2021-12-31
@@ -513,31 +526,40 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
 DataFrame Analysis
 -------------------
 
-**Analyze DataFrame columns, including dtype, null values, and unique value counts.**
+**Analyze DataFrame columns, including data type, null values, and unique value counts.**
 
-.. function:: dataframe_columns(df, background_color=None, return_df=False)
+The ``dataframe_columns`` function provides a comprehensive summary of a DataFrame's columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.
 
-    Analyze DataFrame columns to provide summary statistics such as data type,
-    null counts, unique values, and most frequent values.
-
-    This function analyzes the columns of a DataFrame, providing details about the data type, 
-    the number and percentage of ``null`` values, the total number of unique values, and the most 
-    frequent unique value along with its count and percentage. It handles special cases such as 
-    converting date columns and replacing empty strings with Pandas ``NA`` values.
+.. function:: dataframe_columns(df, background_color=None, return_df=False, sort_cols_alpha=False)
 
     :param df: The DataFrame to analyze.
     :type df: pandas.DataFrame
-    :param background_color: Hex color code or color name for background styling in the output
-                             DataFrame. Defaults to ``None``.
+    :param background_color: Hex color code or color name for background styling in the output 
+                             DataFrame. Applies to specific columns, such as unique value totals 
+                             and percentages. Defaults to ``None``.
     :type background_color: str, optional
-    :param return_df: If ``True``, returns the plain DataFrame with the summary statistics. If 
-                      ``False``, returns a styled DataFrame for visual presentation. Defaults to ``False``.
+    :param return_df: If ``True``, returns the plain DataFrame with summary statistics. If ``False``, 
+                      returns a styled DataFrame for visual presentation. Defaults to ``False``.
     :type return_df: bool, optional
+    :param sort_cols_alpha: If ``True``, sorts the DataFrame columns alphabetically in the output. 
+                            Defaults to ``False``.
+    :type sort_cols_alpha: bool, optional
 
-    :returns: If ``return_df`` is ``True``, returns the plain DataFrame containing column summary 
-              statistics. If ``return_df`` is ``False``, returns a styled DataFrame with optional 
-              background color for specific columns.
+    :returns: 
+        - If ``return_df`` is ``True`` or running in a terminal environment, returns the plain 
+          DataFrame containing column summary statistics.
+        - If ``return_df`` is ``False`` and running in a Jupyter Notebook, returns a styled 
+          DataFrame with optional background styling.
     :rtype: pandas.DataFrame
+    :raises ValueError: If the DataFrame is empty or contains no columns.
+
+.. admonition:: Notes
+
+    - Automatically detects whether the function is running in a Jupyter Notebook or terminal and adjusts the output accordingly.
+    - In Jupyter environments, uses Pandas' Styler for visual presentation. If the installed Pandas version does not support ``hide``, falls back to ``hide_index``.
+    - Utilizes a ``tqdm`` progress bar to show the status of column processing.
+    - Preprocesses columns to handle NaN values and replaces empty strings with Pandas' ``pd.NA`` for consistency.
+
 
 
 Census Income Example
