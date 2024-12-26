@@ -2174,60 +2174,68 @@ def box_violin_plot(
     **kwargs,  # To allow passing additional parameters to Seaborn
 ):
     """
-    Create and save individual boxplots or violin plots, an entire grid
-    of plots, or both for given metrics and comparisons, with optional
-    axis limits.
+    Create and save individual or grid-based boxplots or violin plots for 
+    specified metrics and comparisons.
+
+    This function generates individual plots, grid plots, or both for the 
+    specified metrics and comparison categories in a DataFrame. It provides 
+    extensive customization options for plot appearance, saving options, and 
+    display preferences, including support for axis limits, label customization, 
+    and rotated layouts.
 
     Parameters:
     -----------
     df : pandas.DataFrame
-        The DataFrame containing the data.
+        The DataFrame containing the data to plot.
 
     metrics_list : list of str
-        List of metric names (columns in df) to plot.
+        List of column names representing the metrics to be plotted.
 
     metrics_comp : list of str
-        List of comparison categories (columns in df).
+        List of column names representing the comparison categories.
 
     n_rows : int, optional
-        Number of rows in the subplot grid. Calculated automatically
-        if not provided.
+        Number of rows in the subplot grid. Calculated automatically if not 
+        provided.
 
     n_cols : int, optional
-        Number of columns in the subplot grid. Calculated automatically
-        if not provided.
+        Number of columns in the subplot grid. Calculated automatically if not 
+        provided.
 
     image_path_png : str, optional
-        Directory path to save .png images.
+        Directory path to save plots in PNG format. If not specified, plots will 
+        not be saved as PNG.
 
     image_path_svg : str, optional
-        Directory path to save .svg images.
+        Directory path to save plots in SVG format. If not specified, plots will 
+        not be saved as SVG.
 
     save_plots : bool, optional
-        If True, saves the plots specified by `show_plot`. The plots to be saved
-        ("individual", "grid", or "both") are determined by the `show_plot`
-        parameter. Defaults to False.
+        If True, saves the plots specified by the `show_plot` parameter 
+        ("individual", "grid", or "both"). Defaults to False.
 
     show_legend : bool, optional (default=True)
-        True if showing the legend in the plots.
+        Whether to display the legend on the plots.
 
     plot_type : str, optional (default='boxplot')
-        String, "boxplot" or "violinplot" to specify the type of plot.
+        Type of plot to generate. Options are "boxplot" or "violinplot".
 
     xlabel_rot : int, optional (default=0)
         Rotation angle for x-axis labels.
 
     show_plot : str, optional (default='both')
-        String, "individual", "grid", or "both" to control plot display.
+        Specify the type of plots to display. Options are "individual", "grid", 
+        or "both".
 
     rotate_plot : bool, optional (default=False)
-        True if rotating (pivoting) the plots.
+        If True, rotates the plots by swapping the x and y axes.
 
-    individual_figsize : tuple or list, optional (default=(6, 4))
-        Width and height of the figure for individual plots.
+    individual_figsize : tuple of int, optional (default=(6, 4))
+        Dimensions (width, height) for individual plots.
 
-    grid_figsize : tuple or list, optional
-        Width and height of the figure for grid plots.
+    grid_figsize : tuple of int, optional
+        Dimensions (width, height) for the grid plot. Defaults to a size 
+        proportional to the number of rows and columns.
 
     label_fontsize : int, optional (default=12)
         Font size for axis labels.
@@ -2236,55 +2244,45 @@ def box_violin_plot(
         Font size for axis tick labels.
 
     text_wrap : int, optional (default=50)
-        The maximum width of the title text before wrapping.
+        Maximum width of the plot titles before wrapping.
 
-    xlim : tuple, optional
-        Tuple specifying the limits of the x-axis.
+    xlim : tuple of float, optional
+        Limits for the x-axis as (min, max).
 
-    ylim : tuple, optional
-        Tuple specifying the limits of the y-axis.
+    ylim : tuple of float, optional
+        Limits for the y-axis as (min, max).
 
     label_names : dict, optional
-        Dictionary mapping original column names to custom labels.
+        Dictionary to map original column names to custom labels for display 
+        purposes.
 
     **kwargs : additional keyword arguments
-        Additional keyword arguments passed to the Seaborn plotting function.
+        Additional parameters passed to the Seaborn plotting function.
 
     Returns:
     --------
     None
-        This function does not return any value but generates and optionally
-        saves boxplots or violin plots for the specified metrics and comparisons.
+        This function does not return a value. It generates and optionally saves 
+        or displays the specified plots.
 
     Raises:
     -------
     ValueError
-        If 'show_plot' is not one of "individual", "grid", or "both".
-
-    ValueError
-        If 'save_plots' is not one of None, "all", "individual", or "grid".
-
-    ValueError
-        If 'save_plots' is set without specifying 'image_path_png' or
-        'image_path_svg'.
-
-    ValueError
-        If 'rotate_plot' is not a boolean value.
-
-    ValueError
-        If 'individual_figsize' is not a tuple or list of two numbers
-        (width, height).
-
-    ValueError
-        If 'grid_figsize' is provided and is not a tuple or list of two numbers
-        (width, height).
+        - If `show_plot` is not one of "individual", "grid", or "both".
+        - If `save_plots` is True but `image_path_png` or `image_path_svg` is 
+          not specified.
+        - If `rotate_plot` is not a boolean value.
+        - If `individual_figsize` or `grid_figsize` is not a tuple or list of 
+          two numbers.
 
     Notes:
     ------
-    - `n_rows` and `n_cols` are automatically calculated if not provided, based
-      on the number of plots.
-    - `label_names` allows you to map original column names to custom labels
-      used in plot titles and labels.
+    - Automatically calculates `n_rows` and `n_cols` if not provided based on 
+      the number of plots.
+    - Supports rotating the plot layout using the `rotate_plot` parameter.
+    - Saves plots to the specified paths if `save_plots` is True.
+    - Handles axis label customization using `label_names` and supports text 
+      wrapping for plot titles.
     """
 
     # Check for valid show_plot values
