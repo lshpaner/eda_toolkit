@@ -2367,89 +2367,81 @@ regular bar plots for income by age, without stacking.
 
 
 Box and Violin Plots
-===========================
+=====================
 
-**Create and save individual boxplots or violin plots, an entire grid of plots, 
-or both for given metrics and comparisons.**
+**Create and save individual boxplots or violin plots, an entire grid of plots, or both for specified metrics and comparisons.**
 
-The ``box_violin_plot`` function is designed to generate both individual and grid 
-plots of boxplots or violin plots for a set of specified metrics against comparison 
-categories within a DataFrame. This function offers flexibility in how the plots are 
-presented and saved, allowing users to create detailed visualizations that highlight 
-the distribution of metrics across different categories.
+The ``box_violin_plot`` function generates individual and/or grid-based plots of boxplots or violin plots for specified metrics against comparison categories in a DataFrame. It offers extensive customization options, including control over plot type, display mode, axis label rotation, figure size, and saving preferences, making it suitable for a wide range of data visualization needs.
 
-With options to customize the plot type (``boxplot`` or ``violinplot``), 
-axis label rotation, figure size, and whether to display or save the plots, this 
-function can be adapted for a wide range of data visualization needs. Users can 
-choose to display individual plots, a grid of plots, or both, depending on the 
-requirements of their analysis.
+This function supports:
+- Rotating plots (swapping x and y axes).
+- Adjusting font sizes for axis labels and tick labels.
+- Wrapping plot titles for better readability.
+- Saving plots in PNG and/or SVG format with customizable file paths.
+- Visualizing the distribution of metrics across categories, either individually, as a grid, or both.
 
-Additionally, the function includes features for rotating the plots, adjusting 
-the font sizes of labels, and selectively showing or hiding legends. It also 
-supports the automatic saving of plots in either PNG or SVG format, depending on 
-the specified paths, making it a powerful tool for producing publication-quality 
-figures.
-
-The function is particularly useful in scenarios where the user needs to compare 
-the distribution of multiple metrics across different categories, enabling a 
-clear visual analysis of how these metrics vary within the dataset.
-
-.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, label_names=None, **kwargs)
+.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=False, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, label_names=None, **kwargs)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
-    :param metrics_list: List of metric names (columns in df) to plot.
+    :param metrics_list: List of column names representing the metrics to plot.
     :type metrics_list: list of str
-    :param metrics_comp: List of comparison categories (columns in df).
+    :param metrics_comp: List of column names representing the comparison categories.
     :type metrics_comp: list of str
-    :param n_rows: Number of rows in the subplot grid. Calculated automatically if not provided.
+    :param n_rows: Number of rows in the subplot grid. Automatically calculated if not provided.
     :type n_rows: int, optional
-    :param n_cols: Number of columns in the subplot grid. Calculated automatically if not provided.
+    :param n_cols: Number of columns in the subplot grid. Automatically calculated if not provided.
     :type n_cols: int, optional
-    :param image_path_png: Optional directory path to save ``.png`` images.
+    :param image_path_png: Directory path to save plots in PNG format.
     :type image_path_png: str, optional
-    :param image_path_svg: Optional directory path to save ``.svg`` images.
+    :param image_path_svg: Directory path to save plots in SVG format.
     :type image_path_svg: str, optional
-    :param save_plots: String, ``"all"``, ``"individual"``, or ``"grid"`` to control saving plots.
-    :type save_plots: str, optional
-    :param show_legend: Boolean, True if showing the legend in the plots. Default is ``True``.
+    :param save_plots: Boolean indicating whether to save plots. Defaults to ``False``.
+    :type save_plots: bool, optional
+    :param show_legend: Whether to display the legend in the plots. Defaults to ``True``.
     :type show_legend: bool, optional
-    :param plot_type: Specify the type of plot, either ``"boxplot"`` or ``"violinplot"``. Default is ``"boxplot"``.
+    :param plot_type: Type of plot to generate, either ``"boxplot"`` or ``"violinplot"``. Defaults to ``"boxplot"``.
     :type plot_type: str, optional
-    :param xlabel_rot: Rotation angle for ``x-axis`` labels. Default is ``0``.
+    :param xlabel_rot: Rotation angle for x-axis labels. Defaults to ``0``.
     :type xlabel_rot: int, optional
-    :param show_plot: Specify the plot display mode: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
+    :param show_plot: Specify the plot display mode: ``"individual"``, ``"grid"``, or ``"both"``. Defaults to ``"both"``.
     :type show_plot: str, optional
-    :param rotate_plot: Boolean, True if rotating (pivoting) the plots. Default is ``False``.
+    :param rotate_plot: Whether to rotate the plots by swapping the x and y axes. Defaults to ``False``.
     :type rotate_plot: bool, optional
-    :param individual_figsize: Width and height of the figure for individual plots. Default is ``(6, 4)``.
-    :type individual_figsize: tuple or list, optional
-    :param grid_figsize: Width and height of the figure for grid plots.
-    :type grid_figsize: tuple or list, optional
-    :param label_fontsize: Font size for axis labels. Default is ``12``.
+    :param individual_figsize: Dimensions (width, height) for individual plots. Defaults to ``(6, 4)``.
+    :type individual_figsize: tuple, optional
+    :param grid_figsize: Dimensions (width, height) for the grid plot.
+    :type grid_figsize: tuple, optional
+    :param label_fontsize: Font size for axis labels. Defaults to ``12``.
     :type label_fontsize: int, optional
-    :param tick_fontsize: Font size for axis tick labels. Default is ``10``.
+    :param tick_fontsize: Font size for tick labels. Defaults to ``10``.
     :type tick_fontsize: int, optional
-    :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
+    :param text_wrap: Maximum width of plot titles before wrapping. Defaults to ``50``.
     :type text_wrap: int, optional
-    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min``, ``max``).
+    :param xlim: Limits for the x-axis as a tuple or list (``min``, ``max``).
     :type xlim: tuple or list, optional
-    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
+    :param ylim: Limits for the y-axis as a tuple or list (``min``, ``max``).
     :type ylim: tuple or list, optional
-    :param label_names: Dictionary mapping original column names to custom labels. Default is ``None``.
+    :param label_names: Dictionary mapping original column names to custom labels for display purposes.
     :type label_names: dict, optional
     :param kwargs: Additional keyword arguments passed to the Seaborn plotting function.
     :type kwargs: additional keyword arguments
 
     :raises ValueError:
         - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
-        - If ``save_plots`` is not one of ``None``, ``"all"``, ``"individual"``, or ``"grid"``.
-        - If ``save_plots`` is set without specifying ``image_path_png`` or ``image_path_svg``.
+        - If ``save_plots`` is ``True`` but neither ``image_path_png`` nor ``image_path_svg`` is specified.
         - If ``rotate_plot`` is not a boolean value.
         - If ``individual_figsize`` is not a tuple or list of two numbers.
         - If ``grid_figsize`` is provided and is not a tuple or list of two numbers.
 
-    :returns: ``None``
+    :returns: None
+
+.. admonition:: Notes
+
+    - Automatically calculates grid dimensions if ``n_rows`` and ``n_cols`` are not specified.
+    - Rotating plots swaps the roles of the x and y axes.
+    - Saving plots requires specifying valid file paths for PNG and/or SVG formats.
+    - Supports customization of plot labels, title wrapping, and font sizes for publication-quality visuals.
 
 
 
