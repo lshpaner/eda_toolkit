@@ -113,7 +113,6 @@ celerybeat-schedule
 .env
 .venv
 **/*venv*/
-eda_venv374/
 env/
 env.bak/
 venv.bak/
