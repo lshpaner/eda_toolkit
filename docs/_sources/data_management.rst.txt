@@ -829,33 +829,48 @@ This analysis helps in identifying columns with a high proportion of dominant va
 
 Generating Summary Tables for Variable Combinations
 -----------------------------------------------------
-
-**This function generates summary tables for all possible combinations of specified variables 
-in a DataFrame and save them to an Excel file.**
-
+**Generate and save summary tables for all possible combinations of specified variables in a DataFrame to an Excel file, complete with formatting and progress tracking.**
 
 .. function:: summarize_all_combinations(df, variables, data_path, data_name, min_length=2)
 
+    Generate summary tables for all possible combinations of the specified variables in the DataFrame and save them to an Excel file with a Table of Contents.
+
     :param df: The pandas DataFrame containing the data.
     :type df: pandas.DataFrame
+
     :param variables: List of column names from the DataFrame to generate combinations.
     :type variables: list of str
-    :param data_path: Path where the output Excel file will be saved.
+
+    :param data_path: Directory path where the output Excel file will be saved.
     :type data_path: str
+
     :param data_name: Name of the output Excel file.
     :type data_name: str
+
     :param min_length: Minimum size of the combinations to generate. Defaults to ``2``.
     :type min_length: int, optional
 
-    :returns: A tuple containing a dictionary of summary tables and a list of all generated combinations.
+    :returns: A tuple containing:
+              - A dictionary where keys are tuples of column names (combinations) and values are the corresponding summary DataFrames.
+              - A list of all generated combinations, where each combination is represented as a tuple of column names.
     :rtype: tuple(dict, list)
 
-.. note::
+.. admonition:: Notes
 
-    - The function will create an Excel file with a sheet for each combination of the specified variables, as well as a "Table of Contents" sheet with hyperlinks to each summary table.
-    - The sheet names are limited to 31 characters due to Excel's constraints.
+    - **Excel Output**:
+        - Each combination is saved as a separate sheet in an Excel file.
+        - A "Table of Contents" sheet is created with hyperlinks to each combination's summary table.
+        - Sheet names are truncated to 31 characters to meet Excel's constraints.
+    - **Formatting**:
+        - Headers in all sheets are bold, left-aligned, and borderless.
+        - Columns are auto-fitted to content length for improved readability.
+        - A left-aligned format is applied to all columns in the output.
+    - The function uses ``tqdm`` progress bars for tracking:
+        - Combination generation.
+        - Writing the Table of Contents.
+        - Writing individual summary tables to Excel.
 
-The function returns two outputs:
+**The function returns two outputs**:
 
     1. ``summary_tables``: A dictionary where each key is a tuple representing a combination 
     of variables, and each value is a DataFrame containing the summary table for that combination. 
