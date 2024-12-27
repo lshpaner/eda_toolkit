@@ -672,7 +672,8 @@ def save_dataframes_to_excel(
 ):
     """
     Save multiple DataFrames to separate sheets in an Excel file with customized
-    formatting, including column autofit and numeric formatting.
+    formatting, including column autofit, numeric formatting, and progress 
+    tracking.
 
     Parameters:
     -----------
@@ -689,19 +690,28 @@ def save_dataframes_to_excel(
 
     Notes:
     ------
-    - Columns will be autofitted to content and left-aligned.
-    - Numeric columns will be formatted with the specified number of decimal
-      places.
-    - Headers will be bold, left-aligned, and have no borders.
-    - This function requires the 'xlsxwriter' library for Excel writing.
+    - Columns are automatically adjusted to fit their content and left-aligned.
+    - Numeric columns are rounded to the specified decimal places and formatted
+      accordingly. If `decimal_places` is 0, numeric columns are saved as integers.
+    - Headers are bold, left-aligned, and have no borders.
+    - The function uses **`tqdm`** to display a progress bar for tracking the 
+      saving of DataFrames to Excel sheets.
+    - This function requires the `xlsxwriter` library for writing Excel files.
+    - Non-numeric columns are left-aligned by default.
 
     Example:
     --------
-    df1 = pd.DataFrame({"A": [1, 2], "B": [3.14159, 2.71828]})
-    df2 = pd.DataFrame({"X": ["foo", "bar"], "Y": ["baz", "qux"]})
-    df_dict = {"Sheet1": df1, "Sheet2": df2}
-    save_dataframes_to_excel("output.xlsx", df_dict, decimal_places=2)
+    >>> df1 = pd.DataFrame({"A": [1, 2], "B": [3.14159, 2.71828]})
+    >>> df2 = pd.DataFrame({"X": ["foo", "bar"], "Y": ["baz", "qux"]})
+    >>> df_dict = {"Sheet1": df1, "Sheet2": df2}
+    >>> save_dataframes_to_excel("output.xlsx", df_dict, decimal_places=2)
+
+    Raises:
+    -------
+    ValueError
+        If `df_dict` is empty or not provided, a `ValueError` will be raised.
     """
+
 
     with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
         workbook = writer.book
