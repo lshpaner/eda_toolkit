@@ -500,19 +500,24 @@ def summarize_all_combinations(
     min_length=2,
 ):
     """
-    Generates summary tables for all possible combinations of the specified
-    variables in the DataFrame and saves them to an Excel file.
+    Generate summary tables for all possible combinations of the specified
+    variables in the DataFrame and save them to an Excel file with detailed 
+    formatting.
 
     Parameters:
     -----------
     df : pandas.DataFrame
         The DataFrame containing the data.
+
     variables : list of str
         List of column names from the DataFrame to generate combinations.
+
     data_path : str
-        Path where the output Excel file will be saved.
+        Directory path where the output Excel file will be saved.
+
     data_name : str
         Name of the output Excel file.
+
     min_length : int, optional (default=2)
         Minimum size of the combinations to generate.
 
@@ -521,16 +526,54 @@ def summarize_all_combinations(
     summary_tables : dict
         A dictionary where keys are tuples of column names (combinations) and
         values are the corresponding summary DataFrames.
+
     all_combinations : list of tuple
         A list of all generated combinations, where each combination is
         represented as a tuple of column names.
 
     Notes:
     ------
-    - The function will create an Excel file with a sheet for each combination
-      of the specified variables, as well as a "Table of Contents" sheet with
-      hyperlinks to each summary table.
-    - The sheet names are limited to 31 characters due to Excel's constraints.
+    - **Combination Generation**:
+        - Generates all combinations of the specified variables with a size
+          greater than or equal to `min_length`.
+        - Uses **`tqdm`** for progress tracking during combination generation.
+    - **Excel Output**:
+        - Each combination is saved as a separate sheet in an Excel file.
+        - A "Table of Contents" sheet is created with hyperlinks to each
+          combination's summary table.
+        - Sheet names are truncated to 31 characters to meet Excel's limitations.
+    - **Formatting**:
+        - Headers in all sheets are bold, left-aligned, and borderless.
+        - Columns are auto-fitted based on content length for improved readability.
+        - A left-aligned format is applied to all columns.
+    - **Progress Tracking**:
+        - The function uses **`tqdm`** progress bars for tracking combination 
+          generation, writing the Table of Contents, and writing summary tables 
+          to Excel.
+
+    Example:
+    --------
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({
+    >>>     "Category": ["A", "A", "B", "B"],
+    >>>     "Subcategory": ["X", "Y", "X", "Y"],
+    >>>     "Values": [10, 20, 30, 40]
+    >>> })
+    >>> variables = ["Category", "Subcategory"]
+    >>> summarize_all_combinations(df, variables, "./output", "summary.xlsx")
+
+    Raises:
+    -------
+    ValueError
+        If the `variables` list is empty or not provided, or if `data_path` or
+        `data_name` is invalid.
+
+    Outputs:
+    --------
+    - An Excel file at the specified path with the following:
+        - A "Table of Contents" sheet linking to all combination sheets.
+        - Individual sheets for each variable combination, summarizing the
+          counts and proportions of combinations in the DataFrame.
     """
 
     summary_tables = {}
