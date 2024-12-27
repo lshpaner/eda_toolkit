@@ -3200,15 +3200,17 @@ two features on the model's predictions.
 2D Partial Dependence Plots
 -----------------------------
 
-The ``plot_2d_pdp`` function generates 2D partial dependence plots for individual features or pairs of features. These plots are essential for examining the marginal effect of features on the predicted outcome.
+The ``plot_2d_pdp`` function generates 2D partial dependence plots (PDPs) for specified features or pairs of features. These plots help analyze the marginal effect of individual or paired features on the predicted outcome.
 
-- **Grid and Individual Plots**: Generate all 2D partial dependence plots in a grid layout or as separate individual plots, offering flexibility in presentation.
-- **Customization Options**: Control the figure size, font sizes for labels and ticks, and the wrapping of long titles to ensure the plots are clear and informative.
-- **Saving Plots**: The function provides options to save the plots in PNG or SVG formats, and you can specify whether to save all plots, only individual plots, or just the grid plot.
+**Key Features**:
 
-.. function:: plot_2d_pdp(model, X_train, feature_names, features, title="PDP of house value on CA non-location features", grid_resolution=50, plot_type="grid", grid_figsize=(12, 8), individual_figsize=(6, 4), label_fontsize=12, tick_fontsize=10, text_wrap=50, image_path_png=None, image_path_svg=None, save_plots=None, file_prefix="partial_dependence")
+- **Flexible Plot Layouts**: Generate all 2D PDPs in a grid layout, as separate individual plots, or both for maximum versatility.
+- **Customization Options**: Adjust figure size, font sizes for labels and ticks, and wrap long titles to ensure clear and visually appealing plots.
+- **Save Plots**: Save generated plots in PNG or SVG formats with options to save all plots, only individual plots, or just the grid plot.
 
-    Generate 2D partial dependence plots for specified features using the given machine learning model. The function allows for plotting in grid or individual layouts, with various customization options for figure size, font sizes, and title wrapping. Additionally, the plots can be saved in PNG or SVG formats with a customizable filename prefix.
+.. function:: plot_2d_pdp(model, X_train, feature_names, features, title="Partial dependence plot", grid_resolution=50, plot_type="grid", grid_figsize=(12, 8), individual_figsize=(6, 4), label_fontsize=12, tick_fontsize=10, text_wrap=50, image_path_png=None, image_path_svg=None, save_plots=None, file_prefix="partial_dependence")
+
+    Generate and save 2D partial dependence plots for specified features using a trained machine learning model. The function supports grid and individual layouts and provides options for customization and saving plots in various formats.
 
     :param model: The trained machine learning model used to generate partial dependence plots.
     :type model: estimator object
@@ -3222,10 +3224,10 @@ The ``plot_2d_pdp`` function generates 2D partial dependence plots for individua
     :param features: A list of feature indices or tuples of feature indices for which to generate partial dependence plots.
     :type features: list of int or tuple of int
 
-    :param title: The title for the entire plot. Default is ``"PDP of house value on CA non-location features"``.
+    :param title: The title for the entire plot. Default is ``"Partial dependence plot"``.
     :type title: str, optional
 
-    :param grid_resolution: The number of grid points to use for plotting the partial dependence. Higher values provide smoother curves but may increase computation time. Default is ``50``.
+    :param grid_resolution: The resolution of the grid used to compute the partial dependence. Higher values provide smoother curves but may increase computation time. Default is ``50``.
     :type grid_resolution: int, optional
 
     :param plot_type: The type of plot to generate. Choose ``"grid"`` for a grid layout, ``"individual"`` for separate plots, or ``"both"`` to generate both layouts. Default is ``"grid"``.
@@ -3262,7 +3264,7 @@ The ``plot_2d_pdp`` function generates 2D partial dependence plots for individua
         - If ``plot_type`` is not one of ``"grid"``, ``"individual"``, or ``"both"``.
         - If ``save_plots`` is enabled but neither ``image_path_png`` nor ``image_path_svg`` is provided.
 
-    :returns: ``None`` 
+    :returns: ``None``
         This function generates partial dependence plots and displays them. It does not return any values.
 
 
