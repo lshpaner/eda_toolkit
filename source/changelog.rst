@@ -24,6 +24,142 @@
 Changelog
 =========
 
+`Version 0.0.13`_
+----------------------
+
+.. _Version 0.0.13: https://lshpaner.github.io/eda_toolkit/v0.0.13/index.html
+
+This version introduces a series of updates and fixes across multiple functions to enhance error handling, improve cross-environment compatibility, streamline usability, and optimize performance. These changes address critical issues, add new features, and ensure consistent behavior in both terminal and notebook environments.
+
+Add ``ValueError`` for Insufficient Pool Size in ``add_ids`` and Enhance ID Deduplication
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This update enhances the ``add_ids`` function by adding explicit error handling and improving the uniqueness guarantee for generated IDs.
+
+**Key Changes**
+
+- **New** ``ValueError`` **for Insufficient Pool Size**:
+
+  - Calculates the pool size :math:`9 \times 10^{(\text{d} - 1)}` and compares it with the number of rows in the DataFrame.
+  - **Behavior**:
+
+    - Throws a ``ValueError`` if ``n_rows > pool_size``.
+    - Prints a warning if ``n_rows`` approaches 90% of the pool size, suggesting an increase in digit length.
+
+- **Improved ID Deduplication**:
+
+  - Introduced a set (``unique_ids``) to track generated IDs.
+  - IDs are checked against this set to ensure uniqueness before being added to the DataFrame.
+  - Prevents collisions by regenerating IDs only for duplicates, minimizing retries and improving performance.
+
+
+Enhance ``strip_trailing_period`` to Support Strings and Mixed Data Types
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This update enhances the ``strip_trailing_period`` function to handle trailing periods in both numeric and string values. The updated implementation ensures robustness for columns with mixed data types and gracefully handles special cases like ``NaN``.
+
+**Key Enhancements**
+
+- **Support for Strings with Trailing Periods**:
+
+  - Removes trailing periods from string values, such as ``"123."`` or ``"test."``.
+
+- **Mixed Data Types**:
+
+  - Handles columns containing both numeric and string values seamlessly.
+
+- **Graceful Handling of** ``NaN``:
+
+  - Skips processing for ``NaN`` values, leaving them unchanged.
+
+- **Robust Type Conversion**:
+
+  - Converts numeric strings (e.g., ``"123."``) back to float where applicable.
+  - Retains strings if conversion to float is not possible.
+
+Changes in ``stacked_crosstab_plot``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Remove ``IPython`` Dependency by Replacing ``display`` with ``print``
+
+This resolves an issue where the ``eda_toolkit`` library required ``IPython`` as a dependency due to the use of ``display(crosstab_df)`` in the ``stacked_crosstab_plot`` function. The dependency caused import failures in environments without ``IPython``, especially in non-Jupyter terminal-based workflows.
+
+**Changes Made**
+
+1. **Replaced** ``display`` with ``print``:
+   - The line ``display(crosstab_df)`` was replaced with ``print(crosstab_df)`` to eliminate the need for ``IPython``.
+
+2. **Removed ``IPython`` Import**:
+   - The ``from IPython.display import display`` import statement was removed from the codebase.
+
+**Updated Function Behavior**:
+
+- Crosstabs are displayed using ``print``, maintaining functionality in all runtime environments.
+- The change ensures no loss in usability or user experience.
+
+**Root Cause and Fix**
+
+The issue arose from reliance on ``IPython.display.display`` for rendering crosstab tables in Jupyter notebooks. Environments without ``IPython`` experienced a ``ModuleNotFoundError``. To address this, the ``display(crosstab_df)`` statement was replaced with ``print(crosstab_df)``.
+
+**Testing**:
+
+- **Jupyter Notebook**: Crosstabs are displayed as plain text via ``print()``, rendered neatly in notebook outputs.
+- **Terminal Session**: Crosstabs are printed as expected, ensuring seamless use in terminal-based workflows.
+
+Add Environment Detection to ``dataframe_columns`` Function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This enhances the ``dataframe_columns`` function to dynamically adjust its output based on the runtime environment (Jupyter Notebook or terminal).
+
+**Changes Made**
+
+1. **Environment Detection**:
+
+   - Added a check to determine if the function is running in a Jupyter Notebook or terminal:
+
+     ```
+     is_notebook_env = "ipykernel" in sys.modules
+     ```
+
+2. **Dynamic Output Behavior**:
+
+   - **Terminal Environment**:
+
+     - Returns a plain DataFrame (``result_df``) when running outside of a notebook or when ``return_df=True``.
+
+   - **Jupyter Notebook**:
+
+     - Retains the styled DataFrame functionality when running in a notebook and ``return_df=False``.
+
+3. **Improved Compatibility**:
+
+   - The function now works seamlessly in both terminal and notebook environments without requiring additional dependencies.
+
+Add ``tqdm`` Progress Bar to ``dataframe_columns`` Function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This enhances the ``dataframe_columns`` function by incorporating a ``tqdm`` progress bar to track column processing. This is particularly useful for analyzing large DataFrames, providing real-time feedback.
+
+**Changes Made**:
+
+- Wrapped the column processing loop with a ``tqdm`` progress bar:
+
+  .. code-block:: python
+    
+    for col in tqdm(df.columns, desc="Processing columns"):
+    ...
+
+  
+Other Enhancements and Fixes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Improved ``save_dataframes_to_excel`` with ``tqdm`` integration.
+- Fixed ``plot_2d_pdp`` plot display logic to adhere strictly to the ``plot_type`` parameter.
+- Updated project dependencies and added robust environment testing.
+
+
+
+
 `Version 0.0.12`_
 ----------------------
 
