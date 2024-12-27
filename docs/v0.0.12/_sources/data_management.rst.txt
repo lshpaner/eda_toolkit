@@ -110,29 +110,33 @@ directories do not exist, the function creates them.
 Adding Unique Identifiers
 --------------------------
 
-**Add a column of unique IDs with a specified number of digits to the dataframe.**
+**Add a column of unique IDs with a specified number of digits to the DataFrame.**
 
-.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=True)
+.. function:: add_ids(df, id_colname="ID", num_digits=9, seed=None, set_as_index=False)
 
-    :param df: The dataframe to add IDs to.
+    :param df: The DataFrame to which IDs will be added.
     :type df: pd.DataFrame
-    :param id_colname: The name of the new column for the IDs. Defaults to ``"ID"``.
+    :param id_colname: The name of the new column for the unique IDs. Defaults to ``"ID"``.
     :type id_colname: str, optional
-    :param num_digits: The number of digits for the unique IDs. Defaults to ``9``.
+    :param num_digits: The number of digits for the unique IDs. Defaults to ``9``. The first digit will always be non-zero to ensure proper formatting.
     :type num_digits: int, optional
-    :param seed: The seed for the random number generator. Defaults to ``None``.
+    :param seed: The seed for the random number generator to ensure reproducibility. Defaults to ``None``.
     :type seed: int, optional
-    :param set_as_index: Whether to set the new ID column as the index. Defaults to ``False``.
+    :param set_as_index: If ``True``, the generated ID column will replace the existing index of the DataFrame. Defaults to ``False``.
     :type set_as_index: bool, optional
 
-    :returns: The updated dataframe with the new ID column.
+    :returns: The updated DataFrame with a new column of unique IDs. If ``set_as_index`` is ``True``, the new ID column replaces the existing index.
     :rtype: pd.DataFrame
 
-.. note::
-    - If the dataframe index is not unique, a warning is printed.
-    - The function does not check if the number of rows exceeds the number of 
-        unique IDs that can be generated with the specified number of digits.
-    - The first digit of the generated IDs is ensured to be non-zero.
+    :raises ValueError: If the number of rows in the DataFrame exceeds the pool of possible unique IDs for the specified ``num_digits``.
+
+.. admonition:: Notes
+
+    - The function ensures all IDs are unique by resolving potential collisions during generation, even for large datasets.
+    - The total pool size of unique IDs is determined by :math:`9 \times 10^{(\text{num_digits} - 1)}`, since the first digit must be non-zero.
+    - Warnings are printed if the number of rows in the DataFrame approaches the pool size of possible unique IDs, recommending increasing ``num_digits``.
+    - If ``set_as_index`` is ``False``, the ID column will be added as the first column in the DataFrame.
+    - Setting a random seed ensures reproducibility of the generated IDs.
 
 The ``add_ids`` function is used to append a column of unique identifiers with a 
 specified number of digits to a given dataframe. This is particularly useful for 
@@ -287,23 +291,32 @@ column in the dataframe.
 Trailing Period Removal
 -----------------------
 
-**Strip the trailing period from floats in a specified column of a DataFrame, if present.**
+**Strip the trailing period from values in a specified column of a DataFrame, if present.**
 
 .. function:: strip_trailing_period(df, column_name)
 
     :param df: The DataFrame containing the column to be processed.
     :type df: pd.DataFrame
-    :param column_name: The name of the column containing floats with potential trailing periods.
+    :param column_name: The name of the column containing values with potential trailing periods.
     :type column_name: str
 
-    :returns: The updated DataFrame with the trailing periods removed from the specified column.
+    :returns: The updated DataFrame with trailing periods removed from the specified column.
     :rtype: pd.DataFrame
 
+    :raises ValueError: If the specified ``column_name`` does not exist in the DataFrame, pandas will raise a ``ValueError``.
 
-    The ``strip_trailing_period`` function is designed to remove trailing periods 
-    from float values in a specified column of a DataFrame. This can be particularly 
-    useful when dealing with data that has been inconsistently formatted, ensuring 
-    that all float values are correctly represented.
+.. admonition:: Notes:
+
+    - For string values, trailing periods are stripped directly.
+    - For numeric values represented as strings (e.g., ``"1234."``), the trailing period is removed, and the value is converted back to a numeric type if possible.
+    - ``NaN`` values are preserved and remain unprocessed.
+    - Non-string and non-numeric types are returned as-is.
+
+
+The ``strip_trailing_period`` function is designed to remove trailing periods 
+from float values in a specified column of a DataFrame. This can be particularly 
+useful when dealing with data that has been inconsistently formatted, ensuring 
+that all float values are correctly represented.
 
 **Implementation Example**
 
@@ -500,7 +513,7 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
 
 **Output**
 
-.. code-block:: python
+.. code-block:: text
 
        date_column     name  amount standardized_date
     0   31/12/2021    Alice  100.00        2021-12-31
@@ -513,31 +526,40 @@ function to parse and standardize each date string to the ``ISO 8601`` format.
 DataFrame Analysis
 -------------------
 
-**Analyze DataFrame columns, including dtype, null values, and unique value counts.**
+**Analyze DataFrame columns, including data type, null values, and unique value counts.**
 
-.. function:: dataframe_columns(df, background_color=None, return_df=False)
+The ``dataframe_columns`` function provides a comprehensive summary of a DataFrame's columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.
 
-    Analyze DataFrame columns to provide summary statistics such as data type,
-    null counts, unique values, and most frequent values.
-
-    This function analyzes the columns of a DataFrame, providing details about the data type, 
-    the number and percentage of ``null`` values, the total number of unique values, and the most 
-    frequent unique value along with its count and percentage. It handles special cases such as 
-    converting date columns and replacing empty strings with Pandas ``NA`` values.
+.. function:: dataframe_columns(df, background_color=None, return_df=False, sort_cols_alpha=False)
 
     :param df: The DataFrame to analyze.
     :type df: pandas.DataFrame
-    :param background_color: Hex color code or color name for background styling in the output
-                             DataFrame. Defaults to ``None``.
+    :param background_color: Hex color code or color name for background styling in the output 
+                             DataFrame. Applies to specific columns, such as unique value totals 
+                             and percentages. Defaults to ``None``.
     :type background_color: str, optional
-    :param return_df: If ``True``, returns the plain DataFrame with the summary statistics. If 
-                      ``False``, returns a styled DataFrame for visual presentation. Defaults to ``False``.
+    :param return_df: If ``True``, returns the plain DataFrame with summary statistics. If ``False``, 
+                      returns a styled DataFrame for visual presentation. Defaults to ``False``.
     :type return_df: bool, optional
+    :param sort_cols_alpha: If ``True``, sorts the DataFrame columns alphabetically in the output. 
+                            Defaults to ``False``.
+    :type sort_cols_alpha: bool, optional
 
-    :returns: If ``return_df`` is ``True``, returns the plain DataFrame containing column summary 
-              statistics. If ``return_df`` is ``False``, returns a styled DataFrame with optional 
-              background color for specific columns.
+    :returns: 
+        - If ``return_df`` is ``True`` or running in a terminal environment, returns the plain 
+          DataFrame containing column summary statistics.
+        - If ``return_df`` is ``False`` and running in a Jupyter Notebook, returns a styled 
+          DataFrame with optional background styling.
     :rtype: pandas.DataFrame
+    :raises ValueError: If the DataFrame is empty or contains no columns.
+
+.. admonition:: Notes
+
+    - Automatically detects whether the function is running in a Jupyter Notebook or terminal and adjusts the output accordingly.
+    - In Jupyter environments, uses Pandas' Styler for visual presentation. If the installed Pandas version does not support ``hide``, falls back to ``hide_index``.
+    - Utilizes a ``tqdm`` progress bar to show the status of column processing.
+    - Preprocesses columns to handle NaN values and replaces empty strings with Pandas' ``pd.NA`` for consistency.
+
 
 
 Census Income Example
@@ -807,33 +829,48 @@ This analysis helps in identifying columns with a high proportion of dominant va
 
 Generating Summary Tables for Variable Combinations
 -----------------------------------------------------
-
-**This function generates summary tables for all possible combinations of specified variables 
-in a DataFrame and save them to an Excel file.**
-
+**Generate and save summary tables for all possible combinations of specified variables in a DataFrame to an Excel file, complete with formatting and progress tracking.**
 
 .. function:: summarize_all_combinations(df, variables, data_path, data_name, min_length=2)
 
+    Generate summary tables for all possible combinations of the specified variables in the DataFrame and save them to an Excel file with a Table of Contents.
+
     :param df: The pandas DataFrame containing the data.
     :type df: pandas.DataFrame
+
     :param variables: List of column names from the DataFrame to generate combinations.
     :type variables: list of str
-    :param data_path: Path where the output Excel file will be saved.
+
+    :param data_path: Directory path where the output Excel file will be saved.
     :type data_path: str
+
     :param data_name: Name of the output Excel file.
     :type data_name: str
+
     :param min_length: Minimum size of the combinations to generate. Defaults to ``2``.
     :type min_length: int, optional
 
-    :returns: A tuple containing a dictionary of summary tables and a list of all generated combinations.
+    :returns: A tuple containing:
+              - A dictionary where keys are tuples of column names (combinations) and values are the corresponding summary DataFrames.
+              - A list of all generated combinations, where each combination is represented as a tuple of column names.
     :rtype: tuple(dict, list)
 
-.. note::
+.. admonition:: Notes
 
-    - The function will create an Excel file with a sheet for each combination of the specified variables, as well as a "Table of Contents" sheet with hyperlinks to each summary table.
-    - The sheet names are limited to 31 characters due to Excel's constraints.
+    - **Excel Output**:
+        - Each combination is saved as a separate sheet in an Excel file.
+        - A "Table of Contents" sheet is created with hyperlinks to each combination's summary table.
+        - Sheet names are truncated to 31 characters to meet Excel's constraints.
+    - **Formatting**:
+        - Headers in all sheets are bold, left-aligned, and borderless.
+        - Columns are auto-fitted to content length for improved readability.
+        - A left-aligned format is applied to all columns in the output.
+    - The function uses ``tqdm`` progress bars for tracking:
+        - Combination generation.
+        - Writing the Table of Contents.
+        - Writing individual summary tables to Excel.
 
-The function returns two outputs:
+**The function returns two outputs**:
 
     1. ``summary_tables``: A dictionary where each key is a tuple representing a combination 
     of variables, and each value is a DataFrame containing the summary table for that combination. 
@@ -1034,35 +1071,44 @@ The first sheet will be a Table of Contents with hyperlinks to each summary tabl
 
 
 Saving DataFrames to Excel with Customized Formatting
--------------------------------------------------------
-**Save multiple DataFrames to separate sheets in an Excel file with customized
-formatting.**
+-----------------------------------------------------
+**Save multiple DataFrames to separate sheets in an Excel file with progress tracking and formatting.**
 
-
-This section explains how to save multiple DataFrames to separate sheets in an Excel file with customized formatting using the ``save_dataframes_to_excel`` function.
-
+This section explains how to save multiple DataFrames to separate sheets in an 
+Excel file with customized formatting using the ``save_dataframes_to_excel`` function.
 
 .. function:: save_dataframes_to_excel(file_path, df_dict, decimal_places=0)
 
+    Save DataFrames to an Excel file, applying formatting and autofitting columns.
+
     :param file_path: Full path to the output Excel file.
     :type file_path: str
+
     :param df_dict: Dictionary where keys are sheet names and values are DataFrames to save.
     :type df_dict: dict
-    :param decimal_places: Number of decimal places to round numeric columns. Default is ``0``.
+
+    :param decimal_places: Number of decimal places to round numeric columns. Default is ``0``. When set to ``0``, numeric columns are saved as integers.
     :type decimal_places: int
 
-.. note::
-    
-    - The function will autofit columns and left-align text.
-    - Numeric columns will be formatted with the specified number of decimal places.
-    - Headers will be bold and left-aligned without borders.
+.. admonition:: Notes
 
-The function performs the following tasks:
+    - **Progress Tracking**: The function uses ``tqdm`` to display a progress bar while saving DataFrames to Excel sheets.
+    - **Column Formatting**:
+        - Columns are autofitted to content length and left-aligned by default.
+        - Numeric columns are rounded to the specified decimal places and formatted accordingly.
+        - Non-numeric columns are left-aligned.
+    - **Header Styling**:
+        - Headers are bold, left-aligned, and borderless.
+    - **Dependencies**: This function requires the ``xlsxwriter`` library.
+
+**The function performs the following tasks**:
 
 - Writes each DataFrame to its respective sheet in the Excel file.
 - Rounds numeric columns to the specified number of decimal places.
 - Applies customized formatting to headers and cells.
-- Autofits columns based on the content length.
+- Autofits columns based on content length for improved readability.
+- Tracks the saving process with a progress bar, making it user-friendly for large datasets.
+
 
 **Implementation Example**
 
