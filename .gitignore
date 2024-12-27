@@ -76,6 +76,11 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+src/*.doctree
+*.doctree
+.doctrees/
+docs/**/*.doctrees
+docs/**/*.doctree
 
 # PyBuilder
 target/
@@ -114,6 +119,7 @@ celerybeat-schedule
 .venv
 **/*venv*/
 edatkit_374/
+edatkit_311/
 env/
 env.bak/
 venv.bak/

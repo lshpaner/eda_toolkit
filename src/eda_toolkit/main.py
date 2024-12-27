@@ -501,7 +501,7 @@ def summarize_all_combinations(
 ):
     """
     Generate summary tables for all possible combinations of the specified
-    variables in the DataFrame and save them to an Excel file with detailed 
+    variables in the DataFrame and save them to an Excel file with detailed
     formatting.
 
     Parameters:
@@ -547,8 +547,8 @@ def summarize_all_combinations(
         - Columns are auto-fitted based on content length for improved readability.
         - A left-aligned format is applied to all columns.
     - **Progress Tracking**:
-        - The function uses **`tqdm`** progress bars for tracking combination 
-          generation, writing the Table of Contents, and writing summary tables 
+        - The function uses **`tqdm`** progress bars for tracking combination
+          generation, writing the Table of Contents, and writing summary tables
           to Excel.
 
     Example:
@@ -715,7 +715,7 @@ def save_dataframes_to_excel(
 ):
     """
     Save multiple DataFrames to separate sheets in an Excel file with customized
-    formatting, including column autofit, numeric formatting, and progress 
+    formatting, including column autofit, numeric formatting, and progress
     tracking.
 
     Parameters:
@@ -737,7 +737,7 @@ def save_dataframes_to_excel(
     - Numeric columns are rounded to the specified decimal places and formatted
       accordingly. If `decimal_places` is 0, numeric columns are saved as integers.
     - Headers are bold, left-aligned, and have no borders.
-    - The function uses **`tqdm`** to display a progress bar for tracking the 
+    - The function uses **`tqdm`** to display a progress bar for tracking the
       saving of DataFrames to Excel sheets.
     - This function requires the `xlsxwriter` library for writing Excel files.
     - Non-numeric columns are left-aligned by default.
@@ -754,7 +754,6 @@ def save_dataframes_to_excel(
     ValueError
         If `df_dict` is empty or not provided, a `ValueError` will be raised.
     """
-
 
     with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
         workbook = writer.book
@@ -2199,6 +2198,7 @@ def stacked_crosstab_plot(
     if return_dict:
         return crosstabs_dict
 
+
 ################################################################################
 ############################ Box and Violin Plots ##############################
 ################################################################################
@@ -2229,13 +2229,13 @@ def box_violin_plot(
     **kwargs,  # To allow passing additional parameters to Seaborn
 ):
     """
-    Create and save individual or grid-based boxplots or violin plots for 
+    Create and save individual or grid-based boxplots or violin plots for
     specified metrics and comparisons.
 
-    This function generates individual plots, grid plots, or both for the 
-    specified metrics and comparison categories in a DataFrame. It provides 
-    extensive customization options for plot appearance, saving options, and 
-    display preferences, including support for axis limits, label customization, 
+    This function generates individual plots, grid plots, or both for the
+    specified metrics and comparison categories in a DataFrame. It provides
+    extensive customization options for plot appearance, saving options, and
+    display preferences, including support for axis limits, label customization,
     and rotated layouts.
 
     Parameters:
@@ -2250,23 +2250,23 @@ def box_violin_plot(
         List of column names representing the comparison categories.
 
     n_rows : int, optional
-        Number of rows in the subplot grid. Calculated automatically if not 
+        Number of rows in the subplot grid. Calculated automatically if not
         provided.
 
     n_cols : int, optional
-        Number of columns in the subplot grid. Calculated automatically if not 
+        Number of columns in the subplot grid. Calculated automatically if not
         provided.
 
     image_path_png : str, optional
-        Directory path to save plots in PNG format. If not specified, plots will 
+        Directory path to save plots in PNG format. If not specified, plots will
         not be saved as PNG.
 
     image_path_svg : str, optional
-        Directory path to save plots in SVG format. If not specified, plots will 
+        Directory path to save plots in SVG format. If not specified, plots will
         not be saved as SVG.
 
     save_plots : bool, optional
-        If True, saves the plots specified by the `show_plot` parameter 
+        If True, saves the plots specified by the `show_plot` parameter
         ("individual", "grid", or "both"). Defaults to False.
 
     show_legend : bool, optional (default=True)
@@ -2279,7 +2279,7 @@ def box_violin_plot(
         Rotation angle for x-axis labels.
 
     show_plot : str, optional (default='both')
-        Specify the type of plots to display. Options are "individual", "grid", 
+        Specify the type of plots to display. Options are "individual", "grid",
         or "both".
 
     rotate_plot : bool, optional (default=False)
@@ -2289,7 +2289,7 @@ def box_violin_plot(
         Dimensions (width, height) for individual plots.
 
     grid_figsize : tuple of int, optional
-        Dimensions (width, height) for the grid plot. Defaults to a size 
+        Dimensions (width, height) for the grid plot. Defaults to a size
         proportional to the number of rows and columns.
 
     label_fontsize : int, optional (default=12)
@@ -2308,7 +2308,7 @@ def box_violin_plot(
         Limits for the y-axis as (min, max).
 
     label_names : dict, optional
-        Dictionary to map original column names to custom labels for display 
+        Dictionary to map original column names to custom labels for display
         purposes.
 
     **kwargs : additional keyword arguments
@@ -2317,26 +2317,26 @@ def box_violin_plot(
     Returns:
     --------
     None
-        This function does not return a value. It generates and optionally saves 
+        This function does not return a value. It generates and optionally saves
         or displays the specified plots.
 
     Raises:
     -------
     ValueError
         - If `show_plot` is not one of "individual", "grid", or "both".
-        - If `save_plots` is True but `image_path_png` or `image_path_svg` is 
+        - If `save_plots` is True but `image_path_png` or `image_path_svg` is
           not specified.
         - If `rotate_plot` is not a boolean value.
-        - If `individual_figsize` or `grid_figsize` is not a tuple or list of 
+        - If `individual_figsize` or `grid_figsize` is not a tuple or list of
           two numbers.
 
     Notes:
     ------
-    - Automatically calculates `n_rows` and `n_cols` if not provided based on 
+    - Automatically calculates `n_rows` and `n_cols` if not provided based on
       the number of plots.
     - Supports rotating the plot layout using the `rotate_plot` parameter.
     - Saves plots to the specified paths if `save_plots` is True.
-    - Handles axis label customization using `label_names` and supports text 
+    - Handles axis label customization using `label_names` and supports text
       wrapping for plot titles.
     """
 
@@ -2574,7 +2574,7 @@ def scatter_fit_plot(
     df,
     x_vars=None,
     y_vars=None,
-    exclude_combinations=None,  
+    exclude_combinations=None,
     n_rows=None,
     n_cols=None,
     max_cols=4,
@@ -2767,6 +2767,14 @@ def scatter_fit_plot(
     ValueError
         If `grid_figsize` is provided and is not a tuple or list of two numbers
         (width, height).
+
+    ValueError
+        If `exclude_combinations` contains invalid entries (i.e., items that
+        are not tuples of exactly two elements).
+
+    ValueError
+        If any column names in `exclude_combinations` do not exist in the
+        DataFrame.
     """
 
     # Ensure x_vars and y_vars are lists
@@ -2800,16 +2808,48 @@ def scatter_fit_plot(
             f"Either `all_vars` or both `x_vars` and `y_vars` must be provided."
         )
 
-    # Filter out excluded combinations
+    # Validate exclude_combinations
     if exclude_combinations:
-        combinations = [
-            (x, y) for (x, y) in combinations if (x, y) not in exclude_combinations
+        # Ensure each item is a tuple with two elements
+        invalid_pairs = [
+            pair
+            for pair in exclude_combinations
+            if not (isinstance(pair, tuple) and len(pair) == 2)
         ]
-   
+        if invalid_pairs:
+            raise ValueError(
+                "All items in `exclude_combinations` must be tuples "
+                "with exactly two elements. Invalid entries: "
+                f"{invalid_pairs}"
+            )
+
+        # Check if all columns in exclude_combinations exist in the DataFrame
+        invalid_columns = {
+            col
+            for pair in exclude_combinations
+            for col in pair
+            if col not in df.columns
+        }
+        if invalid_columns:
+            raise ValueError(
+                f"Invalid column names in `exclude_combinations`: {invalid_columns}. "
+                "Please ensure all columns exist in the DataFrame."
+            )
+
+        # Normalize order of tuples in exclude_combinations
+        exclude_combinations = {tuple(sorted(pair)) for pair in exclude_combinations}
+
+        # Normalize order of tuples in combinations and filter
+        combinations = [
+            (x, y)
+            for (x, y) in combinations
+            if tuple(sorted((x, y))) not in exclude_combinations
+        ]
+
     # Handle show_plot="combinations"
     if show_plot == "combinations":
         return combinations
-    
+
     # Calculate the number of plots
     num_plots = len(combinations)
 
@@ -2826,9 +2866,7 @@ def scatter_fit_plot(
     # Validate the show_plot input
     valid_show_plot_values = ["individual", "grid", "both", "combinations"]
     if show_plot not in valid_show_plot_values:
-        raise ValueError(
-            f"Invalid `show_plot`. Choose from {valid_show_plot_values}."
-        )
+        raise ValueError(f"Invalid `show_plot`. Choose from {valid_show_plot_values}.")
 
     # Validate the save_plots input
     if save_plots not in [None, "all", "individual", "grid"]:
@@ -2909,7 +2947,7 @@ def scatter_fit_plot(
                 marker=marker,
                 **kwargs,
             )
-           
+
             if add_best_fit_line:
                 x_data = df[x_var] if not rotate_plot else df[y_var]
                 y_data = df[y_var] if not rotate_plot else df[x_var]
@@ -2948,10 +2986,9 @@ def scatter_fit_plot(
 
             plt.show()
 
-
     # Render and show grid plot
     if show_plot in ["grid", "both"]:
-           
+
         for i, ax in enumerate(axes):
             if i < num_plots:
                 x_var, y_var = combinations[i]
@@ -3020,7 +3057,7 @@ def scatter_fit_plot(
                 marker=marker,
                 **kwargs,
             )
-            
+
             if add_best_fit_line:
                 add_best_fit(
                     ax,
@@ -3078,6 +3115,7 @@ def scatter_fit_plot(
 ################################################################################
 ######################### Correlation Matrices #################################
 ################################################################################
+
 
 def flex_corr_matrix(
     df,
@@ -3343,6 +3381,7 @@ def flex_corr_matrix(
             )
 
     plt.show()
+
 
 ################################################################################
 ############################## Data Doctor #####################################
