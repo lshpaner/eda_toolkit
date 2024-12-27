@@ -33,14 +33,14 @@ University of San Diego for providing an exceptional learning environment and
 supporting our educational endeavors.
 
 
-Version: 0.0.13
+Version: 0.0.14
 """
 
 # Assign only the detailed documentation to __doc__
 __doc__ = detailed_doc
 
 # Metadata
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 __author__ = "Leonid Shpaner, Oscar Gil"
 __email__ = "lshpaner@ucla.edu; info@oscargildata.com"
 
