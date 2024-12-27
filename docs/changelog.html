@@ -26,6 +26,7 @@
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script src="_static/custom.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -89,6 +90,15 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-13">Version 0.0.13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication">Add <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for Insufficient Pool Size in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> and Enhance ID Deduplication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enhance-strip-trailing-period-to-support-strings-and-mixed-data-types">Enhance <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> to Support Strings and Mixed Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changes-in-stacked-crosstab-plot">Changes in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-environment-detection-to-dataframe-columns-function">Add Environment Detection to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-tqdm-progress-bar-to-dataframe-columns-function">Add <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Progress Bar to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-enhancements-and-fixes">Other Enhancements and Fixes</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-12">Version 0.0.12</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#new-features">New Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#improvements">Improvements</a></li>
@@ -109,9 +119,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id10">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id11">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id12">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -144,6 +154,143 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="version-0-0-13">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.13/index.html">Version 0.0.13</a><a class="headerlink" href="#version-0-0-13" title="Permalink to this heading"></a></h2>
+<p>This version introduces a series of updates and fixes across multiple functions to enhance error handling, improve cross-environment compatibility, streamline usability, and optimize performance. These changes address critical issues, add new features, and ensure consistent behavior in both terminal and notebook environments.</p>
+<section id="add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication">
+<h3>Add <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for Insufficient Pool Size in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> and Enhance ID Deduplication<a class="headerlink" href="#add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication" title="Permalink to this heading"></a></h3>
+<p>This update enhances the <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> function by adding explicit error handling and improving the uniqueness guarantee for generated IDs.</p>
+<p><strong>Key Changes</strong></p>
+<ul class="simple">
+<li><p><strong>New</strong> <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> <strong>for Insufficient Pool Size</strong>:</p>
+<ul>
+<li><p>Calculates the pool size <span class="math notranslate nohighlight">\(9 \times 10^{(\text{d} - 1)}\)</span> and compares it with the number of rows in the DataFrame.</p></li>
+<li><p><strong>Behavior</strong>:</p>
+<ul>
+<li><p>Throws a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">n_rows</span> <span class="pre">&gt;</span> <span class="pre">pool_size</span></code>.</p></li>
+<li><p>Prints a warning if <code class="docutils literal notranslate"><span class="pre">n_rows</span></code> approaches 90% of the pool size, suggesting an increase in digit length.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Improved ID Deduplication</strong>:</p>
+<ul>
+<li><p>Introduced a set (<code class="docutils literal notranslate"><span class="pre">unique_ids</span></code>) to track generated IDs.</p></li>
+<li><p>IDs are checked against this set to ensure uniqueness before being added to the DataFrame.</p></li>
+<li><p>Prevents collisions by regenerating IDs only for duplicates, minimizing retries and improving performance.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="enhance-strip-trailing-period-to-support-strings-and-mixed-data-types">
+<h3>Enhance <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> to Support Strings and Mixed Data Types<a class="headerlink" href="#enhance-strip-trailing-period-to-support-strings-and-mixed-data-types" title="Permalink to this heading"></a></h3>
+<p>This update enhances the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to handle trailing periods in both numeric and string values. The updated implementation ensures robustness for columns with mixed data types and gracefully handles special cases like <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+<p><strong>Key Enhancements</strong></p>
+<ul class="simple">
+<li><p><strong>Support for Strings with Trailing Periods</strong>:</p>
+<ul>
+<li><p>Removes trailing periods from string values, such as <code class="docutils literal notranslate"><span class="pre">&quot;123.&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;test.&quot;</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Mixed Data Types</strong>:</p>
+<ul>
+<li><p>Handles columns containing both numeric and string values seamlessly.</p></li>
+</ul>
+</li>
+<li><p><strong>Graceful Handling of</strong> <code class="docutils literal notranslate"><span class="pre">NaN</span></code>:</p>
+<ul>
+<li><p>Skips processing for <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values, leaving them unchanged.</p></li>
+</ul>
+</li>
+<li><p><strong>Robust Type Conversion</strong>:</p>
+<ul>
+<li><p>Converts numeric strings (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;123.&quot;</span></code>) back to float where applicable.</p></li>
+<li><p>Retains strings if conversion to float is not possible.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="changes-in-stacked-crosstab-plot">
+<h3>Changes in <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code><a class="headerlink" href="#changes-in-stacked-crosstab-plot" title="Permalink to this heading"></a></h3>
+<p>Remove <code class="docutils literal notranslate"><span class="pre">IPython</span></code> Dependency by Replacing <code class="docutils literal notranslate"><span class="pre">display</span></code> with <code class="docutils literal notranslate"><span class="pre">print</span></code></p>
+<p>This resolves an issue where the <code class="docutils literal notranslate"><span class="pre">eda_toolkit</span></code> library required <code class="docutils literal notranslate"><span class="pre">IPython</span></code> as a dependency due to the use of <code class="docutils literal notranslate"><span class="pre">display(crosstab_df)</span></code> in the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function. The dependency caused import failures in environments without <code class="docutils literal notranslate"><span class="pre">IPython</span></code>, especially in non-Jupyter terminal-based workflows.</p>
+<p><strong>Changes Made</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Replaced</strong> <code class="docutils literal notranslate"><span class="pre">display</span></code> with <code class="docutils literal notranslate"><span class="pre">print</span></code>:
+- The line <code class="docutils literal notranslate"><span class="pre">display(crosstab_df)</span></code> was replaced with <code class="docutils literal notranslate"><span class="pre">print(crosstab_df)</span></code> to eliminate the need for <code class="docutils literal notranslate"><span class="pre">IPython</span></code>.</p></li>
+<li><p><strong>Removed ``IPython`` Import</strong>:
+- The <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">IPython.display</span> <span class="pre">import</span> <span class="pre">display</span></code> import statement was removed from the codebase.</p></li>
+</ol>
+<p><strong>Updated Function Behavior</strong>:</p>
+<ul class="simple">
+<li><p>Crosstabs are displayed using <code class="docutils literal notranslate"><span class="pre">print</span></code>, maintaining functionality in all runtime environments.</p></li>
+<li><p>The change ensures no loss in usability or user experience.</p></li>
+</ul>
+<p><strong>Root Cause and Fix</strong></p>
+<p>The issue arose from reliance on <code class="docutils literal notranslate"><span class="pre">IPython.display.display</span></code> for rendering crosstab tables in Jupyter notebooks. Environments without <code class="docutils literal notranslate"><span class="pre">IPython</span></code> experienced a <code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError</span></code>. To address this, the <code class="docutils literal notranslate"><span class="pre">display(crosstab_df)</span></code> statement was replaced with <code class="docutils literal notranslate"><span class="pre">print(crosstab_df)</span></code>.</p>
+<p><strong>Testing</strong>:</p>
+<ul class="simple">
+<li><p><strong>Jupyter Notebook</strong>: Crosstabs are displayed as plain text via <code class="docutils literal notranslate"><span class="pre">print()</span></code>, rendered neatly in notebook outputs.</p></li>
+<li><p><strong>Terminal Session</strong>: Crosstabs are printed as expected, ensuring seamless use in terminal-based workflows.</p></li>
+</ul>
+</section>
+<section id="add-environment-detection-to-dataframe-columns-function">
+<h3>Add Environment Detection to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function<a class="headerlink" href="#add-environment-detection-to-dataframe-columns-function" title="Permalink to this heading"></a></h3>
+<p>This enhances the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> function to dynamically adjust its output based on the runtime environment (Jupyter Notebook or terminal).</p>
+<p><strong>Changes Made</strong></p>
+<ol class="arabic">
+<li><p><strong>Environment Detection</strong>:</p>
+<ul>
+<li><p>Added a check to determine if the function is running in a Jupyter Notebook or terminal:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">is_notebook_env</span> <span class="pre">=</span> <span class="pre">&quot;ipykernel&quot;</span> <span class="pre">in</span> <span class="pre">sys.modules</span>
+<span class="pre">`</span></code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Dynamic Output Behavior</strong>:</p>
+<ul class="simple">
+<li><p><strong>Terminal Environment</strong>:</p>
+<ul>
+<li><p>Returns a plain DataFrame (<code class="docutils literal notranslate"><span class="pre">result_df</span></code>) when running outside of a notebook or when <code class="docutils literal notranslate"><span class="pre">return_df=True</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Jupyter Notebook</strong>:</p>
+<ul>
+<li><p>Retains the styled DataFrame functionality when running in a notebook and <code class="docutils literal notranslate"><span class="pre">return_df=False</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Improved Compatibility</strong>:</p>
+<ul class="simple">
+<li><p>The function now works seamlessly in both terminal and notebook environments without requiring additional dependencies.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="add-tqdm-progress-bar-to-dataframe-columns-function">
+<h3>Add <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> Progress Bar to <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> Function<a class="headerlink" href="#add-tqdm-progress-bar-to-dataframe-columns-function" title="Permalink to this heading"></a></h3>
+<p>This enhances the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> function by incorporating a <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar to track column processing. This is particularly useful for analyzing large DataFrames, providing real-time feedback.</p>
+<p><strong>Changes Made</strong>:</p>
+<ul>
+<li><p>Wrapped the column processing loop with a <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bar:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing columns&quot;</span><span class="p">):</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="other-enhancements-and-fixes">
+<h3>Other Enhancements and Fixes<a class="headerlink" href="#other-enhancements-and-fixes" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Improved <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> with <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> integration.</p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">plot_2d_pdp</span></code> plot display logic to adhere strictly to the <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> parameter.</p></li>
+<li><p>Updated project dependencies and added robust environment testing.</p></li>
+</ul>
+</section>
+</section>
 <section id="version-0-0-12">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.12/index.html">Version 0.0.12</a><a class="headerlink" href="#version-0-0-12" title="Permalink to this heading"></a></h2>
 <section id="new-features">
@@ -681,8 +828,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id10">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h2>
+<section id="id11">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -700,8 +847,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id11">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h2>
+<section id="id12">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -783,8 +930,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id12">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h2>
+<section id="id13">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>
