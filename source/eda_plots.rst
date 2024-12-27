@@ -2649,18 +2649,17 @@ For users interested in understanding the strength of the relationship between v
 
 .. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, all_vars=None, label_names=None, **kwargs)
 
-    Create and save scatter plots or a grid of scatter plots for given ``x_vars``
-    and ``y_vars``, with an optional best fit line and customizable point color,
-    size, and markers.
+    Generate scatter plots or a grid of scatter plots for the given ``x_vars`` and ``y_vars``, 
+    with optional best fit lines, correlation coefficients, and customizable aesthetics.
 
-    :param df: The DataFrame containing the data.
+    :param df: The DataFrame containing the data for the plots.
     :type df: pandas.DataFrame
 
-    :param x_vars: List of variable names to plot on the ``x-axis``.
-    :type x_vars: list of str, optional
+    :param x_vars: List of variable names to plot on the ``x-axis``. If a single string is provided, it will be converted into a list with one element.
+    :type x_vars: list of str or str, optional
 
-    :param y_vars: List of variable names to plot on the ``y-axis``.
-    :type y_vars: list of str, optional
+    :param y_vars: List of variable names to plot on the ``y-axis``. If a single string is provided, it will be converted into a list with one element.
+    :type y_vars: list of str or str, optional
 
     :param n_rows: Number of rows in the subplot grid. Calculated based on the number of plots and ``n_cols`` if not specified.
     :type n_rows: int, optional
@@ -2677,7 +2676,7 @@ For users interested in understanding the strength of the relationship between v
     :param image_path_svg: Directory path to save SVG images of the scatter plots.
     :type image_path_svg: str, optional
 
-    :param save_plots: Controls which plots to save: ``"all"``, ``"individual"``, or ``"grid"``. If None, plots will not be saved.
+    :param save_plots: Controls which plots to save: ``"all"``, ``"individual"``, or ``"grid"``. If ``None``, plots will not be saved.
     :type save_plots: str, optional
 
     :param show_legend: Whether to display the legend on the plots. Default is ``True``.
@@ -2689,19 +2688,19 @@ For users interested in understanding the strength of the relationship between v
     :param show_plot: Controls plot display: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
     :type show_plot: str, optional
 
-    :param rotate_plot: Whether to rotate (pivot) the plots. Default is ``False``.
+    :param rotate_plot: Whether to rotate (pivot) the plots, swapping x and y axes. Default is ``False``.
     :type rotate_plot: bool, optional
 
-    :param individual_figsize: Width and height of the figure for individual plots. Default is ``(6, 4)``.
+    :param individual_figsize: Dimensions (width, height) of the figure for individual plots. Default is ``(6, 4)``.
     :type individual_figsize: tuple or list, optional
 
-    :param grid_figsize: Width and height of the figure for grid plots. Calculated based on the number of rows and columns if not specified.
+    :param grid_figsize: Dimensions (width, height) of the figure for grid plots. Calculated automatically if not specified.
     :type grid_figsize: tuple or list, optional
 
-    :param label_fontsize: Font size for axis labels. Default is 12.
+    :param label_fontsize: Font size for axis labels. Default is ``12``.
     :type label_fontsize: int, optional
 
-    :param tick_fontsize: Font size for axis tick labels. Default is 10.
+    :param tick_fontsize: Font size for tick labels. Default is ``10``.
     :type tick_fontsize: int, optional
 
     :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
@@ -2710,7 +2709,7 @@ For users interested in understanding the strength of the relationship between v
     :param add_best_fit_line: Whether to add a best fit line to the scatter plots. Default is ``False``.
     :type add_best_fit_line: bool, optional
 
-    :param scatter_color: Color code for the scattered points. Default is ``"C0"``.
+    :param scatter_color: Color code for the scatter points. Default is ``"C0"``.
     :type scatter_color: str, optional
 
     :param best_fit_linecolor: Color code for the best fit line. Default is ``"red"``.
@@ -2719,19 +2718,19 @@ For users interested in understanding the strength of the relationship between v
     :param best_fit_linestyle: Linestyle for the best fit line. Default is ``"-"``.
     :type best_fit_linestyle: str, optional
 
-    :param hue: Column name for the grouping variable that will produce points with different colors.
+    :param hue: Column name for the grouping variable that produces points with different colors.
     :type hue: str, optional
 
-    :param hue_palette: Specifies colors for each hue level. Can be a dictionary mapping hue levels to colors, a list of colors, or the name of a seaborn color palette. This parameter requires the ``hue`` parameter to be set.
+    :param hue_palette: Specifies colors for each hue level. Accepts a dictionary mapping hue levels to colors, a list of colors, or a seaborn color palette name. This requires the ``hue`` parameter to be set.
     :type hue_palette: dict, list, or str, optional
 
-    :param size: Column name for the grouping variable that will produce points with different sizes.
+    :param size: Column name for the grouping variable that produces points with different sizes.
     :type size: str, optional
 
-    :param sizes: Dictionary mapping sizes (smallest and largest) to min and max values.
+    :param sizes: Dictionary mapping sizes (smallest and largest) to min and max values for scatter points.
     :type sizes: dict, optional
 
-    :param marker: Marker style used for the scatter points. Default is ``"o"``.
+    :param marker: Marker style for scatter points. Default is ``"o"``.
     :type marker: str, optional
 
     :param show_correlation: Whether to display the Pearson correlation coefficient in the plot title. Default is ``True``.
@@ -2743,27 +2742,27 @@ For users interested in understanding the strength of the relationship between v
     :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
     :type ylim: tuple or list, optional
 
-    :param all_vars: If provided, automatically generates scatter plots for all combinations of variables in this list, overriding ``x_vars`` and ``y_vars``.
+    :param all_vars: If provided, generates scatter plots for all combinations of variables in this list, overriding ``x_vars`` and ``y_vars``.
     :type all_vars: list of str, optional
 
-    :param label_names: A dictionary to rename columns for display in the plot titles and labels.
+    :param label_names: Dictionary mapping original column names to custom labels for plot titles and axis labels.
     :type label_names: dict, optional
 
-    :param kwargs: Additional keyword arguments to pass to ``sns.scatterplot``.
+    :param kwargs: Additional keyword arguments to pass to the ``sns.scatterplot`` function.
     :type kwargs: dict, optional
 
     :raises ValueError: 
-        - If ``all_vars`` is provided and either ``x_vars`` or ``y_vars`` is also provided.
+        - If ``all_vars`` is provided alongside ``x_vars`` or ``y_vars``.
         - If neither ``all_vars`` nor both ``x_vars`` and ``y_vars`` are provided.
         - If ``hue_palette`` is specified without ``hue``.
         - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
         - If ``save_plots`` is not one of ``None``, ``"all"``, ``"individual"``, or ``"grid"``.
-        - If ``save_plots`` is set but no image paths are provided.
+        - If ``save_plots`` is set but no ``image_path_png`` or ``image_path_svg`` is specified.
         - If ``rotate_plot`` is not a boolean value.
-        - If ``individual_figsize`` or ``grid_figsize`` are not tuples/lists with two numeric values.
+        - If ``individual_figsize`` or ``grid_figsize`` is not a tuple or list of two numeric values.
 
-    :returns: ``None``. This function does not return any value but generates and optionally saves scatter plots for the specified ``x_vars`` and ``y_vars``, or for all combinations of variables in ``all_vars`` if it is provided.
-
+    :returns: 
+        ``None``. This function does not return any value but generates and optionally saves scatter plots for the specified ``x_vars`` and ``y_vars``, or for all combinations in ``all_vars`` if provided.
 
 
 Regression-Centric Scatter Plots Example
