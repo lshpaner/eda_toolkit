@@ -2574,6 +2574,7 @@ def scatter_fit_plot(
     df,
     x_vars=None,
     y_vars=None,
+    all_vars=None,
     exclude_combinations=None,
     n_rows=None,
     n_cols=None,
@@ -2602,7 +2603,6 @@ def scatter_fit_plot(
     show_correlation=True,  # Parameter to toggle showing correlation in title
     xlim=None,  # Parameter to set x-axis limits
     ylim=None,  # Parameter to set y-axis limits
-    all_vars=None,
     label_names=None,  # New parameter for custom column renames
     **kwargs,  # Additional keyword arguments to pass to sns.scatterplot
 ):
@@ -2623,6 +2623,10 @@ def scatter_fit_plot(
     y_vars : list of str or str, optional
         List of variable names to plot on the y-axis. If a string is provided,
         it will be converted into a list with one element.
+
+    all_vars : list of str, optional
+        If provided, automatically generates scatter plots for all combinations
+        of variables in this list, overriding x_vars and y_vars.
 
     exclude_combinations : list of tuples, optional
         List of (x_var, y_var) combinations to exclude from the plots.
@@ -2718,10 +2722,6 @@ def scatter_fit_plot(
     ylim : tuple or list, optional
         Limits for the y-axis as a tuple or list of (min, max).
         If not provided, the limits are determined automatically.
-
-    all_vars : list of str, optional
-        If provided, automatically generates scatter plots for all combinations
-        of variables in this list, overriding x_vars and y_vars.
 
     label_names : dict, optional
         A dictionary to rename columns for display in the plot titles and labels.
