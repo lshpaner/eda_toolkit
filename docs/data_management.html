@@ -685,8 +685,7 @@ DataFrame with optional background styling.</p></li>
 <section id="census-income-example">
 <h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Permalink to this heading"></a></h3>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
-function to analyze a DataFrame’s columns. You may notice a new variable,
-<code class="docutils literal notranslate"><span class="pre">age_group</span></code>, is introduced. The logic for generating this variable is <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">provided here</span></a>.</p>
+function to analyze a DataFrame’s columns.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">dataframe_columns</span>
 
 <span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
@@ -694,9 +693,11 @@ function to analyze a DataFrame’s columns. You may notice a new variable,
 </div>
 <p><strong>Output</strong></p>
 <p><cite>Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)</cite> <a class="footnote-reference brackets" href="#id9" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span><span class="p">:</span>  <span class="p">(</span><span class="mi">48842</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Shape:  (48842, 15)
 
-<span class="n">Total</span> <span class="n">seconds</span> <span class="n">of</span> <span class="n">processing</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.861555</span>
+Processing columns: 100%|██████████| 15/15 [00:00&lt;00:00, 74.38it/s]
+
+Total seconds of processing time: 0.351102
 </pre></div>
 </div>
 <style type="text/css">
@@ -735,7 +736,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">age</td>
         <td class="tg-dvpl">int64</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">74</td>
         <td class="tg-dvpl">36</td>
         <td class="tg-dvpl">1348</td>
@@ -757,7 +758,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">fnlwgt</td>
         <td class="tg-dvpl">int64</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">28523</td>
         <td class="tg-dvpl">203488</td>
         <td class="tg-dvpl">21</td>
@@ -768,7 +769,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">education</td>
         <td class="tg-dvpl">object</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">16</td>
         <td class="tg-dvpl">HS-grad</td>
         <td class="tg-dvpl">15784</td>
@@ -779,7 +780,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">education-num</td>
         <td class="tg-dvpl">int64</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">16</td>
         <td class="tg-dvpl">9</td>
         <td class="tg-dvpl">15784</td>
@@ -790,7 +791,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">marital-status</td>
         <td class="tg-dvpl">object</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">7</td>
         <td class="tg-dvpl">Married-civ-spouse</td>
         <td class="tg-dvpl">22379</td>
@@ -812,7 +813,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">relationship</td>
         <td class="tg-dvpl">object</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">6</td>
         <td class="tg-dvpl">Husband</td>
         <td class="tg-dvpl">19716</td>
@@ -823,18 +824,18 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">race</td>
         <td class="tg-dvpl">object</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">5</td>
         <td class="tg-dvpl">White</td>
         <td class="tg-dvpl">41762</td>
-        <td class="tg-dvpl">85.5</td>
+        <td class="tg-dvpl">85.50</td>
     </tr>
     <tr>
         <td class="tg-rvpl">9</td>
         <td class="tg-dvpl">sex</td>
         <td class="tg-dvpl">object</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">2</td>
         <td class="tg-dvpl">Male</td>
         <td class="tg-dvpl">32650</td>
@@ -845,7 +846,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">capital-gain</td>
         <td class="tg-dvpl">int64</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">123</td>
         <td class="tg-dvpl">0</td>
         <td class="tg-dvpl">44807</td>
@@ -856,7 +857,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">capital-loss</td>
         <td class="tg-dvpl">int64</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">99</td>
         <td class="tg-dvpl">0</td>
         <td class="tg-dvpl">46560</td>
@@ -867,7 +868,7 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">hours-per-week</td>
         <td class="tg-dvpl">int64</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">96</td>
         <td class="tg-dvpl">40</td>
         <td class="tg-dvpl">22803</td>
@@ -889,22 +890,11 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
         <td class="tg-dvpl">income</td>
         <td class="tg-dvpl">object</td>
         <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
+        <td class="tg-dvpl">0.00</td>
         <td class="tg-dvpl">4</td>
         <td class="tg-dvpl">&lt;=50K</td>
         <td class="tg-dvpl">24720</td>
         <td class="tg-dvpl">50.61</td>
-    </tr>
-    <tr>
-        <td class="tg-rvpl">15</td>
-        <td class="tg-dvpl">age_group</td>
-        <td class="tg-dvpl">category</td>
-        <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">0</td>
-        <td class="tg-dvpl">9</td>
-        <td class="tg-dvpl">18-29</td>
-        <td class="tg-dvpl">13920</td>
-        <td class="tg-dvpl">28.5</td>
     </tr>
     </tbody>
 </table>
@@ -1036,6 +1026,12 @@ Detailed instructions for this process can be found under <a class="reference in
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generating combinations: 100%|██████████| 120/120 [00:01&lt;00:00, 76.56it/s]
+Writing summary tables: 100%|██████████| 120/120 [00:41&lt;00:00,  2.87it/s]
+Finalizing Excel file: 100%|██████████| 1/1 [00:00&lt;00:00, 13706.88it/s]
+Data saved to ../data_output/census_summary_tables.xlsx
+</pre></div>
+</div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[(&#39;age_group&#39;, &#39;workclass&#39;),
 (&#39;age_group&#39;, &#39;education&#39;),
 (&#39;age_group&#39;, &#39;occupation&#39;),
@@ -1243,6 +1239,10 @@ the original DataFrame and a filtered DataFrame with ages between <cite>18</cite
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Saving DataFrames: 100%|██████████| 2/2 [00:08&lt;00:00,  4.34s/it]
+DataFrames saved to ../data/df_census.xlsx
+</pre></div>
+</div>
 <p>The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages
 between <cite>18</cite> and <cite>40</cite>, each on separate sheets with customized formatting.</p>
 </section>
@@ -1292,9 +1292,8 @@ from the specified columns in a DataFrame containing census data <a class="footn
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
-function to analyze a DataFrame’s columns. You may notice a new variable,
-<code class="docutils literal notranslate"><span class="pre">age_group</span></code>, is introduced. The logic for generating this variable is <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">provided here</span></a>.</p>
+<p>You may notice a new variable, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>, is introduced. The logic for
+generating this variable is <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">provided here</span></a>.</p>
 </div>
 <p><strong>Output</strong></p>
 <p>The output will be a contingency table with the specified columns, showing the
