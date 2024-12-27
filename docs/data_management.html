@@ -936,23 +936,25 @@ overflow:hidden;padding:0px 6px;word-break:normal;}
 </section>
 <section id="generating-summary-tables-for-variable-combinations">
 <h2>Generating Summary Tables for Variable Combinations<a class="headerlink" href="#generating-summary-tables-for-variable-combinations" title="Permalink to this heading"></a></h2>
-<p><strong>This function generates summary tables for all possible combinations of specified variables
-in a DataFrame and save them to an Excel file.</strong></p>
+<p><strong>Generate and save summary tables for all possible combinations of specified variables in a DataFrame to an Excel file, complete with formatting and progress tracking.</strong></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="summarize_all_combinations">
 <span class="sig-name descname"><span class="pre">summarize_all_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#summarize_all_combinations" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Generate summary tables for all possible combinations of the specified variables in the DataFrame and save them to an Excel file with a Table of Contents.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The pandas DataFrame containing the data.</p></li>
 <li><p><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – List of column names from the DataFrame to generate combinations.</p></li>
-<li><p><strong>data_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Path where the output Excel file will be saved.</p></li>
+<li><p><strong>data_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Directory path where the output Excel file will be saved.</p></li>
 <li><p><strong>data_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the output Excel file.</p></li>
 <li><p><strong>min_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Minimum size of the combinations to generate. Defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple containing a dictionary of summary tables and a list of all generated combinations.</p>
+<dd class="field-even"><p>A tuple containing:
+- A dictionary where keys are tuples of column names (combinations) and values are the corresponding summary DataFrames.
+- A list of all generated combinations, where each combination is represented as a tuple of column names.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>)</p>
@@ -960,14 +962,39 @@ in a DataFrame and save them to an Excel file.</strong></p>
 </dl>
 </dd></dl>
 
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
 <ul class="simple">
-<li><p>The function will create an Excel file with a sheet for each combination of the specified variables, as well as a “Table of Contents” sheet with hyperlinks to each summary table.</p></li>
-<li><p>The sheet names are limited to 31 characters due to Excel’s constraints.</p></li>
+<li><dl class="simple">
+<dt><strong>Excel Output</strong>:</dt><dd><ul>
+<li><p>Each combination is saved as a separate sheet in an Excel file.</p></li>
+<li><p>A “Table of Contents” sheet is created with hyperlinks to each combination’s summary table.</p></li>
+<li><p>Sheet names are truncated to 31 characters to meet Excel’s constraints.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Formatting</strong>:</dt><dd><ul>
+<li><p>Headers in all sheets are bold, left-aligned, and borderless.</p></li>
+<li><p>Columns are auto-fitted to content length for improved readability.</p></li>
+<li><p>A left-aligned format is applied to all columns in the output.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>The function uses <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bars for tracking:</dt><dd><ul>
+<li><p>Combination generation.</p></li>
+<li><p>Writing the Table of Contents.</p></li>
+<li><p>Writing individual summary tables to Excel.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </div>
-<p>The function returns two outputs:</p>
+<p><strong>The function returns two outputs</strong>:</p>
 <blockquote>
 <div><p>1. <code class="docutils literal notranslate"><span class="pre">summary_tables</span></code>: A dictionary where each key is a tuple representing a combination
 of variables, and each value is a DataFrame containing the summary table for that combination.
