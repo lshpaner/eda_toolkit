@@ -566,8 +566,7 @@ Census Income Example
 """"""""""""""""""""""""""""""
 
 In the example below, we demonstrate how to use the ``dataframe_columns`` 
-function to analyze a DataFrame's columns. You may notice a new variable, 
-``age_group``, is introduced. The logic for generating this variable is :ref:`provided here <Binning_Numerical_Columns>`.
+function to analyze a DataFrame's columns. 
 
 .. code-block:: python
 
@@ -580,11 +579,13 @@ function to analyze a DataFrame's columns. You may notice a new variable,
 
 `Result on Census Income Data (Adapted from Kohavi, 1996, UCI Machine Learning Repository)` [1]_
 
-.. code-block:: python
+.. code-block:: text
 
-    Shape:  (48842, 16) 
+    Shape:  (48842, 15) 
 
-    Total seconds of processing time: 0.861555
+    Processing columns: 100%|██████████| 15/15 [00:00<00:00, 74.38it/s]
+
+    Total seconds of processing time: 0.351102
 
 .. raw:: html
 
@@ -624,7 +625,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">age</td>
             <td class="tg-dvpl">int64</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">74</td>
             <td class="tg-dvpl">36</td>
             <td class="tg-dvpl">1348</td>
@@ -646,7 +647,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">fnlwgt</td>
             <td class="tg-dvpl">int64</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">28523</td>
             <td class="tg-dvpl">203488</td>
             <td class="tg-dvpl">21</td>
@@ -657,7 +658,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">education</td>
             <td class="tg-dvpl">object</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">16</td>
             <td class="tg-dvpl">HS-grad</td>
             <td class="tg-dvpl">15784</td>
@@ -668,7 +669,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">education-num</td>
             <td class="tg-dvpl">int64</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">16</td>
             <td class="tg-dvpl">9</td>
             <td class="tg-dvpl">15784</td>
@@ -679,7 +680,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">marital-status</td>
             <td class="tg-dvpl">object</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">7</td>
             <td class="tg-dvpl">Married-civ-spouse</td>
             <td class="tg-dvpl">22379</td>
@@ -701,7 +702,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">relationship</td>
             <td class="tg-dvpl">object</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">6</td>
             <td class="tg-dvpl">Husband</td>
             <td class="tg-dvpl">19716</td>
@@ -712,18 +713,18 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">race</td>
             <td class="tg-dvpl">object</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">5</td>
             <td class="tg-dvpl">White</td>
             <td class="tg-dvpl">41762</td>
-            <td class="tg-dvpl">85.5</td>
+            <td class="tg-dvpl">85.50</td>
         </tr>
         <tr>
             <td class="tg-rvpl">9</td>
             <td class="tg-dvpl">sex</td>
             <td class="tg-dvpl">object</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">2</td>
             <td class="tg-dvpl">Male</td>
             <td class="tg-dvpl">32650</td>
@@ -734,7 +735,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">capital-gain</td>
             <td class="tg-dvpl">int64</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">123</td>
             <td class="tg-dvpl">0</td>
             <td class="tg-dvpl">44807</td>
@@ -745,7 +746,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">capital-loss</td>
             <td class="tg-dvpl">int64</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">99</td>
             <td class="tg-dvpl">0</td>
             <td class="tg-dvpl">46560</td>
@@ -756,7 +757,7 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">hours-per-week</td>
             <td class="tg-dvpl">int64</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">96</td>
             <td class="tg-dvpl">40</td>
             <td class="tg-dvpl">22803</td>
@@ -778,30 +779,18 @@ function to analyze a DataFrame's columns. You may notice a new variable,
             <td class="tg-dvpl">income</td>
             <td class="tg-dvpl">object</td>
             <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
+            <td class="tg-dvpl">0.00</td>
             <td class="tg-dvpl">4</td>
             <td class="tg-dvpl">&lt;=50K</td>
             <td class="tg-dvpl">24720</td>
             <td class="tg-dvpl">50.61</td>
         </tr>
-        <tr>
-            <td class="tg-rvpl">15</td>
-            <td class="tg-dvpl">age_group</td>
-            <td class="tg-dvpl">category</td>
-            <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">0</td>
-            <td class="tg-dvpl">9</td>
-            <td class="tg-dvpl">18-29</td>
-            <td class="tg-dvpl">13920</td>
-            <td class="tg-dvpl">28.5</td>
-        </tr>
         </tbody>
     </table>
     </div>
 
-
-
 \
+
 
 DataFrame Column Names
 """"""""""""""""""""""""""""""
@@ -917,6 +906,13 @@ variables from a DataFrame containing the census data [1]_.
     print(all_combinations)
 
 **Output**
+
+.. code-block:: text
+
+    Generating combinations: 100%|██████████| 120/120 [00:01<00:00, 76.56it/s]
+    Writing summary tables: 100%|██████████| 120/120 [00:41<00:00,  2.87it/s]
+    Finalizing Excel file: 100%|██████████| 1/1 [00:00<00:00, 13706.88it/s]
+    Data saved to ../data_output/census_summary_tables.xlsx
 
 .. code-blocK:: text 
 
@@ -1139,6 +1135,11 @@ the original DataFrame and a filtered DataFrame with ages between `18` and `40`.
 
 **Output**
 
+.. code-block:: text 
+
+    Saving DataFrames: 100%|██████████| 2/2 [00:08<00:00,  4.34s/it]
+    DataFrames saved to ../data/df_census.xlsx
+
 The output Excel file will contain the original DataFrame and a filtered DataFrame as a separate tab with ages 
 between `18` and `40`, each on separate sheets with customized formatting.
 
@@ -1184,9 +1185,8 @@ from the specified columns in a DataFrame containing census data [1]_
 
 .. note:: 
 
-    In the example below, we demonstrate how to use the ``dataframe_columns`` 
-    function to analyze a DataFrame's columns. You may notice a new variable, 
-    ``age_group``, is introduced. The logic for generating this variable is :ref:`provided here <Binning_Numerical_Columns>`.
+    You may notice a new variable, ``age_group``, is introduced. The logic for 
+    generating this variable is :ref:`provided here <Binning_Numerical_Columns>`.
 
 
 **Output**
