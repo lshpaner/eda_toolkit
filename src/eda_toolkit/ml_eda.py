@@ -26,64 +26,88 @@ def plot_2d_pdp(
     file_prefix="partial_dependence",  # Prefix for saved grid plots
 ):
     """
-    Generate 2D partial dependence plots (PDP) for the specified features using
-    a trained model.
+    Generate and save 2D partial dependence plots (PDPs) for specified features 
+    using a trained model.
 
     Parameters:
     -----------
     model : estimator object
         A fitted machine learning model that supports the `predict` method.
+
     X_train : pandas.DataFrame or numpy.ndarray
         The training data (features) used to generate partial dependence plots.
+
     feature_names : list of str
-        A list of feature names corresponding to columns in X_train.
+        List of feature names corresponding to columns in X_train.
+
     features : list of int or tuple of int
-        A list of feature indices or tuples of feature indices for which to
+        List of feature indices or tuples of feature indices for which to 
         generate partial dependence plots.
+
     title : str, optional
         Title for the entire plot. Default is "Partial dependence plot".
+
     grid_resolution : int, optional
-        The resolution of the grid used to compute the partial dependence.
+        The resolution of the grid used to compute the partial dependence. 
         Default is 50.
+
     plot_type : str, optional
-        Choose between "grid" for all plots in a grid layout, "individual" for
+        Choose between "grid" for all plots in a grid layout, "individual" for 
         separate plots, or "both" for both layouts. Default is "grid".
+
     grid_figsize : tuple, optional
         Figure size for the grid layout. Default is (12, 8).
+
     individual_figsize : tuple, optional
         Figure size for individual plots. Default is (6, 4).
+
     label_fontsize : int, optional
         Font size for axis labels and titles. Default is 12.
+
     tick_fontsize : int, optional
         Font size for tick labels. Default is 10.
+
     text_wrap : int, optional
         Maximum width of the title text before wrapping. Default is 50.
+
     image_path_png : str, optional
         Directory to save PNG files. If not specified, PNG files are not saved.
+
     image_path_svg : str, optional
         Directory to save SVG files. If not specified, SVG files are not saved.
+
     save_plots : str, optional
-        Controls which plots to save: "all", "individual", "grid", or None to
+        Controls which plots to save: "all", "individual", "grid", or None to 
         save no plots. Default is None.
+
     file_prefix : str, optional
-        Prefix for the filenames of the saved grid plots.
-        Default is "partial_dependence".
+        Prefix for filenames of saved grid plots. Default is "partial_dependence".
 
     Raises:
     -------
     ValueError
-        If `save_plots` is not one of [None, "all", "individual", "grid"].
-    ValueError
-        If `plot_type` is not one of ["grid", "individual", "both"].
-    ValueError
-        If `save_plots` is specified without providing `image_path_png` or
-        `image_path_svg`.
+        - If `save_plots` is not one of [None, "all", "individual", "grid"].
+        - If `plot_type` is not one of ["grid", "individual", "both"].
+        - If `save_plots` is specified without providing `image_path_png` or 
+          `image_path_svg`.
 
     Returns:
     --------
     None
         This function generates and optionally saves 2D partial dependence plots.
+
+    Notes:
+    ------
+    - The `plot_type` parameter determines the layout: grid, individual plots, 
+      or both.
+    - The `save_plots` parameter specifies which plots to save and requires 
+      either `image_path_png` or `image_path_svg` to be specified.
+    - Titles are wrapped based on the `text_wrap` parameter for better readability.
+    - Grid plots are saved with the prefix specified by `file_prefix`.
+    - Individual plot filenames use the sanitized feature names to avoid issues 
+      with special characters.
     """
+
 
     # Validate save_plots input
     if save_plots not in [None, "all", "individual", "grid"]:
