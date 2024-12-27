@@ -18,3 +18,5 @@ src/*.doctree
 *.buildinfo
 docs/**/*.doctrees
 docs/**/*.buildinfo
+docs/**/*.doctrees
+docs/**/*.buildinfo
