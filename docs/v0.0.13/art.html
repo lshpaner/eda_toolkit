@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASCII Art &mdash; EDA Toolkit 0.0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.js" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/custom.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Acknowledgements" href="acknowledgements.html" />
+    <link rel="prev" title="Creating Effective Visualizations" href="eda_plots.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            EDA Toolkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Welcome to the EDA Toolkit Python Library Documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#description">Description</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theoretical Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html">Gaussian Assumption for Normality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#pearson-correlation-coefficient">Pearson Correlation Coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#box-cox-transformation">Box-Cox Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Management</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data_management.html">Data Management Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_management.html#data-management-techniques">Data Management Techniques</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plotting Heuristics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html">Creating Effective Visualizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#kde-and-histogram-distribution-plots">KDE and Histogram Distribution Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#feature-scaling-and-outliers">Feature Scaling and Outliers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#stacked-crosstab-plots">Stacked Crosstab Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ASCII Art</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ascii-art-collection">ASCII Art Collection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#print_art"><code class="docutils literal notranslate"><span class="pre">print_art()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EDA Toolkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ASCII Art</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="no-click"><a class="reference internal image-reference" href="_images/eda_toolkit_logo.svg"><img alt="EDA Toolkit Logo" class="align-left" src="_images/eda_toolkit_logo.svg" width="300px" /></a>
+</div><div style="height: 100px;"></div><p></p>
+<section id="ascii-art">
+<h1>ASCII Art<a class="headerlink" href="#ascii-art" title="Permalink to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">art.py</span></code> module provides a collection of ASCII art illustrations and utilities
+for displaying or saving them. This documentation outlines the available ASCII art,
+the dictionary structure, and how to use the <code class="docutils literal notranslate"><span class="pre">print_art</span></code> function to interact with the artwork.</p>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>A dictionary of predefined ASCII art.</p></li>
+<li><p>Flexible options to display one, multiple, or all available ASCII art illustrations.</p></li>
+<li><p>Capability to save the output to a specified file and directory.</p></li>
+</ul>
+</section>
+<section id="ascii-art-collection">
+<h2>ASCII Art Collection<a class="headerlink" href="#ascii-art-collection" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ascii_art</span></code> dictionary contains the following predefined artworks:</p>
+<ul class="simple">
+<li><p><strong>eda_toolkit_logo</strong>: ASCII representation of the EDA Toolkit logo.</p></li>
+<li><p><strong>leon_shpaner_bb</strong>: ASCII art of “Leon Shpaner” with a black background.</p></li>
+<li><p><strong>leon_shpaner_wb</strong>: ASCII art of “Leon Shpaner” with a white background.</p></li>
+<li><p><strong>oscar_gil_bb</strong>: ASCII art of “Oscar Gil” with a black background.</p></li>
+<li><p><strong>oscar_gil_wb</strong>: ASCII art of “Oscar Gil” with a white background.</p></li>
+<li><p><strong>royce_hall_bb</strong>: ASCII art of UCLA’s Royce Hall with a black background.</p></li>
+<li><p><strong>royce_hall_wb</strong>: ASCII art of UCLA’s Royce Hall with a white background.</p></li>
+<li><p><strong>ca_state_bb</strong>: ASCII art of the State of California with a black background.</p></li>
+<li><p><strong>ca_state_wb</strong>: ASCII art of the State of California with a white background.</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="print_art">
+<span class="sig-name descname"><span class="pre">print_art</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">art_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#print_art" title="Permalink to this definition"></a></dt>
+<dd><p>Print ASCII art based on user input and optionally save output to a specified path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>art_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Names of the ASCII art to print. Each name should match a key in the <code class="docutils literal notranslate"><span class="pre">ascii_art</span></code> dictionary.</p></li>
+<li><p><strong>all</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, all available ASCII art will be printed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the file to save the output. Defaults to <code class="docutils literal notranslate"><span class="pre">.txt</span></code> if no extension is provided.</p></li>
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Directory where the output file should be saved. If not specified, the current working directory will be used. Non-existent directories will be created automatically.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If both <code class="docutils literal notranslate"><span class="pre">art_names</span></code> and <code class="docutils literal notranslate"><span class="pre">all=True</span></code> are specified simultaneously.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p><strong>Display a Logo Artwork</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;eda_toolkit_logo&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>+--------------------------------------------------------------------------------+
+|  _____   ____       _              _____                   _   _      _   _    |
+| | ____| |  _ \     / \            |_   _|   ___     ___   | | | | __ (_) | |_  |
+| |  _|   | | | |   / _ \    _____    | |    / _ \   / _ \  | | | |/ / | | | __| |
+| | |___  | |_| |  / ___ \  |_____|   | |   | (_) | | (_) | | | |   &lt;  | | | |_  |
+| |_____| |____/  /_/   \_\           |_|    \___/   \___/  |_| |_|\_\ |_|  \__| |
+|                                                                                |
++--------------------------------------------------------------------------------+
+</pre></div>
+</div>
+<p><strong>Display Leon Shpaner Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;leon_shpaner_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                           Leon Shpaner
+
+                          %%%%%%%%%%%%%%%
+                      %%%%%%%%%%@%@@%%@@@@@@@
+                    @@@@@@@%%%%%@%@%@@@@%%%@@@@
+                  @@@@@@@@%%%%%%%%%%%%%%@@@@@@@%%
+                @@@@@@@@@@%%%%####*****#%@@@@@@@%%%
+               @@@@@%%%%####**+++++++++++*%@@%%%@%%@
+              @@@@%###****++++++++++++++++*%%%%@@%%@
+              @@@#*****++++++++++++++++++++#%%%%%%%%%
+             @@@##****++++++++++++++++++++++#%%%%%%%%
+             @@%####***+++++++++++++++++++++*%@%%%%%%
+             @@#####****+++++++++++++++++++***%@@%%%%%
+             @@####*****++++++++++++++++++++**#%@@%%%%
+             @@###****+++++++++++++++++++++++*#%@@%%%%
+             @@###*****+++++++++++++++++++++++*%@@@%%#+
+             @@##########****###%%%%%####**+++*#%%%###**
+             @@%%%%%@@%%%##*##%%%%##****#**++++#%%#++*#+
+             %%%%%%#%%%%%%#++*##%%%%@%##*++++++*###+++*+
+             %%##%%%%%%#%#*+++***#****++++++++++##***+*+
+             #%#####*****#*++++++++++++++++++++*##++++++
+             #%##**++++**#*++++++++++++++++++++*##+++++
+             ####*+++++*##+++++++*+++++++++++++*##+++++
+              ###*****##*++++++++**##***++++++*###+++*
+              %%###*####%##*##%##*+*#####**++*####*
+              %%#####%%%%%%%%%%%#####%##******#####
+              %%####%%%%%%%%%%%%%%#%%%%#*****######
+               %%###%%%@%%%######*####%##*#####%%#
+               %%%%#%%%#%###****++++*#########%%%*
+                %%%%%%#####*******++*######%%%%%#+*+
+                 %%%%%%#######***+++*#%%%%%%%%%#*+#++
+                 @@@@@@%##***+++++**#%%%%%%%%%#*++*=+###
+                  @@@@@@%%##########%%@%%%%%%#*+++===+##%
+                   @@@@@@@%%%%%%%%%@@@%%%%%%#++++===+*%%%%%
+                     @@@@@@@@%@@@@@@@@%%%%#**++===++*%%%%##%
+                     +##%@@@@@@@@@@@@@%%##**+++++=+#%%%%%%%%#%
+                    ++*##%%%@@@@%@%%%###***+==+==+%%%%%%%%%%#####
+                   +++**#%###########****++==+==*%%%%%%%%%%%%%%########
+                  +++++*#%%####*********+===+++#%%%%%%%%%%%%%%%%%%%#######%%
+                %#++++++*#%#**********+====+=+%%%%%%%%%%%%%%%%%%%%%%#%##########
+           %%%%%%*+++=+++*###++++++++=======*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%##%####
+       %%%%%%%%%%+++++++++###*+++++++======#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%#++++++++###*+++++++====+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%+++*#++=*#**++++++++==+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+</pre></div>
+</div>
+<p><strong>Display Oscar Gil Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;oscar_gil_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                                 Oscar Gil
+
+                                %@@@@@@@@@@@@
+                             @@@@@@@@@@@@@@@@@@@@
+                        %%@@@@@@@@@@@@@@@@@@@@@@@@@@
+                      %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                   @@@@@@@@@@@@@@@@%%#%%%%%@@@@@@@@@@@@@@@
+                   %@@@@@@@%%#*****************###%%@@@@@@@
+                   @@@@@@%#**************************#@@@@@@
+                   @@@@@%#****************************#%@@@@
+                   @@@@%#*************+****************%@@@@
+                   %@@@#*************+++++*************#%@@@
+                   @@@%**************+++*+*************#%@@@%
+                   @@%#******************+**************%@@@%
+                   %@%#************++*+*+*++++**********#@@@%
+                   @@%#**************+**+***************#%@@%
+                    @@#**#%%%%%@@%%#*******#%%%%%%%##***#@@%
+                    %@%**#%%%%%%%%%%%*****#%%%%%#####***#@%**
+                    *%#***#%%%%##***#********#%%%%#******%***
+                    #*#**************************************
+                     *#*************************************
+                     *##******++*******+*******+++*********
+                     **#***************+********++*********
+                     **#***********%%*****#%***************
+                       *********##%%%%%%@%%##*************
+                       *******#%%##**********#%#*********
+                       #********#%%#********%%##********
+                        ##****************************##
+                         %####**********************###
+                          %%%%#*******##*********######
+                          %%%%%%#******+*******#%####***
+                           ##%%%%##***********%%###******##
+                           %##%%%%%%##***##%%%%%#*********#*##*
+                      %%%%%%#*#%%%%@@@@%%%%%%%#************##%#%#####
+                   %%%%%%#******#%%%%%%%%%%%#************##%####%%%##%##
+              ##%%%%%%%%#**********#%%###**************####%%###%#%%#%%##%%##
+         %####%%%%%%%%%%%***************************###%%%%%#%%%#%%%%###%%%%##%###
+    ##%#####%%%%%%%%%%%%%#************************##%%%%#%%#######%##%%%%###%#####
+ ########%##%%%#%%%%%%%%%%%#*****************#%##%%%%#%%%####%###%################
+####%%####%%#%%###%%%%%%%%%%%%%%#######%%%%%%%%%%%%%%%##%%%%%%%#####%%############
+</pre></div>
+</div>
+<p><strong>Display UCLA Royce Hall Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;royce_hall_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                %############+                       %############%
+                @###%*#%#####*                      %%####%####%##%
+                %##%@*%%*@####*                     %@###@%###@%##%
+                %##%@+@@*@####*                     @@###@####@%###
+                ###%@+@%*@####*                     @@###@####@###%
+                ###********####   UCLA Royce Hall   @@##********###
+                ###############                     @@#############
+                ###############                     %@#############
+                ###############     ##*##%##*##     %@#############
+                ###############*############%######*%@#############
+                ####################%+######%*#####################
+                ####################%+#@@%@@########%##############    @@@@@@%
+@@@@@@@@@@@@@@@@@##############%@@@%#+%#%###%*##@@@%##############@@@@@@@@@@@@@@@@@
+%%%%%%%%%%%%%%%%%###%########*%%%@@%%+#%@@%%%+%%@@%@%####@#########################
+%%%%%%%%%%%%%%%%%############*%%@@@@#+%%@@@%#+%@@@@%%##############################
+@@%%%%%@@%%%%%@@@##**########*%@@@@@#+%@@@@@%+%@@@@@%#############%@%#####@@#####@@
+@@%%%%%@@%%%%%@@@###%########++++++++++++++++*++++++++###@########%@%#####@@#####@@
+@@%%%%%@@%%%%%@@%####*#######+++++++*+++++++#+++++++*+####%###%%##%@%#####@@#####@@
+%@%%@@@@@@%%%%@%@############++%@@%#*++#%%%#*++#%@@%*+############%#%#####%%%%%##%#
+++++#*+**+*%%%%%%############+%%@@@@#+#@@@@@#+%@@@@@%+############*++***+*+++**++*+
++**+#*+**+*%%%%%%############+%@#####+%%###%#+#####@%*############+*+*++**+*+**+*#+
++%@%@%%@##@@@@%@%####%%@@####+%%%%%%#+%%%%%%#+#%%%%@%+####@%%%####%@#@%@@#*@%@@%@%+
++@@%@@%@*#@@@@%@@###%@%@@####+%%%@@%#+%%@@@%#+#@@@%@%+####@@@@%#%#@@#@%@@#*@%@@%@@+
+                    @@@@@@@##*%%%%%%#*%%%@%%#*#%@%%%%+##@
+</pre></div>
+</div>
+<p><strong>Display California State Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;ca_state_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>   ..                           ...
+ ..@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+ .:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+   -@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+   :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+  .#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+..:%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+..@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+.*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+..@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+...:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+  ...%@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+     :@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+     -@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+    .:@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+    ..+@@@@@@@@@@@@@@@@@@@@@@@@@@@...
+    . =@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+       .+@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+        ..#@@@@@@@@@@@@@@@@@@@@@@@@@@@@=.
+          .=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+.
+           .%@@#-@##%%@@@@@@@@@@@@@@@@@@@@@+..
+           ..-%#+@@@@@@@@@@@@@@@@@@@@@@@@@@@@*...
+              .*+*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*..
+              .+@%+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#. .
+               .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*..
+               .-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*..
+                 ...%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+..
+                   .=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+..
+                   =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+..
+                   .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=..
+                    .:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+                     ..%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+                     ...#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+                       ...%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:.
+                         ..+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:
+                         ....#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%..
+                            .%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@...
+                            .*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:
+                            ..#%#%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@..
+                              ........:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#.
+                              .:...-....-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#...
+                              .... ...   . ..:@@@@@@@@@@@@@@@@@@@@@@@@@@@@%.
+                                             .:.-@@@@@@@@@@@@@@@@@@@@@@@@@%.
+                                          . =:.  ..%@@@@@@@@@@@@@@@@@@@@@@.
+                                    .=.      ..    ..@@@@@@@@@@@@@@@@@@@@*.
+                                      .   . :.      ..%@@@@@@@@@@@@@@@@@@%=.
+                                            .+.      .#@@@@@@@@@@@@@@@@@@@@.
+                                             .        .*@@@@@@%*+=-:::.......
+                                                      .. .  ..
+</pre></div>
+</div>
+<p><strong>Display All Artworks</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Save Artwork to a File</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;royce_hall_bb&quot;</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;royce_hall.txt&quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;./artworks&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Handle Missing Artwork</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;unknown_art&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&#39;unknown_art&#39; not found. Available options are: eda_toolkit_logo, leon_shpaner_bb, ...
+</pre></div>
+</div>
+<p><strong>Key Details</strong></p>
+<ul class="simple">
+<li><p><strong>Default Behavior</strong>: If no artwork name is provided and <cite>all</cite> is <cite>False</cite>, a list of available options is displayed.</p></li>
+<li><p><strong>Output Handling</strong>: If <cite>output_file</cite> and <cite>output_path</cite> are specified, the function creates the directory (if needed) and saves the ASCII art to the file.</p></li>
+</ul>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>Ensure that the <code class="docutils literal notranslate"><span class="pre">ascii_art</span></code> dictionary contains the desired artwork and keys are correctly referenced when using the <code class="docutils literal notranslate"><span class="pre">print_art</span></code> function.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="eda_plots.html" class="btn btn-neutral float-left" title="Creating Effective Visualizations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="acknowledgements.html" class="btn btn-neutral float-right" title="Acknowledgements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Leonid Shpaner, Oscar Gil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
