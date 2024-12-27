@@ -53,10 +53,11 @@ Table of Contents
    :maxdepth: 4
    :caption: About EDA Toolkit
 
+   art
    acknowledgements
    contributors
    citations
    changelog
    references
-   art
+
    
