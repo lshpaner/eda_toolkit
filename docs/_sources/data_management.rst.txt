@@ -1056,35 +1056,44 @@ The first sheet will be a Table of Contents with hyperlinks to each summary tabl
 
 
 Saving DataFrames to Excel with Customized Formatting
--------------------------------------------------------
-**Save multiple DataFrames to separate sheets in an Excel file with customized
-formatting.**
+-----------------------------------------------------
+**Save multiple DataFrames to separate sheets in an Excel file with progress tracking and formatting.**
 
-
-This section explains how to save multiple DataFrames to separate sheets in an Excel file with customized formatting using the ``save_dataframes_to_excel`` function.
-
+This section explains how to save multiple DataFrames to separate sheets in an 
+Excel file with customized formatting using the ``save_dataframes_to_excel`` function.
 
 .. function:: save_dataframes_to_excel(file_path, df_dict, decimal_places=0)
 
+    Save DataFrames to an Excel file, applying formatting and autofitting columns.
+
     :param file_path: Full path to the output Excel file.
     :type file_path: str
+
     :param df_dict: Dictionary where keys are sheet names and values are DataFrames to save.
     :type df_dict: dict
-    :param decimal_places: Number of decimal places to round numeric columns. Default is ``0``.
+
+    :param decimal_places: Number of decimal places to round numeric columns. Default is ``0``. When set to ``0``, numeric columns are saved as integers.
     :type decimal_places: int
 
-.. note::
-    
-    - The function will autofit columns and left-align text.
-    - Numeric columns will be formatted with the specified number of decimal places.
-    - Headers will be bold and left-aligned without borders.
+.. admonition:: Notes
 
-The function performs the following tasks:
+    - **Progress Tracking**: The function uses ``tqdm`` to display a progress bar while saving DataFrames to Excel sheets.
+    - **Column Formatting**:
+        - Columns are autofitted to content length and left-aligned by default.
+        - Numeric columns are rounded to the specified decimal places and formatted accordingly.
+        - Non-numeric columns are left-aligned.
+    - **Header Styling**:
+        - Headers are bold, left-aligned, and borderless.
+    - **Dependencies**: This function requires the ``xlsxwriter`` library.
+
+**The function performs the following tasks**:
 
 - Writes each DataFrame to its respective sheet in the Excel file.
 - Rounds numeric columns to the specified number of decimal places.
 - Applies customized formatting to headers and cells.
-- Autofits columns based on the content length.
+- Autofits columns based on content length for improved readability.
+- Tracks the saving process with a progress bar, making it user-friendly for large datasets.
+
 
 **Implementation Example**
 
