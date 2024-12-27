@@ -9,3 +9,5 @@ __pycache__/
 edatkit_374/
 src/*.doctree
 *.pickle
+.doctrees
+.doctrees
