@@ -29,7 +29,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="References" href="references.html" /> 
+    <link rel="next" title="Acknowledgements" href="acknowledgements.html" />
+    <link rel="prev" title="Creating Effective Visualizations" href="eda_plots.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -84,11 +85,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ASCII Art</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
@@ -97,10 +93,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#key-details">Key Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
         </div>
@@ -149,14 +148,14 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 <p>The <code class="docutils literal notranslate"><span class="pre">ascii_art</span></code> dictionary contains the following predefined artworks:</p>
 <ul class="simple">
 <li><p><strong>eda_toolkit_logo</strong>: ASCII representation of the EDA Toolkit logo.</p></li>
-<li><p><strong>leon_shpaner_bb</strong>: Black-and-blue ASCII art of “Leon Shpaner”.</p></li>
-<li><p><strong>leon_shpaner_wb</strong>: White-and-black ASCII art of “Leon Shpaner”.</p></li>
-<li><p><strong>oscar_gil_bb</strong>: Black-and-blue ASCII art of “Oscar Gil”.</p></li>
-<li><p><strong>oscar_gil_wb</strong>: White-and-black ASCII art of “Oscar Gil”.</p></li>
-<li><p><strong>royce_hall_bb</strong>: Black-and-blue ASCII art of UCLA’s Royce Hall.</p></li>
-<li><p><strong>royce_hall_wb</strong>: White-and-black ASCII art of UCLA’s Royce Hall.</p></li>
-<li><p><strong>ca_state_bb</strong>: Black-and-blue ASCII art of the State of California.</p></li>
-<li><p><strong>ca_state_wb</strong>: White-and-black ASCII art of the State of California.</p></li>
+<li><p><strong>leon_shpaner_bb</strong>: ASCII art of “Leon Shpaner” with a black background.</p></li>
+<li><p><strong>leon_shpaner_wb</strong>: ASCII art of “Leon Shpaner” with a white background.</p></li>
+<li><p><strong>oscar_gil_bb</strong>: ASCII art of “Oscar Gil” with a black background.</p></li>
+<li><p><strong>oscar_gil_wb</strong>: ASCII art of “Oscar Gil” with a white background.</p></li>
+<li><p><strong>royce_hall_bb</strong>: ASCII art of UCLA’s Royce Hall with a black background.</p></li>
+<li><p><strong>royce_hall_wb</strong>: ASCII art of UCLA’s Royce Hall with a white background.</p></li>
+<li><p><strong>ca_state_bb</strong>: ASCII art of the State of California with a black background.</p></li>
+<li><p><strong>ca_state_wb</strong>: ASCII art of the State of California with a white background.</p></li>
 </ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="print_art">
@@ -180,10 +179,211 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<p><strong>Display a Single Artwork</strong>:</p>
+<p><strong>Display a Logo Artwork</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;eda_toolkit_logo&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>+--------------------------------------------------------------------------------+
+|  _____   ____       _              _____                   _   _      _   _    |
+| | ____| |  _ \     / \            |_   _|   ___     ___   | | | | __ (_) | |_  |
+| |  _|   | | | |   / _ \    _____    | |    / _ \   / _ \  | | | |/ / | | | __| |
+| | |___  | |_| |  / ___ \  |_____|   | |   | (_) | | (_) | | | |   &lt;  | | | |_  |
+| |_____| |____/  /_/   \_\           |_|    \___/   \___/  |_| |_|\_\ |_|  \__| |
+|                                                                                |
++--------------------------------------------------------------------------------+
+</pre></div>
+</div>
+<p><strong>Display Leon Shpaner Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;leon_shpaner_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                           Leon Shpaner
+
+                          %%%%%%%%%%%%%%%
+                      %%%%%%%%%%@%@@%%@@@@@@@
+                    @@@@@@@%%%%%@%@%@@@@%%%@@@@
+                  @@@@@@@@%%%%%%%%%%%%%%@@@@@@@%%
+                @@@@@@@@@@%%%%####*****#%@@@@@@@%%%
+               @@@@@%%%%####**+++++++++++*%@@%%%@%%@
+              @@@@%###****++++++++++++++++*%%%%@@%%@
+              @@@#*****++++++++++++++++++++#%%%%%%%%%
+             @@@##****++++++++++++++++++++++#%%%%%%%%
+             @@%####***+++++++++++++++++++++*%@%%%%%%
+             @@#####****+++++++++++++++++++***%@@%%%%%
+             @@####*****++++++++++++++++++++**#%@@%%%%
+             @@###****+++++++++++++++++++++++*#%@@%%%%
+             @@###*****+++++++++++++++++++++++*%@@@%%#+
+             @@##########****###%%%%%####**+++*#%%%###**
+             @@%%%%%@@%%%##*##%%%%##****#**++++#%%#++*#+
+             %%%%%%#%%%%%%#++*##%%%%@%##*++++++*###+++*+
+             %%##%%%%%%#%#*+++***#****++++++++++##***+*+
+             #%#####*****#*++++++++++++++++++++*##++++++
+             #%##**++++**#*++++++++++++++++++++*##+++++
+             ####*+++++*##+++++++*+++++++++++++*##+++++
+              ###*****##*++++++++**##***++++++*###+++*
+              %%###*####%##*##%##*+*#####**++*####*
+              %%#####%%%%%%%%%%%#####%##******#####
+              %%####%%%%%%%%%%%%%%#%%%%#*****######
+               %%###%%%@%%%######*####%##*#####%%#
+               %%%%#%%%#%###****++++*#########%%%*
+                %%%%%%#####*******++*######%%%%%#+*+
+                 %%%%%%#######***+++*#%%%%%%%%%#*+#++
+                 @@@@@@%##***+++++**#%%%%%%%%%#*++*=+###
+                  @@@@@@%%##########%%@%%%%%%#*+++===+##%
+                   @@@@@@@%%%%%%%%%@@@%%%%%%#++++===+*%%%%%
+                     @@@@@@@@%@@@@@@@@%%%%#**++===++*%%%%##%
+                     +##%@@@@@@@@@@@@@%%##**+++++=+#%%%%%%%%#%
+                    ++*##%%%@@@@%@%%%###***+==+==+%%%%%%%%%%#####
+                   +++**#%###########****++==+==*%%%%%%%%%%%%%%########
+                  +++++*#%%####*********+===+++#%%%%%%%%%%%%%%%%%%%#######%%
+                %#++++++*#%#**********+====+=+%%%%%%%%%%%%%%%%%%%%%%#%##########
+           %%%%%%*+++=+++*###++++++++=======*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%##%####
+       %%%%%%%%%%+++++++++###*+++++++======#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%#++++++++###*+++++++====+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%+++*#++=*#**++++++++==+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+</pre></div>
+</div>
+<p><strong>Display Oscar Gil Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;oscar_gil_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                                 Oscar Gil
+
+                                %@@@@@@@@@@@@
+                             @@@@@@@@@@@@@@@@@@@@
+                        %%@@@@@@@@@@@@@@@@@@@@@@@@@@
+                      %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                   @@@@@@@@@@@@@@@@%%#%%%%%@@@@@@@@@@@@@@@
+                   %@@@@@@@%%#*****************###%%@@@@@@@
+                   @@@@@@%#**************************#@@@@@@
+                   @@@@@%#****************************#%@@@@
+                   @@@@%#*************+****************%@@@@
+                   %@@@#*************+++++*************#%@@@
+                   @@@%**************+++*+*************#%@@@%
+                   @@%#******************+**************%@@@%
+                   %@%#************++*+*+*++++**********#@@@%
+                   @@%#**************+**+***************#%@@%
+                    @@#**#%%%%%@@%%#*******#%%%%%%%##***#@@%
+                    %@%**#%%%%%%%%%%%*****#%%%%%#####***#@%**
+                    *%#***#%%%%##***#********#%%%%#******%***
+                    #*#**************************************
+                     *#*************************************
+                     *##******++*******+*******+++*********
+                     **#***************+********++*********
+                     **#***********%%*****#%***************
+                       *********##%%%%%%@%%##*************
+                       *******#%%##**********#%#*********
+                       #********#%%#********%%##********
+                        ##****************************##
+                         %####**********************###
+                          %%%%#*******##*********######
+                          %%%%%%#******+*******#%####***
+                           ##%%%%##***********%%###******##
+                           %##%%%%%%##***##%%%%%#*********#*##*
+                      %%%%%%#*#%%%%@@@@%%%%%%%#************##%#%#####
+                   %%%%%%#******#%%%%%%%%%%%#************##%####%%%##%##
+              ##%%%%%%%%#**********#%%###**************####%%###%#%%#%%##%%##
+         %####%%%%%%%%%%%***************************###%%%%%#%%%#%%%%###%%%%##%###
+    ##%#####%%%%%%%%%%%%%#************************##%%%%#%%#######%##%%%%###%#####
+ ########%##%%%#%%%%%%%%%%%#*****************#%##%%%%#%%%####%###%################
+####%%####%%#%%###%%%%%%%%%%%%%%#######%%%%%%%%%%%%%%%##%%%%%%%#####%%############
+</pre></div>
+</div>
+<p><strong>Display UCLA Royce Hall Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;royce_hall_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                %############+                       %############%
+                @###%*#%#####*                      %%####%####%##%
+                %##%@*%%*@####*                     %@###@%###@%##%
+                %##%@+@@*@####*                     @@###@####@%###
+                ###%@+@%*@####*                     @@###@####@###%
+                ###********####   UCLA Royce Hall   @@##********###
+                ###############                     @@#############
+                ###############                     %@#############
+                ###############     ##*##%##*##     %@#############
+                ###############*############%######*%@#############
+                ####################%+######%*#####################
+                ####################%+#@@%@@########%##############    @@@@@@%
+@@@@@@@@@@@@@@@@@##############%@@@%#+%#%###%*##@@@%##############@@@@@@@@@@@@@@@@@
+%%%%%%%%%%%%%%%%%###%########*%%%@@%%+#%@@%%%+%%@@%@%####@#########################
+%%%%%%%%%%%%%%%%%############*%%@@@@#+%%@@@%#+%@@@@%%##############################
+@@%%%%%@@%%%%%@@@##**########*%@@@@@#+%@@@@@%+%@@@@@%#############%@%#####@@#####@@
+@@%%%%%@@%%%%%@@@###%########++++++++++++++++*++++++++###@########%@%#####@@#####@@
+@@%%%%%@@%%%%%@@%####*#######+++++++*+++++++#+++++++*+####%###%%##%@%#####@@#####@@
+%@%%@@@@@@%%%%@%@############++%@@%#*++#%%%#*++#%@@%*+############%#%#####%%%%%##%#
+++++#*+**+*%%%%%%############+%%@@@@#+#@@@@@#+%@@@@@%+############*++***+*+++**++*+
++**+#*+**+*%%%%%%############+%@#####+%%###%#+#####@%*############+*+*++**+*+**+*#+
++%@%@%%@##@@@@%@%####%%@@####+%%%%%%#+%%%%%%#+#%%%%@%+####@%%%####%@#@%@@#*@%@@%@%+
++@@%@@%@*#@@@@%@@###%@%@@####+%%%@@%#+%%@@@%#+#@@@%@%+####@@@@%#%#@@#@%@@#*@%@@%@@+
+                    @@@@@@@##*%%%%%%#*%%%@%%#*#%@%%%%+##@
+</pre></div>
+</div>
+<p><strong>Display California State Image</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+
+<span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;ca_state_wb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>   ..                           ...
+ ..@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+ .:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+   -@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+   :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+  .#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+..:%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+..@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+.*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+..@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+...:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+  ...%@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+     :@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+     -@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+    .:@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+    ..+@@@@@@@@@@@@@@@@@@@@@@@@@@@...
+    . =@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+       .+@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+        ..#@@@@@@@@@@@@@@@@@@@@@@@@@@@@=.
+          .=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+.
+           .%@@#-@##%%@@@@@@@@@@@@@@@@@@@@@+..
+           ..-%#+@@@@@@@@@@@@@@@@@@@@@@@@@@@@*...
+              .*+*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*..
+              .+@%+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#. .
+               .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*..
+               .-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*..
+                 ...%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+..
+                   .=@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+..
+                   =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@+..
+                   .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=..
+                    .:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+                     ..%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-.
+                     ...#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
+                       ...%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:.
+                         ..+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%:
+                         ....#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%..
+                            .%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@...
+                            .*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:
+                            ..#%#%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@..
+                              ........:@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#.
+                              .:...-....-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#...
+                              .... ...   . ..:@@@@@@@@@@@@@@@@@@@@@@@@@@@@%.
+                                             .:.-@@@@@@@@@@@@@@@@@@@@@@@@@%.
+                                          . =:.  ..%@@@@@@@@@@@@@@@@@@@@@@.
+                                    .=.      ..    ..@@@@@@@@@@@@@@@@@@@@*.
+                                      .   . :.      ..%@@@@@@@@@@@@@@@@@@%=.
+                                            .+.      .#@@@@@@@@@@@@@@@@@@@@.
+                                             .        .*@@@@@@%*+=-:::.......
+                                                      .. .  ..
 </pre></div>
 </div>
 <p><strong>Display All Artworks</strong>:</p>
@@ -202,20 +402,20 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;unknown_art&quot;</span><span class="p">)</span>
-<span class="c1"># Output: &#39;unknown_art&#39; not found. Available options are: eda_toolkit_logo, leon_shpaner_bb, ...</span>
 </pre></div>
 </div>
-</section>
-<section id="key-details">
-<h2>Key Details<a class="headerlink" href="#key-details" title="Permalink to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&#39;unknown_art&#39; not found. Available options are: eda_toolkit_logo, leon_shpaner_bb, ...
+</pre></div>
+</div>
+<p><strong>Key Details</strong></p>
 <ul class="simple">
 <li><p><strong>Default Behavior</strong>: If no artwork name is provided and <cite>all</cite> is <cite>False</cite>, a list of available options is displayed.</p></li>
 <li><p><strong>Output Handling</strong>: If <cite>output_file</cite> and <cite>output_path</cite> are specified, the function creates the directory (if needed) and saves the ASCII art to the file.</p></li>
 </ul>
-</section>
-<section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading"></a></h2>
-<p>Ensure that the <cite>ascii_art</cite> dictionary contains the desired artwork and keys are correctly referenced when using the <cite>print_art</cite> function.</p>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>Ensure that the <code class="docutils literal notranslate"><span class="pre">ascii_art</span></code> dictionary contains the desired artwork and keys are correctly referenced when using the <code class="docutils literal notranslate"><span class="pre">print_art</span></code> function.</p>
+</div>
 </section>
 </section>
 
@@ -223,7 +423,8 @@ the dictionary structure, and how to use the <code class="docutils literal notra
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="references.html" class="btn btn-neutral float-left" title="References" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="eda_plots.html" class="btn btn-neutral float-left" title="Creating Effective Visualizations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="acknowledgements.html" class="btn btn-neutral float-right" title="Acknowledgements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
