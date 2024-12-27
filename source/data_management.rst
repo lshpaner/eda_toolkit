@@ -1184,9 +1184,8 @@ from the specified columns in a DataFrame containing census data [1]_
 
 .. note:: 
 
-    In the example below, we demonstrate how to use the ``dataframe_columns`` 
-    function to analyze a DataFrame's columns. You may notice a new variable, 
-    ``age_group``, is introduced. The logic for generating this variable is :ref:`provided here <Binning_Numerical_Columns>`.
+    You may notice a new variable, ``age_group``, is introduced. The logic for 
+    generating this variable is :ref:`provided here <Binning_Numerical_Columns>`.
 
 
 **Output**
