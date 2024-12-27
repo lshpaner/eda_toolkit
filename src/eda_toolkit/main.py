@@ -500,19 +500,24 @@ def summarize_all_combinations(
     min_length=2,
 ):
     """
-    Generates summary tables for all possible combinations of the specified
-    variables in the DataFrame and saves them to an Excel file.
+    Generate summary tables for all possible combinations of the specified
+    variables in the DataFrame and save them to an Excel file with detailed
+    formatting.
 
     Parameters:
     -----------
     df : pandas.DataFrame
         The DataFrame containing the data.
+
     variables : list of str
         List of column names from the DataFrame to generate combinations.
+
     data_path : str
-        Path where the output Excel file will be saved.
+        Directory path where the output Excel file will be saved.
+
     data_name : str
         Name of the output Excel file.
+
     min_length : int, optional (default=2)
         Minimum size of the combinations to generate.
 
@@ -521,16 +526,54 @@ def summarize_all_combinations(
     summary_tables : dict
         A dictionary where keys are tuples of column names (combinations) and
         values are the corresponding summary DataFrames.
+
     all_combinations : list of tuple
         A list of all generated combinations, where each combination is
         represented as a tuple of column names.
 
     Notes:
     ------
-    - The function will create an Excel file with a sheet for each combination
-      of the specified variables, as well as a "Table of Contents" sheet with
-      hyperlinks to each summary table.
-    - The sheet names are limited to 31 characters due to Excel's constraints.
+    - **Combination Generation**:
+        - Generates all combinations of the specified variables with a size
+          greater than or equal to `min_length`.
+        - Uses **`tqdm`** for progress tracking during combination generation.
+    - **Excel Output**:
+        - Each combination is saved as a separate sheet in an Excel file.
+        - A "Table of Contents" sheet is created with hyperlinks to each
+          combination's summary table.
+        - Sheet names are truncated to 31 characters to meet Excel's limitations.
+    - **Formatting**:
+        - Headers in all sheets are bold, left-aligned, and borderless.
+        - Columns are auto-fitted based on content length for improved readability.
+        - A left-aligned format is applied to all columns.
+    - **Progress Tracking**:
+        - The function uses **`tqdm`** progress bars for tracking combination
+          generation, writing the Table of Contents, and writing summary tables
+          to Excel.
+
+    Example:
+    --------
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({
+    >>>     "Category": ["A", "A", "B", "B"],
+    >>>     "Subcategory": ["X", "Y", "X", "Y"],
+    >>>     "Values": [10, 20, 30, 40]
+    >>> })
+    >>> variables = ["Category", "Subcategory"]
+    >>> summarize_all_combinations(df, variables, "./output", "summary.xlsx")
+
+    Raises:
+    -------
+    ValueError
+        If the `variables` list is empty or not provided, or if `data_path` or
+        `data_name` is invalid.
+
+    Outputs:
+    --------
+    - An Excel file at the specified path with the following:
+        - A "Table of Contents" sheet linking to all combination sheets.
+        - Individual sheets for each variable combination, summarizing the
+          counts and proportions of combinations in the DataFrame.
     """
 
     summary_tables = {}
@@ -672,7 +715,8 @@ def save_dataframes_to_excel(
 ):
     """
     Save multiple DataFrames to separate sheets in an Excel file with customized
-    formatting, including column autofit and numeric formatting.
+    formatting, including column autofit, numeric formatting, and progress
+    tracking.
 
     Parameters:
     -----------
@@ -689,18 +733,26 @@ def save_dataframes_to_excel(
 
     Notes:
     ------
-    - Columns will be autofitted to content and left-aligned.
-    - Numeric columns will be formatted with the specified number of decimal
-      places.
-    - Headers will be bold, left-aligned, and have no borders.
-    - This function requires the 'xlsxwriter' library for Excel writing.
+    - Columns are automatically adjusted to fit their content and left-aligned.
+    - Numeric columns are rounded to the specified decimal places and formatted
+      accordingly. If `decimal_places` is 0, numeric columns are saved as integers.
+    - Headers are bold, left-aligned, and have no borders.
+    - The function uses **`tqdm`** to display a progress bar for tracking the
+      saving of DataFrames to Excel sheets.
+    - This function requires the `xlsxwriter` library for writing Excel files.
+    - Non-numeric columns are left-aligned by default.
 
     Example:
     --------
-    df1 = pd.DataFrame({"A": [1, 2], "B": [3.14159, 2.71828]})
-    df2 = pd.DataFrame({"X": ["foo", "bar"], "Y": ["baz", "qux"]})
-    df_dict = {"Sheet1": df1, "Sheet2": df2}
-    save_dataframes_to_excel("output.xlsx", df_dict, decimal_places=2)
+    >>> df1 = pd.DataFrame({"A": [1, 2], "B": [3.14159, 2.71828]})
+    >>> df2 = pd.DataFrame({"X": ["foo", "bar"], "Y": ["baz", "qux"]})
+    >>> df_dict = {"Sheet1": df1, "Sheet2": df2}
+    >>> save_dataframes_to_excel("output.xlsx", df_dict, decimal_places=2)
+
+    Raises:
+    -------
+    ValueError
+        If `df_dict` is empty or not provided, a `ValueError` will be raised.
     """
 
     with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
@@ -2083,8 +2135,8 @@ def stacked_crosstab_plot(
 
             plt.show()
 
-    # Generate crosstabs if output is "both" or "crosstabs_only"
-    if output in ["both", "crosstabs_only"]:
+    # Always generate crosstabs if return_dict=True
+    if return_dict:
         legend_counter = 0
         # First run of the crosstab, accounting for totals only
         for col_results in func_col:
@@ -2127,8 +2179,12 @@ def stacked_crosstab_plot(
                 inplace=True,
             )
             crosstab_df = pd.concat([crosstab_df, crosstab_df_norm], axis=1)
-            # Process counter
             legend_counter += 1
+            crosstabs_dict[col_results] = crosstab_df
+
+    # Display crosstabs only if required by output
+    if output in ["both", "crosstabs_only"]:
+        for col_results, crosstab_df in crosstabs_dict.items():
             # Display results
             print()
             print("Crosstab for " + col_results)
@@ -2137,7 +2193,6 @@ def stacked_crosstab_plot(
             print()
             # Store the crosstab in the dictionary
             # Use col_results as the key
-            crosstabs_dict[col_results] = crosstab_df
 
     # Return the crosstabs_dict only if return_dict is True
     if return_dict:
@@ -2174,60 +2229,68 @@ def box_violin_plot(
     **kwargs,  # To allow passing additional parameters to Seaborn
 ):
     """
-    Create and save individual boxplots or violin plots, an entire grid
-    of plots, or both for given metrics and comparisons, with optional
-    axis limits.
+    Create and save individual or grid-based boxplots or violin plots for
+    specified metrics and comparisons.
+
+    This function generates individual plots, grid plots, or both for the
+    specified metrics and comparison categories in a DataFrame. It provides
+    extensive customization options for plot appearance, saving options, and
+    display preferences, including support for axis limits, label customization,
+    and rotated layouts.
 
     Parameters:
     -----------
     df : pandas.DataFrame
-        The DataFrame containing the data.
+        The DataFrame containing the data to plot.
 
     metrics_list : list of str
-        List of metric names (columns in df) to plot.
+        List of column names representing the metrics to be plotted.
 
     metrics_comp : list of str
-        List of comparison categories (columns in df).
+        List of column names representing the comparison categories.
 
     n_rows : int, optional
-        Number of rows in the subplot grid. Calculated automatically
-        if not provided.
+        Number of rows in the subplot grid. Calculated automatically if not
+        provided.
 
     n_cols : int, optional
-        Number of columns in the subplot grid. Calculated automatically
-        if not provided.
+        Number of columns in the subplot grid. Calculated automatically if not
+        provided.
 
     image_path_png : str, optional
-        Directory path to save .png images.
+        Directory path to save plots in PNG format. If not specified, plots will
+        not be saved as PNG.
 
     image_path_svg : str, optional
-        Directory path to save .svg images.
+        Directory path to save plots in SVG format. If not specified, plots will
+        not be saved as SVG.
 
     save_plots : bool, optional
-        If True, saves the plots specified by `show_plot`. The plots to be saved
-        ("individual", "grid", or "both") are determined by the `show_plot`
-        parameter. Defaults to False.
+        If True, saves the plots specified by the `show_plot` parameter
+        ("individual", "grid", or "both"). Defaults to False.
 
     show_legend : bool, optional (default=True)
-        True if showing the legend in the plots.
+        Whether to display the legend on the plots.
 
     plot_type : str, optional (default='boxplot')
-        String, "boxplot" or "violinplot" to specify the type of plot.
+        Type of plot to generate. Options are "boxplot" or "violinplot".
 
     xlabel_rot : int, optional (default=0)
         Rotation angle for x-axis labels.
 
     show_plot : str, optional (default='both')
-        String, "individual", "grid", or "both" to control plot display.
+        Specify the type of plots to display. Options are "individual", "grid",
+        or "both".
 
     rotate_plot : bool, optional (default=False)
-        True if rotating (pivoting) the plots.
+        If True, rotates the plots by swapping the x and y axes.
 
-    individual_figsize : tuple or list, optional (default=(6, 4))
-        Width and height of the figure for individual plots.
+    individual_figsize : tuple of int, optional (default=(6, 4))
+        Dimensions (width, height) for individual plots.
 
-    grid_figsize : tuple or list, optional
-        Width and height of the figure for grid plots.
+    grid_figsize : tuple of int, optional
+        Dimensions (width, height) for the grid plot. Defaults to a size
+        proportional to the number of rows and columns.
 
     label_fontsize : int, optional (default=12)
         Font size for axis labels.
@@ -2236,55 +2299,45 @@ def box_violin_plot(
         Font size for axis tick labels.
 
     text_wrap : int, optional (default=50)
-        The maximum width of the title text before wrapping.
+        Maximum width of the plot titles before wrapping.
 
-    xlim : tuple, optional
-        Tuple specifying the limits of the x-axis.
+    xlim : tuple of float, optional
+        Limits for the x-axis as (min, max).
 
-    ylim : tuple, optional
-        Tuple specifying the limits of the y-axis.
+    ylim : tuple of float, optional
+        Limits for the y-axis as (min, max).
 
     label_names : dict, optional
-        Dictionary mapping original column names to custom labels.
+        Dictionary to map original column names to custom labels for display
+        purposes.
 
     **kwargs : additional keyword arguments
-        Additional keyword arguments passed to the Seaborn plotting function.
+        Additional parameters passed to the Seaborn plotting function.
 
     Returns:
     --------
     None
-        This function does not return any value but generates and optionally
-        saves boxplots or violin plots for the specified metrics and comparisons.
+        This function does not return a value. It generates and optionally saves
+        or displays the specified plots.
 
     Raises:
     -------
     ValueError
-        If 'show_plot' is not one of "individual", "grid", or "both".
-
-    ValueError
-        If 'save_plots' is not one of None, "all", "individual", or "grid".
-
-    ValueError
-        If 'save_plots' is set without specifying 'image_path_png' or
-        'image_path_svg'.
-
-    ValueError
-        If 'rotate_plot' is not a boolean value.
-
-    ValueError
-        If 'individual_figsize' is not a tuple or list of two numbers
-        (width, height).
-
-    ValueError
-        If 'grid_figsize' is provided and is not a tuple or list of two numbers
-        (width, height).
+        - If `show_plot` is not one of "individual", "grid", or "both".
+        - If `save_plots` is True but `image_path_png` or `image_path_svg` is
+          not specified.
+        - If `rotate_plot` is not a boolean value.
+        - If `individual_figsize` or `grid_figsize` is not a tuple or list of
+          two numbers.
 
     Notes:
     ------
-    - `n_rows` and `n_cols` are automatically calculated if not provided, based
-      on the number of plots.
-    - `label_names` allows you to map original column names to custom labels
-      used in plot titles and labels.
+    - Automatically calculates `n_rows` and `n_cols` if not provided based on
+      the number of plots.
+    - Supports rotating the plot layout using the `rotate_plot` parameter.
+    - Saves plots to the specified paths if `save_plots` is True.
+    - Handles axis label customization using `label_names` and supports text
+      wrapping for plot titles.
     """
 
     # Check for valid show_plot values
@@ -2521,6 +2574,7 @@ def scatter_fit_plot(
     df,
     x_vars=None,
     y_vars=None,
+    exclude_combinations=None,
     n_rows=None,
     n_cols=None,
     max_cols=4,
@@ -2529,7 +2583,7 @@ def scatter_fit_plot(
     save_plots=None,  # Parameter to control saving plots
     show_legend=True,  # Parameter to toggle legend
     xlabel_rot=0,  # Parameter to rotate x-axis labels
-    show_plot="both",  # Parameter to control plot display
+    show_plot="grid",  # Parameter to control plot display
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
     grid_figsize=None,  # Parameter to specify figure size for grid plots
@@ -2554,8 +2608,8 @@ def scatter_fit_plot(
 ):
     """
     Create and save scatter plots or a grid of scatter plots for given
-    x_vars and y_vars, with an optional best fit line and customizable
-    point color, size, and markers.
+    x_vars and y_vars, with an optional best fit line, customizable
+    point color, size, markers, and axis limits.
 
     Parameters:
     -----------
@@ -2569,6 +2623,9 @@ def scatter_fit_plot(
     y_vars : list of str or str, optional
         List of variable names to plot on the y-axis. If a string is provided,
         it will be converted into a list with one element.
+
+    exclude_combinations : list of tuples, optional
+        List of (x_var, y_var) combinations to exclude from the plots.
 
     n_rows : int, optional
         Number of rows in the subplot grid. If not specified, it will be
@@ -2597,7 +2654,7 @@ def scatter_fit_plot(
     xlabel_rot : int, optional (default=0)
         Rotation angle for x-axis labels.
 
-    show_plot : str, optional (default="both")
+    show_plot : str, optional (default="grid")
         Controls plot display: "individual", "grid", or "both".
 
     rotate_plot : bool, optional (default=False)
@@ -2656,9 +2713,11 @@ def scatter_fit_plot(
 
     xlim : tuple or list, optional
         Limits for the x-axis as a tuple or list of (min, max).
+        If not provided, the limits are determined automatically.
 
     ylim : tuple or list, optional
         Limits for the y-axis as a tuple or list of (min, max).
+        If not provided, the limits are determined automatically.
 
     all_vars : list of str, optional
         If provided, automatically generates scatter plots for all combinations
@@ -2689,7 +2748,7 @@ def scatter_fit_plot(
         If `hue_palette` is specified without `hue`.
 
     ValueError
-        If `show_plot` is not one of ["individual", "grid", "both"].
+        If `show_plot` is not one of ["individual", "grid", "both", "combinations"].
 
     ValueError
         If `save_plots` is not one of [None, "all", "individual", "grid"].
@@ -2709,6 +2768,13 @@ def scatter_fit_plot(
         If `grid_figsize` is provided and is not a tuple or list of two numbers
         (width, height).
 
+    ValueError
+        If `exclude_combinations` contains invalid entries (i.e., items that
+        are not tuples of exactly two elements).
+
+    ValueError
+        If any column names in `exclude_combinations` do not exist in the
+        DataFrame.
     """
 
     # Ensure x_vars and y_vars are lists
@@ -2742,6 +2808,48 @@ def scatter_fit_plot(
             f"Either `all_vars` or both `x_vars` and `y_vars` must be provided."
         )
 
+    # Validate exclude_combinations
+    if exclude_combinations:
+        # Ensure each item is a tuple with two elements
+        invalid_pairs = [
+            pair
+            for pair in exclude_combinations
+            if not (isinstance(pair, tuple) and len(pair) == 2)
+        ]
+        if invalid_pairs:
+            raise ValueError(
+                "All items in `exclude_combinations` must be tuples "
+                "with exactly two elements. Invalid entries: "
+                f"{invalid_pairs}"
+            )
+
+        # Check if all columns in exclude_combinations exist in the DataFrame
+        invalid_columns = {
+            col
+            for pair in exclude_combinations
+            for col in pair
+            if col not in df.columns
+        }
+        if invalid_columns:
+            raise ValueError(
+                f"Invalid column names in `exclude_combinations`: {invalid_columns}. "
+                "Please ensure all columns exist in the DataFrame."
+            )
+
+        # Normalize order of tuples in exclude_combinations
+        exclude_combinations = {tuple(sorted(pair)) for pair in exclude_combinations}
+
+        # Normalize order of tuples in combinations and filter
+        combinations = [
+            (x, y)
+            for (x, y) in combinations
+            if tuple(sorted((x, y))) not in exclude_combinations
+        ]
+
+    # Handle show_plot="combinations"
+    if show_plot == "combinations":
+        return combinations
+
     # Calculate the number of plots
     num_plots = len(combinations)
 
@@ -2756,10 +2864,9 @@ def scatter_fit_plot(
         grid_figsize = (5 * n_cols, 5 * n_rows)
 
     # Validate the show_plot input
-    if show_plot not in ["individual", "grid", "both"]:
-        raise ValueError(
-            f"Invalid `show_plot`. Choose 'individual', 'grid', " f"or 'both'."
-        )
+    valid_show_plot_values = ["individual", "grid", "both", "combinations"]
+    if show_plot not in valid_show_plot_values:
+        raise ValueError(f"Invalid `show_plot`. Choose from {valid_show_plot_values}.")
 
     # Validate the save_plots input
     if save_plots not in [None, "all", "individual", "grid"]:
@@ -2798,10 +2905,6 @@ def scatter_fit_plot(
             "numbers (width, height)."
         )
 
-    # Determine saving options based on save_plots value
-    save_individual = save_plots in ["all", "individual"]
-    save_grid = save_plots in ["all", "grid"]
-
     # Validation checks (already present)
     def get_label(var):
         return label_names.get(var, var) if label_names else var
@@ -2815,7 +2918,18 @@ def scatter_fit_plot(
             linestyle=linestyle,
             label=f"y = {m:.2f}x + {b:.2f}",
         )
-        ax.legend(loc="best")
+        if show_legend:
+            ax.legend(loc="best")
+        elif ax.legend_:
+            ax.legend_.remove()
+
+    # Create subplots for individual or grid plotting
+    if num_plots == 1:
+        fig, ax = plt.subplots(figsize=grid_figsize)
+        axes = [ax]  # Wrap single axis in a list for consistency
+    else:
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
+        axes = axes.flatten()
 
     # Render and show individual plots
     if show_plot in ["individual", "both"]:
@@ -2833,6 +2947,7 @@ def scatter_fit_plot(
                 marker=marker,
                 **kwargs,
             )
+
             if add_best_fit_line:
                 x_data = df[x_var] if not rotate_plot else df[y_var]
                 y_data = df[y_var] if not rotate_plot else df[x_var]
@@ -2862,12 +2977,18 @@ def scatter_fit_plot(
             )
             ax.tick_params(axis="x", rotation=xlabel_rot)
             ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+            # Apply xlim and ylim if provided
+            if xlim:
+                ax.set_xlim(xlim)
+            if ylim:
+                ax.set_ylim(ylim)
+
             plt.show()
 
     # Render and show grid plot
     if show_plot in ["grid", "both"]:
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
-        axes = axes.flatten()
+
         for i, ax in enumerate(axes):
             if i < num_plots:
                 x_var, y_var = combinations[i]
@@ -2884,6 +3005,7 @@ def scatter_fit_plot(
                     marker=marker,
                     **kwargs,
                 )
+
                 if add_best_fit_line:
                     x_data = df[x_var] if not rotate_plot else df[y_var]
                     y_data = df[y_var] if not rotate_plot else df[x_var]
@@ -2905,6 +3027,13 @@ def scatter_fit_plot(
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                # Apply xlim and ylim if provided
+                if xlim:
+                    ax.set_xlim(xlim)
+                if ylim:
+                    ax.set_ylim(ylim)
+
             else:
                 ax.axis("off")
 
@@ -2928,6 +3057,7 @@ def scatter_fit_plot(
                 marker=marker,
                 **kwargs,
             )
+
             if add_best_fit_line:
                 add_best_fit(
                     ax,
@@ -3012,8 +3142,9 @@ def flex_corr_matrix(
     **kwargs,
 ):
     """
-    Creates a correlation heatmap with enhanced customization and options to
-    save the plots in specified formats.
+    Creates a correlation heatmap with extensive customization options,
+    including triangular masking, alignment adjustments, and title wrapping.
+    Users can save the plot in PNG and SVG formats.
 
     Parameters:
     -----------
@@ -3031,25 +3162,25 @@ def flex_corr_matrix(
         The colormap to use for the heatmap.
 
     save_plots : bool, optional (default=False)
-        Controls whether to save the plots.
+        Whether to save the heatmap as an image.
 
     image_path_png : str, optional
-        Directory path to save PNG image of the heatmap.
+        Directory path to save the heatmap as a PNG image.
 
     image_path_svg : str, optional
-        Directory path to save SVG image of the heatmap.
+        Directory path to save the heatmap as an SVG image.
 
     figsize : tuple, optional (default=(10, 10))
-        Width and height of the figure for the heatmap.
+        Width and height of the heatmap figure.
 
     title : str, optional
         Title of the heatmap.
 
     label_fontsize : int, optional (default=12)
-        Font size for the axis labels and title.
+        Font size for axis labels and title.
 
     tick_fontsize : int, optional (default=10)
-        Font size for tick labels (variable names) and colorbar label.
+        Font size for tick labels and colorbar labels.
 
     xlabel_rot : int, optional (default=45)
         Rotation angle for x-axis labels.
@@ -3064,12 +3195,12 @@ def flex_corr_matrix(
         Vertical alignment for y-axis labels (e.g., "center", "top").
 
     text_wrap : int, optional (default=50)
-        The maximum width of the title text before wrapping.
+        Maximum width of the title text before wrapping.
 
-    vmin : float, optional
+    vmin : float, optional (default=-1)
         Minimum value for the heatmap color scale.
 
-    vmax : float, optional
+    vmax : float, optional (default=1)
         Maximum value for the heatmap color scale.
 
     cbar_label : str, optional (default='Correlation Index')
@@ -3079,10 +3210,10 @@ def flex_corr_matrix(
         Whether to show only the upper triangle of the correlation matrix.
 
     label_names : dict, optional
-        Dictionary to map original column names to custom labels.
+        A dictionary to map original column names to custom labels.
 
     **kwargs : dict, optional
-        Additional keyword arguments to pass to seaborn.heatmap().
+        Additional keyword arguments to pass to `sns.heatmap()`.
 
     Returns:
     --------
@@ -3093,20 +3224,24 @@ def flex_corr_matrix(
     Raises:
     -------
     ValueError
-        If `annot` is not a boolean value.
+        If `annot`, `save_plots`, or `triangular` is not a boolean value.
 
     ValueError
-        If `cols` is provided and is not a list of column names.
+        If `cols` is provided but is not a list of column names.
 
     ValueError
-        If `save_plots` is not a boolean value.
+        If `save_plots` is True but neither `image_path_png` nor `image_path_svg`
+        is specified.
 
-    ValueError
-        If `triangular` is not a boolean value.
-
-    ValueError
-        If `save_plots` is set to True without specifying either
-        `image_path_png` or `image_path_svg`.
+    Notes:
+    ------
+    - If `triangular=True`, the heatmap will display only the upper triangle
+      of the correlation matrix, excluding the diagonal.
+    - Custom labels specified in `label_names` will replace the default column
+      names in the heatmap's axes.
+    - Save formats are determined by the paths provided for PNG and SVG files.
+    - The `kwargs` parameter allows for further customization of the heatmap,
+      leveraging Seaborn's `heatmap()` function.
     """
 
     # Validation: Ensure annot is a boolean
@@ -3218,9 +3353,19 @@ def flex_corr_matrix(
     # Adjust layout to prevent overlap
     plt.tight_layout()
 
+    # Determine the filename title for saving, using the default if None
+    filename_title = title or "Correlation Matrix"
+
+    # Set the plot title only if a title is explicitly provided
+    if title:
+        plt.title(
+            "\\n".join(textwrap.wrap(title, width=text_wrap)),
+            fontsize=label_fontsize,
+        )
+
     # Save the plot if save_plots is True
     if save_plots:
-        safe_title = title.replace(" ", "_").replace(":", "").lower()
+        safe_title = filename_title.replace(" ", "_").replace(":", "").lower()
 
         if image_path_png:
             filename_png = f"{safe_title}.png"
