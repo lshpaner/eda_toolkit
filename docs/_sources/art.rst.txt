@@ -288,7 +288,7 @@ Examples
 
 
 
-**Display All Artworks**::
+**Display All Artwork**::
 
     from art import print_art
 
