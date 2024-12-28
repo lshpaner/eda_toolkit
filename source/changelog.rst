@@ -24,6 +24,51 @@
 Changelog
 =========
 
+`Version 0.0.15`_
+----------------------
+
+.. _Version 0.0.15: https://lshpaner.github.io/eda_toolkit/v0.0.15/index.html
+
+Scatter Plot Function Updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Avoid In-Place Modification of ``exclude_combinations``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This addresses an issue where the ``scatter_fit_plot`` function modifies the ``exclude_combinations`` parameter in-place, causing errors when reused in subsequent calls.
+
+- Created a local copy of ``exclude_combinations`` for normalization instead of modifying the input directly:
+
+  .. code-block:: python
+
+     exclude_combinations_normalized = {tuple(sorted(pair)) for pair in exclude_combinations}
+
+Improve Progress Tracking and Resolve Last Plot Saving Issue
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Separate Progress Bars for Grid Plot:
+
+   - Added a ``tqdm`` progress bar to track the rendering of subplots in the grid.
+   - Introduced a second ``tqdm`` progress bar to handle the saving step of the entire grid plot.
+
+2. Fix for Last Plot Saving with ``save_plots="all"``:
+
+   - Ensured individual plots and the grid plot are saved independently without overlap or interference.
+   - Addressed an issue where the last individual plot was incorrectly saved or overwritten.
+
+3. Accurate Updates and Feedback:
+
+   - Progress bars now provide clear updates for rendering and saving stages, avoiding any hanging or delays.
+
+Updated ``tqdm`` Saving Logic in ``scatter_fit_plot``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Refactored ``tqdm`` progress bar in ``scatter_fit_plot`` to track the overall plot-saving process, covering both individual and grid plots.
+- Updated ``tqdm`` progress bar description in ``scatter_fit_plot`` to use universal phrasing: "Saving scatter plot(s)."
+- Ensured consistency for singular or multiple plot-saving scenarios in progress tracking.
+
+
+
 `Version 0.0.14`_
 ----------------------
 
