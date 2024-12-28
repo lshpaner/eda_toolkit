@@ -8,6 +8,7 @@ __pycache__/
 *.github/
 **/*venv*/
 edatkit_374/
+edatkit_311/
 *.pickle
 src/*.doctree
 *.doctree
