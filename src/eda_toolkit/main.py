@@ -2651,6 +2651,10 @@ def scatter_fit_plot(
     save_plots : str, optional
         Controls which plots to save: "all", "individual", or "grid".
         If None, plots will not be saved.
+        - "all": Saves both individual and grid plots.
+        - "individual": Saves each scatter plot separately with a progress bar
+          (powered by `tqdm`) to track saving progress.
+        - "grid": Saves a single grid plot of all combinations.
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
@@ -3031,7 +3035,7 @@ def scatter_fit_plot(
 
     # Save individual plots with progress bar
     if save_plots in ["all", "individual"]:
-        with tqdm(total=len(combinations), desc="Saving individual plots") as pbar:
+        with tqdm(total=len(combinations), desc="Saving scatter plot(s)") as pbar:
             for x_var, y_var in combinations:
                 fig_individual, ax = plt.subplots(
                     figsize=individual_figsize
@@ -3088,76 +3092,69 @@ def scatter_fit_plot(
                 pbar.update(1)  # Update progress bar
 
     # Save grid plot
-    if save_plots in ["all", "grid"]:
-        # Progress bar for rendering subplots
-        with tqdm(total=num_plots, desc="Rendering grid plot") as render_pbar:
-            fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
-            axes = axes.flatten()  # Flatten axes for consistent handling
+    if save_plots == "grid":
+        # Render the subplots
+        fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
+        axes = axes.flatten()  # Flatten axes for consistent handling
 
-            # Render the subplots
-            for i, ax in enumerate(axes):
-                if i < num_plots:
-                    x_var, y_var = combinations[i]
-                    sns.scatterplot(
-                        x=x_var if not rotate_plot else y_var,
-                        y=y_var if not rotate_plot else x_var,
-                        data=df,
-                        ax=ax,
-                        color=scatter_color,
-                        hue=hue,
-                        palette=hue_palette,
-                        size=size,
-                        sizes=sizes,
-                        marker=marker,
-                        **kwargs,
-                    )
-
-                    if add_best_fit_line:
-                        x_data = df[x_var] if not rotate_plot else df[y_var]
-                        y_data = df[y_var] if not rotate_plot else df[x_var]
-                        add_best_fit(
-                            ax,
-                            x_data,
-                            y_data,
-                            best_fit_linestyle,
-                            best_fit_linecolor,
-                        )
-
-                    r_value = df[x_var].corr(df[y_var])
-                    title = f"{get_label(x_var)} vs. {get_label(y_var)}"
-                    if show_correlation:
-                        title += f" ($r$ = {r_value:.2f})"
-                    ax.set_title(
-                        "\n".join(textwrap.wrap(title, width=text_wrap)),
-                        fontsize=label_fontsize,
-                    )
-                    ax.tick_params(axis="x", rotation=xlabel_rot)
-                    ax.tick_params(axis="both", labelsize=tick_fontsize)
-
-                    render_pbar.update(1)  # Update progress bar for rendering
-
-                else:
-                    ax.axis("off")  # Turn off unused axes
-
-            plt.tight_layout()
-
-        # Progress bar for saving the grid plot
-        with tqdm(total=1, desc="Saving grid plot") as save_pbar:
-            grid_filename_png = "scatter_plots_grid.png"
-            grid_filename_svg = "scatter_plots_grid.svg"
-            if image_path_png:
-                fig_grid.savefig(
-                    os.path.join(image_path_png, grid_filename_png),
-                    bbox_inches="tight",
-                )
-            if image_path_svg:
-                fig_grid.savefig(
-                    os.path.join(image_path_svg, grid_filename_svg),
-                    bbox_inches="tight",
+        for i, ax in enumerate(axes):
+            if i < num_plots:
+                x_var, y_var = combinations[i]
+                sns.scatterplot(
+                    x=x_var if not rotate_plot else y_var,
+                    y=y_var if not rotate_plot else x_var,
+                    data=df,
+                    ax=ax,
+                    color=scatter_color,
+                    hue=hue,
+                    palette=hue_palette,
+                    size=size,
+                    sizes=sizes,
+                    marker=marker,
+                    **kwargs,
                 )
 
-            save_pbar.update(1)  # Update progress bar for saving
-            plt.close(fig_grid)  # Clear memory
+                if add_best_fit_line:
+                    x_data = df[x_var] if not rotate_plot else df[y_var]
+                    y_data = df[y_var] if not rotate_plot else df[x_var]
+                    add_best_fit(
+                        ax,
+                        x_data,
+                        y_data,
+                        best_fit_linestyle,
+                        best_fit_linecolor,
+                    )
+
+                r_value = df[x_var].corr(df[y_var])
+                title = f"{get_label(x_var)} vs. {get_label(y_var)}"
+                if show_correlation:
+                    title += f" ($r$ = {r_value:.2f})"
+                ax.set_title(
+                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
+                ax.tick_params(axis="x", rotation=xlabel_rot)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+            else:
+                ax.axis("off")  # Turn off unused axes
+
+        plt.tight_layout()
+
+        # Save the grid plot without a progress bar
+        grid_filename_png = "scatter_plots_grid.png"
+        grid_filename_svg = "scatter_plots_grid.svg"
+        if image_path_png:
+            fig_grid.savefig(
+                os.path.join(image_path_png, grid_filename_png),
+                bbox_inches="tight",
+            )
+        if image_path_svg:
+            fig_grid.savefig(
+                os.path.join(image_path_svg, grid_filename_svg),
+                bbox_inches="tight",
+            )
+
+        plt.close(fig_grid)  # Clear memory
 
 
 ################################################################################
