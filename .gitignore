@@ -75,6 +75,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
+docs/
 docs/_build/
 src/*.doctree
 *.doctree
