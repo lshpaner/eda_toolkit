@@ -2802,7 +2802,7 @@ interpretability of the scatter plots.
 
    <div class="no-click">
 
-.. image:: ../assets/scatter_plots_grid.png
+.. image:: ../assets/scatter_plots_1x2_grid.png
    :alt: Scatter Plot Comparisons (with Best Fit Lines)
    :align: center
    :width: 900px
