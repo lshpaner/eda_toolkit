@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating Effective Visualizations &mdash; EDA Toolkit 0.0.14 documentation</title>
+  <title>Creating Effective Visualizations &mdash; EDA Toolkit 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=544df88d"></script>
+      <script src="_static/documentation_options.js?v=f0357c94"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -2287,7 +2287,7 @@ This adjustment flips the axes, providing a different perspective on the data di
 <li><p><strong>max_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum number of columns in the subplot grid. Default is <code class="docutils literal notranslate"><span class="pre">4</span></code>.</p></li>
 <li><p><strong>image_path_png</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save PNG images of scatter plots.</p></li>
 <li><p><strong>image_path_svg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Directory path to save SVG images of scatter plots.</p></li>
-<li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Specify which plots to save: <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> (no saving).</p></li>
+<li><p><strong>save_plots</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Specify which plots to save (<code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>); uses a progress bar (<code class="docutils literal notranslate"><span class="pre">tqdm</span></code>) for saving.</p></li>
 <li><p><strong>show_legend</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Toggle display of the plot legend. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 <li><p><strong>xlabel_rot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Angle to rotate <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 <li><p><strong>show_plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Controls plot display: <code class="docutils literal notranslate"><span class="pre">&quot;individual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;combinations&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code>. Use <code class="docutils literal notranslate"><span class="pre">&quot;combinations&quot;</span></code> to return all valid (<code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">y</span></code>) variable pairs without generating plots.</p></li>

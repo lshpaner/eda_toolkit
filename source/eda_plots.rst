@@ -2685,7 +2685,7 @@ The function performs comprehensive input validation to prevent common errors, s
     :param image_path_svg: Directory path to save SVG images of scatter plots.
     :type image_path_svg: str, optional
 
-    :param save_plots: Specify which plots to save: ``"all"``, ``"individual"``, or ``"grid"``. Default is ``None`` (no saving).
+    :param save_plots: Specify which plots to save (``"all"``, ``"individual"``, or ``"grid"``); uses a progress bar (``tqdm``) for saving.
     :type save_plots: str, optional
 
     :param show_legend: Toggle display of the plot legend. Default is ``True``.
