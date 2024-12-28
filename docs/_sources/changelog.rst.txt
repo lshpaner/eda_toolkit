@@ -24,6 +24,63 @@
 Changelog
 =========
 
+`Version 0.0.14`_
+----------------------
+
+.. _Version 0.0.14: https://lshpaner.github.io/eda_toolkit/v0.0.14/index.html
+
+Ensure Crosstabs Dictionary is Populated with ``return_dict=True``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This resolves the issue where the ``stacked_crosstab_plot`` function fails to 
+populate and return the crosstabs dictionary (``crosstabs_dict``) when 
+``return_dict=True`` and ``output="plots_only"``. The fix ensures that crosstabs 
+are always generated when ``return_dict=True``, regardless of the output parameter.
+
+- Always Generate Crosstabs with ``return_dict=True``:
+
+  - Added logic to ensure crosstabs are created and populated in ``crosstabs_dict`` whenever ``return_dict=True``, even if the output parameter is set to ``"plots_only"``.
+
+- Separation of Crosstabs Display from Generation:
+
+  - The generation of crosstabs is now independent of the output parameter.
+  - Crosstabs display (``print``) occurs only when output includes ``"both"`` or ``"crosstabs_only"``.
+
+Enhancements and Fixes for ``scatter_fit_plot`` Function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This addresses critical issues and introduces key enhancements for the ``scatter_fit_plot`` function. 
+These changes aim to improve usability, flexibility, and robustness of the function.
+
+1. Added ``exclude_combinations`` Parameter. Users can now exclude specific variable pairs from being plotted by providing a list of tuples with the combinations to omit.
+
+2. Added ``combinations`` Parameter to ``show_plot``. Users can also now show just the list of combinations that are part of the selection process when ``all_vars=True``.
+
+3. When plotting a single variable pair with ``show_plot="both"``, the function threw an ``AttributeError``. Single-variable pairs are now properly handled.
+
+4. Changed the default value of ``show_plot`` to ``"both"`` to prevent excessive individual plots when handling large variable sets.
+
+5. Fixed Issues with Legend, ``xlim``, and ``ylim``; inputs were not being used; these have been corrected.
+
+
+Fix Default Title and Filename Handling in ``flex_corr_matrix``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This resolves issues in the ``flex_corr_matrix`` function where:
+
+1. No default title was provided when ``title=None``, resulting in missing titles on plots.
+2. Saved plot filenames were incorrect, leading to issues like ``.png.png`` when ``title`` was not provided.
+
+The fix ensures that a default title ("Correlation Matrix") is used for both plot display and file saving when no ``title`` 
+is explicitly provided. If ``title`` is explicitly set to ``None``, the plot will have no title, 
+but the saved filename will still use ``"correlation_matrix"``.
+
+1. If no ``title`` is provided, ``"Correlation Matrix"`` is used as the default for filenames and displayed titles. If ``title=None`` is explicitly passed, no title is displayed on the plot.
+
+2. File names are generated based on the ``title`` or default to ``"correlation_matrix"`` if ``title`` is not provided. Spaces in the ``title`` are replaced with underscores, and special characters like ``:`` are removed to ensure valid filenames.
+
+
+
 `Version 0.0.13`_
 ----------------------
 
