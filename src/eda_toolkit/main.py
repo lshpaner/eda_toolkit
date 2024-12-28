@@ -2810,23 +2810,15 @@ def scatter_fit_plot(
 
     # Validate exclude_combinations
     if exclude_combinations:
-        # Ensure each item is a tuple with two elements
-        invalid_pairs = [
-            pair
-            for pair in exclude_combinations
-            if not (isinstance(pair, tuple) and len(pair) == 2)
-        ]
-        if invalid_pairs:
-            raise ValueError(
-                "All items in `exclude_combinations` must be tuples "
-                "with exactly two elements. Invalid entries: "
-                f"{invalid_pairs}"
-            )
+        # Validate exclude_combinations without modifying the original input
+        normalized_exclude_combinations = {
+            tuple(sorted(pair)) for pair in exclude_combinations
+        }
 
         # Check if all columns in exclude_combinations exist in the DataFrame
         invalid_columns = {
             col
-            for pair in exclude_combinations
+            for pair in normalized_exclude_combinations
             for col in pair
             if col not in df.columns
         }
@@ -2836,14 +2828,11 @@ def scatter_fit_plot(
                 "Please ensure all columns exist in the DataFrame."
             )
 
-        # Normalize order of tuples in exclude_combinations
-        exclude_combinations = {tuple(sorted(pair)) for pair in exclude_combinations}
-
-        # Normalize order of tuples in combinations and filter
+        # Use normalized_exclude_combinations to filter combinations
         combinations = [
             (x, y)
             for (x, y) in combinations
-            if tuple(sorted((x, y))) not in exclude_combinations
+            if tuple(sorted((x, y))) not in normalized_exclude_combinations
         ]
 
     # Handle show_plot="combinations"
