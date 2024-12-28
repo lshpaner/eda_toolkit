@@ -1803,8 +1803,8 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
     :type image_path_png: str, optional
     :param image_path_svg: Directory path to save SVG plot images.
     :type image_path_svg: str, optional
-    :param save_formats: List of file formats to save the plots (e.g., ``["png", "svg"]``). Default is ``None``.
-    :type save_formats: list of str, optional
+    :param save_formats: List, string, or tuple of file formats to save the plots (e.g., ``["png", "svg"]``). Default is ``None``. Raises an error if an invalid format is provided without the corresponding path.
+    :type save_formats: list, str, or tuple, optional
     :param color: List of colors to use for the plots. Default is the seaborn color palette.
     :type color: list of str, optional
     :param output: Specify the output type: ``"plots_only"``, ``"crosstabs_only"``, or ``"both"``. Default is ``"both"``.
@@ -1840,8 +1840,10 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
 
     :raises ValueError:
         - If ``remove_stacks`` is ``True`` and ``plot_type`` is not ``"regular"``.
+        - If an invalid save format is specified without providing the corresponding path.
         - If ``output`` is not one of ``"both"``, ``"plots_only"``, or ``"crosstabs_only"``.
         - If ``plot_type`` is not one of ``"both"``, ``"regular"``, or ``"normalized"``.
+        - If ``remove_stacks`` is used with ``plot_type`` not set to ``"regular"``.
         - If lengths of ``title``, ``func_col``, and ``legend_labels_list`` are unequal.
     :raises KeyError: If any column in ``col`` or ``func_col`` is missing from the DataFrame.
 
@@ -1850,9 +1852,8 @@ The ``stacked_crosstab_plot`` function is a powerful tool for visualizing catego
 
 .. admonition:: Notes
 
-    - To save images, specify the paths in ``image_path_png`` or ``image_path_svg`` along with a valid ``file_prefix``.
-    - The ``save_formats`` parameter determines the file types for saved images.
-    - This function is ideal for analyzing and visualizing categorical data distributions.
+    - Ensure ``save_formats`` aligns with provided paths for saving images. For instance, specify ``image_path_png`` or ``image_path_svg`` if saving as ``"png"`` or ``"svg"`` respectively.
+    - The returned crosstabs dictionary includes both absolute and normalized values when ``return_dict=True``.
 
 
 Stacked Bar Plots With Crosstabs Example
@@ -2610,47 +2611,49 @@ Scatter Fit Plot
 
 **Create and Save Scatter Plots or a Grid of Scatter Plots**
 
-This function, ``scatter_fit_plot``, is designed to generate scatter plots for 
-one or more pairs of variables (``x_vars`` and ``y_vars``) from a given DataFrame. 
-The function can produce either individual scatter plots or organize multiple 
-scatter plots into a grid layout, making it easy to visualize relationships between 
-different pairs of variables in one cohesive view.
+This function, ``scatter_fit_plot``, generates scatter plots for one or more pairs of variables (``x_vars`` and ``y_vars``) from a given DataFrame. The function can produce individual scatter plots or organize multiple scatter plots into a grid layout, enabling easy visualization of relationships between different pairs of variables in a unified view.
 
-**Optional Best Fit Line**
+**Optional Features**
 
-An optional feature of this function is the ability to add a best fit line to the 
-scatter plots. This line, often called a regression line, is calculated using a 
-linear regression model and represents the trend in the data. By adding this line, 
-you can visually assess the linear relationship between the variables, and the 
-function can also display the equation of this line in the plot’s legend.s
+- **Best Fit Line**: Adds an optional best fit line to the scatter plots, calculated using linear regression. This provides visual insights into the linear relationship between variables. The equation of the line can also be displayed in the plot's legend.
 
-**Customizable Plot Aesthetics**
+- **Correlation Coefficient Display**: Displays the Pearson correlation coefficient directly in the plot title, offering a numeric indicator of the linear relationship between variables.
 
-The function offers a wide range of customization options to tailor the appearance 
-of the scatter plots:
+**Customization Options**
 
-- **Point Color**: You can specify a default color for the scatter points or use a ``hue`` parameter to color the points based on a categorical variable. This allows for easy comparison across different groups within the data.
+The function provides a variety of parameters to customize the appearance and behavior of scatter plots:
 
-- **Point Size**: The size of the scatter points can be controlled and scaled based on another variable, which can help highlight differences or patterns related to that variable.
+- **Color**: Customize point colors with a fixed color or a ``hue`` parameter to group points by a categorical variable.
 
-- **Markers**: The shape or style of the scatter points can also be customized. Whether you prefer circles, squares, or other marker types, the function allows you to choose the best representation for your data.
+- **Size and Marker**: Adjust the size of points dynamically based on a variable, and specify custom markers to represent data effectively.
 
-**Axis and Label Configuration**
+- **Labels and Axis Configuration**: Set axis labels, font sizes, label rotation, and axis limits to ensure readability and focus on relevant data.
 
-The function also provides flexibility in setting axis labels, tick marks, and grid sizes. You can rotate axis labels for better readability, adjust font sizes, and even specify limits for the x and y axes to focus on particular data ranges.
+**Plot Management**
 
-**Plot Display and Saving Options**
+- **Display Options**: Control how plots are displayed, whether as individual plots, in a grid, or both.
 
-The function allows you to display plots individually, as a grid, or both. Additionally, you can save the generated plots as PNG or SVG files, making it easy to include them in reports or presentations.
+- **Saving Options**: Save the generated plots in PNG or SVG formats. Specify which plots to save (e.g., ``"all"``, ``"individual"``, or ``"grid"``) and their respective file paths.
 
-**Correlation Coefficient Display**
+**Advanced Features**
 
-For users interested in understanding the strength of the relationship between variables, the function can also display the Pearson correlation coefficient directly in the plot title. This numeric value provides a quick reference to the linear correlation between the variables, offering further insight into their relationship.
+- **Combination Plotting**: Automatically generate scatter plots for all combinations of variables when using the ``all_vars`` parameter.
 
-.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, all_vars=None, label_names=None, **kwargs)
+- **Exclusion Rules**: Exclude specific (``x_var``, ``y_var``) combinations from being plotted using the ``exclude_combinations`` parameter.
 
-    Generate scatter plots or a grid of scatter plots for the given ``x_vars`` and ``y_vars``, 
-    with optional best fit lines, correlation coefficients, and customizable aesthetics.
+- **Legend and Aesthetic Adjustments**: Toggle legends, adjust plot size for individual or grid plots, and wrap long titles for clarity.
+
+**Error Handling**
+
+The function performs comprehensive input validation to prevent common errors, such as:
+
+- Conflicting inputs for ``all_vars``, ``x_vars``, and ``y_vars``.
+- Invalid or missing column names in the DataFrame.
+- Incorrectly specified parameters like axis limits or figure sizes.
+
+.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, all_vars=None, exclude_combinations=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="grid", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, label_names=None, **kwargs)
+
+    Generate scatter plots or a grid of scatter plots for the given ``x_vars`` and ``y_vars``, with optional best fit lines, correlation coefficients, and customizable aesthetics.
 
     :param df: The DataFrame containing the data for the plots.
     :type df: pandas.DataFrame
@@ -2661,108 +2664,103 @@ For users interested in understanding the strength of the relationship between v
     :param y_vars: List of variable names to plot on the ``y-axis``. If a single string is provided, it will be converted into a list with one element.
     :type y_vars: list of str or str, optional
 
-    :param n_rows: Number of rows in the subplot grid. Calculated based on the number of plots and ``n_cols`` if not specified.
+    :param all_vars: Generates scatter plots for all combinations of variables in this list, overriding ``x_vars`` and ``y_vars``.
+    :type all_vars: list of str, optional
+
+    :param exclude_combinations: List of (``x_var``, ``y_var``) combinations to exclude from plotting.
+    :type exclude_combinations: list of tuples, optional
+
+    :param n_rows: Number of rows in the subplot grid. Calculated automatically if not specified.
     :type n_rows: int, optional
 
-    :param n_cols: Number of columns in the subplot grid. Calculated based on the number of plots and ``max_cols`` if not specified.
+    :param n_cols: Number of columns in the subplot grid. Calculated automatically if not specified.
     :type n_cols: int, optional
 
     :param max_cols: Maximum number of columns in the subplot grid. Default is ``4``.
     :type max_cols: int, optional
 
-    :param image_path_png: Directory path to save PNG images of the scatter plots.
+    :param image_path_png: Directory path to save PNG images of scatter plots.
     :type image_path_png: str, optional
 
-    :param image_path_svg: Directory path to save SVG images of the scatter plots.
+    :param image_path_svg: Directory path to save SVG images of scatter plots.
     :type image_path_svg: str, optional
 
-    :param save_plots: Controls which plots to save: ``"all"``, ``"individual"``, or ``"grid"``. If ``None``, plots will not be saved.
+    :param save_plots: Specify which plots to save: ``"all"``, ``"individual"``, or ``"grid"``. Default is ``None`` (no saving).
     :type save_plots: str, optional
 
-    :param show_legend: Whether to display the legend on the plots. Default is ``True``.
+    :param show_legend: Toggle display of the plot legend. Default is ``True``.
     :type show_legend: bool, optional
 
-    :param xlabel_rot: Rotation angle for ``x-axis`` labels. Default is ``0``.
+    :param xlabel_rot: Angle to rotate ``x-axis`` labels. Default is ``0``.
     :type xlabel_rot: int, optional
 
-    :param show_plot: Controls plot display: ``"individual"``, ``"grid"``, or ``"both"``. Default is ``"both"``.
+    :param show_plot: Controls plot display: ``"individual"``, ``"grid"``, ``"both"``, or ``"combinations"``. Default is ``"grid"``. Use ``"combinations"`` to return all valid (``x, y``) variable pairs without generating plots.
     :type show_plot: str, optional
 
-    :param rotate_plot: Whether to rotate (pivot) the plots, swapping x and y axes. Default is ``False``.
+
+    :param rotate_plot: Rotate plots (swap ``x`` and ``y`` axes). Default is ``False``.
     :type rotate_plot: bool, optional
 
-    :param individual_figsize: Dimensions (width, height) of the figure for individual plots. Default is ``(6, 4)``.
+    :param individual_figsize: Dimensions for individual plot figures (width, height). Default is ``(6, 4)``.
     :type individual_figsize: tuple or list, optional
 
-    :param grid_figsize: Dimensions (width, height) of the figure for grid plots. Calculated automatically if not specified.
+    :param grid_figsize: Dimensions for grid plots (width, height). Calculated automatically if not specified.
     :type grid_figsize: tuple or list, optional
 
     :param label_fontsize: Font size for axis labels. Default is ``12``.
     :type label_fontsize: int, optional
 
-    :param tick_fontsize: Font size for tick labels. Default is ``10``.
+    :param tick_fontsize: Font size for axis ticks. Default is ``10``.
     :type tick_fontsize: int, optional
 
-    :param text_wrap: The maximum width of the title text before wrapping. Default is ``50``.
+    :param text_wrap: Maximum title width before wrapping. Default is ``50``.
     :type text_wrap: int, optional
 
-    :param add_best_fit_line: Whether to add a best fit line to the scatter plots. Default is ``False``.
+    :param add_best_fit_line: Add a best fit line to scatter plots. Default is ``False``.
     :type add_best_fit_line: bool, optional
 
-    :param scatter_color: Color code for the scatter points. Default is ``"C0"``.
+    :param scatter_color: Default color for scatter points. Default is ``"C0"``.
     :type scatter_color: str, optional
 
-    :param best_fit_linecolor: Color code for the best fit line. Default is ``"red"``.
+    :param best_fit_linecolor: Color for the best fit line. Default is ``"red"``.
     :type best_fit_linecolor: str, optional
 
     :param best_fit_linestyle: Linestyle for the best fit line. Default is ``"-"``.
     :type best_fit_linestyle: str, optional
 
-    :param hue: Column name for the grouping variable that produces points with different colors.
+    :param hue: Column name for grouping variable to color points differently.
     :type hue: str, optional
 
-    :param hue_palette: Specifies colors for each hue level. Accepts a dictionary mapping hue levels to colors, a list of colors, or a seaborn color palette name. This requires the ``hue`` parameter to be set.
+    :param hue_palette: Colors for each ``hue`` level (requires ``hue``).
     :type hue_palette: dict, list, or str, optional
 
-    :param size: Column name for the grouping variable that produces points with different sizes.
+    :param size: Variable to scale scatter point sizes.
     :type size: str, optional
 
-    :param sizes: Dictionary mapping sizes (smallest and largest) to min and max values for scatter points.
+    :param sizes: Mapping of minimum and maximum point sizes.
     :type sizes: dict, optional
 
-    :param marker: Marker style for scatter points. Default is ``"o"``.
+    :param marker: Style of scatter points. Default is ``"o"``.
     :type marker: str, optional
 
-    :param show_correlation: Whether to display the Pearson correlation coefficient in the plot title. Default is ``True``.
+    :param show_correlation: Display correlation coefficient in titles. Default is ``True``.
     :type show_correlation: bool, optional
 
-    :param xlim: Limits for the ``x-axis`` as a tuple or list of (``min``, ``max``).
+    :param xlim: Limits for the ``x-axis`` (``min``, ``max``).
     :type xlim: tuple or list, optional
 
-    :param ylim: Limits for the ``y-axis`` as a tuple or list of (``min``, ``max``).
+    :param ylim: Limits for the ``y-axis`` (``min``, ``max``).
     :type ylim: tuple or list, optional
 
-    :param all_vars: If provided, generates scatter plots for all combinations of variables in this list, overriding ``x_vars`` and ``y_vars``.
-    :type all_vars: list of str, optional
-
-    :param label_names: Dictionary mapping original column names to custom labels for plot titles and axis labels.
+    :param label_names: Rename columns for display in titles and labels.
     :type label_names: dict, optional
 
-    :param kwargs: Additional keyword arguments to pass to the ``sns.scatterplot`` function.
+    :param kwargs: Additional options for ``sns.scatterplot``.
     :type kwargs: dict, optional
 
-    :raises ValueError: 
-        - If ``all_vars`` is provided alongside ``x_vars`` or ``y_vars``.
-        - If neither ``all_vars`` nor both ``x_vars`` and ``y_vars`` are provided.
-        - If ``hue_palette`` is specified without ``hue``.
-        - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
-        - If ``save_plots`` is not one of ``None``, ``"all"``, ``"individual"``, or ``"grid"``.
-        - If ``save_plots`` is set but no ``image_path_png`` or ``image_path_svg`` is specified.
-        - If ``rotate_plot`` is not a boolean value.
-        - If ``individual_figsize`` or ``grid_figsize`` is not a tuple or list of two numeric values.
+    :raises ValueError: See function docstring for detailed error conditions.
 
-    :returns: 
-        ``None``. This function does not return any value but generates and optionally saves scatter plots for the specified ``x_vars`` and ``y_vars``, or for all combinations in ``all_vars`` if provided.
+    :returns: ``None``. Generates and optionally saves scatter plots.
 
 
 Regression-Centric Scatter Plots Example
@@ -2947,6 +2945,164 @@ These settings allow for the creation of scatter plots that comprehensively expl
    <div style="height: 50px;"></div>
 
 
+Scatter Plots: Excluding Specific Combinations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Example 1
+~~~~~~~~~~~
+
+In this example, the ``scatter_fit_plot`` function is used to generate a grid of 
+scatter plots while excluding specific combinations of variables. This allows for 
+a more targeted exploration of relationships, omitting plots that may be redundant 
+or irrelevant. Below are key aspects of this example:
+
+1. **Exclude Combinations**: The ``exclude_combinations parameter`` is used to 
+specify pairs of variables that should be excluded from the scatter plot grid. 
+
+For example:
+
+.. code-block:: text
+
+    ("capital-gain", "hours-per-week")
+    ("capital-loss", "capital-gain")
+    ("education-num", "hours-per-week") 
+
+This ensures that the generated plots are more relevant to the analysis.
+
+2. **All Variables Combination**: Like the previous example, the ``all_vars`` parameter 
+is used to automatically generate scatter plots for all combinations of numerical 
+variables in the DataFrame, minus the excluded pairs.
+
+3. **Grid Display**: The ``show_plot`` parameter is set to ``"grid"``, allowing for 
+simultaneous visualization of multiple relationships in a cohesive layout.
+
+By excluding specific variable combinations, this example demonstrates how to fine-tune the generated scatter plots to focus only on the most meaningful comparisons.
+
+.. code-block:: python
+
+    from eda_toolkit import scatter_fit_plot
+
+    exclude_combinations = [
+        ("capital-gain", "hours-per-week"),
+        ("capital-loss", "capital-gain"),
+        ("capital-loss", "hours-per-week"),
+        ("capital-loss", "education-num"),
+        ("capital-loss", "fnlwgt"),
+        ("education-num", "hours-per-week"),
+        ("hours-per-week", "age"),
+    ]
+
+    scatter_fit_plot(
+        df=df,
+        all_vars=df.select_dtypes(np.number).columns.to_list(),
+        show_legend=True,
+        exclude_combinations=exclude_combinations,
+        show_plot="grid",
+        label_fontsize=14,
+        tick_fontsize=12,
+        add_best_fit_line=True,
+        scatter_color="#808080",
+        show_correlation=True,
+    )
+
+
+.. raw:: html
+
+   <div class="no-click">
+
+.. image:: ../assets/scatter_plots_grid_exclude.png
+   :alt: Scatter Plot Comparisons (Grouped2)
+   :align: center
+   :width: 900px
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
+
+
+Example 2
+~~~~~~~~~~~
+
+In this example, the ``scatter_fit_plot`` function is used to generate a list of 
+valid (`x`, `y`) combinations without creating any plots. This feature is particularly 
+useful when identifying potential variable pairs for further analysis or programmatically 
+excluding irrelevant combinations. Below are key aspects of this example:
+
+1. **List of Combinations**: Setting the ``show_plot`` parameter to ``"combinations"`` 
+returns a list of all valid combinations of numerical variables. The ``exclude_combinations`` 
+parameter is used to omit specific pairs from this list.
+
+2. **Excluded Combinations**: Certain variable pairs are excluded using the ``exclude_combinations`` parameter. For instance:
+
+   - ``("capital-gain", "hours-per-week")``
+   - ``("capital-loss", "education-num")``
+   - ``("hours-per-week", "age")``
+
+   This ensures the returned list only includes meaningful and relevant combinations.
+
+3. **Order Irrelevance**: The order of variables in each tuple is irrelevant. For example, 
+``("capital-gain", "hours-per-week")`` and ``("hours-per-week", "capital-gain")`` are 
+considered the same pair, and only one is included in the output.
+
+
+4. **Efficient Output**: No scatter plots are generated or displayed, making this 
+approach efficient for exploratory analysis or preprocessing.
+
+Below is an example illustrating how to retrieve a list of combinations:
+
+.. code-block:: python
+
+    from eda_toolkit import scatter_fit_plot
+
+    exclude_combinations = [
+        ("capital-gain", "hours-per-week"),
+        ("capital-loss", "capital-gain"),
+        ("capital-loss", "hours-per-week"),
+        ("capital-loss", "education-num"),
+        ("capital-loss", "fnlwgt"),
+        ("education-num", "hours-per-week"),
+        ("hours-per-week", "age"),
+    ]
+
+    combinations = scatter_fit_plot(
+        df=df,
+        all_vars=df.select_dtypes(np.number).columns.to_list(),
+        show_legend=True,
+        exclude_combinations=exclude_combinations,
+        show_plot="combinations",
+        label_fontsize=14,
+        tick_fontsize=12,
+        add_best_fit_line=True,
+        scatter_color="#808080",
+        show_correlation=True,
+        image_path_png=image_path_png,
+        image_path_svg=image_path_svg,
+        save_plots="grid",
+    )
+
+    print(combinations)
+
+The returned list of combinations will look like this:
+
+.. code-block:: text
+
+    [
+        ('age', 'fnlwgt'),
+        ('age', 'education-num'),
+        ('age', 'capital-gain'),
+        ('age', 'capital-loss'),
+        ('fnlwgt', 'education-num'),
+        ('fnlwgt', 'capital-gain'),
+        ('fnlwgt', 'hours-per-week'),
+        ('education-num', 'capital-gain'),
+    ]
+
+This feature allows users to explore potential variable relationships before deciding on visualization or further analysis.
+
 
 Correlation Matrices
 =====================
@@ -3045,19 +3201,19 @@ The ``flex_corr_matrix`` function allows you to display the heatmap directly or 
     :param cbar_label: Label for the colorbar. Default is ``"Correlation Index"``.
     :type cbar_label: str, optional
 
-    :param triangular: Whether to show only the upper triangle of the correlation matrix. Default is ``True``.
+    :param triangular: Whether to show only the upper triangle of the correlation matrix. Default is ``True``. Excludes the diagonal and lower triangle if enabled.
     :type triangular: bool, optional
 
-    :param kwargs: Additional keyword arguments to pass to ``seaborn.heatmap()``.
+    :param kwargs: Additional keyword arguments for ``seaborn.heatmap()`` to customize the plot further.
     :type kwargs: dict, optional
 
     :raises ValueError: 
 
         - If ``annot`` is not a boolean.
-        - If ``cols`` is not a list.
+        - If ``cols`` is not a list of column names.
         - If ``save_plots`` is not a boolean.
         - If ``triangular`` is not a boolean.
-        - If ``save_plots`` is True but no image paths are provided.
+        - If ``save_plots`` is True but neither ``image_path_png`` nor ``image_path_svg`` is specified.
 
     :returns: ``None``
         This function does not return any value but generates and optionally saves a correlation heatmap.
