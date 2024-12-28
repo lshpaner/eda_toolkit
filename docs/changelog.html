@@ -88,6 +88,12 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors/Maintainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citations.html">Citing EDA Toolkit</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-14">Version 0.0.14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ensure-crosstabs-dictionary-is-populated-with-return-dict-true">Ensure Crosstabs Dictionary is Populated with <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enhancements-and-fixes-for-scatter-fit-plot-function">Enhancements and Fixes for <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fix-default-title-and-filename-handling-in-flex-corr-matrix">Fix Default Title and Filename Handling in <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-13">Version 0.0.13</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#add-valueerror-for-insufficient-pool-size-in-add-ids-and-enhance-id-deduplication">Add <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> for Insufficient Pool Size in <code class="docutils literal notranslate"><span class="pre">add_ids</span></code> and Enhance ID Deduplication</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enhance-strip-trailing-period-to-support-strings-and-mixed-data-types">Enhance <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> to Support Strings and Mixed Data Types</a></li>
@@ -117,9 +123,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1rc0">Version 0.0.1rc0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1b0">Version 0.0.1b0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id11">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id12">Version 0.0.1b0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id13">Version 0.0.1b0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">Version 0.0.1b0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -153,6 +159,56 @@
 </div><div style="height: 100px;"></div><p></p>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<section id="version-0-0-14">
+<h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.14/index.html">Version 0.0.14</a><a class="headerlink" href="#version-0-0-14" title="Link to this heading"></a></h2>
+<section id="ensure-crosstabs-dictionary-is-populated-with-return-dict-true">
+<h3>Ensure Crosstabs Dictionary is Populated with <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code><a class="headerlink" href="#ensure-crosstabs-dictionary-is-populated-with-return-dict-true" title="Link to this heading"></a></h3>
+<p>This resolves the issue where the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function fails to
+populate and return the crosstabs dictionary (<code class="docutils literal notranslate"><span class="pre">crosstabs_dict</span></code>) when
+<code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code> and <code class="docutils literal notranslate"><span class="pre">output=&quot;plots_only&quot;</span></code>. The fix ensures that crosstabs
+are always generated when <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>, regardless of the output parameter.</p>
+<ul class="simple">
+<li><p>Always Generate Crosstabs with <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>:</p>
+<ul>
+<li><p>Added logic to ensure crosstabs are created and populated in <code class="docutils literal notranslate"><span class="pre">crosstabs_dict</span></code> whenever <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code>, even if the output parameter is set to <code class="docutils literal notranslate"><span class="pre">&quot;plots_only&quot;</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Separation of Crosstabs Display from Generation:</p>
+<ul>
+<li><p>The generation of crosstabs is now independent of the output parameter.</p></li>
+<li><p>Crosstabs display (<code class="docutils literal notranslate"><span class="pre">print</span></code>) occurs only when output includes <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;crosstabs_only&quot;</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="enhancements-and-fixes-for-scatter-fit-plot-function">
+<h3>Enhancements and Fixes for <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> Function<a class="headerlink" href="#enhancements-and-fixes-for-scatter-fit-plot-function" title="Link to this heading"></a></h3>
+<p>This addresses critical issues and introduces key enhancements for the <code class="docutils literal notranslate"><span class="pre">scatter_fit_plot</span></code> function.
+These changes aim to improve usability, flexibility, and robustness of the function.</p>
+<ol class="arabic simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">exclude_combinations</span></code> Parameter. Users can now exclude specific variable pairs from being plotted by providing a list of tuples with the combinations to omit.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">combinations</span></code> Parameter to <code class="docutils literal notranslate"><span class="pre">show_plot</span></code>. Users can also now show just the list of combinations that are part of the selection process when <code class="docutils literal notranslate"><span class="pre">all_vars=True</span></code>.</p></li>
+<li><p>When plotting a single variable pair with <code class="docutils literal notranslate"><span class="pre">show_plot=&quot;both&quot;</span></code>, the function threw an <code class="docutils literal notranslate"><span class="pre">AttributeError</span></code>. Single-variable pairs are now properly handled.</p></li>
+<li><p>Changed the default value of <code class="docutils literal notranslate"><span class="pre">show_plot</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code> to prevent excessive individual plots when handling large variable sets.</p></li>
+<li><p>Fixed Issues with Legend, <code class="docutils literal notranslate"><span class="pre">xlim</span></code>, and <code class="docutils literal notranslate"><span class="pre">ylim</span></code>; inputs were not being used; these have been corrected.</p></li>
+</ol>
+</section>
+<section id="fix-default-title-and-filename-handling-in-flex-corr-matrix">
+<h3>Fix Default Title and Filename Handling in <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code><a class="headerlink" href="#fix-default-title-and-filename-handling-in-flex-corr-matrix" title="Link to this heading"></a></h3>
+<p>This resolves issues in the <code class="docutils literal notranslate"><span class="pre">flex_corr_matrix</span></code> function where:</p>
+<ol class="arabic simple">
+<li><p>No default title was provided when <code class="docutils literal notranslate"><span class="pre">title=None</span></code>, resulting in missing titles on plots.</p></li>
+<li><p>Saved plot filenames were incorrect, leading to issues like <code class="docutils literal notranslate"><span class="pre">.png.png</span></code> when <code class="docutils literal notranslate"><span class="pre">title</span></code> was not provided.</p></li>
+</ol>
+<p>The fix ensures that a default title (“Correlation Matrix”) is used for both plot display and file saving when no <code class="docutils literal notranslate"><span class="pre">title</span></code>
+is explicitly provided. If <code class="docutils literal notranslate"><span class="pre">title</span></code> is explicitly set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, the plot will have no title,
+but the saved filename will still use <code class="docutils literal notranslate"><span class="pre">&quot;correlation_matrix&quot;</span></code>.</p>
+<ol class="arabic simple">
+<li><p>If no <code class="docutils literal notranslate"><span class="pre">title</span></code> is provided, <code class="docutils literal notranslate"><span class="pre">&quot;Correlation</span> <span class="pre">Matrix&quot;</span></code> is used as the default for filenames and displayed titles. If <code class="docutils literal notranslate"><span class="pre">title=None</span></code> is explicitly passed, no title is displayed on the plot.</p></li>
+<li><p>File names are generated based on the <code class="docutils literal notranslate"><span class="pre">title</span></code> or default to <code class="docutils literal notranslate"><span class="pre">&quot;correlation_matrix&quot;</span></code> if <code class="docutils literal notranslate"><span class="pre">title</span></code> is not provided. Spaces in the <code class="docutils literal notranslate"><span class="pre">title</span></code> are replaced with underscores, and special characters like <code class="docutils literal notranslate"><span class="pre">:</span></code> are removed to ensure valid filenames.</p></li>
+</ol>
+</section>
+</section>
 <section id="version-0-0-13">
 <h2><a class="reference external" href="https://lshpaner.github.io/eda_toolkit/v0.0.13/index.html">Version 0.0.13</a><a class="headerlink" href="#version-0-0-13" title="Link to this heading"></a></h2>
 <p>This version introduces a series of updates and fixes across multiple functions to enhance error handling, improve cross-environment compatibility, streamline usability, and optimize performance. These changes address critical issues, add new features, and ensure consistent behavior in both terminal and notebook environments.</p>
@@ -827,8 +883,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </ul>
 <p>These changes enhance the flexibility and functionality of the <code class="docutils literal notranslate"><span class="pre">stacked_crosstab_plot</span></code> function, allowing for more customizable and specific plot generation based on user requirements.</p>
 </section>
-<section id="id11">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<section id="id12">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
 <p><strong>Refined KDE Distributions</strong></p>
 <p><strong>Key Changes</strong></p>
 <ol class="arabic simple">
@@ -846,8 +902,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated the function’s docstring to reflect new parameters and provide comprehensive guidance on usage.</p></li>
 </ol>
 </section>
-<section id="id12">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<section id="id13">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
 <p><strong>Enhanced KDE Distributions Function</strong></p>
 <p><strong>Added Parameters</strong></p>
 <ol class="arabic simple">
@@ -929,8 +985,8 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 - Updated function documentation to reflect new parameters and error handling.</p></li>
 </ol>
 </section>
-<section id="id13">
-<h2>Version 0.0.1b0<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<section id="id14">
+<h2>Version 0.0.1b0<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
 <p><strong>Contingency Table Updates</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fillna('')</span></code> added to output so that null values come through, removed <code class="docutils literal notranslate"><span class="pre">'All'</span></code> column name from output, sort options <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, updated docstring documentation. Tested successfully on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">3.7.3</span></code>.</p></li>

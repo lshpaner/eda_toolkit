@@ -2931,7 +2931,7 @@ These settings allow for the creation of scatter plots that comprehensively expl
 
    <div class="no-click">
 
-.. image:: ../assets/scatter_plots_all_grid.png
+.. image:: ../assets/scatter_plots_grid.png
    :alt: Scatter Plot Comparisons (Grouped2)
    :align: center
    :width: 900px
