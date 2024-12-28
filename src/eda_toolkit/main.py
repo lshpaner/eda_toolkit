@@ -3029,76 +3029,135 @@ def scatter_fit_plot(
         plt.tight_layout()
         plt.show()
 
-    # Save individual plots
+    # Save individual plots with progress bar
     if save_plots in ["all", "individual"]:
-        for x_var, y_var in tqdm(combinations, desc="Saving individual plots"):
-            fig, ax = plt.subplots(figsize=individual_figsize)
-            sns.scatterplot(
-                x=x_var if not rotate_plot else y_var,
-                y=y_var if not rotate_plot else x_var,
-                data=df,
-                ax=ax,
-                color=scatter_color if hue is None else None,
-                hue=hue,
-                palette=hue_palette,
-                size=size,
-                sizes=sizes,
-                marker=marker,
-                **kwargs,
-            )
-
-            if add_best_fit_line:
-                add_best_fit(
-                    ax,
-                    df[x_var],
-                    df[y_var],
-                    best_fit_linestyle,
-                    best_fit_linecolor,
+        with tqdm(total=len(combinations), desc="Saving individual plots") as pbar:
+            for x_var, y_var in combinations:
+                fig_individual, ax = plt.subplots(
+                    figsize=individual_figsize
+                )  # Use distinct figure for each plot
+                sns.scatterplot(
+                    x=x_var if not rotate_plot else y_var,
+                    y=y_var if not rotate_plot else x_var,
+                    data=df,
+                    ax=ax,
+                    color=scatter_color if hue is None else None,
+                    hue=hue,
+                    palette=hue_palette,
+                    size=size,
+                    sizes=sizes,
+                    marker=marker,
+                    **kwargs,
                 )
 
-            ax.set_title(
-                f"{get_label(x_var)} vs. {get_label(y_var)}",
-                fontsize=label_fontsize,
-            )
-            ax.tick_params(axis="x", rotation=xlabel_rot)
-            ax.tick_params(axis="both", labelsize=tick_fontsize)
+                if add_best_fit_line:
+                    add_best_fit(
+                        ax,
+                        df[x_var] if not rotate_plot else df[y_var],
+                        df[y_var] if not rotate_plot else df[x_var],
+                        best_fit_linestyle,
+                        best_fit_linecolor,
+                    )
 
-            safe_x_var = x_var.replace(" ", "_").replace("/", "_per_")
-            safe_y_var = y_var.replace(" ", "_").replace("/", "_per_")
-            if image_path_png:
-                fig.savefig(
-                    os.path.join(
-                        image_path_png,
-                        f"scatter_{safe_x_var}_vs_{safe_y_var}.png",
-                    ),
-                    bbox_inches="tight",
+                ax.set_title(
+                    f"{get_label(x_var)} vs. {get_label(y_var)}",
+                    fontsize=label_fontsize,
                 )
-            if image_path_svg:
-                fig.savefig(
-                    os.path.join(
-                        image_path_svg,
-                        f"scatter_{safe_x_var}_vs_{safe_y_var}.svg",
-                    ),
-                    bbox_inches="tight",
-                )
-            plt.close(fig)
+                ax.tick_params(axis="x", rotation=xlabel_rot)
+                ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                safe_x_var = x_var.replace(" ", "_").replace("/", "_per_")
+                safe_y_var = y_var.replace(" ", "_").replace("/", "_per_")
+                if image_path_png:
+                    fig_individual.savefig(
+                        os.path.join(
+                            image_path_png,
+                            f"scatter_{safe_x_var}_vs_{safe_y_var}.png",
+                        ),
+                        bbox_inches="tight",
+                    )
+                if image_path_svg:
+                    fig_individual.savefig(
+                        os.path.join(
+                            image_path_svg,
+                            f"scatter_{safe_x_var}_vs_{safe_y_var}.svg",
+                        ),
+                        bbox_inches="tight",
+                    )
+                plt.close(fig_individual)  # Clear memory
+                pbar.update(1)  # Update progress bar
 
     # Save grid plot
     if save_plots in ["all", "grid"]:
-        with tqdm(total=1, desc="Saving grid plot") as pbar:
+        # Progress bar for rendering subplots
+        with tqdm(total=num_plots, desc="Rendering grid plot") as render_pbar:
+            fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
+            axes = axes.flatten()  # Flatten axes for consistent handling
+
+            # Render the subplots
+            for i, ax in enumerate(axes):
+                if i < num_plots:
+                    x_var, y_var = combinations[i]
+                    sns.scatterplot(
+                        x=x_var if not rotate_plot else y_var,
+                        y=y_var if not rotate_plot else x_var,
+                        data=df,
+                        ax=ax,
+                        color=scatter_color,
+                        hue=hue,
+                        palette=hue_palette,
+                        size=size,
+                        sizes=sizes,
+                        marker=marker,
+                        **kwargs,
+                    )
+
+                    if add_best_fit_line:
+                        x_data = df[x_var] if not rotate_plot else df[y_var]
+                        y_data = df[y_var] if not rotate_plot else df[x_var]
+                        add_best_fit(
+                            ax,
+                            x_data,
+                            y_data,
+                            best_fit_linestyle,
+                            best_fit_linecolor,
+                        )
+
+                    r_value = df[x_var].corr(df[y_var])
+                    title = f"{get_label(x_var)} vs. {get_label(y_var)}"
+                    if show_correlation:
+                        title += f" ($r$ = {r_value:.2f})"
+                    ax.set_title(
+                        "\n".join(textwrap.wrap(title, width=text_wrap)),
+                        fontsize=label_fontsize,
+                    )
+                    ax.tick_params(axis="x", rotation=xlabel_rot)
+                    ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                    render_pbar.update(1)  # Update progress bar for rendering
+
+                else:
+                    ax.axis("off")  # Turn off unused axes
+
+            plt.tight_layout()
+
+        # Progress bar for saving the grid plot
+        with tqdm(total=1, desc="Saving grid plot") as save_pbar:
             grid_filename_png = "scatter_plots_grid.png"
             grid_filename_svg = "scatter_plots_grid.svg"
             if image_path_png:
-                fig.savefig(
+                fig_grid.savefig(
                     os.path.join(image_path_png, grid_filename_png),
                     bbox_inches="tight",
                 )
             if image_path_svg:
-                fig.savefig(
+                fig_grid.savefig(
                     os.path.join(image_path_svg, grid_filename_svg),
                     bbox_inches="tight",
                 )
-            pbar.update(1)
+
+            save_pbar.update(1)  # Update progress bar for saving
+            plt.close(fig_grid)  # Clear memory
 
 
 ################################################################################
