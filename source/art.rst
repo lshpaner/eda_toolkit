@@ -312,8 +312,8 @@ Examples
 
 **Key Details**
 
-- **Default Behavior**: If no artwork name is provided and `all` is `False`, a list of available options is displayed.
-- **Output Handling**: If `output_file` and `output_path` are specified, the function creates the directory (if needed) and saves the ASCII art to the file.
+- **Default Behavior**: If no artwork name is provided and ``all`` is ``False``, a list of available options is displayed.
+- **Output Handling**: If ``output_file`` and ``output_path`` are specified, the function creates the directory (if needed) and saves the ASCII art to the file.
 
 .. admonition:: Notes
 
