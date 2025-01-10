@@ -1132,7 +1132,8 @@ def kde_distributions(
         Font size for tick labels on the axes.
 
     text_wrap : int, optional (default=50)
-        Maximum width of the title text before wrapping.
+        Maximum number of characters allowed in plot titles and axis labels
+        before wrapping them onto the next line.
 
     disable_sci_notation : bool, optional (default=False)
         Toggle to disable scientific notation on axes.
@@ -2308,7 +2309,8 @@ def box_violin_plot(
         Font size for axis tick labels.
 
     text_wrap : int, optional (default=50)
-        Maximum width of the plot titles before wrapping.
+        Maximum number of characters allowed in plot titles and axis labels
+        before wrapping them onto the next line.
 
     xlim : tuple of float, optional
         Limits for the x-axis as (min, max).
@@ -2448,11 +2450,21 @@ def box_violin_plot(
                     fontsize=label_fontsize,
                 )
                 plt.xlabel(
-                    get_label(met_list) if rotate_plot else get_label(met_comp),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_list) if rotate_plot else get_label(met_comp),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 plt.ylabel(
-                    get_label(met_comp) if rotate_plot else get_label(met_list),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_comp) if rotate_plot else get_label(met_list),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -2529,16 +2541,25 @@ def box_violin_plot(
                     fontsize=label_fontsize,
                 )
                 ax.set_xlabel(
-                    get_label(met_list) if rotate_plot else get_label(met_comp),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_list) if rotate_plot else get_label(met_comp),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.set_ylabel(
-                    get_label(met_comp) if rotate_plot else get_label(met_list),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_comp) if rotate_plot else get_label(met_list),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
-
                 # Set x and y limits if specified
                 if xlim:
                     ax.set_xlim(xlim)
@@ -2692,7 +2713,8 @@ def scatter_fit_plot(
         Font size for axis tick labels.
 
     text_wrap : int, optional (default=50)
-        The maximum width of the title text before wrapping.
+        The maximum width of text (in characters) before wrapping. This applies
+        to the plot title, x-axis labels, and y-axis labels.
 
     add_best_fit_line : bool, optional (default=False)
         Whether to add a best fit line to the scatter plots.
@@ -2970,11 +2992,21 @@ def scatter_fit_plot(
                 fontsize=label_fontsize,
             )
             plt.xlabel(
-                get_label(x_var) if not rotate_plot else get_label(y_var),
+                "\n".join(
+                    textwrap.wrap(
+                        get_label(x_var) if not rotate_plot else get_label(y_var),
+                        width=text_wrap,
+                    )
+                ),
                 fontsize=label_fontsize,
             )
             plt.ylabel(
-                get_label(y_var) if not rotate_plot else get_label(x_var),
+                "\n".join(
+                    textwrap.wrap(
+                        get_label(y_var) if not rotate_plot else get_label(x_var),
+                        width=text_wrap,
+                    )
+                ),
                 fontsize=label_fontsize,
             )
             ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -3025,6 +3057,24 @@ def scatter_fit_plot(
                     title += f" ($r$ = {r_value:.2f})"
                 ax.set_title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
+                ax.set_xlabel(
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(x_var) if not rotate_plot else get_label(y_var),
+                            width=text_wrap,
+                        )
+                    ),
+                    fontsize=label_fontsize,
+                )
+                ax.set_ylabel(
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(y_var) if not rotate_plot else get_label(x_var),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -3252,7 +3302,9 @@ def flex_corr_matrix(
         Vertical alignment for y-axis labels (e.g., "center", "top").
 
     text_wrap : int, optional (default=50)
-        Maximum width of the title text before wrapping.
+        Maximum width of the text before wrapping. This applies to the plot
+        title, x-axis labels, and y-axis labels, ensuring that long text is
+        neatly displayed without overflow or truncation.
 
     vmin : float, optional (default=-1)
         Minimum value for the heatmap color scale.
@@ -3418,7 +3470,12 @@ def flex_corr_matrix(
     if label_names:
         heatmap.set_xticklabels(
             [
-                label_names.get(label.get_text(), label.get_text())
+                "\n".join(
+                    textwrap.wrap(
+                        label_names.get(label.get_text(), label.get_text()),
+                        width=text_wrap,
+                    )
+                )
                 for label in heatmap.get_xticklabels()
             ],
             rotation=xlabel_rot,
@@ -3428,7 +3485,12 @@ def flex_corr_matrix(
         )
         heatmap.set_yticklabels(
             [
-                label_names.get(label.get_text(), label.get_text())
+                "\n".join(
+                    textwrap.wrap(
+                        label_names.get(label.get_text(), label.get_text()),
+                        width=text_wrap,
+                    )
+                )
                 for label in heatmap.get_yticklabels()
             ],
             rotation=ylabel_rot,
@@ -3438,20 +3500,25 @@ def flex_corr_matrix(
     else:
         # Directly set rotation and alignment for x-axis labels
         heatmap.set_xticklabels(
-            heatmap.get_xticklabels(),
+            [
+                "\n".join(textwrap.wrap(label.get_text(), width=text_wrap))
+                for label in heatmap.get_xticklabels()
+            ],
             rotation=xlabel_rot,
             ha=xlabel_alignment,
             fontsize=tick_fontsize,
             rotation_mode="anchor",
         )
 
-        # Directly set rotation and alignment for y-axis labels
+        # Directly set rotation and alignment for y-axis labels with wrapping
         heatmap.set_yticklabels(
-            heatmap.get_yticklabels(),
+            [
+                "\n".join(textwrap.wrap(label.get_text(), width=text_wrap))
+                for label in heatmap.get_yticklabels()
+            ],
             rotation=ylabel_rot,
             va=ylabel_alignment,
             fontsize=tick_fontsize,
-            rotation_mode="anchor",
         )
 
     # Adjust layout to prevent overlap
