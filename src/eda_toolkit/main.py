@@ -1022,6 +1022,8 @@ def kde_distributions(
     std_color="#808080",
     label_names=None,
     show_legend=True,  # New parameter to toggle the legend
+    custom_xlabels=None,  # New parameter to customize x-axis labels
+    custom_titles=None,  # New parameter to customize plot titles
     **kwargs,  # To capture additional keyword arguments
 ):
     """
@@ -1107,10 +1109,11 @@ def kde_distributions(
         Filename to use when saving the separate distribution plots. The
         variable name will be appended to this filename. When using this
         parameter, the `figsize` parameter is used to determine the size of the
-        individual plots. The `grid_figsize` param. is ignored in this context.
+        individual plots. The `grid_figsize` parameter is ignored in this context.
 
     y_axis_label : str, optional (default='Density')
-        The label to display on the y-axis.
+        The label to display on the y-axis. If set to `None`, no y-axis label
+        will be displayed.
 
     plot_type : str, optional (default='both')
         The type of plot to generate ('hist', 'kde', or 'both').
@@ -1166,6 +1169,16 @@ def kde_distributions(
 
     show_legend : bool, optional (default=True)
         Whether to show the legend on the plots.
+
+    custom_xlabels : dict, optional
+        Dictionary to customize x-axis labels. Keys are column names, and values
+        are the desired labels. If a value is `None`, no x-axis label is displayed
+        for the corresponding column.
+
+    custom_titles : dict, optional
+        Dictionary to customize plot titles. Keys are column names, and values
+        are the desired titles. If a value is `None`, no title is displayed
+        for the corresponding column.
 
     **kwargs : additional keyword arguments
         Additional keyword arguments passed to the Seaborn plotting function.
@@ -1326,11 +1339,18 @@ def kde_distributions(
             # Filter out non-positive values if log_scale is True
             data = df[df[col] > 0] if log_scale else df
 
-            # Add "(Log)" to the label if log_scale is applied
-            xlabel = f"{get_label(col)} (Log)" if log_scale else get_label(col)
+            if custom_xlabels and col in custom_xlabels:
+                xlabel = custom_xlabels[col]
+            else:
+                # Add "(Log)" to the label if log_scale is applied
+                xlabel = f"{get_label(col)} (Log)" if log_scale else get_label(col)
 
-            # Modify the title to include "(Log Scaled)" if log_scale is applied
-            title = f"Distribution of {get_label(col)} {'(Log Scaled)' if log_scale else ''}"
+            # Determine custom title
+            if custom_titles and col in custom_titles:
+                title = custom_titles[col]
+            else:
+                # Modify the title to include "(Log Scaled)" if log_scale is applied
+                title = f"Distribution of {get_label(col)} {'(Log Scaled)' if log_scale else ''}"
 
             # Calculate mean and median if needed
             mean_value = data[col].mean() if plot_mean or std_dev_levels else None
@@ -1449,17 +1469,22 @@ def kde_distributions(
                             ax.get_legend().remove()
 
             ax.set_xlabel(
-                "\n".join(textwrap.wrap(xlabel, width=text_wrap)),
+                "\n".join(textwrap.wrap(xlabel, width=text_wrap)) if xlabel else None,
                 fontsize=label_fontsize,
             )
 
             ax.set_ylabel(
-                "\n".join(textwrap.wrap(y_axis_label.capitalize(), width=text_wrap)),
+                (
+                    "\n".join(textwrap.wrap(y_axis_label.capitalize(), width=text_wrap))
+                    if y_axis_label
+                    else None
+                ),
                 fontsize=label_fontsize,
             )
 
+            # Apply the title
             ax.set_title(
-                "\n".join(textwrap.wrap(title, width=text_wrap)),
+                "\n".join(textwrap.wrap(title, width=text_wrap)) if title else None,
                 fontsize=label_fontsize,
             )
 
@@ -1630,25 +1655,33 @@ def kde_distributions(
                                 ax.get_legend().remove()
 
                 ax.set_xlabel(
-                    "\n".join(textwrap.wrap(xlabel, width=text_wrap)),
+                    (
+                        "\n".join(textwrap.wrap(xlabel, width=text_wrap))
+                        if xlabel
+                        else None
+                    ),
                     fontsize=label_fontsize,
                 )
 
                 ax.set_ylabel(
-                    "\n".join(
-                        textwrap.wrap(y_axis_label.capitalize(), width=text_wrap)
+                    (
+                        "\n".join(
+                            textwrap.wrap(y_axis_label.capitalize(), width=text_wrap)
+                        )
+                        if y_axis_label
+                        else None
                     ),
                     fontsize=label_fontsize,
                 )
                 ax.set_title(
-                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    "\n".join(textwrap.wrap(title, width=text_wrap)) if title else None,
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(
                     axis="both", labelsize=tick_fontsize
                 )  # Control tick fontsize separately
 
-                # Set axis limits if specified
+                # Set axis limits if specified~
                 if xlim:
                     ax.set_xlim(xlim)
                 if ylim:
