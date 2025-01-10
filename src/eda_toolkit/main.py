@@ -3453,6 +3453,7 @@ def flex_corr_matrix(
         cbar=False,  # Disable the default colorbar
         vmin=vmin,
         vmax=vmax,
+        annot_kws={"fontsize": label_fontsize},
         ax=ax_heatmap,
         **kwargs,
     )
