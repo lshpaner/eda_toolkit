@@ -9,8 +9,10 @@ import random
 import itertools  # Import itertools for combinations
 from itertools import combinations
 from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from matplotlib import gridspec
 import matplotlib.ticker as mticker  # Import for formatting
 import seaborn as sns
 import plotly.graph_objects as go
@@ -1020,6 +1022,8 @@ def kde_distributions(
     std_color="#808080",
     label_names=None,
     show_legend=True,  # New parameter to toggle the legend
+    custom_xlabels=None,  # New parameter to customize x-axis labels
+    custom_titles=None,  # New parameter to customize plot titles
     **kwargs,  # To capture additional keyword arguments
 ):
     """
@@ -1105,10 +1109,11 @@ def kde_distributions(
         Filename to use when saving the separate distribution plots. The
         variable name will be appended to this filename. When using this
         parameter, the `figsize` parameter is used to determine the size of the
-        individual plots. The `grid_figsize` param. is ignored in this context.
+        individual plots. The `grid_figsize` parameter is ignored in this context.
 
     y_axis_label : str, optional (default='Density')
-        The label to display on the y-axis.
+        The label to display on the y-axis. If set to `None`, no y-axis label
+        will be displayed.
 
     plot_type : str, optional (default='both')
         The type of plot to generate ('hist', 'kde', or 'both').
@@ -1130,7 +1135,8 @@ def kde_distributions(
         Font size for tick labels on the axes.
 
     text_wrap : int, optional (default=50)
-        Maximum width of the title text before wrapping.
+        Maximum number of characters allowed in plot titles and axis labels
+        before wrapping them onto the next line.
 
     disable_sci_notation : bool, optional (default=False)
         Toggle to disable scientific notation on axes.
@@ -1163,6 +1169,16 @@ def kde_distributions(
 
     show_legend : bool, optional (default=True)
         Whether to show the legend on the plots.
+
+    custom_xlabels : dict, optional
+        Dictionary to customize x-axis labels. Keys are column names, and values
+        are the desired labels. If a value is `None`, no x-axis label is displayed
+        for the corresponding column.
+
+    custom_titles : dict, optional
+        Dictionary to customize plot titles. Keys are column names, and values
+        are the desired titles. If a value is `None`, no title is displayed
+        for the corresponding column.
 
     **kwargs : additional keyword arguments
         Additional keyword arguments passed to the Seaborn plotting function.
@@ -1323,11 +1339,18 @@ def kde_distributions(
             # Filter out non-positive values if log_scale is True
             data = df[df[col] > 0] if log_scale else df
 
-            # Add "(Log)" to the label if log_scale is applied
-            xlabel = f"{get_label(col)} (Log)" if log_scale else get_label(col)
+            if custom_xlabels and col in custom_xlabels:
+                xlabel = custom_xlabels[col]
+            else:
+                # Add "(Log)" to the label if log_scale is applied
+                xlabel = f"{get_label(col)} (Log)" if log_scale else get_label(col)
 
-            # Modify the title to include "(Log Scaled)" if log_scale is applied
-            title = f"Distribution of {get_label(col)} {'(Log Scaled)' if log_scale else ''}"
+            # Determine custom title
+            if custom_titles and col in custom_titles:
+                title = custom_titles[col]
+            else:
+                # Modify the title to include "(Log Scaled)" if log_scale is applied
+                title = f"Distribution of {get_label(col)} {'(Log Scaled)' if log_scale else ''}"
 
             # Calculate mean and median if needed
             mean_value = data[col].mean() if plot_mean or std_dev_levels else None
@@ -1446,18 +1469,25 @@ def kde_distributions(
                             ax.get_legend().remove()
 
             ax.set_xlabel(
-                xlabel,
+                "\n".join(textwrap.wrap(xlabel, width=text_wrap)) if xlabel else None,
                 fontsize=label_fontsize,
             )
 
             ax.set_ylabel(
-                y_axis_label.capitalize(),
+                (
+                    "\n".join(textwrap.wrap(y_axis_label.capitalize(), width=text_wrap))
+                    if y_axis_label
+                    else None
+                ),
                 fontsize=label_fontsize,
             )
+
+            # Apply the title
             ax.set_title(
-                "\n".join(textwrap.wrap(title, width=text_wrap)),
+                "\n".join(textwrap.wrap(title, width=text_wrap)) if title else None,
                 fontsize=label_fontsize,
             )
+
             ax.tick_params(
                 axis="both", labelsize=tick_fontsize
             )  # Control tick fontsize separately
@@ -1624,21 +1654,34 @@ def kde_distributions(
                             if ax.get_legend() is not None:
                                 ax.get_legend().remove()
 
-                ax.set_xlabel(xlabel, fontsize=label_fontsize)
+                ax.set_xlabel(
+                    (
+                        "\n".join(textwrap.wrap(xlabel, width=text_wrap))
+                        if xlabel
+                        else None
+                    ),
+                    fontsize=label_fontsize,
+                )
 
                 ax.set_ylabel(
-                    y_axis_label.capitalize(),
+                    (
+                        "\n".join(
+                            textwrap.wrap(y_axis_label.capitalize(), width=text_wrap)
+                        )
+                        if y_axis_label
+                        else None
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.set_title(
-                    "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    "\n".join(textwrap.wrap(title, width=text_wrap)) if title else None,
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(
                     axis="both", labelsize=tick_fontsize
                 )  # Control tick fontsize separately
 
-                # Set axis limits if specified
+                # Set axis limits if specified~
                 if xlim:
                     ax.set_xlim(xlim)
                 if ylim:
@@ -2299,7 +2342,8 @@ def box_violin_plot(
         Font size for axis tick labels.
 
     text_wrap : int, optional (default=50)
-        Maximum width of the plot titles before wrapping.
+        Maximum number of characters allowed in plot titles and axis labels
+        before wrapping them onto the next line.
 
     xlim : tuple of float, optional
         Limits for the x-axis as (min, max).
@@ -2439,11 +2483,21 @@ def box_violin_plot(
                     fontsize=label_fontsize,
                 )
                 plt.xlabel(
-                    get_label(met_list) if rotate_plot else get_label(met_comp),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_list) if rotate_plot else get_label(met_comp),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 plt.ylabel(
-                    get_label(met_comp) if rotate_plot else get_label(met_list),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_comp) if rotate_plot else get_label(met_list),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -2520,16 +2574,25 @@ def box_violin_plot(
                     fontsize=label_fontsize,
                 )
                 ax.set_xlabel(
-                    get_label(met_list) if rotate_plot else get_label(met_comp),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_list) if rotate_plot else get_label(met_comp),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.set_ylabel(
-                    get_label(met_comp) if rotate_plot else get_label(met_list),
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(met_comp) if rotate_plot else get_label(met_list),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
-
                 # Set x and y limits if specified
                 if xlim:
                     ax.set_xlim(xlim)
@@ -2683,7 +2746,8 @@ def scatter_fit_plot(
         Font size for axis tick labels.
 
     text_wrap : int, optional (default=50)
-        The maximum width of the title text before wrapping.
+        The maximum width of text (in characters) before wrapping. This applies
+        to the plot title, x-axis labels, and y-axis labels.
 
     add_best_fit_line : bool, optional (default=False)
         Whether to add a best fit line to the scatter plots.
@@ -2961,11 +3025,21 @@ def scatter_fit_plot(
                 fontsize=label_fontsize,
             )
             plt.xlabel(
-                get_label(x_var) if not rotate_plot else get_label(y_var),
+                "\n".join(
+                    textwrap.wrap(
+                        get_label(x_var) if not rotate_plot else get_label(y_var),
+                        width=text_wrap,
+                    )
+                ),
                 fontsize=label_fontsize,
             )
             plt.ylabel(
-                get_label(y_var) if not rotate_plot else get_label(x_var),
+                "\n".join(
+                    textwrap.wrap(
+                        get_label(y_var) if not rotate_plot else get_label(x_var),
+                        width=text_wrap,
+                    )
+                ),
                 fontsize=label_fontsize,
             )
             ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -3016,6 +3090,24 @@ def scatter_fit_plot(
                     title += f" ($r$ = {r_value:.2f})"
                 ax.set_title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
+                    fontsize=label_fontsize,
+                )
+                ax.set_xlabel(
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(x_var) if not rotate_plot else get_label(y_var),
+                            width=text_wrap,
+                        )
+                    ),
+                    fontsize=label_fontsize,
+                )
+                ax.set_ylabel(
+                    "\n".join(
+                        textwrap.wrap(
+                            get_label(y_var) if not rotate_plot else get_label(x_var),
+                            width=text_wrap,
+                        )
+                    ),
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -3184,12 +3276,15 @@ def flex_corr_matrix(
     cbar_label="Correlation Index",
     triangular=True,  # New parameter to control triangular vs full matrix
     label_names=None,
+    cbar_padding=0.8,
+    cbar_width_ratio=0.05,
+    show_colorbar=True,
     **kwargs,
 ):
     """
-    Creates a correlation heatmap with extensive customization options,
-    including triangular masking, alignment adjustments, and title wrapping.
-    Users can save the plot in PNG and SVG formats.
+    Creates a correlation heatmap with extensive customization options, including
+    triangular masking, alignment adjustments, title wrapping, and dynamic
+    colorbar scaling. Users can save the plot in PNG and SVG formats.
 
     Parameters:
     -----------
@@ -3197,8 +3292,8 @@ def flex_corr_matrix(
         The DataFrame containing the data.
 
     cols : list of str, optional
-        List of column names to include in the correlation matrix.
-        If None, all columns are included.
+        List of column names to include in the correlation matrix. If None, all
+        columns are included.
 
     annot : bool, optional (default=True)
         Whether to annotate the heatmap with correlation coefficients.
@@ -3240,7 +3335,9 @@ def flex_corr_matrix(
         Vertical alignment for y-axis labels (e.g., "center", "top").
 
     text_wrap : int, optional (default=50)
-        Maximum width of the title text before wrapping.
+        Maximum width of the text before wrapping. This applies to the plot
+        title, x-axis labels, and y-axis labels, ensuring that long text is
+        neatly displayed without overflow or truncation.
 
     vmin : float, optional (default=-1)
         Minimum value for the heatmap color scale.
@@ -3256,6 +3353,15 @@ def flex_corr_matrix(
 
     label_names : dict, optional
         A dictionary to map original column names to custom labels.
+
+    cbar_padding : float, optional (default=0.8)
+        Padding between the heatmap and the colorbar.
+
+    cbar_width_ratio : float, optional (default=0.05)
+        Relative width of the colorbar compared to the heatmap.
+
+    show_colorbar : bool, optional (default=True)
+        Whether to display the colorbar. If False, no colorbar will be shown.
 
     **kwargs : dict, optional
         Additional keyword arguments to pass to `sns.heatmap()`.
@@ -3281,12 +3387,16 @@ def flex_corr_matrix(
     Notes:
     ------
     - If `triangular=True`, the heatmap will display only the upper triangle
-      of the correlation matrix, excluding the diagonal.
+    of the correlation matrix, excluding the diagonal.
     - Custom labels specified in `label_names` will replace the default column
-      names in the heatmap's axes.
+    names in the heatmap's axes.
     - Save formats are determined by the paths provided for PNG and SVG files.
-    - The `kwargs` parameter allows for further customization of the heatmap,
-      leveraging Seaborn's `heatmap()` function.
+    - The colorbar width dynamically scales based on the grid square size for
+    consistent proportions.
+    - The `cbar_padding` and `cbar_width_ratio` parameters control the relative
+    spacing and size of the colorbar, providing additional layout customization.
+    - The `show_colorbar` parameter allows users to optionally exclude the
+    colorbar for a cleaner plot.
     """
 
     # Validation: Ensure annot is a boolean
@@ -3329,9 +3439,9 @@ def flex_corr_matrix(
         mask = np.triu(np.ones_like(corr_matrix, dtype=bool), k=1)
 
     # Set up the matplotlib figure
-    plt.figure(figsize=figsize)
+    fig, ax_heatmap = plt.subplots(figsize=figsize)
 
-    # Draw the heatmap with the mask and correct aspect ratio
+    # Draw the heatmap
     heatmap = sns.heatmap(
         corr_matrix,
         mask=mask,
@@ -3340,16 +3450,48 @@ def flex_corr_matrix(
         fmt=".2f",
         square=True,
         linewidths=0.5,
-        cbar_kws={"label": cbar_label},
+        cbar=False,  # Disable the default colorbar
         vmin=vmin,
         vmax=vmax,
+        annot_kws={"fontsize": label_fontsize},
+        ax=ax_heatmap,
         **kwargs,
     )
 
-    # Set the font size for the colorbar label
-    cbar = heatmap.collections[0].colorbar
-    cbar.ax.tick_params(labelsize=tick_fontsize)  # Updated to use tick_fontsize
-    cbar.set_label(cbar_label, fontsize=label_fontsize)
+    # Add the colorbar
+    if show_colorbar:
+        # Use make_axes_locatable to add the colorbar
+        divider = make_axes_locatable(ax_heatmap)
+        cax = divider.append_axes(
+            "right", size=f"{cbar_width_ratio*100}%", pad=cbar_padding
+        )
+
+        # Add the colorbar
+        cbar = fig.colorbar(
+            heatmap.collections[0],
+            cax=cax,
+            orientation="vertical",
+        )
+
+        # Customize the colorbar
+        cbar.ax.tick_params(labelsize=tick_fontsize)
+        cbar.set_label(cbar_label, fontsize=label_fontsize)
+
+        # Align the colorbar's height to the heatmap
+        pos_heatmap = ax_heatmap.get_position()
+        pos_cax = cax.get_position()
+        cax.set_position(
+            [
+                pos_cax.x0,  # Keep x position
+                pos_heatmap.y0,  # Align bottom with heatmap
+                pos_cax.width,  # Keep the width set by `cbar_width_ratio`
+                pos_heatmap.height,  # Match height with heatmap
+            ]
+        )
+
+        # Remove the spines (despine the colorbar)
+        for spine in cax.spines.values():
+            spine.set_visible(False)
 
     # Set the title if provided
     if title:
@@ -3362,7 +3504,12 @@ def flex_corr_matrix(
     if label_names:
         heatmap.set_xticklabels(
             [
-                label_names.get(label.get_text(), label.get_text())
+                "\n".join(
+                    textwrap.wrap(
+                        label_names.get(label.get_text(), label.get_text()),
+                        width=text_wrap,
+                    )
+                )
                 for label in heatmap.get_xticklabels()
             ],
             rotation=xlabel_rot,
@@ -3372,7 +3519,12 @@ def flex_corr_matrix(
         )
         heatmap.set_yticklabels(
             [
-                label_names.get(label.get_text(), label.get_text())
+                "\n".join(
+                    textwrap.wrap(
+                        label_names.get(label.get_text(), label.get_text()),
+                        width=text_wrap,
+                    )
+                )
                 for label in heatmap.get_yticklabels()
             ],
             rotation=ylabel_rot,
@@ -3380,23 +3532,37 @@ def flex_corr_matrix(
             va=ylabel_alignment,
         )
     else:
-        # Rotate x-axis labels, adjust alignment, and apply padding
-        plt.xticks(
+        # Directly set rotation and alignment for x-axis labels
+        heatmap.set_xticklabels(
+            [
+                "\n".join(textwrap.wrap(label.get_text(), width=text_wrap))
+                for label in heatmap.get_xticklabels()
+            ],
             rotation=xlabel_rot,
-            fontsize=tick_fontsize,  # Updated to use tick_fontsize
             ha=xlabel_alignment,
+            fontsize=tick_fontsize,
             rotation_mode="anchor",
         )
 
-        # Rotate y-axis labels and adjust alignment
-        plt.yticks(
+        # Directly set rotation and alignment for y-axis labels with wrapping
+        heatmap.set_yticklabels(
+            [
+                "\n".join(textwrap.wrap(label.get_text(), width=text_wrap))
+                for label in heatmap.get_yticklabels()
+            ],
             rotation=ylabel_rot,
-            fontsize=tick_fontsize,  # Updated to use tick_fontsize
             va=ylabel_alignment,
+            fontsize=tick_fontsize,
         )
 
     # Adjust layout to prevent overlap
-    plt.tight_layout()
+    plt.subplots_adjust(
+        left=0.1,
+        right=0.9,
+        top=0.9,
+        bottom=0.1,
+        wspace=cbar_padding,
+    )
 
     # Determine the filename title for saving, using the default if None
     filename_title = title or "Correlation Matrix"
@@ -3404,7 +3570,7 @@ def flex_corr_matrix(
     # Set the plot title only if a title is explicitly provided
     if title:
         plt.title(
-            "\\n".join(textwrap.wrap(title, width=text_wrap)),
+            "\n".join(textwrap.wrap(title, width=text_wrap)),
             fontsize=label_fontsize,
         )
 
