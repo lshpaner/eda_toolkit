@@ -273,19 +273,19 @@ def parse_date_with_rule(date_str):
 
 
 ################################################################################
-############################### DataFrame Columns ##############################
+############################### DataFrame Profiler #############################
 ################################################################################
 
 
-def dataframe_columns(
+def dataframe_profiler(
     df,
     background_color=None,
     return_df=False,
     sort_cols_alpha=False,
 ):
     """
-    Analyze DataFrame columns to provide summary statistics such as data type,
-    null counts, unique values, and most frequent values.
+    Analyze DataFrame columns to provide a profile of summary statistics such as 
+    data type, null counts, unique values, and most frequent values.
 
     Parameters:
     -----------
