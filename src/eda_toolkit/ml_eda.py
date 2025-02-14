@@ -26,7 +26,7 @@ def plot_2d_pdp(
     file_prefix="partial_dependence",  # Prefix for saved grid plots
 ):
     """
-    Generate and save 2D partial dependence plots (PDPs) for specified features 
+    Generate and save 2D partial dependence plots (PDPs) for specified features
     using a trained model.
 
     Parameters:
@@ -41,18 +41,18 @@ def plot_2d_pdp(
         List of feature names corresponding to columns in X_train.
 
     features : list of int or tuple of int
-        List of feature indices or tuples of feature indices for which to 
+        List of feature indices or tuples of feature indices for which to
         generate partial dependence plots.
 
     title : str, optional
         Title for the entire plot. Default is "Partial dependence plot".
 
     grid_resolution : int, optional
-        The resolution of the grid used to compute the partial dependence. 
+        The resolution of the grid used to compute the partial dependence.
         Default is 50.
 
     plot_type : str, optional
-        Choose between "grid" for all plots in a grid layout, "individual" for 
+        Choose between "grid" for all plots in a grid layout, "individual" for
         separate plots, or "both" for both layouts. Default is "grid".
 
     grid_figsize : tuple, optional
@@ -77,7 +77,7 @@ def plot_2d_pdp(
         Directory to save SVG files. If not specified, SVG files are not saved.
 
     save_plots : str, optional
-        Controls which plots to save: "all", "individual", "grid", or None to 
+        Controls which plots to save: "all", "individual", "grid", or None to
         save no plots. Default is None.
 
     file_prefix : str, optional
@@ -88,7 +88,7 @@ def plot_2d_pdp(
     ValueError
         - If `save_plots` is not one of [None, "all", "individual", "grid"].
         - If `plot_type` is not one of ["grid", "individual", "both"].
-        - If `save_plots` is specified without providing `image_path_png` or 
+        - If `save_plots` is specified without providing `image_path_png` or
           `image_path_svg`.
 
     Returns:
@@ -98,16 +98,15 @@ def plot_2d_pdp(
 
     Notes:
     ------
-    - The `plot_type` parameter determines the layout: grid, individual plots, 
+    - The `plot_type` parameter determines the layout: grid, individual plots,
       or both.
-    - The `save_plots` parameter specifies which plots to save and requires 
+    - The `save_plots` parameter specifies which plots to save and requires
       either `image_path_png` or `image_path_svg` to be specified.
     - Titles are wrapped based on the `text_wrap` parameter for better readability.
     - Grid plots are saved with the prefix specified by `file_prefix`.
-    - Individual plot filenames use the sanitized feature names to avoid issues 
+    - Individual plot filenames use the sanitized feature names to avoid issues
       with special characters.
     """
-
 
     # Validate save_plots input
     if save_plots not in [None, "all", "individual", "grid"]:
@@ -245,11 +244,12 @@ def plot_2d_pdp(
 def plot_3d_pdp(
     model,
     dataframe,
-    feature_names_list,
+    feature_names,
     x_label=None,
     y_label=None,
     z_label=None,
     title=None,
+    save_plots=None,  # "html", "static", "both", or None
     html_file_path=None,
     html_file_name=None,
     image_filename=None,
@@ -296,21 +296,21 @@ def plot_3d_pdp(
 
     dataframe : pandas.DataFrame or numpy.ndarray
         The dataset on which the model was trained or a representative sample.
-        If a DataFrame is provided, `feature_names_list` should correspond to
-        the column names. If a numpy array is provided, `feature_names_list`
+        If a DataFrame is provided, `feature_names` should correspond to
+        the column names. If a numpy array is provided, `feature_names`
         should correspond to the indices of the columns.
 
-    feature_names_list : list of str
+    feature_names : list of str
         A list of two feature names or indices for which partial dependence
         plots are generated.
 
     x_label : str, optional
         Label for the x-axis in the plots. Defaults to the first feature in
-        `feature_names_list`.
+        `feature_names`.
 
     y_label : str, optional
         Label for the y-axis in the plots. Defaults to the second feature in
-        `feature_names_list`.
+        `feature_names`.
 
     z_label : str, optional
         Label for the z-axis in the plots. Defaults to "Partial Dependence".
@@ -318,9 +318,16 @@ def plot_3d_pdp(
     title : str, optional
         Title for the plots. If not provided, no title is displayed.
 
+    save_plots : {"html", "static", "both", None}, optional
+        Specifies whether and how to save the generated plots.
+        - `"static"`: Saves only the Matplotlib (PNG/SVG) plot.
+        - `"html"`: Saves only the Plotly interactive plot as an HTML file.
+        - `"both"`: Saves both static (PNG/SVG) and interactive (HTML) plots.
+        - `None`: Does not save any plots.
+
     html_file_path : str, optional
-        Path to save the interactive Plotly HTML file. Required if `plot_type`
-        is "interactive" or "both".
+        Directory path to save the interactive Plotly HTML file.
+        Required if `save_plots="html"` or `save_plots="both"`.
 
     html_file_name : str, optional
         Name of the HTML file to save the interactive Plotly plot. Required if
@@ -329,11 +336,14 @@ def plot_3d_pdp(
     image_filename : str, optional
         Base filename for saving static Matplotlib plots as PNG and/or SVG.
 
-    plot_type : str, optional, default="both"
-        Type of plots to generate. Options are:
-        - "static": Generate only static Matplotlib plots.
-        - "interactive": Generate only interactive Plotly plots.
-        - "both": Generate both static and interactive plots.
+    plot_type : {"static", "interactive", "both"}, optional, default="both"
+        Specifies the type of plot to generate.
+        - `"static"`: Generates only a Matplotlib 3D plot.
+        - `"interactive"`: Generates only an interactive Plotly 3D plot.
+        - `"both"`: Generates both static and interactive plots.
+
+        **Note**: If `plot_type="static"`, an interactive plot is **not**
+        created, and attempting to save an HTML file will raise an error.
 
     matplotlib_colormap : matplotlib.colors.Colormap, optional
         Custom colormap for the Matplotlib plot. If not provided, a
@@ -434,7 +444,7 @@ def plot_3d_pdp(
     ############# Suppress specific FutureWarnings from sklearn ################
     ############################################################################
 
-    # Typically, it is best practice to avoid setting warnings like this inside
+    # It is best practice to avoid setting warnings like this inside
     # the function/method itself. However, the following logic mandates this
     # specific use case for the following reasons.
     #
@@ -446,6 +456,23 @@ def plot_3d_pdp(
     # be updated from 1.0.2 to 1.3.2 in this Python version, hence this
     # mandated suppression.
     warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn")
+
+    # Validate `save_plots` input
+    if save_plots not in [None, "html", "static", "both"]:
+        raise ValueError(
+            f"Invalid `save_plots` value: {save_plots}. "
+            f"Choose from 'html', 'static', 'both', or None."
+        )
+
+    # Validate that paths are provided if required
+    if save_plots in ["static", "both"] and not (image_path_png or image_path_svg):
+        raise ValueError(
+            f"To save static plots, provide either `image_path_png` "
+            f"or `image_path_svg`."
+        )
+
+    if save_plots in ["html", "both"] and not html_file_path:
+        raise ValueError("To save an HTML plot, provide `html_file_path`.")
 
     # Check if the plot_type is valid
     if plot_type not in ["static", "interactive", "both"]:
@@ -461,15 +488,16 @@ def plot_3d_pdp(
                 f" provided for 'interactive' or 'both' plot types."
             )
 
+    if zoom_out_factor is None:
+        zoom_out_factor = 1.1  # Default to no zoom-out effect
+
     # Handle both pandas DataFrame and NumPy array inputs
     if isinstance(dataframe, np.ndarray):
-        feature_indices = [
-            feature_names_list.index(name) for name in feature_names_list
-        ]
+        feature_indices = [feature_names.index(name) for name in feature_names]
     else:
         feature_indices = [
-            list(dataframe.columns).index(feature_names_list[0]),
-            list(dataframe.columns).index(feature_names_list[1]),
+            list(dataframe.columns).index(feature_names[0]),
+            list(dataframe.columns).index(feature_names[1]),
         ]
 
     # Computing the partial dependence
@@ -500,11 +528,19 @@ def plot_3d_pdp(
     ZZ = pdp_results["average"][0].T
 
     if not x_label:
-        x_label = feature_names_list[0]
+        x_label = feature_names[0]
     if not y_label:
-        y_label = feature_names_list[1]
+        y_label = feature_names[1]
     if not z_label:
         z_label = "Partial Dependence"
+
+    ## Define full_html_file_path early to avoid UnboundLocalError
+    full_html_file_path = None
+    plotly_fig = None  # Ensure plotly_fig is defined before conditional blocks
+
+    if plot_type in ["interactive", "both"]:
+        if html_file_path and html_file_name:
+            full_html_file_path = os.path.join(html_file_path, html_file_name)
 
     if plot_type in ["both", "interactive"]:
 
@@ -597,8 +633,6 @@ def plot_3d_pdp(
         }
 
         pyo.iplot(plotly_fig, config=config)
-
-        full_html_file_path = os.path.join(html_file_path, html_file_name)
         pyo.plot(
             plotly_fig,
             filename=full_html_file_path,
@@ -655,15 +689,27 @@ def plot_3d_pdp(
 
         plt.subplots_adjust(left=0.2, right=0.80, top=0.9, bottom=0.1)
 
-        if image_path_png and image_filename:
-            plt.savefig(
-                os.path.join(image_path_png, f"{image_filename}.png"),
-                bbox_inches="tight",
-            )
-        if image_path_svg and image_filename:
-            plt.savefig(
-                os.path.join(image_path_svg, f"{image_filename}.svg"),
-                bbox_inches="tight",
+        if save_plots in ["static", "both"]:
+            if image_path_png:
+                os.makedirs(image_path_png, exist_ok=True)
+                plt.savefig(
+                    os.path.join(image_path_png, "plot_3d_pdp.png"),
+                    bbox_inches="tight",
+                )
+            if image_path_svg:
+                os.makedirs(image_path_svg, exist_ok=True)
+                plt.savefig(
+                    os.path.join(image_path_svg, "plot_3d_pdp.svg"),
+                    bbox_inches="tight",
+                )
+
+        if save_plots in ["html", "both"] and full_html_file_path:
+            os.makedirs(full_html_file_path, exist_ok=True)
+            pyo.plot(
+                plotly_fig,
+                filename=os.path.join(html_file_path, "plot_3d_pdp.html"),
+                auto_open=False,
+                config=config,
             )
 
         plt.show()
