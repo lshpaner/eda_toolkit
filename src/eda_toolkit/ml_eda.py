@@ -632,13 +632,18 @@ def plot_3d_pdp(
             ),
         }
 
-        pyo.iplot(plotly_fig, config=config)
-        pyo.plot(
-            plotly_fig,
-            filename=full_html_file_path,
-            auto_open=False,
-            config=config,
-        )
+        try:
+            # Try using iplot (works in Jupyter Notebooks)
+            pyo.iplot(plotly_fig, config=config)
+        except ImportError:
+            # If running in a script or pytest, fallback to plot()
+            print("Warning: `iplot` is not available. Falling back to `plot()`.")
+            pyo.plot(
+                plotly_fig,
+                filename=full_html_file_path,
+                auto_open=False,
+                config=config,
+            )
 
     if plot_type in ["both", "static"]:
         # Prepare custom colormap

@@ -284,7 +284,7 @@ def dataframe_profiler(
     sort_cols_alpha=False,
 ):
     """
-    Analyze DataFrame columns to provide a profile of summary statistics such as 
+    Analyze DataFrame columns to provide a profile of summary statistics such as
     data type, null counts, unique values, and most frequent values.
 
     Parameters:
@@ -2427,11 +2427,22 @@ def box_violin_plot(
             "numbers (width, height)."
         )
 
-    # Calculate n_rows and n_cols dynamically if not provided
-    if n_rows is None or n_cols is None:
-        total_plots = len(metrics_list) * len(metrics_comp)
-        n_cols = int(np.ceil(np.sqrt(total_plots)))
-        n_rows = int(np.ceil(total_plots / n_cols))
+    total_plots = len(metrics_list) * len(metrics_comp)
+
+    # Ensure at least one plot is possible
+    if total_plots == 0:
+        raise ValueError(
+            "No valid plots to generate. Ensure `metrics_list` and "
+            "`metrics_comp` are not empty."
+        )
+
+    if n_cols is None:
+        # Ensure at least 1 column
+        n_cols = max(1, int(np.ceil(np.sqrt(total_plots))))
+
+    if n_rows is None:
+        # Ensure at least 1 row
+        n_rows = max(1, int(np.ceil(total_plots / n_cols)))
 
     # Set default grid figure size if not specified
     if grid_figsize is None:
@@ -2910,11 +2921,12 @@ def scatter_fit_plot(
     # Calculate the number of plots
     num_plots = len(combinations)
 
-    # Set a fixed number of columns and calculate rows
-    if n_cols is None:
-        n_cols = min(num_plots, max_cols)
+    # Ensuring that `n_cols` and `n_rows` never become zero, preventing a
+    # division by zero error.
+    if n_cols is None or n_cols == 0:
+        n_cols = min(num_plots, max_cols) if num_plots > 0 else 1
     if n_rows is None:
-        n_rows = math.ceil(num_plots / n_cols)
+        n_rows = max(1, math.ceil(num_plots / n_cols))
 
     # Set default grid figure size if not specified
     if grid_figsize is None:
