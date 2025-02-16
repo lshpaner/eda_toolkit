@@ -58,8 +58,6 @@ https://lshpaner.github.io/eda_toolkit
 
 ## Installation
 
-Clone the repository and install the necessary dependencies:
-
 ```bash
 pip install eda_toolkit
 ```
