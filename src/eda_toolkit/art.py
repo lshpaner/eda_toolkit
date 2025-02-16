@@ -4,7 +4,7 @@
 
 import os
 
-eda_toolkit_logo = """ 
+eda_toolkit_logo = r""" 
 +--------------------------------------------------------------------------------+
 |  _____   ____       _              _____                   _   _      _   _    |
 | | ____| |  _ \     / \            |_   _|   ___     ___   | | | | __ (_) | |_  |
@@ -555,7 +555,7 @@ ascii_art = {
 ###################################################################################
 
 
-def print_art(*art_names, all=False, suffix=None,output_file=None, output_path=None):
+def print_art(*art_names, all=False, suffix=None, output_file=None, output_path=None):
     """
     Print ASCII art based on user input and optionally save output to a
     specified path.
@@ -613,7 +613,7 @@ def print_art(*art_names, all=False, suffix=None,output_file=None, output_path=N
 
     # Collect output to a list if saving to a file
     output = []
-  
+
     # Check for suffix filtering
     if suffix:
         filtered_keys = [key for key in ascii_art.keys() if key.endswith(suffix)]
