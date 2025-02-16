@@ -92,3 +92,64 @@ def test_print_art_directory_creation(mocker, tmp_path):
         str(output_path), exist_ok=True
     )  # Ensure directory was created
     assert (output_path / output_file).exists()  # File should exist
+
+
+def test_print_art_auto_txt_extension(tmp_path):
+    """Ensure .txt is added automatically if no extension is provided."""
+    output_file = "test_output"  # No extension
+    output_path = tmp_path / "output_dir"
+
+    print_art("eda_toolkit_logo", output_file=output_file, output_path=str(output_path))
+
+    output_file_path = output_path / (
+        output_file + ".txt"
+    )  # Should have .txt extension
+    assert output_file_path.exists()
+
+
+def test_print_art_suffix_no_matches(capfd):
+    """Ensure suffix filtering returns an empty list when no matches are found."""
+    print_art(suffix="nonexistent_suffix")
+    captured = capfd.readouterr()
+    assert (
+        "No keys found with suffix 'nonexistent_suffix'." in captured.out
+    )  # Fix wording
+
+
+def test_print_art_invalid_output_path(mocker):
+    """Ensure ValueError is raised when output path is invalid."""
+    mocker.patch("os.makedirs", side_effect=OSError("Permission denied"))
+
+    with pytest.raises(OSError, match="Permission denied"):
+        print_art(
+            "eda_toolkit_logo", output_file="output.txt", output_path="/invalid/path"
+        )
+
+
+def test_print_art_save_file_contents(tmp_path):
+    """Ensure saved file contains the correct ASCII art."""
+    output_file = "test_output.txt"
+    output_path = tmp_path / "output_dir"
+
+    print_art("eda_toolkit_logo", output_file=output_file, output_path=str(output_path))
+
+    output_file_path = output_path / output_file
+    assert output_file_path.exists()
+
+    with open(output_file_path, "r") as file:
+        content = file.read()
+
+    assert "eda_toolkit_logo" in content
+    assert (
+        "+--------------------------------------------------------------------------------+"
+        in content
+    )  # ASCII border
+
+
+def test_print_art_suffix_and_all(capfd):
+    """Ensure that specifying `suffix` and `all=True` does not override `suffix`."""
+    print_art(all=True, suffix="bb")
+    captured = capfd.readouterr()
+    assert (
+        "No keys found with suffix 'bb'." not in captured.out
+    )  # Ensure some output exists
