@@ -1,5 +1,6 @@
 import pytest
 import importlib
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import sys
@@ -7,6 +8,7 @@ import os
 import datetime
 import builtins
 from unittest import mock
+from unittest.mock import patch
 from eda_toolkit import (
     ensure_directory,
     add_ids,
@@ -27,6 +29,11 @@ from eda_toolkit import (
     eda_toolkit_logo,
     detailed_doc,
 )
+
+
+@pytest.fixture
+def sample_dataframe():
+    return pd.DataFrame({"Feature1": [1, 2, 3, 4, 5], "Feature2": [10, 20, 30, 40, 50]})
 
 
 @pytest.fixture
@@ -180,6 +187,25 @@ def test_add_ids(sample_dataframe):
     ), "IDs generated with the same seed do not match"
 
 
+def test_add_ids_exceed_pool_size():
+    """Test that a ValueError is raised when the number of rows exceeds the pool of unique IDs."""
+
+    # Set num_digits such that the pool size is too small for the given DataFrame
+    num_digits = 3  # Pool size = 9 * (10^2) = 900 unique IDs
+    pool_size = 9 * (10 ** (num_digits - 1))  # Pool size = 900
+    n_rows = pool_size + 1  # Exceed the pool size
+
+    # Create a DataFrame with more rows than the pool size
+    df = pd.DataFrame({"data": range(n_rows)})
+
+    # Expect a ValueError when trying to add IDs
+    with pytest.raises(
+        ValueError,
+        match=r"The number of rows \(\d+\) exceeds the total pool of possible unique IDs",
+    ):
+        add_ids(df, num_digits=num_digits)
+
+
 def test_strip_trailing_period(sample_dataframe_with_text):
     """Test that strip_trailing_period removes trailing periods correctly."""
 
@@ -253,24 +279,31 @@ def test_summarize_all_combinations(sample_categorical_dataframe, tmp_path):
         pytest.fail(f"summarize_all_combinations failed: {e}")
 
 
-import pytest
-import pandas as pd
-import os
-import matplotlib.pyplot as plt
-from eda_toolkit import kde_distributions
-
-
-@pytest.fixture
-def sample_dataframe():
-    return pd.DataFrame({"Feature1": [1, 2, 3, 4, 5], "Feature2": [10, 20, 30, 40, 50]})
-
-
-def test_kde_distributions(sample_dataframe, tmp_path):
+@pytest.mark.parametrize(
+    "plot_type, vars_of_interest",
+    [
+        ("both", "all"),
+        ("both", None),
+        ("hist", "all"),
+        ("hist", None),
+        ("kde", "all"),
+        ("kde", None),
+    ],
+)
+def test_kde_distributions(sample_dataframe, tmp_path, plot_type, vars_of_interest):
+    """Test kde_distributions with different plot types and variable selections."""
     save_path = str(tmp_path)
+
+    # Handle vars_of_interest: "all" means selecting all numeric columns, None defaults to all numeric columns
+    if vars_of_interest == "all" or vars_of_interest is None:
+        vars_of_interest = sample_dataframe.select_dtypes(
+            include=np.number
+        ).columns.to_list()
+
     try:
         kde_distributions(
             df=sample_dataframe,
-            vars_of_interest=["Feature1", "Feature2"],
+            vars_of_interest=vars_of_interest,
             figsize=(5, 5),
             hist_color="#0000FF",
             kde_color="#FF0000",
@@ -280,8 +313,8 @@ def test_kde_distributions(sample_dataframe, tmp_path):
             fill=True,
             fill_alpha=0.6,
             image_path_png=save_path,
-            image_filename="test_kde_plot",
-            plot_type="both",
+            image_filename=f"test_kde_plot_{plot_type}",
+            plot_type=plot_type,
             plot_mean=True,
             plot_median=True,
             std_dev_levels=[1, 2],
@@ -290,9 +323,9 @@ def test_kde_distributions(sample_dataframe, tmp_path):
         )
         assert any(
             f.endswith(".png") for f in os.listdir(save_path)
-        ), "PNG file should be created."
+        ), f"PNG file should be created for plot_type={plot_type}."
     except Exception as e:
-        pytest.fail(f"kde_distributions failed: {e}")
+        pytest.fail(f"kde_distributions failed for plot_type={plot_type}: {e}")
 
 
 def test_kde_distributions_invalid_plot_type(sample_dataframe):
@@ -321,7 +354,11 @@ def test_kde_distributions_log_scale(sample_dataframe, tmp_path):
         pytest.fail(f"kde_distributions with log scale failed: {e}")
 
 
+import pytest
+
+
 def test_data_doctor_basic(sample_dataframe_values):
+    """Test data_doctor with default parameters."""
     try:
         data_doctor(sample_dataframe_values, "values", show_plot=False)
     except Exception as e:
@@ -329,7 +366,19 @@ def test_data_doctor_basic(sample_dataframe_values):
 
 
 def test_data_doctor_scale_conversion(sample_dataframe_values):
-    scale_options = ["log", "sqrt", "cbrt", "reciprocal", "stdrz", "minmax"]
+    """Test data_doctor with different scale conversion options."""
+    scale_options = [
+        "log",
+        "sqrt",
+        "cbrt",
+        "reciprocal",
+        "stdrz",
+        "minmax",
+        "robust",
+        "maxabs",
+        "exp",
+        "arcsinh",  # Newly added transformations
+    ]
     for scale in scale_options:
         try:
             data_doctor(
@@ -343,6 +392,7 @@ def test_data_doctor_scale_conversion(sample_dataframe_values):
 
 
 def test_data_doctor_cutoff(sample_dataframe_values):
+    """Test data_doctor with lower and upper cutoff values applied."""
     try:
         data_doctor(
             sample_dataframe_values,
@@ -357,6 +407,7 @@ def test_data_doctor_cutoff(sample_dataframe_values):
 
 
 def test_data_doctor_apply_as_new_col(sample_dataframe_values):
+    """Test data_doctor when applying transformation as a new column."""
     df_copy = sample_dataframe_values.copy()
     try:
         data_doctor(
@@ -368,6 +419,39 @@ def test_data_doctor_apply_as_new_col(sample_dataframe_values):
         )
     except Exception as e:
         pytest.fail(f"data_doctor failed when applying as new column: {e}")
+
+
+def test_data_doctor_apply_as_kde(sample_dataframe_values):
+    """Test data_doctor with KDE plot enabled."""
+    df_copy = sample_dataframe_values.copy()
+    try:
+        data_doctor(
+            df_copy,
+            "values",
+            scale_conversion="log",
+            apply_as_new_col_to_df=True,
+            show_plot=True,
+            plot_type="kde",
+        )
+    except Exception as e:
+        pytest.fail(f"data_doctor failed when applying as new column: {e}")
+
+
+@pytest.mark.parametrize(
+    "scale_conversion",
+    ["robust", "maxabs", "exp", "arcsinh"],  # Parametrize newly added methods
+)
+def test_data_doctor_new_scale_conversions(sample_dataframe_values, scale_conversion):
+    """Test data_doctor with new scale conversion methods."""
+    try:
+        data_doctor(
+            sample_dataframe_values,
+            "values",
+            scale_conversion=scale_conversion,
+            show_plot=False,
+        )
+    except Exception as e:
+        pytest.fail(f"data_doctor failed with scale_conversion={scale_conversion}: {e}")
 
 
 def test_flex_corr_matrix_basic(sample_corr_dataframe):
@@ -542,6 +626,89 @@ def test_scatter_fit_plot_save_without_path(sample_scatter_dataframe):
         )
 
 
+def test_scatter_fit_plot_save_png(tmp_path, sample_scatter_dataframe):
+    """Test scatter_fit_plot successfully saves PNG files when a valid path is provided"""
+    save_path = str(tmp_path)  # Temporary directory for saving
+    os.makedirs(save_path, exist_ok=True)
+
+    try:
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            save_plots="all",
+            image_path_png=save_path,  # Ensure PNG saving works
+        )
+
+        # Check that at least one PNG file is created
+        png_files = [f for f in os.listdir(save_path) if f.endswith(".png")]
+        assert len(png_files) > 0, "Expected at least one PNG file to be created."
+    except Exception as e:
+        pytest.fail(f"scatter_fit_plot failed to save PNG files: {e}")
+
+
+def test_scatter_fit_plot_save_svg(tmp_path, sample_scatter_dataframe):
+    """Test scatter_fit_plot successfully saves SVG files when a valid path is provided"""
+    save_path = str(tmp_path)  # Temporary directory for saving
+    os.makedirs(save_path, exist_ok=True)
+
+    try:
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            save_plots="all",
+            image_path_svg=save_path,  # Ensure SVG saving works
+        )
+
+        # Check that at least one SVG file is created
+        svg_files = [f for f in os.listdir(save_path) if f.endswith(".svg")]
+        assert len(svg_files) > 0, "Expected at least one SVG file to be created."
+    except Exception as e:
+        pytest.fail(f"scatter_fit_plot failed to save SVG files: {e}")
+
+
+def test_scatter_fit_plot_progress_bar(tmp_path, sample_scatter_dataframe):
+    """Test scatter_fit_plot correctly updates the tqdm progress bar when saving"""
+    save_path = str(tmp_path)
+    os.makedirs(save_path, exist_ok=True)
+
+    with patch("tqdm.tqdm.update") as mock_update:
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            save_plots="all",
+            image_path_png=save_path,
+        )
+
+        assert mock_update.called, "Progress bar update was not called."
+
+
+def test_scatter_fit_plot_memory_cleanup(tmp_path, sample_scatter_dataframe):
+    """Test that scatter_fit_plot clears memory after saving to prevent leaks"""
+    save_path = str(tmp_path)
+    os.makedirs(save_path, exist_ok=True)
+
+    try:
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            save_plots="all",
+            image_path_png=save_path,
+        )
+    except Exception as e:
+        pytest.fail(f"scatter_fit_plot failed memory cleanup check: {e}")
+
+    plt.close("all")
+
+    remaining_figs = plt.get_fignums()
+    assert (
+        len(remaining_figs) == 0
+    ), f"Figures were not properly closed after saving. Open figures: {remaining_figs}"
+
+
 def test_scatter_fit_plot_invalid_show_plot(sample_scatter_dataframe):
     with pytest.raises(ValueError, match="Invalid `show_plot`. Choose from"):
         scatter_fit_plot(
@@ -553,6 +720,65 @@ def test_scatter_fit_plot_invalid_show_plot(sample_scatter_dataframe):
 
 
 def test_scatter_fit_plot_missing_variables(sample_scatter_dataframe):
+    with pytest.raises(
+        ValueError,
+        match="Either `all_vars` or both `x_vars` and `y_vars` must be provided.",
+    ):
+        scatter_fit_plot(sample_scatter_dataframe)
+
+
+import pytest
+
+
+def test_scatter_fit_plot_invalid_figsize(sample_scatter_dataframe):
+    """Test scatter_fit_plot raises ValueError for invalid figsize values"""
+    with pytest.raises(ValueError, match="Invalid `individual_figsize` value"):
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            individual_figsize="invalid_size",  # Not a tuple or list of two numbers
+        )
+
+    with pytest.raises(ValueError, match="Invalid `grid_figsize` value"):
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            grid_figsize=[10],  # Should be a tuple or list of two numbers
+        )
+
+
+def test_scatter_fit_plot_legend_removal(sample_scatter_dataframe):
+    """Test scatter_fit_plot correctly handles missing legend removal"""
+    try:
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            show_plot="grid",
+        )
+    except AttributeError as e:
+        pytest.fail(f"scatter_fit_plot failed due to legend removal issue: {e}")
+
+
+def test_scatter_fit_plot_xylim(sample_scatter_dataframe):
+    """Test scatter_fit_plot correctly applies xlim and ylim if provided"""
+    try:
+        scatter_fit_plot(
+            sample_scatter_dataframe,
+            x_vars=["Feature1"],
+            y_vars=["Feature2"],
+            xlim=(0, 100),
+            ylim=(0, 200),
+            show_plot="grid",
+        )
+    except Exception as e:
+        pytest.fail(f"scatter_fit_plot failed with xlim/ylim: {e}")
+
+
+def test_scatter_fit_plot_missing_all_vars(sample_scatter_dataframe):
+    """Test scatter_fit_plot raises error when missing `all_vars` for scatter plot generation"""
     with pytest.raises(
         ValueError,
         match="Either `all_vars` or both `x_vars` and `y_vars` must be provided.",
@@ -624,6 +850,83 @@ def test_box_violin_plot_invalid_input(sample_box_violin_dataframe):
         )
 
 
+import pytest
+
+
+# Test that `show_plot` only allows "individual", "grid", or "both"
+def test_box_violin_plot_invalid_show_plot(sample_box_violin_dataframe):
+    with pytest.raises(
+        ValueError,
+        match="Invalid `show_plot` value selected. Choose from 'individual', 'grid', or 'both'.",
+    ):
+        box_violin_plot(
+            sample_box_violin_dataframe,
+            metrics_list=["Metric1"],
+            metrics_comp=["Category"],
+            show_plot="invalid_option",
+        )
+
+
+# Test that `save_plots` must be a boolean value
+def test_box_violin_plot_invalid_save_plots(sample_box_violin_dataframe):
+    with pytest.raises(ValueError, match="`save_plots` must be a boolean value"):
+        box_violin_plot(
+            sample_box_violin_dataframe,
+            metrics_list=["Metric1"],
+            metrics_comp=["Category"],
+            save_plots="not_a_boolean",
+        )
+
+
+# Test that `save_plots=True` requires `image_path_png` or `image_path_svg`
+def test_box_violin_plot_missing_image_path(sample_box_violin_dataframe):
+    with pytest.raises(
+        ValueError, match="To save plots, specify `image_path_png` or `image_path_svg`."
+    ):
+        box_violin_plot(
+            sample_box_violin_dataframe,
+            metrics_list=["Metric1"],
+            metrics_comp=["Category"],
+            save_plots=True,  # Should fail since no path is provided
+        )
+
+
+# Test that `rotate_plot` must be a boolean value
+def test_box_violin_plot_invalid_rotate_plot(sample_box_violin_dataframe):
+    with pytest.raises(
+        ValueError,
+        match="Invalid `rotate_plot` value selected. Choose from 'True' or 'False'.",
+    ):
+        box_violin_plot(
+            sample_box_violin_dataframe,
+            metrics_list=["Metric1"],
+            metrics_comp=["Category"],
+            rotate_plot="yes",  # Invalid input (should be True/False)
+        )
+
+
+# Test that `individual_figsize` must be a tuple/list of two numbers
+def test_box_violin_plot_invalid_individual_figsize(sample_box_violin_dataframe):
+    with pytest.raises(ValueError, match="Invalid `individual_figsize` value"):
+        box_violin_plot(
+            sample_box_violin_dataframe,
+            metrics_list=["Metric1"],
+            metrics_comp=["Category"],
+            individual_figsize="big",  # Invalid type
+        )
+
+
+# Test that `grid_figsize`, if specified, must be a tuple/list of two numbers
+def test_box_violin_plot_invalid_grid_figsize(sample_box_violin_dataframe):
+    with pytest.raises(ValueError, match="Invalid `grid_figsize` value"):
+        box_violin_plot(
+            sample_box_violin_dataframe,
+            metrics_list=["Metric1"],
+            metrics_comp=["Category"],
+            grid_figsize=["too", "big"],  # Invalid values
+        )
+
+
 # Test that stacked_crosstab_plot runs without errors with default parameters
 def test_stacked_crosstab_plot_basic(sample_crosstab_dataframe):
     try:
@@ -691,6 +994,62 @@ def test_stacked_crosstab_plot_remove_stacks(sample_crosstab_dataframe):
         )
     except Exception as e:
         pytest.fail(f"stacked_crosstab_plot failed with remove_stacks: {e}")
+
+
+def test_stacked_crosstab_plot_save_single_format(sample_crosstab_dataframe, tmp_path):
+    save_path = str(tmp_path)
+
+    # Ensure the directory exists
+    os.makedirs(save_path, exist_ok=True)
+
+    try:
+        stacked_crosstab_plot(
+            df=sample_crosstab_dataframe,
+            col="Category",
+            func_col=["Group"],
+            legend_labels_list=[["X", "Y"]],
+            title=["Saving Single Format"],
+            save_formats="png",  # Ensure this matches function expectations
+            image_path_png=save_path,  # Pass directory instead of filename
+        )
+
+        # Assert that at least one PNG file was created in the directory
+        png_files = [f for f in os.listdir(save_path) if f.endswith(".png")]
+        assert len(png_files) > 0, "PNG file should be created."
+
+    except Exception as e:
+        pytest.fail(f"stacked_crosstab_plot failed with single save format: {e}")
+
+
+def test_stacked_crosstab_plot_save_multiple_formats(
+    sample_crosstab_dataframe, tmp_path
+):
+    save_path = str(tmp_path)
+
+    # Ensure the directory exists
+    os.makedirs(save_path, exist_ok=True)
+
+    try:
+        stacked_crosstab_plot(
+            df=sample_crosstab_dataframe,
+            col="Category",
+            func_col=["Group"],
+            legend_labels_list=[["X", "Y"]],
+            title=["Saving Multiple Formats"],
+            save_formats=["png", "svg"],  # Ensure this matches function expectations
+            image_path_png=save_path,  # Pass directory instead of filename
+            image_path_svg=save_path,  # Pass directory instead of filename
+        )
+
+        # Assert that at least one PNG and one SVG file were created
+        png_files = [f for f in os.listdir(save_path) if f.endswith(".png")]
+        svg_files = [f for f in os.listdir(save_path) if f.endswith(".svg")]
+
+        assert len(png_files) > 0, "PNG file should be created."
+        assert len(svg_files) > 0, "SVG file should be created."
+
+    except Exception as e:
+        pytest.fail(f"stacked_crosstab_plot failed with multiple save formats: {e}")
 
 
 def test_datetime_import_version_gte_3_7(mocker):

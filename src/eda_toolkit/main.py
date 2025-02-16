@@ -1468,6 +1468,9 @@ def kde_distributions(
                         if ax.get_legend() is not None:
                             ax.get_legend().remove()
 
+            finally:
+                pass  # Ensures the try block is valid
+
             ax.set_xlabel(
                 "\n".join(textwrap.wrap(xlabel, width=text_wrap)) if xlabel else None,
                 fontsize=label_fontsize,
@@ -1653,6 +1656,9 @@ def kde_distributions(
                         else:
                             if ax.get_legend() is not None:
                                 ax.get_legend().remove()
+
+                finally:
+                    pass  # Ensures the try block is valid
 
                 ax.set_xlabel(
                     (
