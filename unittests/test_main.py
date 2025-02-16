@@ -23,9 +23,10 @@ from eda_toolkit import (
     box_violin_plot,
     stacked_crosstab_plot,
     highlight_columns,
+    custom_help,
+    eda_toolkit_logo,
+    detailed_doc,
 )
-
-from eda_toolkit import custom_help, eda_toolkit_logo, detailed_doc
 
 
 @pytest.fixture
