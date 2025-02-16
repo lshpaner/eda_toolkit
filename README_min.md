@@ -28,7 +28,7 @@ Additionally, `eda_toolkit` depends on the following packages, which will be aut
 - `pandas`: version `1.3.5` or higher, but capped at `2.2.3`
 - `plotly`: version `5.18.0` or higher, but capped at `5.24.0`
 - `scikit-learn`: version `1.0.2` or higher, but capped at `1.5.2`
-- `seaborn`: version `0.12.2` or higher, but capped below `0.13.0`
+- `seaborn`: version `0.12.2` or higher, but capped below `0.13.2`
 - `xlsxwriter`: version `3.2.0` (Exact version required)
 
 
