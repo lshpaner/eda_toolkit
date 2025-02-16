@@ -233,7 +233,7 @@ from eda_toolkit import (
 We welcome contributions! If you have suggestions or improvements, please submit an issue or pull request. Follow the standard GitHub flow for contributing.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/readme/LICENSE.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/lshpaner/eda_toolkit/blob/main/LICENSE.md) file for details.
 
 For more detailed documentation, refer to the docstrings within each function.
 
