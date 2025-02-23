@@ -12,7 +12,7 @@ from eda_toolkit import (
     strip_trailing_period,
     add_ids,
     parse_date_with_rule,
-    dataframe_columns,
+    dataframe_profiler,
     summarize_all_combinations,
     save_dataframes_to_excel,
     contingency_table,
@@ -147,9 +147,9 @@ print("*" * terminal_width)
 ################################################################################
 
 print()
-print("Testing `dataframe_columns` function:")
-dataframe_columns_df = dataframe_columns(df=df)
-print(dataframe_columns_df)
+print("Testing `dataframe_profiler` function:")
+dataframe_profiler_df = dataframe_profiler(df=df)
+print(dataframe_profiler_df)
 print()
 
 ################################################################################
