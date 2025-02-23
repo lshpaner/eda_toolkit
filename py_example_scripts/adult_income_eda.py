@@ -989,7 +989,7 @@ model.fit(X_train, y_train)
 plot_3d_pdp(
     model=model,
     dataframe=X_test,  # Use the test dataset
-    feature_names_list=["HouseAge", "AveOccup"],
+    feature_names=["HouseAge", "AveOccup"],
     x_label="House Age",
     y_label="Average Occupancy",
     z_label="Partial Dependence",
