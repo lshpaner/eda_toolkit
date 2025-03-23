@@ -1,7 +1,5 @@
 import pytest
 import os
-from unittest import mock
-
 from eda_toolkit import print_art
 
 
@@ -56,7 +54,11 @@ def test_print_art_save_output(tmp_path):
     output_file = "test_output.txt"
     output_path = tmp_path / "output_dir"
 
-    print_art("eda_toolkit_logo", output_file=output_file, output_path=str(output_path))
+    print_art(
+        "eda_toolkit_logo",
+        output_file=output_file,
+        output_path=str(output_path),
+    )
 
     output_file_path = output_path / output_file
     assert output_file_path.exists()
@@ -66,13 +68,14 @@ def test_print_art_save_output(tmp_path):
 
     assert "eda_toolkit_logo" in content
     assert (
-        "+--------------------------------------------------------------------------------+"
-        in content
-    )  # Ensure ASCII content is written
+        "███████╗██████╗  █████╗" in content
+    )  # Representative line from new ASCII art
 
 
 def test_print_art_conflicting_args():
-    """Test handling of conflicting arguments (all=True with specific art_names)."""
+    """
+    Test handling of conflicting arguments (all=True with specific art_names).
+    """
     with pytest.raises(
         ValueError, match="You cannot specify both `all=True` and specific `art_names`"
     ):
@@ -86,7 +89,11 @@ def test_print_art_directory_creation(mocker, tmp_path):
 
     mock_makedirs = mocker.patch("os.makedirs", wraps=os.makedirs)
 
-    print_art("eda_toolkit_logo", output_file=output_file, output_path=str(output_path))
+    print_art(
+        "eda_toolkit_logo",
+        output_file=output_file,
+        output_path=str(output_path),
+    )
 
     mock_makedirs.assert_called_once_with(
         str(output_path), exist_ok=True
@@ -99,7 +106,11 @@ def test_print_art_auto_txt_extension(tmp_path):
     output_file = "test_output"  # No extension
     output_path = tmp_path / "output_dir"
 
-    print_art("eda_toolkit_logo", output_file=output_file, output_path=str(output_path))
+    print_art(
+        "eda_toolkit_logo",
+        output_file=output_file,
+        output_path=str(output_path),
+    )
 
     output_file_path = output_path / (
         output_file + ".txt"
@@ -108,7 +119,9 @@ def test_print_art_auto_txt_extension(tmp_path):
 
 
 def test_print_art_suffix_no_matches(capfd):
-    """Ensure suffix filtering returns an empty list when no matches are found."""
+    """
+    Ensure suffix filtering returns an empty list when no matches are found.
+    """
     print_art(suffix="nonexistent_suffix")
     captured = capfd.readouterr()
     assert (
@@ -122,7 +135,9 @@ def test_print_art_invalid_output_path(mocker):
 
     with pytest.raises(OSError, match="Permission denied"):
         print_art(
-            "eda_toolkit_logo", output_file="output.txt", output_path="/invalid/path"
+            "eda_toolkit_logo",
+            output_file="output.txt",
+            output_path="/invalid/path",
         )
 
 
@@ -131,7 +146,11 @@ def test_print_art_save_file_contents(tmp_path):
     output_file = "test_output.txt"
     output_path = tmp_path / "output_dir"
 
-    print_art("eda_toolkit_logo", output_file=output_file, output_path=str(output_path))
+    print_art(
+        "eda_toolkit_logo",
+        output_file=output_file,
+        output_path=str(output_path),
+    )
 
     output_file_path = output_path / output_file
     assert output_file_path.exists()
@@ -141,15 +160,26 @@ def test_print_art_save_file_contents(tmp_path):
 
     assert "eda_toolkit_logo" in content
     assert (
-        "+--------------------------------------------------------------------------------+"
-        in content
-    )  # ASCII border
+        "███████╗██████╗  █████╗" in content
+    )  # Again, matching the actual new content
 
 
 def test_print_art_suffix_and_all(capfd):
-    """Ensure that specifying `suffix` and `all=True` does not override `suffix`."""
+    """
+    Ensure that specifying `suffix` and `all=True` does not override `suffix`.
+    """
     print_art(all=True, suffix="bb")
     captured = capfd.readouterr()
     assert (
         "No keys found with suffix 'bb'." not in captured.out
     )  # Ensure some output exists
+
+
+def test_print_art_specific(capfd):
+    """Test printing a specific ASCII art piece."""
+    print_art("eda_toolkit_logo")
+    captured = capfd.readouterr()
+    assert "eda_toolkit_logo" in captured.out  # Ensure label is printed
+    assert (
+        "███████╗██████╗  █████╗" in captured.out
+    )  # Representative line from new ASCII art
