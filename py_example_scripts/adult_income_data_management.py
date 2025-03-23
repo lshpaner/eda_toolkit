@@ -3,7 +3,6 @@
 ################################################################################
 
 import pandas as pd
-import numpy as np
 import os
 
 from eda_toolkit import (
@@ -16,6 +15,7 @@ from eda_toolkit import (
     summarize_all_combinations,
     save_dataframes_to_excel,
     contingency_table,
+    generate_table1,
 )
 
 ################################################################################
@@ -66,6 +66,25 @@ df.to_csv(os.path.join(data_path, "adult_income.csv"))
 
 print(df.head())
 print("*" * terminal_width)
+
+
+# Get DataFrame and Markdown string
+df1 = generate_table1(
+    df,
+    value_counts=True,
+    export_markdown=True,
+    markdown_path="table1_summary.md",
+)
+
+print(f"\nTable 1\n{df1}\n")
+
+# Save Markdown to file
+generate_table1(
+    df,
+    value_counts=True,
+    export_markdown=True,
+    markdown_path="table1_summary.md",
+)
 
 ################################################################################
 ##################################### Add Ids ##################################
