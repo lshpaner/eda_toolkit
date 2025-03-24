@@ -289,7 +289,7 @@ column in the dataframe.
 
 
 Trailing Period Removal
------------------------
+-------------------------
 
 **Strip the trailing period from values in a specified column of a DataFrame, if present.**
 
@@ -317,6 +317,7 @@ The ``strip_trailing_period`` function is designed to remove trailing periods
 from float values in a specified column of a DataFrame. This can be particularly 
 useful when dealing with data that has been inconsistently formatted, ensuring 
 that all float values are correctly represented.
+
 
 **Implementation Example**
 
@@ -1217,6 +1218,72 @@ is set to ``1``.
 
 
 \
+
+Generating Summaries (Table 1)
+----------------------------------------
+
+Create a summary statistics table for both categorical and continuous variables 
+in a DataFrame. This section describes how to generate a summary "Table 1" from 
+a given dataset using the ``generate_table1`` function. It supports automatic detection 
+of variable types, flexible formatting, and optional export to Markdown.
+
+.. function:: generate_table1(df, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False)
+
+    :param df: Input DataFrame containing the data to summarize.
+    :type df: pandas.DataFrame
+    :param categorical_cols: List of categorical column names. If ``None``, columns will be auto-detected based on ``dtype``.
+    :type categorical_cols: list of str, optional
+    :param continuous_cols: List of continuous (numeric) column names. If ``None``, columns will be auto-detected.
+    :type continuous_cols: list of str, optional
+    :param decimal_places: Number of decimal places to round summary statistics. Defaults to ``2``.
+    :type decimal_places: int, optional
+    :param export_markdown: If ``True``, export the resulting summary as a Markdown string.
+    :type export_markdown: bool, optional
+    :param markdown_path: Path to save the Markdown file (used only if ``export_markdown=True``).
+    :type markdown_path: str, optional
+    :param max_categories: Maximum number of categories to include per categorical variable (if ``value_counts=True``).
+    :type max_categories: int, optional
+    :param detect_binary_numeric: Reclassify numeric columns with <=2 unique values as categorical. Defaults to ``True``.
+    :type detect_binary_numeric: bool, optional
+    :param return_markdown_only: If ``True`` and exporting to Markdown, return the Markdown string instead of the DataFrame.
+    :type return_markdown_only: bool, optional
+    :param value_counts: If ``True``, show full frequency breakdown for each category. Defaults to ``False``.
+    :type value_counts: bool, optional
+    :raises ValueError: If invalid input parameters are provided.
+    :returns: A summary table either as a DataFrame or a Markdown string (if ``export_markdown`` and ``return_markdown_only`` are ``True``).
+    :rtype: pandas.DataFrame or str
+
+
+Implementation Example
+----------------------------------------
+
+In the example below, we summarize a DataFrame that includes both categorical and 
+continuous variables as passed in by the user. The summary table provides 
+descriptive statistics such as mean, standard deviation, and missingness for each variable.
+
+.. code-block:: python
+
+    from eda_toolkit import generate_table1
+
+    generate_table1(
+        df=census_df,
+        categorical_cols=["sex", "race", "workclass"],
+        continuous_cols=["hours_per_week", "age", "education_num"],
+        value_counts=True,
+        max_categories=3,
+        export_markdown=True,
+        markdown_path="table1_summary.md"
+    )
+
+
+.. note::
+
+    If ``categorical_cols`` or ``continuous_cols`` are not specified, the function 
+    will attempt to auto-detect them. Binary numeric columns will be reclassified 
+    as categorical if ``detect_binary_numeric=True``.
+
+
+
 
 Highlighting Specific Columns in a DataFrame
 ---------------------------------------------
