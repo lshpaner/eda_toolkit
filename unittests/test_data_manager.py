@@ -10,6 +10,7 @@ from unittest.mock import MagicMock, patch
 from eda_toolkit import (
     ensure_directory,
     generate_table1,
+    table1_to_str,
     add_ids,
     strip_trailing_period,
     parse_date_with_rule,
@@ -430,9 +431,6 @@ def test_custom_help_override():
     ), "builtins.help should be overridden by custom_help."
 
 
-#################################################################################
-
-
 def test_returns_dataframe(sample_df):
     result = generate_table1(sample_df)
     assert isinstance(result, pd.DataFrame)
@@ -516,3 +514,68 @@ def test_manual_column_specification(sample_df):
         for _, row in result.iterrows()
     )
     assert any("gender" in v for v in result["Variable"])
+
+
+def test_basic_table_formatting():
+    df = pd.DataFrame(
+        {
+            "Variable": ["age", "gender"],
+            "Type": ["Continuous", "Categorical"],
+            "Mean": [29.12345, None],
+            "SD": [5.98765, None],
+        }
+    )
+
+    output = table1_to_str(df)
+    assert isinstance(output, str)
+    assert "age" in output
+    assert "Continuous" in output
+    assert "29.12" in output  # Default float_precision = 2
+    assert "5.99" in output  # Rounded
+
+
+def test_padding_applied():
+    df = pd.DataFrame({"Col": ["val"]})
+    padded = table1_to_str(df, padding=4)
+    assert padded.startswith("    Col    ")  # 4 spaces on each side
+
+
+def test_max_col_width_truncates():
+    df = pd.DataFrame({"ThisIsAVeryLongColumnName": ["ThisIsAVeryLongValue"]})
+    output = table1_to_str(df, max_col_width=10)
+    assert "ThisIsAVer" in output  # truncated column
+    assert "ThisIsAVer" in output  # truncated value
+
+
+def test_empty_dataframe():
+    df = pd.DataFrame()
+    output = table1_to_str(df)
+    assert output == "[Empty Table]"
+
+
+def test_none_dataframe():
+    output = table1_to_str(None)
+    assert output == "[Empty Table]"
+
+
+def test_high_precision():
+    df = pd.DataFrame(
+        {
+            "X": [1.123456],
+            "Y": [2.987654],
+        }
+    )
+    output = table1_to_str(df, float_precision=4)
+    assert "1.1235" in output
+    assert "2.9877" in output
+
+
+def test_mixed_dtypes():
+    df = pd.DataFrame(
+        {"Name": ["Alice", "Bob"], "Age": [30, 40], "Score": [87.6789, 93.1234]}
+    )
+    output = table1_to_str(df, float_precision=1)
+    assert "Alice" in output
+    assert "Bob" in output
+    assert "87.7" in output
+    assert "93.1" in output
