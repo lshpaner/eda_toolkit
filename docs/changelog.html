@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Changelog &mdash; EDA Toolkit 0.0.15 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data Management</span></p>
 <ul>
@@ -79,7 +78,6 @@
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul class="current">
@@ -531,7 +529,7 @@ DataFrame columns to provide summary statistics.</p>
 - Updated logic allows saving plots in one format (e.g., only <cite>“png”</cite> or <cite>“svg”</cite>) without requiring the other.
 - Simplified and more intuitive path handling for saving plots.</p></li>
 </ul>
-<p><a class="reference internal" href="eda_plots.html#plot_3d_pdp" title="plot_3d_pdp"><code class="xref py py-class docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code></a></p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">plot_3d_pdp</span></code></p>
 <p>This update introduces several key changes to the <cite>plot_3d_pdp</cite> function, simplifying the function’s interface and improving usability, while maintaining the flexibility needed for diverse visualization needs.</p>
 <p><strong>1. Parameter Changes</strong></p>
 <ul class="simple">
@@ -1056,9 +1054,9 @@ plots, and pass additional parameters to <code class="docutils literal notransla
 </li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">datetime</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 </pre></div>
 </div>
 </section>

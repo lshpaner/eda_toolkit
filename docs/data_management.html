@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data Management Overview &mdash; EDA Toolkit 0.0.15 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data Management</span></p>
 <ul class="current">
@@ -104,6 +103,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#contingency_table"><code class="docutils literal notranslate"><span class="pre">contingency_table()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-summaries-table-1">Generating Summaries (Table 1)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#generate_table1"><code class="docutils literal notranslate"><span class="pre">generate_table1()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-example">Implementation Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#highlighting-specific-columns-in-a-dataframe">Highlighting Specific Columns in a DataFrame</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#highlight_columns"><code class="docutils literal notranslate"><span class="pre">highlight_columns()</span></code></a></li>
 </ul>
@@ -121,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul>
@@ -205,8 +208,8 @@ directory, both located one level up from the current directory.</p>
 <code class="docutils literal notranslate"><span class="pre">images</span></code> folder in the parent directory. Using the <code class="docutils literal notranslate"><span class="pre">ensure_directory</span></code>
 function, we then verify that these directories exist. If any of the specified
 directories do not exist, the function creates them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
-<span class="kn">import</span> <span class="nn">os</span> <span class="c1"># import operating system for dir</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ensure_directory</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span> <span class="c1"># import operating system for dir</span>
 
 
 <span class="n">base_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
@@ -291,7 +294,7 @@ specifying the dataframe, the column name for the IDs, the number of digits for
 each ID, a seed for reproducibility, and whether to set the new ID column as the
 index. The function generates unique IDs for each row and adds them as the first
 column in the dataframe.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">add_ids</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_ids</span>
 
 <span class="c1"># Add a column of unique IDs with 9 digits and call it &quot;census_id&quot;</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">add_ids</span><span class="p">(</span>
@@ -451,7 +454,7 @@ that all float values are correctly represented.</p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to clean a
 column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame.
 We then use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to remove any trailing periods from the specified column.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">strip_trailing_period</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">strip_trailing_period</span>
 
 <span class="c1"># Create a sample dataframe with trailing periods in some values</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
@@ -583,7 +586,7 @@ cannot parse the date.</p>
 function to standardize date strings. We start by importing the necessary library
 and creating a sample list of date strings. We then use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
 function to parse and standardize each date string to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">parse_date_with_rule</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_date_with_rule</span>
 
 <span class="n">date_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;15/04/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;04/15/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;01/12/2020&quot;</span><span class="p">,</span> <span class="s2">&quot;12/01/2020&quot;</span><span class="p">]</span>
 
@@ -685,7 +688,7 @@ DataFrame with optional background styling.</p></li>
 <h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Link to this heading"></a></h3>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
 function to analyze a DataFrame’s columns.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">dataframe_columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataframe_columns</span>
 
 <span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
@@ -999,7 +1002,7 @@ variables from a DataFrame containing the census data <a class="footnote-referen
 <p>Before proceeding with any further examples in this documentation, ensure that the <code class="docutils literal notranslate"><span class="pre">age</span></code> variable is binned into a new variable, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>.
 Detailed instructions for this process can be found under <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">Binning Numerical Columns</span></a>.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
 <span class="n">unique_vars</span> <span class="o">=</span> <span class="p">[</span>
@@ -1218,7 +1221,7 @@ Excel file with customized formatting using the <code class="docutils literal no
 <p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> function to save two DataFrames:
 the original DataFrame and a filtered DataFrame with ages between <cite>18</cite> and <cite>40</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
 
 <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;df_census.xlsx&quot;</span>  <span class="c1"># Name of the output Excel file</span>
 <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
@@ -1276,7 +1279,7 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 <p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
 from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id9" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">contingency_table</span>
 
 <span class="n">contingency_table</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1318,6 +1321,68 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 </div>
 <p></p>
 </section>
+<section id="generating-summaries-table-1">
+<h2>Generating Summaries (Table 1)<a class="headerlink" href="#generating-summaries-table-1" title="Link to this heading"></a></h2>
+<p>Create a summary statistics table for both categorical and continuous variables
+in a DataFrame. This section describes how to generate a summary “Table 1” from
+a given dataset using the <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> function. It supports automatic detection
+of variable types, flexible formatting, and optional export to Markdown.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="generate_table1">
+<span class="sig-name descname"><span class="pre">generate_table1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_markdown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markdown_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_binary_numeric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_markdown_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generate_table1" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Input DataFrame containing the data to summarize.</p></li>
+<li><p><strong>categorical_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – List of categorical column names. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, columns will be auto-detected based on <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p></li>
+<li><p><strong>continuous_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – List of continuous (numeric) column names. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, columns will be auto-detected.</p></li>
+<li><p><strong>decimal_places</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Number of decimal places to round summary statistics. Defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></li>
+<li><p><strong>export_markdown</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, export the resulting summary as a Markdown string.</p></li>
+<li><p><strong>markdown_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Path to save the Markdown file (used only if <code class="docutils literal notranslate"><span class="pre">export_markdown=True</span></code>).</p></li>
+<li><p><strong>max_categories</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum number of categories to include per categorical variable (if <code class="docutils literal notranslate"><span class="pre">value_counts=True</span></code>).</p></li>
+<li><p><strong>detect_binary_numeric</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Reclassify numeric columns with &lt;=2 unique values as categorical. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>return_markdown_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and exporting to Markdown, return the Markdown string instead of the DataFrame.</p></li>
+<li><p><strong>value_counts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, show full frequency breakdown for each category. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If invalid input parameters are provided.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A summary table either as a DataFrame or a Markdown string (if <code class="docutils literal notranslate"><span class="pre">export_markdown</span></code> and <code class="docutils literal notranslate"><span class="pre">return_markdown_only</span></code> are <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="implementation-example">
+<h2>Implementation Example<a class="headerlink" href="#implementation-example" title="Link to this heading"></a></h2>
+<p>In the example below, we summarize a DataFrame that includes both categorical and
+continuous variables as passed in by the user. The summary table provides
+descriptive statistics such as mean, standard deviation, and missingness for each variable.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_table1</span>
+
+<span class="n">generate_table1</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">census_df</span><span class="p">,</span>
+    <span class="n">categorical_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;race&quot;</span><span class="p">,</span> <span class="s2">&quot;workclass&quot;</span><span class="p">],</span>
+    <span class="n">continuous_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hours_per_week&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;education_num&quot;</span><span class="p">],</span>
+    <span class="n">value_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">max_categories</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">export_markdown</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">markdown_path</span><span class="o">=</span><span class="s2">&quot;table1_summary.md&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">categorical_cols</span></code> or <code class="docutils literal notranslate"><span class="pre">continuous_cols</span></code> are not specified, the function
+will attempt to auto-detect them. Binary numeric columns will be reclassified
+as categorical if <code class="docutils literal notranslate"><span class="pre">detect_binary_numeric=True</span></code>.</p>
+</div>
+</section>
 <section id="highlighting-specific-columns-in-a-dataframe">
 <h2>Highlighting Specific Columns in a DataFrame<a class="headerlink" href="#highlighting-specific-columns-in-a-dataframe" title="Link to this heading"></a></h2>
 <p>This section explains how to highlight specific columns in a DataFrame using the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function.</p>
@@ -1345,7 +1410,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 <p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
 columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id9" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">highlight_columns</span>
 
 <span class="n">highlighted_df</span> <span class="o">=</span> <span class="n">highlight_columns</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(),</span>

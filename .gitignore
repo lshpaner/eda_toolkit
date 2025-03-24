@@ -24,3 +24,7 @@ src/
 
 *.buildinfo
 *.pickle
+setup.py
+.coverage
+requirements.txt
+htmlcov/
