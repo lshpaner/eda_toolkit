@@ -1,10 +1,8 @@
 # Import package modules
-from .main import *
-from .ml_eda import *
+from .plots import *
+from .data_manager import *
 from .art import *
 
-import os
-import sys
 import builtins
 
 # Detailed Documentation
@@ -44,23 +42,22 @@ __version__ = "0.0.15"
 __author__ = "Leonid Shpaner, Oscar Gil"
 __email__ = "lshpaner@ucla.edu; info@oscargildata.com"
 
-
-# Define the custom help function
-def custom_help(obj=None):
-    """
-    Custom help function to dynamically include ASCII art in help() output.
-    """
-    if (
-        obj is None or obj is sys.modules[__name__]
-    ):  # When `help()` is called for this module
-        print(eda_toolkit_logo)  # Print ASCII art first
-        print(detailed_doc)  # Print the detailed documentation
-    else:
-        original_help(obj)  # Use the original help for other objects
-
-
-# Backup the original help function
+# Backup the original help function BEFORE redefining
 original_help = builtins.help
 
-# Override the global help function in builtins
+
+def custom_help(obj=None):
+    if obj is None or obj is sys.modules[__name__]:
+        print(eda_toolkit_logo)
+        print(detailed_doc)
+    elif original_help != custom_help:
+        original_help(obj)
+    else:
+        # Safety: fallback to default help if somehow it got overridden incorrectly
+        import pydoc
+
+        pydoc.help(obj)
+
+
+# Override the global help
 builtins.help = custom_help
