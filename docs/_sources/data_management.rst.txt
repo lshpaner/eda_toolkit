@@ -1254,36 +1254,584 @@ of variable types, flexible formatting, and optional export to Markdown.
     :rtype: pandas.DataFrame or str
 
 
-Implementation Example
-----------------------------------------
 
-In the example below, we summarize a DataFrame that includes both categorical and 
-continuous variables as passed in by the user. The summary table provides 
-descriptive statistics such as mean, standard deviation, and missingness for each variable.
+Implementation Example 1
+""""""""""""""""""""""""""""""
+
+In the example below, we generate a summary table from a dataset containing both 
+categorical and continuous variables. We explicitly define which columns fall into 
+each category—although the ``generate_table1`` function also supports automatic 
+detection of variable types if desired.
+
+We also use a utility function, ``table1_to_str``, to format the output as a clean, 
+readable text table in the console. This is especially helpful for inspecting the 
+summary directly within notebooks or logs.
+
+In addition, we specify ``export_markdown=True`` and provide a file path via
+``markdown_path``. This enables the function to export the resulting summary as a
+Markdown-formatted table and save it to the specified location—ideal for inclusion
+in documentation, reports, or static site generators like Jupyter Book or Quarto.
+
+We also set ``value_counts=False``, which results in one summary row per categorical 
+variable, rather than a breakdown of each individual category. This is useful when 
+a high-level overview is preferred over a detailed category-level count.
+
+.. code-block:: python
+
+    from eda_toolkit import generate_table1, table1_to_str
+
+    table1 = generate_table1(
+        df=df,
+        categorical_cols=["sex", "race", "workclass"],
+        continuous_cols=["hours-per-week", "age", "education-num"],
+        value_counts=False,
+        max_categories=3,
+        export_markdown=True,
+        markdown_path="table1_summary.md",
+    )
+
+    print(table1_to_str(table1, padding=1))
+
+
+**Output** 
+
+.. code-block:: text
+
+    Variable       | Type        | Mean  | SD    | Median | Min | Max | Mode    | Missing (n) | Missing (%) | Count | Proportion (%) 
+   ----------------|-------------|-------|-------|--------|-----|-----|---------|-------------|-------------|-------|----------------
+    hours-per-week | Continuous  | 40.42 | 12.39 | 40.00  | 1   | 99  | 40      | 0           | 0.00        | 48842 | 100.00         
+    age            | Continuous  | 38.64 | 13.71 | 37.00  | 17  | 90  | 36      | 0           | 0.00        | 48842 | 100.00         
+    education-num  | Continuous  | 10.08 | 2.57  | 10.00  | 1   | 16  | 9       | 0           | 0.00        | 48842 | 100.00         
+    sex            | Categorical |       |       |        |     |     | Male    | 0           | 0.00        | 48842 | 100.00         
+    race           | Categorical |       |       |        |     |     | White   | 0           | 0.00        | 48842 | 100.00         
+    workclass      | Categorical |       |       |        |     |     | Private | 963         | 1.97        | 47879 | 98.03       
+
+
+
+.. note::
+
+    If ``categorical_cols`` or ``continuous_cols`` are not specified, ``generate_table1``  
+    will automatically detect them based on the column data types. Additionally, numeric  
+    columns with two or fewer unique values can be reclassified as categorical using  
+    the ``detect_binary_numeric=True`` setting (enabled by default).  
+    When ``value_counts=True``, a row will be created for each category-value pair.
+
+
+
+Implementation Example 2
+"""""""""""""""""""""""""""""""""
+
+In this example, we demonstrate the use of ``generate_table1`` without explicitly 
+specifying categorical or continuous columns. Instead, the function automatically 
+detects column types based on the DataFrame's data types. Numeric columns with two 
+or fewer unique values will also be reclassified as categorical (controlled by the 
+default detect_binary_numeric=True setting).
+
+We set ``value_counts=True``, which results in one row for each category-value 
+combination rather than a single summary row per categorical variable. This allows 
+for a more detailed breakdown across categorical features. We also limit each 
+breakdown to the top 3 most frequent categories using ``max_categories=3``.
+
+Finally, we enable ``export_markdown=True`` and specify a ``markdown_path`` to 
+save the output in Markdown format for reporting or documentation purposes.
+
 
 .. code-block:: python
 
     from eda_toolkit import generate_table1
 
-    generate_table1(
-        df=census_df,
-        categorical_cols=["sex", "race", "workclass"],
-        continuous_cols=["hours_per_week", "age", "education_num"],
+    table1 = generate_table1(
+        df=df,
         value_counts=True,
         max_categories=3,
         export_markdown=True,
-        markdown_path="table1_summary.md"
+        markdown_path="table1_summary.md",
     )
 
+    table1
 
-.. note::
+**Output**
 
-    If ``categorical_cols`` or ``continuous_cols`` are not specified, the function 
-    will attempt to auto-detect them. Binary numeric columns will be reclassified 
-    as categorical if ``detect_binary_numeric=True``.
+.. raw:: html
 
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-j6zm{font-weight:bold;text-align:left;vertical-align:bottom}
+    .tg .tg-7zrl{text-align:left;vertical-align:bottom}
+    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
+    <div class="tg-wrap"><table class="tg"><thead>
+    <tr>
+        <th class="tg-j6zm">Variable</th>
+        <th class="tg-j6zm">Type</th>
+        <th class="tg-j6zm">Mean</th>
+        <th class="tg-j6zm">SD</th>
+        <th class="tg-j6zm">Median</th>
+        <th class="tg-j6zm">Min</th>
+        <th class="tg-j6zm">Max</th>
+        <th class="tg-j6zm">Mode</th>
+        <th class="tg-j6zm">Missing (n)</th>
+        <th class="tg-j6zm">Missing (%)</th>
+        <th class="tg-j6zm">Count</th>
+        <th class="tg-j6zm">Proportion (%)</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td class="tg-7zrl">age</td>
+        <td class="tg-7zrl">Continuous</td>
+        <td class="tg-7zrl">38.64</td>
+        <td class="tg-7zrl">13.71</td>
+        <td class="tg-7zrl">37</td>
+        <td class="tg-7zrl">17</td>
+        <td class="tg-7zrl">90</td>
+        <td class="tg-7zrl">36</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">48842</td>
+        <td class="tg-7zrl">100</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">capital-gain</td>
+        <td class="tg-7zrl">Continuous</td>
+        <td class="tg-7zrl">1079.07</td>
+        <td class="tg-7zrl">7452.02</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">99999</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">48842</td>
+        <td class="tg-7zrl">100</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">capital-loss</td>
+        <td class="tg-7zrl">Continuous</td>
+        <td class="tg-7zrl">87.5</td>
+        <td class="tg-7zrl">403</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">4356</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">48842</td>
+        <td class="tg-7zrl">100</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">education-num</td>
+        <td class="tg-7zrl">Continuous</td>
+        <td class="tg-7zrl">10.08</td>
+        <td class="tg-7zrl">2.57</td>
+        <td class="tg-7zrl">10</td>
+        <td class="tg-7zrl">1</td>
+        <td class="tg-7zrl">16</td>
+        <td class="tg-7zrl">9</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">48842</td>
+        <td class="tg-7zrl">100</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">fnlwgt</td>
+        <td class="tg-7zrl">Continuous</td>
+        <td class="tg-7zrl">189664.1</td>
+        <td class="tg-7zrl">105604</td>
+        <td class="tg-7zrl">178145</td>
+        <td class="tg-7zrl">12285</td>
+        <td class="tg-7zrl">1490400</td>
+        <td class="tg-7zrl">203488</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">48842</td>
+        <td class="tg-7zrl">100</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">hours-per-week</td>
+        <td class="tg-7zrl">Continuous</td>
+        <td class="tg-7zrl">40.42</td>
+        <td class="tg-7zrl">12.39</td>
+        <td class="tg-7zrl">40</td>
+        <td class="tg-7zrl">1</td>
+        <td class="tg-7zrl">99</td>
+        <td class="tg-7zrl">40</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">48842</td>
+        <td class="tg-7zrl">100</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">workclass =&nbsp;&nbsp;&nbsp;Private</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Private</td>
+        <td class="tg-7zrl">963</td>
+        <td class="tg-7zrl">1.97</td>
+        <td class="tg-7zrl">33906</td>
+        <td class="tg-7zrl">69.42</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">workclass =&nbsp;&nbsp;&nbsp;Self-emp-not-inc</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Private</td>
+        <td class="tg-7zrl">963</td>
+        <td class="tg-7zrl">1.97</td>
+        <td class="tg-7zrl">3862</td>
+        <td class="tg-7zrl">7.91</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">workclass =&nbsp;&nbsp;&nbsp;Local-gov</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Private</td>
+        <td class="tg-7zrl">963</td>
+        <td class="tg-7zrl">1.97</td>
+        <td class="tg-7zrl">3136</td>
+        <td class="tg-7zrl">6.42</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">education =&nbsp;&nbsp;&nbsp;HS-grad</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">HS-grad</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">15784</td>
+        <td class="tg-7zrl">32.32</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">education =&nbsp;&nbsp;&nbsp;Some-college</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">HS-grad</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">10878</td>
+        <td class="tg-7zrl">22.27</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">education =&nbsp;&nbsp;&nbsp;Bachelors</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">HS-grad</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">8025</td>
+        <td class="tg-7zrl">16.43</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">marital-status&nbsp;&nbsp;&nbsp;= Married-civ-spouse</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Married-civ-spouse</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">22379</td>
+        <td class="tg-7zrl">45.82</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">marital-status&nbsp;&nbsp;&nbsp;= Never-married</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Married-civ-spouse</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">16117</td>
+        <td class="tg-7zrl">33</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">marital-status&nbsp;&nbsp;&nbsp;= Divorced</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Married-civ-spouse</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">6633</td>
+        <td class="tg-7zrl">13.58</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">occupation =&nbsp;&nbsp;&nbsp;Prof-specialty</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Prof-specialty</td>
+        <td class="tg-7zrl">966</td>
+        <td class="tg-7zrl">1.98</td>
+        <td class="tg-7zrl">6172</td>
+        <td class="tg-7zrl">12.64</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">occupation =&nbsp;&nbsp;&nbsp;Craft-repair</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Prof-specialty</td>
+        <td class="tg-7zrl">966</td>
+        <td class="tg-7zrl">1.98</td>
+        <td class="tg-7zrl">6112</td>
+        <td class="tg-7zrl">12.51</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">occupation =&nbsp;&nbsp;&nbsp;Exec-managerial</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Prof-specialty</td>
+        <td class="tg-7zrl">966</td>
+        <td class="tg-7zrl">1.98</td>
+        <td class="tg-7zrl">6086</td>
+        <td class="tg-7zrl">12.46</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">relationship =&nbsp;&nbsp;&nbsp;Husband</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Husband</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">19716</td>
+        <td class="tg-7zrl">40.37</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">relationship =&nbsp;&nbsp;&nbsp;Not-in-family</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Husband</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">12583</td>
+        <td class="tg-7zrl">25.76</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">relationship =&nbsp;&nbsp;&nbsp;Own-child</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Husband</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">7581</td>
+        <td class="tg-7zrl">15.52</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">race = White</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">White</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">41762</td>
+        <td class="tg-7zrl">85.5</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">race = Black</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">White</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">4685</td>
+        <td class="tg-7zrl">9.59</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">race =&nbsp;&nbsp;&nbsp;Asian-Pac-Islander</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">White</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">1519</td>
+        <td class="tg-7zrl">3.11</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">sex = Male</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Male</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">32650</td>
+        <td class="tg-7zrl">66.85</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">sex = Female</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">Male</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">16192</td>
+        <td class="tg-7zrl">33.15</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">native-country&nbsp;&nbsp;&nbsp;= United-States</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">United-States</td>
+        <td class="tg-7zrl">274</td>
+        <td class="tg-7zrl">0.56</td>
+        <td class="tg-7zrl">43832</td>
+        <td class="tg-7zrl">89.74</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">native-country&nbsp;&nbsp;&nbsp;= Mexico</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">United-States</td>
+        <td class="tg-7zrl">274</td>
+        <td class="tg-7zrl">0.56</td>
+        <td class="tg-7zrl">951</td>
+        <td class="tg-7zrl">1.95</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">native-country&nbsp;&nbsp;&nbsp;= ?</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">United-States</td>
+        <td class="tg-7zrl">274</td>
+        <td class="tg-7zrl">0.56</td>
+        <td class="tg-7zrl">583</td>
+        <td class="tg-7zrl">1.19</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">income =&nbsp;&nbsp;&nbsp;&lt;=50K</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">&lt;=50K</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">24720</td>
+        <td class="tg-7zrl">50.61</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">income =&nbsp;&nbsp;&nbsp;&lt;=50K.</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">&lt;=50K</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">12435</td>
+        <td class="tg-7zrl">25.46</td>
+    </tr>
+    <tr>
+        <td class="tg-7zrl">income =&nbsp;&nbsp;&nbsp;&gt;50K</td>
+        <td class="tg-7zrl">Categorical</td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl"> </td>
+        <td class="tg-7zrl">&lt;=50K</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">0</td>
+        <td class="tg-7zrl">7841</td>
+        <td class="tg-7zrl">16.05</td>
+    </tr>
+    </tbody></table></div>
 
-
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
 
 Highlighting Specific Columns in a DataFrame
 ---------------------------------------------

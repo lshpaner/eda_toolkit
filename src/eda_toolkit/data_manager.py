@@ -938,7 +938,10 @@ def generate_table1(
                     "Missing (n)": missing_n,
                     "Missing (%)": missing_pct,
                     "Count": count,
-                    "Proportion (%)": round(100 * count / total_rows, decimal_places),
+                    "Proportion (%)": round(
+                        100 * count / total_rows,
+                        decimal_places,
+                    ),
                 }
             )
 
@@ -968,6 +971,61 @@ def generate_table1(
             return markdown_str
 
     return table1_df
+
+
+def table1_to_str(df, float_precision=2, max_col_width=18, padding=1):
+    """
+    Pretty-print a summary table (like Table 1) with clean alignment.
+
+    Parameters:
+    - df: pd.DataFrame
+    - float_precision: number of decimal places for floats
+    - max_col_width: max width for any column
+    - padding: spaces on each side of a column entry
+
+    Returns:
+    - str
+    """
+    if df is None or df.empty:
+        return "[Empty Table]"
+
+    def format_val(val):
+        if pd.isna(val):
+            return ""
+        elif isinstance(val, float):
+            return f"{val:.{float_precision}f}"
+        else:
+            return str(val)
+
+    # Format all values as strings
+    formatted = df.copy()
+    for col in formatted.columns:
+        formatted[col] = formatted[col].map(format_val)
+
+    # Compute max width per column (including content and padding)
+    col_widths = {
+        col: min(max(len(col), formatted[col].str.len().max()), max_col_width)
+        for col in formatted.columns
+    }
+
+    # Pad each entry based on computed width + padding
+    def pad(val, width):
+        val = val[:width]  # Truncate if needed
+        return f"{' ' * padding}{val:<{width}}{' ' * padding}"
+
+    # Build header and separator
+    header = "|".join([pad(col, col_widths[col]) for col in formatted.columns])
+    separator = "|".join(
+        ["-" * (col_widths[col] + 2 * padding) for col in formatted.columns]
+    )
+
+    # Build all rows
+    rows = []
+    for _, row in formatted.iterrows():
+        line = "|".join([pad(val, col_widths[col]) for col, val in row.items()])
+        rows.append(line)
+
+    return "\n".join([header, separator] + rows)
 
 
 ################################################################################
