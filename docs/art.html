@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ASCII Art &mdash; EDA Toolkit 0.0.15 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -62,7 +62,6 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data Management</span></p>
 <ul>
@@ -78,7 +77,6 @@
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul class="current">
@@ -178,7 +176,7 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <p><strong>Display a Logo Artwork</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;eda_toolkit_logo&quot;</span><span class="p">)</span>
 </pre></div>
@@ -194,7 +192,7 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 </pre></div>
 </div>
 <p><strong>Display Leon Shpaner Image</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;leon_shpaner_wb&quot;</span><span class="p">)</span>
 </pre></div>
@@ -246,7 +244,7 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 </pre></div>
 </div>
 <p><strong>Display Oscar Gil Image</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;oscar_gil_wb&quot;</span><span class="p">)</span>
 </pre></div>
@@ -295,7 +293,7 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 </pre></div>
 </div>
 <p><strong>Display Grey Alien Image</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;grey_alien_wb&quot;</span><span class="p">)</span>
 </pre></div>
@@ -371,7 +369,7 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 </pre></div>
 </div>
 <p><strong>Display UCLA Royce Hall Image</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;royce_hall_wb&quot;</span><span class="p">)</span>
 </pre></div>
@@ -403,7 +401,7 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 </pre></div>
 </div>
 <p><strong>Display California State Image</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;ca_state_wb&quot;</span><span class="p">)</span>
 </pre></div>
@@ -461,25 +459,25 @@ the dictionary structure, and how to use the <code class="docutils literal notra
 </pre></div>
 </div>
 <p><strong>Display All Artworks on Black Background</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;bb&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Display All Artwork</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Save Artwork to a File</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;royce_hall_bb&quot;</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;royce_hall.txt&quot;</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;./artworks&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Handle Missing Artwork</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">art</span> <span class="kn">import</span> <span class="n">print_art</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">art</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_art</span>
 
 <span class="n">print_art</span><span class="p">(</span><span class="s2">&quot;unknown_art&quot;</span><span class="p">)</span>
 </pre></div>

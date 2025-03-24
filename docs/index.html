@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Table of Contents &mdash; EDA Toolkit 0.0.15 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -23,7 +23,6 @@
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="_static/copybutton.js?v=a0ccc04e"></script>
       <script src="_static/custom.js?v=fecc5f50"></script>
-      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -62,7 +61,6 @@
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#the-yeo-johnson-transformation">The Yeo-Johnson Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#median-and-iqr-scaling">Median and IQR Scaling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#logit-transformation">Logit Transformation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data Management</span></p>
 <ul>
@@ -78,7 +76,6 @@
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#box-and-violin-plots">Box and Violin Plots</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#scatter-plots-and-best-fit-lines">Scatter Plots and Best Fit Lines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda_plots.html#correlation-matrices">Correlation Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">About EDA Toolkit</span></p>
 <ul>
@@ -161,7 +158,6 @@
 <li class="toctree-l2"><a class="reference internal" href="theoretical_overview.html#purpose-and-assumptions">Purpose and Assumptions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="theoretical_overview.html#partial-dependence-foundations">Partial Dependence Foundations</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -204,6 +200,11 @@
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#contingency_table"><code class="docutils literal notranslate"><span class="pre">contingency_table()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="data_management.html#generating-summaries-table-1">Generating Summaries (Table 1)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data_management.html#generate_table1"><code class="docutils literal notranslate"><span class="pre">generate_table1()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_management.html#implementation-example">Implementation Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_management.html#highlighting-specific-columns-in-a-dataframe">Highlighting Specific Columns in a DataFrame</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_management.html#highlight_columns"><code class="docutils literal notranslate"><span class="pre">highlight_columns()</span></code></a></li>
 </ul>
@@ -285,21 +286,6 @@
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#flex_corr_matrix"><code class="docutils literal notranslate"><span class="pre">flex_corr_matrix()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#triangular-correlation-matrix-example">Triangular Correlation Matrix Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eda_plots.html#full-correlation-matrix-example">Full Correlation Matrix Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="eda_plots.html#partial-dependence-plots">Partial Dependence Plots</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#d-partial-dependence-plots">2D Partial Dependence Plots</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#plot_2d_pdp"><code class="docutils literal notranslate"><span class="pre">plot_2d_pdp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#d-plots-ca-housing-example">2D Plots - CA Housing Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="eda_plots.html#id19">3D Partial Dependence Plots</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#plot_3d_pdp"><code class="docutils literal notranslate"><span class="pre">plot_3d_pdp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#id21">3D Plots - CA Housing Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#static-plot">Static Plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="eda_plots.html#interactive-plot">Interactive Plot</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
