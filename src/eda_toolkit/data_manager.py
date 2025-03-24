@@ -810,6 +810,7 @@ def generate_table1(
     detect_binary_numeric=True,
     return_markdown_only=False,
     value_counts=False,
+    include_types="both",
 ):
     """
     Generate a summary table (Table 1) for a given DataFrame.
@@ -831,18 +832,32 @@ def generate_table1(
     max_categories : int, optional
         Max number of categories to include per categorical variable.
     detect_binary_numeric : bool, default=True
-        Whether to reclassify numeric columns with <=2 unique values as categorical.
+        Whether to reclassify numeric columns with <=2 unique values as
+        categorical.
     return_markdown_only : bool, default=False
         If True and export_markdown is enabled, only returns the Markdown string.
     value_counts : bool, default=False
         If True, shows frequency breakdown of each category; otherwise one row
         per categorical variable.
+    include_types : str, default="both"
+        Filter output to show only "continuous", "categorical", or "both"
+        variable types.
+
+        Accepted values:
+            - "continuous": shows only continuous variable summaries
+            - "categorical": shows only categorical variable summaries
+            - "both": shows all variable types
+
+        Raises:
+            InvalidIncludeTypeError: if include_types is not one of the accepted
+            values.
 
     Returns:
     --------
     pandas.DataFrame or str
         Summary table as a DataFrame (or Markdown string if specified).
     """
+
     if categorical_cols is None:
         categorical_cols = df.select_dtypes(
             include=["object", "category", "bool"]
@@ -946,6 +961,16 @@ def generate_table1(
             )
 
     table1_df = pd.DataFrame(table1_parts).replace({np.nan: ""})
+
+    # Filter by variable type
+    include_types = include_types.lower()
+    if include_types not in ["both", "continuous", "categorical"]:
+        raise ValueError(
+            "`include_types` must be 'continuous', 'categorical', or 'both'."
+        )
+
+    if include_types != "both":
+        table1_df = table1_df[table1_df["Type"] == include_types.capitalize()]
 
     def df_to_markdown(df):
         lines = []
