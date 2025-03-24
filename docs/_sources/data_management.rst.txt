@@ -1227,7 +1227,7 @@ in a DataFrame. This section describes how to generate a summary "Table 1" from
 a given dataset using the ``generate_table1`` function. It supports automatic detection 
 of variable types, flexible formatting, and optional export to Markdown.
 
-.. function:: generate_table1(df, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False)
+.. function:: generate_table1(df, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False, include_types="both")
 
     :param df: Input DataFrame containing the data to summarize.
     :type df: pandas.DataFrame
@@ -1243,13 +1243,17 @@ of variable types, flexible formatting, and optional export to Markdown.
     :type markdown_path: str, optional
     :param max_categories: Maximum number of categories to include per categorical variable (if ``value_counts=True``).
     :type max_categories: int, optional
-    :param detect_binary_numeric: Reclassify numeric columns with <=2 unique values as categorical. Defaults to ``True``.
+    :param detect_binary_numeric: Reclassify numeric columns with ``<=2`` unique values as categorical. Defaults to ``True``.
     :type detect_binary_numeric: bool, optional
     :param return_markdown_only: If ``True`` and exporting to Markdown, return the Markdown string instead of the DataFrame.
     :type return_markdown_only: bool, optional
     :param value_counts: If ``True``, show full frequency breakdown for each category. Defaults to ``False``.
     :type value_counts: bool, optional
-    :raises ValueError: If invalid input parameters are provided.
+    :param include_types: Filter output to show only ``"continuous"``, ``"categorical"``, or ``"both"`` variable types. Defaults to ``"both"``.
+    :type include_types: str, optional
+
+    :raises ValueError: If ``include_types`` is not one of ``"continuous"``, ``"categorical"``, or ``"both"``.
+
     :returns: A summary table either as a DataFrame or a Markdown string (if ``export_markdown`` and ``return_markdown_only`` are ``True``).
     :rtype: pandas.DataFrame or str
 
@@ -1832,6 +1836,34 @@ save the output in Markdown format for reporting or documentation purposes.
 .. raw:: html
    
    <div style="height: 50px;"></div>
+
+
+Implementation Example 3
+"""""""""""""""""""""""""""""""""
+
+In this final example, we demonstrate how to filter the summary output using the 
+``include_types`` parameter. This allows you to focus exclusively on continuous 
+or categorical variables without modifying your input DataFrame.
+
+Here, we set ``include_types="continuous"`` to restrict the output to only continuous 
+variables. This is useful when generating separate tables for different data types 
+or when you're only interested in the numerical features of your dataset.
+
+Unlike the previous examples, we disable both ``value_counts`` and ``export_markdown`` 
+to return a plain DataFrame directly.
+
+.. code-block:: python
+
+    from eda_toolkit import generate_table1
+
+    df2 = generate_table1(
+        df,
+        value_counts=True,
+        include_types="continuous",
+    )
+
+    df2
+
 
 Highlighting Specific Columns in a DataFrame
 ---------------------------------------------
