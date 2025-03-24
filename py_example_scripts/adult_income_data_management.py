@@ -86,6 +86,16 @@ generate_table1(
     markdown_path="table1_summary.md",
 )
 
+df2 = generate_table1(
+    df,
+    value_counts=True,
+    export_markdown=True,
+    markdown_path="table1_summary.md",
+    include_types="continuous",
+)
+
+print(f"\nTable 1 Filtered for Continuous ONLY\n{df2}\n")
+
 ################################################################################
 ##################################### Add Ids ##################################
 ################################################################################

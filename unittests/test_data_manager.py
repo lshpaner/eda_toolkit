@@ -579,3 +579,31 @@ def test_mixed_dtypes():
     assert "Bob" in output
     assert "87.7" in output
     assert "93.1" in output
+
+
+def test_include_types_continuous_only(sample_df):
+    result = generate_table1(sample_df, include_types="continuous")
+    assert result["Type"].nunique() == 1
+    assert all(result["Type"] == "Continuous")
+
+
+def test_include_types_categorical_only(sample_df):
+    result = generate_table1(sample_df, include_types="categorical")
+    assert result["Type"].nunique() == 1
+    assert all(result["Type"] == "Categorical")
+
+
+def test_include_types_both_returns_mixed(sample_df):
+    result = generate_table1(sample_df, include_types="both")
+    assert set(result["Type"].unique()).issubset({"Continuous", "Categorical"})
+
+
+def test_include_types_invalid_raises():
+    with pytest.raises(
+        ValueError,
+        match="`include_types` must be 'continuous', 'categorical', or 'both'",
+    ):
+        generate_table1(
+            pd.DataFrame({"a": [1, 2, 3]}),
+            include_types="invalid_option",
+        )
