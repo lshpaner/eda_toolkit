@@ -798,9 +798,6 @@ def save_dataframes_to_excel(
 ############################## Table 1 Generator ###############################
 ################################################################################
 
-import pandas as pd
-import numpy as np
-
 
 def table1_to_str(df, float_precision=2, max_col_width=18, padding=1):
     """
@@ -870,9 +867,10 @@ def generate_table1(
     decimal_places : int, default=2
         Number of decimal places for rounding.
     export_markdown : bool, default=False
-        If True, saves summary as Markdown file.
+        If True, saves summary as Markdown file(s).
     markdown_path : str, optional
-        Full path and filename (e.g., "summary.md").
+        Full path and base filename for Markdown export. Used as prefix for
+        _continuous.md and _categorical.md.
     max_categories : int, optional
         Max number of categories per categorical column to show.
     detect_binary_numeric : bool, default=True
@@ -882,14 +880,15 @@ def generate_table1(
     value_counts : bool, default=False
         If True, show counts for each value of categorical features.
     include_types : {'continuous', 'categorical', 'both'}
-        Which type(s) of variables to include.
+        Which type(s) of variables to include in the summary.
     combine : bool, default=True
-        If True and include_types='both', returns single DataFrame; else a tuple.
+        If True and include_types='both', returns a single combined DataFrame.
+        If False, returns a tuple.
 
     Returns:
     --------
-    pd.DataFrame, tuple, or str
-        Summary table(s) or markdown string(s), depending on arguments.
+    pd.DataFrame, tuple, or str/dict
+        Summary table(s) or Markdown string(s), depending on parameters.
     """
 
     if categorical_cols is None:
@@ -1041,20 +1040,23 @@ def generate_table1(
             markdown_str = df_to_markdown(df_continuous)
             if not markdown_path:
                 markdown_path = "table1.md"
-
-                with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
-                    f.write(markdown_str)
+            with open(
+                markdown_path.replace(".md", "_continuous.md"),
+                "w",
+            ) as f:
+                f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
 
         elif include_types == "categorical":
             markdown_str = df_to_markdown(df_categorical)
-            if markdown_path:
-                with open(
-                    markdown_path.replace(".md", "_categorical.md"),
-                    "w",
-                ) as f:
-                    f.write(markdown_str)
+            if not markdown_path:
+                markdown_path = "table1.md"
+            with open(
+                markdown_path.replace(".md", "_categorical.md"),
+                "w",
+            ) as f:
+                f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
 
@@ -1062,9 +1064,15 @@ def generate_table1(
             md_cont = df_to_markdown(df_continuous)
             md_cat = df_to_markdown(df_categorical)
             if markdown_path:
-                with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
+                with open(
+                    markdown_path.replace(".md", "_continuous.md"),
+                    "w",
+                ) as f:
                     f.write(md_cont)
-                with open(markdown_path.replace(".md", "_categorical.md"), "w") as f:
+                with open(
+                    markdown_path.replace(".md", "_categorical.md"),
+                    "w",
+                ) as f:
                     f.write(md_cat)
             if return_markdown_only:
                 return {"continuous": md_cont, "categorical": md_cat}
@@ -1088,8 +1096,14 @@ def generate_table1(
         result.__class__.__str__ = lambda self: _custom_str()
     elif isinstance(result, tuple):
         for r in result:
-            r.__str__ = lambda r=r: table1_to_str(r, float_precision=decimal_places)
-            r.__repr__ = lambda r=r: table1_to_str(r, float_precision=decimal_places)
+            r.__str__ = lambda r=r: table1_to_str(
+                r,
+                float_precision=decimal_places,
+            )
+            r.__repr__ = lambda r=r: table1_to_str(
+                r,
+                float_precision=decimal_places,
+            )
     if not combine and (export_markdown or return_markdown_only):
         return
 
