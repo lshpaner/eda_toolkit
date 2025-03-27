@@ -799,6 +799,46 @@ def save_dataframes_to_excel(
 ################################################################################
 
 
+def table1_to_str(df, float_precision=2, max_col_width=18, padding=1):
+    """
+    Pretty-print a summary table (like Table 1) with clean alignment.
+    """
+    if df is None or df.empty:
+        return "[Empty Table]"
+
+    def format_val(val):
+        if pd.isna(val):
+            return ""
+        elif isinstance(val, float):
+            return f"{val:.{float_precision}f}"
+        else:
+            return str(val)
+
+    formatted = df.copy()
+    for col in formatted.columns:
+        formatted[col] = formatted[col].map(format_val)
+
+    col_widths = {
+        col: min(max(len(col), formatted[col].str.len().max()), max_col_width)
+        for col in formatted.columns
+    }
+
+    def pad(val, width):
+        val = val[:width]
+        return f"{' ' * padding}{val:<{width}}{' ' * padding}"
+
+    header = "|".join([pad(col, col_widths[col]) for col in formatted.columns])
+    separator = "|".join(
+        ["-" * (col_widths[col] + 2 * padding) for col in formatted.columns]
+    )
+    rows = [
+        "|".join([pad(val, col_widths[col]) for col, val in row.items()])
+        for _, row in formatted.iterrows()
+    ]
+
+    return "\n".join([header, separator] + rows)
+
+
 def generate_table1(
     df,
     categorical_cols=None,
@@ -811,6 +851,7 @@ def generate_table1(
     return_markdown_only=False,
     value_counts=False,
     include_types="both",
+    combine=True,
 ):
     """
     Generate a summary table (Table 1) for a given DataFrame.
@@ -818,44 +859,36 @@ def generate_table1(
     Parameters:
     -----------
     df : pandas.DataFrame
-        Input DataFrame containing the data.
+        Input DataFrame.
     categorical_cols : list, optional
-        List of categorical column names. If None, auto-detected.
+        List of categorical columns. If None, inferred.
     continuous_cols : list, optional
-        List of continuous (numeric) column names. If None, auto-detected.
+        List of continuous columns. If None, inferred.
     decimal_places : int, default=2
-        Number of decimal places to round summary statistics.
+        Number of decimal places for rounding.
     export_markdown : bool, default=False
-        Whether to export the resulting summary as a Markdown string.
+        If True, saves summary as Markdown file(s).
     markdown_path : str, optional
-        Path to save the Markdown file (used only if export_markdown=True).
+        Full path and base filename for Markdown export. Used as prefix for
+        _continuous.md and _categorical.md.
     max_categories : int, optional
-        Max number of categories to include per categorical variable.
+        Max number of categories per categorical column to show.
     detect_binary_numeric : bool, default=True
-        Whether to reclassify numeric columns with <=2 unique values as
-        categorical.
+        Whether to treat binary numerics as categorical.
     return_markdown_only : bool, default=False
-        If True and export_markdown is enabled, only returns the Markdown string.
+        If True, return Markdown string(s) instead of DataFrame(s).
     value_counts : bool, default=False
-        If True, shows frequency breakdown of each category; otherwise one row
-        per categorical variable.
-    include_types : str, default="both"
-        Filter output to show only "continuous", "categorical", or "both"
-        variable types.
-
-        Accepted values:
-            - "continuous": shows only continuous variable summaries
-            - "categorical": shows only categorical variable summaries
-            - "both": shows all variable types
-
-        Raises:
-            InvalidIncludeTypeError: if include_types is not one of the accepted
-            values.
+        If True, show counts for each value of categorical features.
+    include_types : {'continuous', 'categorical', 'both'}
+        Which type(s) of variables to include in the summary.
+    combine : bool, default=True
+        If True and include_types='both', returns a single combined DataFrame.
+        If False, returns a tuple.
 
     Returns:
     --------
-    pandas.DataFrame or str
-        Summary table as a DataFrame (or Markdown string if specified).
+    pd.DataFrame, tuple, or str/dict
+        Summary table(s) or Markdown string(s), depending on parameters.
     """
 
     if categorical_cols is None:
@@ -869,22 +902,21 @@ def generate_table1(
             .tolist()
         )
 
-    # Auto-detect binary numeric columns
     if detect_binary_numeric:
-        for col in continuous_cols[:]:  # copy of list
+        for col in continuous_cols[:]:
             unique_vals = df[col].dropna().unique()
             if len(unique_vals) <= 2:
                 categorical_cols.append(col)
                 continuous_cols.remove(col)
 
-    table1_parts = []
     total_rows = len(df)
+    continuous_parts = []
+    categorical_parts = []
 
-    # Continuous Variables Summary
     for col in continuous_cols:
         series = df[col]
         non_missing = series.dropna()
-        table1_parts.append(
+        continuous_parts.append(
             {
                 "Variable": col,
                 "Type": "Continuous",
@@ -899,19 +931,16 @@ def generate_table1(
                     else ""
                 ),
                 "Missing (n)": series.isna().sum(),
-                "Missing (%)": round(100 * series.isna().mean(), decimal_places),
+                "Missing (%)": 100 * series.isna().mean(),
                 "Count": non_missing.count(),
-                "Proportion (%)": round(
-                    100 * non_missing.count() / total_rows, decimal_places
-                ),
+                "Proportion (%)": 100 * non_missing.count() / total_rows,
             }
         )
 
-    # Categorical Variables Summary
     for col in categorical_cols:
         series = df[col]
         missing_n = series.isna().sum()
-        missing_pct = round(100 * missing_n / total_rows, decimal_places)
+        missing_pct = 100 * missing_n / total_rows
         mode_val = series.mode().iloc[0] if not series.mode().empty else ""
 
         if value_counts:
@@ -920,7 +949,7 @@ def generate_table1(
                 counts = counts.head(max_categories)
             for cat_val, count in counts.items():
                 label = f"{col} = {cat_val}" if pd.notna(cat_val) else f"{col} = NaN"
-                table1_parts.append(
+                categorical_parts.append(
                     {
                         "Variable": label,
                         "Type": "Categorical",
@@ -933,14 +962,12 @@ def generate_table1(
                         "Missing (n)": missing_n,
                         "Missing (%)": missing_pct,
                         "Count": count,
-                        "Proportion (%)": round(
-                            100 * count / total_rows, decimal_places
-                        ),
+                        "Proportion (%)": 100 * count / total_rows,
                     }
                 )
         else:
             count = series.notna().sum()
-            table1_parts.append(
+            categorical_parts.append(
                 {
                     "Variable": col,
                     "Type": "Categorical",
@@ -953,24 +980,47 @@ def generate_table1(
                     "Missing (n)": missing_n,
                     "Missing (%)": missing_pct,
                     "Count": count,
-                    "Proportion (%)": round(
-                        100 * count / total_rows,
-                        decimal_places,
-                    ),
+                    "Proportion (%)": 100 * count / total_rows,
                 }
             )
 
-    table1_df = pd.DataFrame(table1_parts).replace({np.nan: ""})
+    df_continuous = pd.DataFrame(continuous_parts).replace({np.nan: ""})
+    df_categorical = pd.DataFrame(categorical_parts).replace({np.nan: ""})
 
-    # Filter by variable type
-    include_types = include_types.lower()
-    if include_types not in ["both", "continuous", "categorical"]:
-        raise ValueError(
-            "`include_types` must be 'continuous', 'categorical', or 'both'."
-        )
+    def format_numeric_cols(df):
+        format_cols = [
+            "Mean",
+            "SD",
+            "Median",
+            "Min",
+            "Max",
+            "Mode",
+            "Missing (n)",
+            "Missing (%)",
+            "Count",
+            "Proportion (%)",
+        ]
 
-    if include_types != "both":
-        table1_df = table1_df[table1_df["Type"] == include_types.capitalize()]
+        def is_numeric_string(x):
+            try:
+                float(str(x).replace(",", ""))
+                return True
+            except:
+                return False
+
+        for col in format_cols:
+            if col in df.columns:
+                df[col] = df[col].apply(
+                    lambda x: (
+                        f"{float(str(x).replace(',', '')):,.{decimal_places}f}"
+                        if is_numeric_string(x)
+                        else x
+                    )
+                )
+        return df
+
+    df_continuous = format_numeric_cols(df_continuous)
+    df_categorical = format_numeric_cols(df_categorical)
 
     def df_to_markdown(df):
         lines = []
@@ -978,79 +1028,89 @@ def generate_table1(
         separator = "| " + " | ".join(["---"] * len(df.columns)) + " |"
         lines.append(header)
         lines.append(separator)
-
         for _, row in df.iterrows():
             row_str = (
                 "| " + " | ".join(str(val) if val != "" else "" for val in row) + " |"
             )
             lines.append(row_str)
-
         return "\n".join(lines)
 
     if export_markdown:
-        markdown_str = df_to_markdown(table1_df)
-        if markdown_path:
-            with open(markdown_path, "w") as f:
+        if include_types == "continuous":
+            markdown_str = df_to_markdown(df_continuous)
+            if not markdown_path:
+                markdown_path = "table1.md"
+            with open(
+                markdown_path.replace(".md", "_continuous.md"),
+                "w",
+            ) as f:
                 f.write(markdown_str)
-        if return_markdown_only:
-            return markdown_str
+            if return_markdown_only:
+                return markdown_str
 
-    return table1_df
+        elif include_types == "categorical":
+            markdown_str = df_to_markdown(df_categorical)
+            if not markdown_path:
+                markdown_path = "table1.md"
+            with open(
+                markdown_path.replace(".md", "_categorical.md"),
+                "w",
+            ) as f:
+                f.write(markdown_str)
+            if return_markdown_only:
+                return markdown_str
 
-
-def table1_to_str(df, float_precision=2, max_col_width=18, padding=1):
-    """
-    Pretty-print a summary table (like Table 1) with clean alignment.
-
-    Parameters:
-    - df: pd.DataFrame
-    - float_precision: number of decimal places for floats
-    - max_col_width: max width for any column
-    - padding: spaces on each side of a column entry
-
-    Returns:
-    - str
-    """
-    if df is None or df.empty:
-        return "[Empty Table]"
-
-    def format_val(val):
-        if pd.isna(val):
-            return ""
-        elif isinstance(val, float):
-            return f"{val:.{float_precision}f}"
         else:
-            return str(val)
+            md_cont = df_to_markdown(df_continuous)
+            md_cat = df_to_markdown(df_categorical)
+            if markdown_path:
+                with open(
+                    markdown_path.replace(".md", "_continuous.md"),
+                    "w",
+                ) as f:
+                    f.write(md_cont)
+                with open(
+                    markdown_path.replace(".md", "_categorical.md"),
+                    "w",
+                ) as f:
+                    f.write(md_cat)
+            if return_markdown_only:
+                return {"continuous": md_cont, "categorical": md_cat}
 
-    # Format all values as strings
-    formatted = df.copy()
-    for col in formatted.columns:
-        formatted[col] = formatted[col].map(format_val)
+    if include_types == "continuous":
+        result = df_continuous
+    elif include_types == "categorical":
+        result = df_categorical
+    else:
+        result = (
+            pd.concat([df_continuous, df_categorical], ignore_index=True)
+            if combine
+            else (df_continuous, df_categorical)
+        )
 
-    # Compute max width per column (including content and padding)
-    col_widths = {
-        col: min(max(len(col), formatted[col].str.len().max()), max_col_width)
-        for col in formatted.columns
-    }
+    if isinstance(result, pd.DataFrame):
 
-    # Pad each entry based on computed width + padding
-    def pad(val, width):
-        val = val[:width]  # Truncate if needed
-        return f"{' ' * padding}{val:<{width}}{' ' * padding}"
+        def _custom_str():
+            return table1_to_str(result, float_precision=decimal_places)
 
-    # Build header and separator
-    header = "|".join([pad(col, col_widths[col]) for col in formatted.columns])
-    separator = "|".join(
-        ["-" * (col_widths[col] + 2 * padding) for col in formatted.columns]
-    )
+        result.__class__.__str__ = lambda self: _custom_str()
+    elif isinstance(result, tuple):
+        for r in result:
+            r.__str__ = lambda r=r: table1_to_str(
+                r,
+                float_precision=decimal_places,
+            )
+            r.__repr__ = lambda r=r: table1_to_str(
+                r,
+                float_precision=decimal_places,
+            )
+    if not combine and (export_markdown or return_markdown_only):
+        return
 
-    # Build all rows
-    rows = []
-    for _, row in formatted.iterrows():
-        line = "|".join([pad(val, col_widths[col]) for col, val in row.items()])
-        rows.append(line)
+    if not combine:
+        return result
 
-    return "\n".join([header, separator] + rows)
+    return result
 
 
 ################################################################################

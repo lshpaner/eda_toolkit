@@ -1328,10 +1328,10 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 <p>Create a summary statistics table for both categorical and continuous variables
 in a DataFrame. This section describes how to generate a summary “Table 1” from
 a given dataset using the <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> function. It supports automatic detection
-of variable types, flexible formatting, and optional export to Markdown.</p>
+of variable types, pretty-printing, and optional export to Markdown.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="generate_table1">
-<span class="sig-name descname"><span class="pre">generate_table1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_markdown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markdown_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_binary_numeric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_markdown_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generate_table1" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_table1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_markdown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markdown_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_categories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_binary_numeric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_markdown_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generate_table1" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1339,23 +1339,27 @@ of variable types, flexible formatting, and optional export to Markdown.</p>
 <li><p><strong>categorical_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – List of categorical column names. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, columns will be auto-detected based on <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p></li>
 <li><p><strong>continuous_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – List of continuous (numeric) column names. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, columns will be auto-detected.</p></li>
 <li><p><strong>decimal_places</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Number of decimal places to round summary statistics. Defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></li>
-<li><p><strong>export_markdown</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, export the resulting summary as a Markdown string.</p></li>
-<li><p><strong>markdown_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Path to save the Markdown file (used only if <code class="docutils literal notranslate"><span class="pre">export_markdown=True</span></code>).</p></li>
+<li><p><strong>export_markdown</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, exports the summary to Markdown format.</p></li>
+<li><p><strong>markdown_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Full path and filename prefix for Markdown output. Files will be saved as <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;_continuous.md</span></code> and/or <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;_categorical.md</span></code> depending on type(s) selected.</p></li>
 <li><p><strong>max_categories</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum number of categories to include per categorical variable (if <code class="docutils literal notranslate"><span class="pre">value_counts=True</span></code>).</p></li>
-<li><p><strong>detect_binary_numeric</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Reclassify numeric columns with <code class="docutils literal notranslate"><span class="pre">&lt;=2</span></code> unique values as categorical. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>return_markdown_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and exporting to Markdown, return the Markdown string instead of the DataFrame.</p></li>
-<li><p><strong>value_counts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, show full frequency breakdown for each category. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>include_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Filter output to show only <code class="docutils literal notranslate"><span class="pre">&quot;continuous&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;categorical&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code> variable types. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p><strong>detect_binary_numeric</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, numeric columns with &lt;=2 unique values will be treated as categorical.</p></li>
+<li><p><strong>return_markdown_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and exporting to Markdown, returns Markdown string(s) instead of DataFrame(s).</p></li>
+<li><p><strong>value_counts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, provides frequency breakdown of each categorical value.</p></li>
+<li><p><strong>include_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Type of variables to summarize. One of <code class="docutils literal notranslate"><span class="pre">&quot;continuous&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;categorical&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p></li>
+<li><p><strong>combine</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="docutils literal notranslate"><span class="pre">include_types</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>, returns a single DataFrame. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, returns a tuple of (<code class="docutils literal notranslate"><span class="pre">continuous_df</span></code>, <code class="docutils literal notranslate"><span class="pre">categorical_df</span></code>).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">include_types</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;continuous&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;categorical&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;both&quot;</span></code>.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">include_types=&quot;both&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">combine=False</span></code>: returns a tuple of DataFrames.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">include_types=&quot;both&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">combine=True</span></code>: returns a single combined DataFrame.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">include_types=&quot;continuous&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;categorical&quot;</span></code>: returns a single DataFrame.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">export_markdown=True</span></code> and <code class="docutils literal notranslate"><span class="pre">return_markdown_only=True</span></code>: returns a Markdown string or dictionary of strings.</p></li>
+</ul>
+</p>
 </dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A summary table either as a DataFrame or a Markdown string (if <code class="docutils literal notranslate"><span class="pre">export_markdown</span></code> and <code class="docutils literal notranslate"><span class="pre">return_markdown_only</span></code> are <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pandas.DataFrame or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1366,17 +1370,19 @@ of variable types, flexible formatting, and optional export to Markdown.</p>
 categorical and continuous variables. We explicitly define which columns fall into
 each category—although the <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> function also supports automatic
 detection of variable types if desired.</p>
-<p>We also use a utility function, <code class="docutils literal notranslate"><span class="pre">table1_to_str</span></code>, to format the output as a clean,
-readable text table in the console. This is especially helpful for inspecting the
-summary directly within notebooks or logs.</p>
-<p>In addition, we specify <code class="docutils literal notranslate"><span class="pre">export_markdown=True</span></code> and provide a file path via
-<code class="docutils literal notranslate"><span class="pre">markdown_path</span></code>. This enables the function to export the resulting summary as a
-Markdown-formatted table and save it to the specified location—ideal for inclusion
-in documentation, reports, or static site generators like Jupyter Book or Quarto.</p>
-<p>We also set <code class="docutils literal notranslate"><span class="pre">value_counts=False</span></code>, which results in one summary row per categorical
-variable, rather than a breakdown of each individual category. This is useful when
-a high-level overview is preferred over a detailed category-level count.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_table1</span><span class="p">,</span> <span class="n">table1_to_str</span>
+<p>The summary output is automatically pretty-printed in the console using the
+<code class="docutils literal notranslate"><span class="pre">table1_to_str</span></code> utility. This formatting is applied behind the scenes whenever
+a summary table is printed, making it especially helpful for reading outputs
+within notebooks or logging environments.</p>
+<p>In this case, we specify <code class="docutils literal notranslate"><span class="pre">export_markdown=True</span></code> and provide a filename via
+<code class="docutils literal notranslate"><span class="pre">markdown_path</span></code>. This allows the summary to be exported in Markdown format
+for use in reports, documentation, or publishing platforms like Jupyter Book or Quarto.
+When <code class="docutils literal notranslate"><span class="pre">include_types=&quot;both&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">combine=True</span></code> (the default), both continuous and
+categorical summaries are merged into a single DataFrame and written to two separate
+Markdown files with <code class="docutils literal notranslate"><span class="pre">_continuous.md</span></code> and <code class="docutils literal notranslate"><span class="pre">_categorical.md</span></code> suffixes.</p>
+<p>We also set <code class="docutils literal notranslate"><span class="pre">value_counts=False</span></code> to limit each categorical variable to a single
+summary row, rather than expanding into one row per category-level value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_table1</span>
 
 <span class="n">table1</span> <span class="o">=</span> <span class="n">generate_table1</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1385,21 +1391,22 @@ a high-level overview is preferred over a detailed category-level count.</p>
     <span class="n">value_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">max_categories</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">export_markdown</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">decimal_places</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">markdown_path</span><span class="o">=</span><span class="s2">&quot;table1_summary.md&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">table1_to_str</span><span class="p">(</span><span class="n">table1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">table1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> Variable       | Type        | Mean  | SD    | Median | Min | Max | Mode    | Missing (n) | Missing (%) | Count | Proportion (%)
-----------------|-------------|-------|-------|--------|-----|-----|---------|-------------|-------------|-------|----------------
- hours-per-week | Continuous  | 40.42 | 12.39 | 40.00  | 1   | 99  | 40      | 0           | 0.00        | 48842 | 100.00
- age            | Continuous  | 38.64 | 13.71 | 37.00  | 17  | 90  | 36      | 0           | 0.00        | 48842 | 100.00
- education-num  | Continuous  | 10.08 | 2.57  | 10.00  | 1   | 16  | 9       | 0           | 0.00        | 48842 | 100.00
- sex            | Categorical |       |       |        |     |     | Male    | 0           | 0.00        | 48842 | 100.00
- race           | Categorical |       |       |        |     |     | White   | 0           | 0.00        | 48842 | 100.00
- workclass      | Categorical |       |       |        |     |     | Private | 963         | 1.97        | 47879 | 98.03
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> Variable       | Type        | Mean | SD | Median | Min | Max | Mode    | Missing (n) | Missing (%) | Count  | Proportion (%)
+----------------|-------------|------|----|--------|-----|-----|---------|-------------|-------------|--------|----------------
+ hours-per-week | Continuous  | 40   | 12 | 40     | 1   | 99  | 40      | 0           | 0           | 48,842 | 100
+ age            | Continuous  | 39   | 14 | 37     | 17  | 90  | 36      | 0           | 0           | 48,842 | 100
+ education-num  | Continuous  | 10   | 3  | 10     | 1   | 16  | 9       | 0           | 0           | 48,842 | 100
+ sex            | Categorical |      |    |        |     |     | Male    | 0           | 0           | 48,842 | 100
+ race           | Categorical |      |    |        |     |     | White   | 0           | 0           | 48,842 | 100
+ workclass      | Categorical |      |    |        |     |     | Private | 963         | 2           | 47,879 | 98
 </pre></div>
 </div>
 <div class="admonition note">
@@ -1407,8 +1414,9 @@ a high-level overview is preferred over a detailed category-level count.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">categorical_cols</span></code> or <code class="docutils literal notranslate"><span class="pre">continuous_cols</span></code> are not specified, <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code>
 will automatically detect them based on the column data types. Additionally, numeric
 columns with two or fewer unique values can be reclassified as categorical using
-the <code class="docutils literal notranslate"><span class="pre">detect_binary_numeric=True</span></code> setting (enabled by default).
-When <code class="docutils literal notranslate"><span class="pre">value_counts=True</span></code>, a row will be created for each category-value pair.</p>
+the <code class="docutils literal notranslate"><span class="pre">detect_binary_numeric=True</span></code> setting (enabled by default).</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">value_counts=True</span></code>, one row will be generated for each category-value pair
+rather than for the variable as a whole.</p>
 </div>
 </section>
 <section id="implementation-example-2">
