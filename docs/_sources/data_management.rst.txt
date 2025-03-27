@@ -1225,38 +1225,53 @@ Generating Summaries (Table 1)
 Create a summary statistics table for both categorical and continuous variables 
 in a DataFrame. This section describes how to generate a summary "Table 1" from 
 a given dataset using the ``generate_table1`` function. It supports automatic detection 
-of variable types, flexible formatting, and optional export to Markdown.
+of variable types, pretty-printing, and optional export to Markdown.
 
-.. function:: generate_table1(df, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False, include_types="both")
+.. function:: generate_table1(df, categorical_cols=None, continuous_cols=None, decimal_places=2, export_markdown=False, markdown_path=None, max_categories=None, detect_binary_numeric=True, return_markdown_only=False, value_counts=False, include_types="both", combine=True)
 
     :param df: Input DataFrame containing the data to summarize.
     :type df: pandas.DataFrame
+
     :param categorical_cols: List of categorical column names. If ``None``, columns will be auto-detected based on ``dtype``.
     :type categorical_cols: list of str, optional
+
     :param continuous_cols: List of continuous (numeric) column names. If ``None``, columns will be auto-detected.
     :type continuous_cols: list of str, optional
+
     :param decimal_places: Number of decimal places to round summary statistics. Defaults to ``2``.
     :type decimal_places: int, optional
-    :param export_markdown: If ``True``, export the resulting summary as a Markdown string.
+
+    :param export_markdown: If ``True``, exports the summary to Markdown format.
     :type export_markdown: bool, optional
-    :param markdown_path: Path to save the Markdown file (used only if ``export_markdown=True``).
+
+    :param markdown_path: Full path and filename prefix for Markdown output. Files will be saved as ``<prefix>_continuous.md`` and/or ``<prefix>_categorical.md`` depending on type(s) selected.
     :type markdown_path: str, optional
+
     :param max_categories: Maximum number of categories to include per categorical variable (if ``value_counts=True``).
     :type max_categories: int, optional
-    :param detect_binary_numeric: Reclassify numeric columns with ``<=2`` unique values as categorical. Defaults to ``True``.
+
+    :param detect_binary_numeric: If ``True``, numeric columns with <=2 unique values will be treated as categorical.
     :type detect_binary_numeric: bool, optional
-    :param return_markdown_only: If ``True`` and exporting to Markdown, return the Markdown string instead of the DataFrame.
+
+    :param return_markdown_only: If ``True`` and exporting to Markdown, returns Markdown string(s) instead of DataFrame(s).
     :type return_markdown_only: bool, optional
-    :param value_counts: If ``True``, show full frequency breakdown for each category. Defaults to ``False``.
+
+    :param value_counts: If ``True``, provides frequency breakdown of each categorical value.
     :type value_counts: bool, optional
-    :param include_types: Filter output to show only ``"continuous"``, ``"categorical"``, or ``"both"`` variable types. Defaults to ``"both"``.
-    :type include_types: str, optional
 
-    :raises ValueError: If ``include_types`` is not one of ``"continuous"``, ``"categorical"``, or ``"both"``.
+    :param include_types: Type of variables to summarize. One of ``"continuous"``, ``"categorical"``, or ``"both"``.
+    :type include_types: str
 
-    :returns: A summary table either as a DataFrame or a Markdown string (if ``export_markdown`` and ``return_markdown_only`` are ``True``).
-    :rtype: pandas.DataFrame or str
+    :param combine: If ``True`` and ``include_types`` is ``"both"``, returns a single DataFrame. If ``False``, returns a tuple of (``continuous_df``, ``categorical_df``).
+    :type combine: bool, optional
 
+    :returns: 
+        - If ``include_types="both"`` and ``combine=False``: returns a tuple of DataFrames.
+        - If ``include_types="both"`` and ``combine=True``: returns a single combined DataFrame.
+        - If ``include_types="continuous"`` or ``"categorical"``: returns a single DataFrame.
+        - If ``export_markdown=True`` and ``return_markdown_only=True``: returns a Markdown string or dictionary of strings.
+
+    :rtype: pandas.DataFrame, tuple, str, or dict
 
 
 Implementation Example 1
@@ -1267,22 +1282,24 @@ categorical and continuous variables. We explicitly define which columns fall in
 each category—although the ``generate_table1`` function also supports automatic 
 detection of variable types if desired.
 
-We also use a utility function, ``table1_to_str``, to format the output as a clean, 
-readable text table in the console. This is especially helpful for inspecting the 
-summary directly within notebooks or logs.
+The summary output is automatically pretty-printed in the console using the 
+``table1_to_str`` utility. This formatting is applied behind the scenes whenever 
+a summary table is printed, making it especially helpful for reading outputs 
+within notebooks or logging environments.
 
-In addition, we specify ``export_markdown=True`` and provide a file path via
-``markdown_path``. This enables the function to export the resulting summary as a
-Markdown-formatted table and save it to the specified location—ideal for inclusion
-in documentation, reports, or static site generators like Jupyter Book or Quarto.
+In this case, we specify ``export_markdown=True`` and provide a filename via
+``markdown_path``. This allows the summary to be exported in Markdown format
+for use in reports, documentation, or publishing platforms like Jupyter Book or Quarto.
+When ``include_types="both"`` and ``combine=True`` (the default), both continuous and 
+categorical summaries are merged into a single DataFrame and written to two separate 
+Markdown files with ``_continuous.md`` and ``_categorical.md`` suffixes.
 
-We also set ``value_counts=False``, which results in one summary row per categorical 
-variable, rather than a breakdown of each individual category. This is useful when 
-a high-level overview is preferred over a detailed category-level count.
+We also set ``value_counts=False`` to limit each categorical variable to a single 
+summary row, rather than expanding into one row per category-level value.
 
 .. code-block:: python
 
-    from eda_toolkit import generate_table1, table1_to_str
+    from eda_toolkit import generate_table1
 
     table1 = generate_table1(
         df=df,
@@ -1291,25 +1308,25 @@ a high-level overview is preferred over a detailed category-level count.
         value_counts=False,
         max_categories=3,
         export_markdown=True,
+        decimal_places=0,
         markdown_path="table1_summary.md",
     )
 
-    print(table1_to_str(table1, padding=1))
+    print(table1)
 
 
 **Output** 
 
 .. code-block:: text
 
-    Variable       | Type        | Mean  | SD    | Median | Min | Max | Mode    | Missing (n) | Missing (%) | Count | Proportion (%) 
-   ----------------|-------------|-------|-------|--------|-----|-----|---------|-------------|-------------|-------|----------------
-    hours-per-week | Continuous  | 40.42 | 12.39 | 40.00  | 1   | 99  | 40      | 0           | 0.00        | 48842 | 100.00         
-    age            | Continuous  | 38.64 | 13.71 | 37.00  | 17  | 90  | 36      | 0           | 0.00        | 48842 | 100.00         
-    education-num  | Continuous  | 10.08 | 2.57  | 10.00  | 1   | 16  | 9       | 0           | 0.00        | 48842 | 100.00         
-    sex            | Categorical |       |       |        |     |     | Male    | 0           | 0.00        | 48842 | 100.00         
-    race           | Categorical |       |       |        |     |     | White   | 0           | 0.00        | 48842 | 100.00         
-    workclass      | Categorical |       |       |        |     |     | Private | 963         | 1.97        | 47879 | 98.03       
-
+    Variable       | Type        | Mean | SD | Median | Min | Max | Mode    | Missing (n) | Missing (%) | Count  | Proportion (%) 
+   ----------------|-------------|------|----|--------|-----|-----|---------|-------------|-------------|--------|----------------
+    hours-per-week | Continuous  | 40   | 12 | 40     | 1   | 99  | 40      | 0           | 0           | 48,842 | 100            
+    age            | Continuous  | 39   | 14 | 37     | 17  | 90  | 36      | 0           | 0           | 48,842 | 100            
+    education-num  | Continuous  | 10   | 3  | 10     | 1   | 16  | 9       | 0           | 0           | 48,842 | 100            
+    sex            | Categorical |      |    |        |     |     | Male    | 0           | 0           | 48,842 | 100            
+    race           | Categorical |      |    |        |     |     | White   | 0           | 0           | 48,842 | 100            
+    workclass      | Categorical |      |    |        |     |     | Private | 963         | 2           | 47,879 | 98      
 
 
 .. note::
@@ -1318,8 +1335,9 @@ a high-level overview is preferred over a detailed category-level count.
     will automatically detect them based on the column data types. Additionally, numeric  
     columns with two or fewer unique values can be reclassified as categorical using  
     the ``detect_binary_numeric=True`` setting (enabled by default).  
-    When ``value_counts=True``, a row will be created for each category-value pair.
-
+    
+    When ``value_counts=True``, one row will be generated for each category-value pair  
+    rather than for the variable as a whole.
 
 
 Implementation Example 2
