@@ -1028,8 +1028,9 @@ def generate_table1(
 
         def is_numeric_string(x):
             try:
-                float(str(x).replace(",", ""))
-                return True
+                return x != "" and float(str(x).replace(",", "")) == float(
+                    str(x).replace(",", "")
+                )
             except:
                 return False
 
@@ -1039,7 +1040,7 @@ def generate_table1(
                     lambda x: (
                         f"{float(str(x).replace(',', '')):,.{decimal_places}f}"
                         if is_numeric_string(x)
-                        else x
+                        else "" if pd.isna(x) else x
                     )
                 )
 
@@ -1049,7 +1050,7 @@ def generate_table1(
                     lambda x: (
                         f"{int(float(str(x).replace(',', ''))):,}"
                         if is_numeric_string(x)
-                        else x
+                        else "" if pd.isna(x) else x
                     )
                 )
 
@@ -1128,6 +1129,12 @@ def generate_table1(
             else (df_continuous, df_categorical)
         )
 
+    if not combine:
+        if isinstance(result, tuple):
+            result = tuple(r.fillna("") for r in result)
+    else:
+        result = result.fillna("")
+
     def attach_pretty_string(df, string):
         return TableWrapper(df, string)
 
@@ -1139,19 +1146,13 @@ def generate_table1(
         result = tuple(
             attach_pretty_string(
                 r,
-                table1_to_str(
-                    r,
-                    float_precision=decimal_places,
-                ),
+                table1_to_str(r, float_precision=decimal_places),
             )
             for r in result
         )
 
     if not combine and (export_markdown or return_markdown_only):
         return
-
-    if not combine:
-        return result
 
     return result
 
