@@ -1274,8 +1274,24 @@ of variable types, pretty-printing, and optional export to Markdown.
     :rtype: pandas.DataFrame, tuple, str, or dict
 
 
-Implementation Example 1
-""""""""""""""""""""""""""""""
+.. important::
+
+    By default, ``combine=True``, so the function returns a single DataFrame containing  
+    both continuous and categorical summaries. This may introduce visual clutter,  
+    as categorical rows do not use columns like mean, standard deviation, median, min, or max.  
+    These columns are automatically removed when generating a categorical-only summary.  
+
+    To separate the summaries for clarity or further processing, set ``combine=False``  
+    and unpack the result into two distinct objects:
+
+    .. code-block:: python
+
+        df_cont, df_cat = generate_table1(df, combine=False)
+
+    This provides greater flexibility for formatting, exporting, or downstream analysis.
+
+Mixed Summary Table with Category Breakdown ``(value_counts=False)``
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 In the example below, we generate a summary table from a dataset containing both 
 categorical and continuous variables. We explicitly define which columns fall into 
@@ -1340,22 +1356,35 @@ summary row, rather than expanding into one row per category-level value.
     rather than for the variable as a whole.
 
 
-Implementation Example 2
-"""""""""""""""""""""""""""""""""
 
-In this example, we demonstrate the use of ``generate_table1`` without explicitly 
-specifying categorical or continuous columns. Instead, the function automatically 
-detects column types based on the DataFrame's data types. Numeric columns with two 
-or fewer unique values will also be reclassified as categorical (controlled by the 
-default detect_binary_numeric=True setting).
+Example 2: Mixed Summary Table with Category Breakdown ``(value_counts=True)``
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-We set ``value_counts=True``, which results in one row for each category-value 
-combination rather than a single summary row per categorical variable. This allows 
-for a more detailed breakdown across categorical features. We also limit each 
-breakdown to the top 3 most frequent categories using ``max_categories=3``.
+In this example, we call ``generate_table1`` without manually specifying which 
+columns are categorical or continuous. Instead, the function automatically detects 
+variable types based on data types. Numeric columns with two or fewer unique values 
+are also reclassified as categorical by default 
+(controlled via ``detect_binary_numeric=True``).
 
-Finally, we enable ``export_markdown=True`` and specify a ``markdown_path`` to 
-save the output in Markdown format for reporting or documentation purposes.
+We set ``value_counts=True`` to generate a separate summary row for each unique value 
+within a categorical variable, rather than a single row per variable. To keep 
+the output concise, we limit each breakdown to the top 3 most frequent values 
+using ``max_categories=3``.
+
+We also enable ``export_markdown=True`` to export the summaries in Markdown format. 
+While you can specify a custom markdown_path, if none is provided, the output files 
+are saved to the current working directory.
+
+Since ``include_types="both"`` is the default and ``combine=True`` by default as well, 
+the underlying summaries are merged into a single DataFrame for display—but two 
+separate Markdown files are still generated with suffixes that reflect the type of 
+summary:
+
+- ``table1_summary_continuous.md``
+- ``table1_summary_categorical.md``
+
+This setup is ideal for detailed reporting, especially when working with 
+downstream tools like Jupyter Book, Quarto, or static site generators.
 
 
 .. code-block:: python

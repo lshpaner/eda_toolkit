@@ -839,6 +839,32 @@ def table1_to_str(df, float_precision=2, max_col_width=18, padding=1):
     return "\n".join([header, separator] + rows)
 
 
+class TableWrapper:
+    """
+    Wraps a DataFrame to override its string output without affecting
+    Jupyter display.
+    """
+
+    def __init__(self, df, string):
+        self._df = df
+        self._string = string
+
+    def __str__(self):
+        return self._string
+
+    def __getattr__(self, attr):
+        return getattr(self._df, attr)
+
+    def __getitem__(self, key):
+        return self._df[key]
+
+    def __len__(self):
+        return len(self._df)
+
+    def __iter__(self):
+        return iter(self._df)
+
+
 def generate_table1(
     df,
     categorical_cols=None,
@@ -988,18 +1014,17 @@ def generate_table1(
     df_categorical = pd.DataFrame(categorical_parts).replace({np.nan: ""})
 
     def format_numeric_cols(df):
-        format_cols = [
+        float_cols = [
             "Mean",
             "SD",
             "Median",
             "Min",
             "Max",
             "Mode",
-            "Missing (n)",
             "Missing (%)",
-            "Count",
             "Proportion (%)",
         ]
+        int_cols = ["Count", "Missing (n)"]
 
         def is_numeric_string(x):
             try:
@@ -1008,7 +1033,7 @@ def generate_table1(
             except:
                 return False
 
-        for col in format_cols:
+        for col in float_cols:
             if col in df.columns:
                 df[col] = df[col].apply(
                     lambda x: (
@@ -1017,10 +1042,25 @@ def generate_table1(
                         else x
                     )
                 )
+
+        for col in int_cols:
+            if col in df.columns:
+                df[col] = df[col].apply(
+                    lambda x: (
+                        f"{int(float(str(x).replace(',', ''))):,}"
+                        if is_numeric_string(x)
+                        else x
+                    )
+                )
+
         return df
 
     df_continuous = format_numeric_cols(df_continuous)
     df_categorical = format_numeric_cols(df_categorical)
+
+    # Drop numeric-only columns from categorical table
+    drop_cols = ["Mean", "SD", "Median", "Min", "Max"]
+    df_categorical.drop(columns=drop_cols, inplace=True, errors="ignore")
 
     def df_to_markdown(df):
         lines = []
@@ -1088,22 +1128,25 @@ def generate_table1(
             else (df_continuous, df_categorical)
         )
 
+    def attach_pretty_string(df, string):
+        return TableWrapper(df, string)
+
     if isinstance(result, pd.DataFrame):
-
-        def _custom_str():
-            return table1_to_str(result, float_precision=decimal_places)
-
-        result.__class__.__str__ = lambda self: _custom_str()
+        result = attach_pretty_string(
+            result, table1_to_str(result, float_precision=decimal_places)
+        )
     elif isinstance(result, tuple):
-        for r in result:
-            r.__str__ = lambda r=r: table1_to_str(
+        result = tuple(
+            attach_pretty_string(
                 r,
-                float_precision=decimal_places,
+                table1_to_str(
+                    r,
+                    float_precision=decimal_places,
+                ),
             )
-            r.__repr__ = lambda r=r: table1_to_str(
-                r,
-                float_precision=decimal_places,
-            )
+            for r in result
+        )
+
     if not combine and (export_markdown or return_markdown_only):
         return
 
