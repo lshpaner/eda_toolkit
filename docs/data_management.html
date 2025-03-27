@@ -105,8 +105,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#generating-summaries-table-1">Generating Summaries (Table 1)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#generate_table1"><code class="docutils literal notranslate"><span class="pre">generate_table1()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#implementation-example-1">Implementation Example 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#implementation-example-2">Implementation Example 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mixed-summary-table-with-category-breakdown-value-counts-false">Mixed Summary Table with Category Breakdown <code class="docutils literal notranslate"><span class="pre">(value_counts=False)</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-2-mixed-summary-table-with-category-breakdown-value-counts-true">Example 2: Mixed Summary Table with Category Breakdown <code class="docutils literal notranslate"><span class="pre">(value_counts=True)</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#implementation-example-3">Implementation Example 3</a></li>
 </ul>
 </li>
@@ -1364,8 +1364,21 @@ of variable types, pretty-printing, and optional export to Markdown.</p>
 </dl>
 </dd></dl>
 
-<section id="implementation-example-1">
-<h3>Implementation Example 1<a class="headerlink" href="#implementation-example-1" title="Link to this heading"></a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">combine=True</span></code>, so the function returns a single DataFrame containing
+both continuous and categorical summaries. This may introduce visual clutter,
+as categorical rows do not use columns like mean, standard deviation, median, min, or max.
+These columns are automatically removed when generating a categorical-only summary.</p>
+<p>To separate the summaries for clarity or further processing, set <code class="docutils literal notranslate"><span class="pre">combine=False</span></code>
+and unpack the result into two distinct objects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_cont</span><span class="p">,</span> <span class="n">df_cat</span> <span class="o">=</span> <span class="n">generate_table1</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">combine</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This provides greater flexibility for formatting, exporting, or downstream analysis.</p>
+</div>
+<section id="mixed-summary-table-with-category-breakdown-value-counts-false">
+<h3>Mixed Summary Table with Category Breakdown <code class="docutils literal notranslate"><span class="pre">(value_counts=False)</span></code><a class="headerlink" href="#mixed-summary-table-with-category-breakdown-value-counts-false" title="Link to this heading"></a></h3>
 <p>In the example below, we generate a summary table from a dataset containing both
 categorical and continuous variables. We explicitly define which columns fall into
 each category—although the <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> function also supports automatic
@@ -1419,19 +1432,30 @@ the <code class="docutils literal notranslate"><span class="pre">detect_binary_n
 rather than for the variable as a whole.</p>
 </div>
 </section>
-<section id="implementation-example-2">
-<h3>Implementation Example 2<a class="headerlink" href="#implementation-example-2" title="Link to this heading"></a></h3>
-<p>In this example, we demonstrate the use of <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> without explicitly
-specifying categorical or continuous columns. Instead, the function automatically
-detects column types based on the DataFrame’s data types. Numeric columns with two
-or fewer unique values will also be reclassified as categorical (controlled by the
-default detect_binary_numeric=True setting).</p>
-<p>We set <code class="docutils literal notranslate"><span class="pre">value_counts=True</span></code>, which results in one row for each category-value
-combination rather than a single summary row per categorical variable. This allows
-for a more detailed breakdown across categorical features. We also limit each
-breakdown to the top 3 most frequent categories using <code class="docutils literal notranslate"><span class="pre">max_categories=3</span></code>.</p>
-<p>Finally, we enable <code class="docutils literal notranslate"><span class="pre">export_markdown=True</span></code> and specify a <code class="docutils literal notranslate"><span class="pre">markdown_path</span></code> to
-save the output in Markdown format for reporting or documentation purposes.</p>
+<section id="example-2-mixed-summary-table-with-category-breakdown-value-counts-true">
+<h3>Example 2: Mixed Summary Table with Category Breakdown <code class="docutils literal notranslate"><span class="pre">(value_counts=True)</span></code><a class="headerlink" href="#example-2-mixed-summary-table-with-category-breakdown-value-counts-true" title="Link to this heading"></a></h3>
+<p>In this example, we call <code class="docutils literal notranslate"><span class="pre">generate_table1</span></code> without manually specifying which
+columns are categorical or continuous. Instead, the function automatically detects
+variable types based on data types. Numeric columns with two or fewer unique values
+are also reclassified as categorical by default
+(controlled via <code class="docutils literal notranslate"><span class="pre">detect_binary_numeric=True</span></code>).</p>
+<p>We set <code class="docutils literal notranslate"><span class="pre">value_counts=True</span></code> to generate a separate summary row for each unique value
+within a categorical variable, rather than a single row per variable. To keep
+the output concise, we limit each breakdown to the top 3 most frequent values
+using <code class="docutils literal notranslate"><span class="pre">max_categories=3</span></code>.</p>
+<p>We also enable <code class="docutils literal notranslate"><span class="pre">export_markdown=True</span></code> to export the summaries in Markdown format.
+While you can specify a custom markdown_path, if none is provided, the output files
+are saved to the current working directory.</p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">include_types=&quot;both&quot;</span></code> is the default and <code class="docutils literal notranslate"><span class="pre">combine=True</span></code> by default as well,
+the underlying summaries are merged into a single DataFrame for display—but two
+separate Markdown files are still generated with suffixes that reflect the type of
+summary:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">table1_summary_continuous.md</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">table1_summary_categorical.md</span></code></p></li>
+</ul>
+<p>This setup is ideal for detailed reporting, especially when working with
+downstream tools like Jupyter Book, Quarto, or static site generators.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_table1</span>
 
 <span class="n">table1</span> <span class="o">=</span> <span class="n">generate_table1</span><span class="p">(</span>
