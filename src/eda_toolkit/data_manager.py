@@ -1151,8 +1151,31 @@ def generate_table1(
             for r in result
         )
 
-    if not combine and (export_markdown or return_markdown_only):
-        return
+    # If user requested to return only markdown string(s), do that and skip DataFrame(s)
+    if return_markdown_only:
+        if include_types == "continuous":
+            return df_to_markdown(df_continuous)
+        elif include_types == "categorical":
+            return df_to_markdown(df_categorical)
+        else:
+            return {
+                "continuous": df_to_markdown(df_continuous),
+                "categorical": df_to_markdown(df_categorical),
+            }
+
+    # Automatically print each table when not assigned (e.g., in Jupyter or console)
+    if not combine:
+        if (
+            hasattr(sys, "_getframe")
+            and sys._getframe(1).f_globals.get("__name__") == "__main__"
+        ):
+            if isinstance(result, tuple):
+                for i, r in enumerate(result):
+                    print(r)
+                    if i < len(result) - 1:
+                        print()  # blank line
+            else:
+                print(result)
 
     return result
 
