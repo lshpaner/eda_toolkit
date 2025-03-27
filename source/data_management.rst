@@ -1349,8 +1349,8 @@ of variable types, pretty-printing, and optional export to Markdown.
 
 
 
-Example 1: Mixed Summary Table with Category Breakdown ``(value_counts=False)``
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Example 1: Mixed Summary Table ``(value_counts=False)``
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 In the example below, we generate a summary table from a dataset containing both 
 categorical and continuous variables. We explicitly define which columns fall into 
@@ -1415,7 +1415,7 @@ summary row, rather than expanding into one row per category-level value.
     rather than for the variable as a whole.
 
 
-Example 2: Mixed Summary Table with Category Breakdown ``(value_counts=True)``
+Example 2: Mixed Summary Table ``(value_counts=True)``
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 In this example, we call ``generate_table1`` without manually specifying which 
@@ -1458,106 +1458,407 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
         markdown_path="table1_summary.md",
     )
 
+    table1_cont = table1_cont.drop(columns=["Type", "Mode"])
+
 **Output**
 
 
 ``table1_cont``
 
 .. raw:: html
+    
 
     <style type="text/css">
-    .tg {
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin: 20px auto;
-    width: max-content;
-    min-width: 100%;
-    }
-    .tg td, .tg th {
-    border: 1px solid black;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    padding: 6px 8px;
-    word-break: normal;
-    white-space: nowrap;
-    }
-    .tg th {
-    font-weight: bold;
-    background-color: #f9f9f9;
-    text-align: center;
-    }
-    .tg td:first-child,
-    .tg th:first-child {
-    text-align: left;
-    }
-    .tg-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 auto;
-    max-width: 100%;
-    }
-    </style>
-
-    <div class="tg-wrap">
-    <table class="tg">
-        <thead>
-        <tr>
-            <th>Variable</th>
-            <th>Type</th>
-            <th>Mean</th>
-            <th>SD</th>
-            <th>Median</th>
-            <th>Min</th>
-            <th>Max</th>
-            <th>Mode</th>
-            <th>Missing (n)</th>
-            <th>Missing (%)</th>
-            <th>Count</th>
-            <th>Proportion (%)</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr><td>age</td><td>Continuous</td><td>38.64</td><td>13.71</td><td>37</td><td>17</td><td>90</td><td>36</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
-        <tr><td>capital-gain</td><td>Continuous</td><td>1,079.07</td><td>7,452.02</td><td>0</td><td>0</td><td>99,999.00</td><td>0</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
-        <tr><td>capital-loss</td><td>Continuous</td><td>87.5</td><td>403</td><td>0</td><td>0</td><td>4,356.00</td><td>0</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
-        <tr><td>education-num</td><td>Continuous</td><td>10.08</td><td>2.57</td><td>10</td><td>1</td><td>16</td><td>9</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
-        <tr><td>fnlwgt</td><td>Continuous</td><td>189,664.13</td><td>105,604.03</td><td>178,144.50</td><td>12,285.00</td><td>1,490,400.00</td><td>203,488.00</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
-        <tr><td>hours-per-week</td><td>Continuous</td><td>40.42</td><td>12.39</td><td>40</td><td>1</td><td>99</td><td>40</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
-        </tbody>
-    </table>
-    </div>
-
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:0px 0px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:0px 0px;word-break:normal;}
+    .tg .tg-2b7s{text-align:right;vertical-align:bottom}
+    .tg .tg-6ic8{border-color:inherit;font-weight:bold;text-align:right;vertical-align:top}
+    .tg .tg-l2oz{font-weight:bold;text-align:right;vertical-align:top}
+    .tg .tg-amwm{font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-jkyp{border-color:inherit;text-align:right;vertical-align:bottom}
+    .tg .tg-8d8j{text-align:center;vertical-align:bottom}
+    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
+    <div class="tg-wrap"><table class="tg" style="undefined;table-layout: fixed; width: 696px"><colgroup>
+    <col style="width: 100px">
+    <col style="width: 73px">
+    <col style="width: 73px">
+    <col style="width: 73px">
+    <col style="width: 65px">
+    <col style="width: 85px">
+    <col style="width: 55px">
+    <col style="width: 53px">
+    <col style="width: 46px">
+    <col style="width: 73px">
+    </colgroup>
+    <thead>
+    <tr>
+        <th class="tg-6ic8">Variable</th>
+        <th class="tg-6ic8">Mean</th>
+        <th class="tg-6ic8">SD</th>
+        <th class="tg-l2oz">Median</th>
+        <th class="tg-l2oz">Min</th>
+        <th class="tg-l2oz">Max</th>
+        <th class="tg-amwm">Missing (n)</th>
+        <th class="tg-amwm">Missing (%)</th>
+        <th class="tg-amwm">Count</th>
+        <th class="tg-amwm">Proportion (%)</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td class="tg-jkyp">age</td>
+        <td class="tg-jkyp">38.64</td>
+        <td class="tg-jkyp">13.71</td>
+        <td class="tg-2b7s">37</td>
+        <td class="tg-2b7s">17</td>
+        <td class="tg-2b7s">90</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100</td>
+    </tr>
+    <tr>
+        <td class="tg-jkyp">capital-gain</td>
+        <td class="tg-jkyp">1,079.07</td>
+        <td class="tg-jkyp">7,452.02</td>
+        <td class="tg-2b7s">0</td>
+        <td class="tg-2b7s">0.00</td>
+        <td class="tg-2b7s">99,999.00</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">capital-loss</td>
+        <td class="tg-2b7s">87.5</td>
+        <td class="tg-2b7s">403</td>
+        <td class="tg-2b7s">0</td>
+        <td class="tg-2b7s">0.00</td>
+        <td class="tg-2b7s">4,356.00</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">education-num</td>
+        <td class="tg-2b7s">10.08</td>
+        <td class="tg-2b7s">2.57</td>
+        <td class="tg-2b7s">10</td>
+        <td class="tg-2b7s">1</td>
+        <td class="tg-2b7s">16</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">fnlwgt</td>
+        <td class="tg-2b7s">189,664.13</td>
+        <td class="tg-2b7s">105,604.03</td>
+        <td class="tg-2b7s">178,144.50</td>
+        <td class="tg-2b7s">12,285.00</td>
+        <td class="tg-2b7s">1,490,400.00</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">hours-per-week</td>
+        <td class="tg-2b7s">40.42</td>
+        <td class="tg-2b7s">12.39</td>
+        <td class="tg-2b7s">40</td>
+        <td class="tg-2b7s">1</td>
+        <td class="tg-2b7s">99</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">48,842</td>
+        <td class="tg-8d8j">100</td>
+    </tr>
+    </tbody></table></div>
 
 .. raw:: html
    
    <div style="height: 50px;"></div>
+   
+``table1_cat``
 
+.. raw:: html
 
-Implementation Example 3
-"""""""""""""""""""""""""""""""""
+    <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:0px 0px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:0px 0px;word-break:normal;}
+    .tg .tg-2b7s{text-align:right;vertical-align:bottom}
+    .tg .tg-l2oz{font-weight:bold;text-align:right;vertical-align:top}
+    .tg .tg-amwm{font-weight:bold;text-align:center;vertical-align:top}
+    .tg .tg-8d8j{text-align:center;vertical-align:bottom}
+    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
+    <div class="tg-wrap"><table class="tg" style="margin-left: 11px;undefined;table-layout: fixed; width: 663px"><colgroup>
+    <col style="width: 250px">
+    <col style="width: 72px">
+    <col style="width: 120px">
+    <col style="width: 61px">
+    <col style="width: 61px">
+    <col style="width: 44px">
+    <col style="width: 77px">
+    </colgroup>
+    <thead>
+    <tr>
+        <th class="tg-l2oz">Variable</th>
+        <th class="tg-l2oz">Type</th>
+        <th class="tg-l2oz">Mode</th>
+        <th class="tg-amwm">Missing (n)</th>
+        <th class="tg-amwm">Missing (%)</th>
+        <th class="tg-amwm">Count</th>
+        <th class="tg-amwm">Proportion (%)</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td class="tg-2b7s">workclass = Private</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Private</td>
+        <td class="tg-8d8j">963</td>
+        <td class="tg-8d8j">1.97</td>
+        <td class="tg-8d8j">33,906</td>
+        <td class="tg-8d8j">69.42</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">workclass = Self-emp-not-inc</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Private</td>
+        <td class="tg-8d8j">963</td>
+        <td class="tg-8d8j">1.97</td>
+        <td class="tg-8d8j">3,862</td>
+        <td class="tg-8d8j">7.91</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">workclass = Local-gov</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Private</td>
+        <td class="tg-8d8j">963</td>
+        <td class="tg-8d8j">1.97</td>
+        <td class="tg-8d8j">3,136</td>
+        <td class="tg-8d8j">6.42</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">education = HS-grad</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">HS-grad</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">15,784</td>
+        <td class="tg-8d8j">32.32</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">education = Some-college</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">HS-grad</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">10,878</td>
+        <td class="tg-8d8j">22.27</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">education = Bachelors</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">HS-grad</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">8,025</td>
+        <td class="tg-8d8j">16.43</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">marital-status =&nbsp;&nbsp;&nbsp;Married-civ-spouse</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Married-civ-spouse</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">22,379</td>
+        <td class="tg-8d8j">45.82</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">marital-status = Never-married</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Married-civ-spouse</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">16,117</td>
+        <td class="tg-8d8j">33</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">marital-status = Divorced</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Married-civ-spouse</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">6,633</td>
+        <td class="tg-8d8j">13.58</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">occupation = Prof-specialty</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Prof-specialty</td>
+        <td class="tg-8d8j">966</td>
+        <td class="tg-8d8j">1.98</td>
+        <td class="tg-8d8j">6,172</td>
+        <td class="tg-8d8j">12.64</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">occupation = Craft-repair</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Prof-specialty</td>
+        <td class="tg-8d8j">966</td>
+        <td class="tg-8d8j">1.98</td>
+        <td class="tg-8d8j">6,112</td>
+        <td class="tg-8d8j">12.51</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">occupation = Exec-managerial</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Prof-specialty</td>
+        <td class="tg-8d8j">966</td>
+        <td class="tg-8d8j">1.98</td>
+        <td class="tg-8d8j">6,086</td>
+        <td class="tg-8d8j">12.46</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">relationship = Husband</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Husband</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">19,716</td>
+        <td class="tg-8d8j">40.37</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">relationship = Not-in-family</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Husband</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">12,583</td>
+        <td class="tg-8d8j">25.76</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">relationship = Own-child</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Husband</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">7,581</td>
+        <td class="tg-8d8j">15.52</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">race = White</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">White</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">41,762</td>
+        <td class="tg-8d8j">85.5</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">race = Black</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">White</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">4,685</td>
+        <td class="tg-8d8j">9.59</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">race = Asian-Pac-Islander</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">White</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">1,519</td>
+        <td class="tg-8d8j">3.11</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">sex = Male</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Male</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">32,650</td>
+        <td class="tg-8d8j">66.85</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">sex = Female</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">Male</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">16,192</td>
+        <td class="tg-8d8j">33.15</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">native-country = United-States</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">United-States</td>
+        <td class="tg-8d8j">274</td>
+        <td class="tg-8d8j">0.56</td>
+        <td class="tg-8d8j">43,832</td>
+        <td class="tg-8d8j">89.74</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">native-country = Mexico</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">United-States</td>
+        <td class="tg-8d8j">274</td>
+        <td class="tg-8d8j">0.56</td>
+        <td class="tg-8d8j">951</td>
+        <td class="tg-8d8j">1.95</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">native-country = ?</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">United-States</td>
+        <td class="tg-8d8j">274</td>
+        <td class="tg-8d8j">0.56</td>
+        <td class="tg-8d8j">583</td>
+        <td class="tg-8d8j">1.19</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">income = &lt;=50K</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">&lt;=50K</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">24,720</td>
+        <td class="tg-8d8j">50.61</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">income = &lt;=50K.</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">&lt;=50K</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">12,435</td>
+        <td class="tg-8d8j">25.46</td>
+    </tr>
+    <tr>
+        <td class="tg-2b7s">income = &gt;50K</td>
+        <td class="tg-2b7s">Categorical</td>
+        <td class="tg-2b7s">&lt;=50K</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">0</td>
+        <td class="tg-8d8j">7,841</td>
+        <td class="tg-8d8j">16.05</td>
+    </tr>
+    </tbody></table></div>
 
-In this final example, we demonstrate how to filter the summary output using the 
-``include_types`` parameter. This allows you to focus exclusively on continuous 
-or categorical variables without modifying your input DataFrame.
-
-Here, we set ``include_types="continuous"`` to restrict the output to only continuous 
-variables. This is useful when generating separate tables for different data types 
-or when you're only interested in the numerical features of your dataset.
-
-Unlike the previous examples, we disable both ``value_counts`` and ``export_markdown`` 
-to return a plain DataFrame directly.
-
-.. code-block:: python
-
-    from eda_toolkit import generate_table1
-
-    df2 = generate_table1(
-        df,
-        value_counts=True,
-        include_types="continuous",
-    )
-
-    df2
+.. raw:: html
+   
+   <div style="height: 50px;"></div>
 
 
 Highlighting Specific Columns in a DataFrame
