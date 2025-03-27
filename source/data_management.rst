@@ -1290,7 +1290,66 @@ of variable types, pretty-printing, and optional export to Markdown.
 
     This provides greater flexibility for formatting, exporting, or downstream analysis.
 
-Mixed Summary Table with Category Breakdown ``(value_counts=False)``
+.. important::
+
+   When using ``combine=False``, the function returns a **tuple of two** ``TableWrapper`` objects — one for continuous variables and one for categorical variables.
+
+   The ``TableWrapper`` class is a lightweight wrapper designed to override the string representation of a DataFrame, enabling pretty-print formatting (e.g., tables) when the result is printed in a Jupyter cell. The wrapper preserves full access to the underlying DataFrame through attribute forwarding.
+
+   .. code-block:: python
+
+      class TableWrapper:
+          """
+          Wraps a DataFrame to override its string output without affecting
+          Jupyter display.
+          """
+          def __init__(self, df, string):
+              self._df = df
+              self._string = string
+
+          def __str__(self):
+              return self._string
+
+          def __getattr__(self, attr):
+              return getattr(self._df, attr)
+
+          def __getitem__(self, key):
+              return self._df[key]
+
+          def __len__(self):
+              return len(self._df)
+
+          def __iter__(self):
+              return iter(self._df)
+
+   Because ``TableWrapper`` overrides ``__str__`` but not ``__repr__``, assigning the result of ``generate_table1()`` to a single variable like this::
+
+       table1 = generate_table1(df, combine=False)
+
+   will show a tuple of object addresses instead of nicely formatted tables::
+
+       (<eda_toolkit.data_manager.TableWrapper at 0x...>, <eda_toolkit.data_manager.TableWrapper at 0x...>)
+
+   To avoid this, you have **two preferred options**:
+
+   1. **Assign the output to two separate variables**::
+
+          table1_cont, table1_cat = generate_table1(df, combine=False)
+
+      Then display them individually::
+
+          table1_cont
+          table1_cat
+
+   2. **Don’t assign the result at all** when calling from a notebook or REPL cell — this will trigger automatic pretty-printing of both tables, with a blank line in between::
+
+          generate_table1(df, combine=False)
+
+   This design keeps the output clean for interactive use while still supporting unpacking in scripts and pipelines.
+
+
+
+Example 1: Mixed Summary Table with Category Breakdown ``(value_counts=False)``
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 In the example below, we generate a summary table from a dataset containing both 
@@ -1356,7 +1415,6 @@ summary row, rather than expanding into one row per category-level value.
     rather than for the variable as a whole.
 
 
-
 Example 2: Mixed Summary Table with Category Breakdown ``(value_counts=True)``
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -1391,498 +1449,83 @@ downstream tools like Jupyter Book, Quarto, or static site generators.
 
     from eda_toolkit import generate_table1
 
-    table1 = generate_table1(
+    table1_cont, table1_cat = generate_table1(
         df=df,
         value_counts=True,
         max_categories=3,
+        combine=False,
         export_markdown=True,
         markdown_path="table1_summary.md",
     )
 
-    table1
-
 **Output**
+
+
+``table1_cont``
 
 .. raw:: html
 
     <style type="text/css">
-    .tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
-    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-    overflow:hidden;padding:0px 0px;word-break:normal;}
-    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-    font-weight:normal;overflow:hidden;padding:0px 0px;word-break:normal;}
-    .tg .tg-2b7s{text-align:right;vertical-align:bottom}
-    .tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
-    .tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
-    .tg .tg-zt7h{font-weight:bold;text-align:right;vertical-align:middle}
-    .tg .tg-7zrl{text-align:left;vertical-align:bottom}
-    .tg .tg-8d8j{text-align:center;vertical-align:bottom}
-    @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
-    <div class="tg-wrap"><table class="tg"><thead>
-    <tr>
-        <th class="tg-yla0">Variable</th>
-        <th class="tg-yla0">Type</th>
-        <th class="tg-yla0">Mean</th>
-        <th class="tg-yla0">SD</th>
-        <th class="tg-yla0">Median</th>
-        <th class="tg-yla0">Min</th>
-        <th class="tg-yla0">Max</th>
-        <th class="tg-zt7h">Mode</th>
-        <th class="tg-wa1i">Missing (n)</th>
-        <th class="tg-wa1i">Missing (%)</th>
-        <th class="tg-wa1i">Count</th>
-        <th class="tg-wa1i">Proportion (%)</th>
-    </tr></thead>
-    <tbody>
-    <tr>
-        <td class="tg-7zrl">age</td>
-        <td class="tg-7zrl">Continuous</td>
-        <td class="tg-7zrl">38.64</td>
-        <td class="tg-7zrl">13.71</td>
-        <td class="tg-7zrl">37</td>
-        <td class="tg-7zrl">17</td>
-        <td class="tg-7zrl">90</td>
-        <td class="tg-2b7s">36</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">48,842</td>
-        <td class="tg-8d8j">100</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">capital-gain</td>
-        <td class="tg-7zrl">Continuous</td>
-        <td class="tg-7zrl">1,079.07</td>
-        <td class="tg-7zrl">7,452.02</td>
-        <td class="tg-7zrl">0</td>
-        <td class="tg-7zrl">0</td>
-        <td class="tg-7zrl">99,999.00</td>
-        <td class="tg-2b7s">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">48,842</td>
-        <td class="tg-8d8j">100</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">capital-loss</td>
-        <td class="tg-7zrl">Continuous</td>
-        <td class="tg-7zrl">87.5</td>
-        <td class="tg-7zrl">403</td>
-        <td class="tg-7zrl">0</td>
-        <td class="tg-7zrl">0</td>
-        <td class="tg-7zrl">4,356.00</td>
-        <td class="tg-2b7s">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">48,842</td>
-        <td class="tg-8d8j">100</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">education-num</td>
-        <td class="tg-7zrl">Continuous</td>
-        <td class="tg-7zrl">10.08</td>
-        <td class="tg-7zrl">2.57</td>
-        <td class="tg-7zrl">10</td>
-        <td class="tg-7zrl">1</td>
-        <td class="tg-7zrl">16</td>
-        <td class="tg-2b7s">9</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">48,842</td>
-        <td class="tg-8d8j">100</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">fnlwgt</td>
-        <td class="tg-7zrl">Continuous</td>
-        <td class="tg-7zrl">189,664.13</td>
-        <td class="tg-7zrl">105,604.03</td>
-        <td class="tg-7zrl">178,144.50</td>
-        <td class="tg-7zrl">12,285.00</td>
-        <td class="tg-7zrl">1,490,400.00</td>
-        <td class="tg-2b7s">203,488.00</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">48,842</td>
-        <td class="tg-8d8j">100</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">hours-per-week</td>
-        <td class="tg-7zrl">Continuous</td>
-        <td class="tg-7zrl">40.42</td>
-        <td class="tg-7zrl">12.39</td>
-        <td class="tg-7zrl">40</td>
-        <td class="tg-7zrl">1</td>
-        <td class="tg-7zrl">99</td>
-        <td class="tg-2b7s">40</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">48,842</td>
-        <td class="tg-8d8j">100</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">workclass&nbsp;&nbsp;&nbsp;= Private</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Private</td>
-        <td class="tg-8d8j">963</td>
-        <td class="tg-8d8j">1.97</td>
-        <td class="tg-7zrl">33,906</td>
-        <td class="tg-8d8j">69.42</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">workclass&nbsp;&nbsp;&nbsp;= Self-emp-not-inc</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Private</td>
-        <td class="tg-8d8j">963</td>
-        <td class="tg-8d8j">1.97</td>
-        <td class="tg-7zrl">3,862</td>
-        <td class="tg-8d8j">7.91</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">workclass&nbsp;&nbsp;&nbsp;= Local-gov</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Private</td>
-        <td class="tg-8d8j">963</td>
-        <td class="tg-8d8j">1.97</td>
-        <td class="tg-7zrl">3,136</td>
-        <td class="tg-8d8j">6.42</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">education&nbsp;&nbsp;&nbsp;= HS-grad</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">HS-grad</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">15,784</td>
-        <td class="tg-8d8j">32.32</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">education&nbsp;&nbsp;&nbsp;= Some-college</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">HS-grad</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">10,878</td>
-        <td class="tg-8d8j">22.27</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">education&nbsp;&nbsp;&nbsp;= Bachelors</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">HS-grad</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">8,025</td>
-        <td class="tg-8d8j">16.43</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">marital-status&nbsp;&nbsp;&nbsp;= Married-civ-spouse</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Married-civ-spouse</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">22,379</td>
-        <td class="tg-8d8j">45.82</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">marital-status&nbsp;&nbsp;&nbsp;= Never-married</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Married-civ-spouse</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">16,117</td>
-        <td class="tg-8d8j">33</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">marital-status&nbsp;&nbsp;&nbsp;= Divorced</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Married-civ-spouse</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">6,633</td>
-        <td class="tg-8d8j">13.58</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">occupation&nbsp;&nbsp;&nbsp;= Prof-specialty</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Prof-specialty</td>
-        <td class="tg-8d8j">966</td>
-        <td class="tg-8d8j">1.98</td>
-        <td class="tg-7zrl">6,172</td>
-        <td class="tg-8d8j">12.64</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">occupation&nbsp;&nbsp;&nbsp;= Craft-repair</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Prof-specialty</td>
-        <td class="tg-8d8j">966</td>
-        <td class="tg-8d8j">1.98</td>
-        <td class="tg-7zrl">6,112</td>
-        <td class="tg-8d8j">12.51</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">occupation&nbsp;&nbsp;&nbsp;= Exec-managerial</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Prof-specialty</td>
-        <td class="tg-8d8j">966</td>
-        <td class="tg-8d8j">1.98</td>
-        <td class="tg-7zrl">6,086</td>
-        <td class="tg-8d8j">12.46</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">relationship&nbsp;&nbsp;&nbsp;= Husband</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Husband</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">19,716</td>
-        <td class="tg-8d8j">40.37</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">relationship&nbsp;&nbsp;&nbsp;= Not-in-family</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Husband</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">12,583</td>
-        <td class="tg-8d8j">25.76</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">relationship&nbsp;&nbsp;&nbsp;= Own-child</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Husband</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">7,581</td>
-        <td class="tg-8d8j">15.52</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">race =&nbsp;&nbsp;&nbsp;White</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">White</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">41,762</td>
-        <td class="tg-8d8j">85.5</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">race =&nbsp;&nbsp;&nbsp;Black</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">White</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">4,685</td>
-        <td class="tg-8d8j">9.59</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">race =&nbsp;&nbsp;&nbsp;Asian-Pac-Islander</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">White</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">1,519</td>
-        <td class="tg-8d8j">3.11</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">sex =&nbsp;&nbsp;&nbsp;Male</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Male</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">32,650</td>
-        <td class="tg-8d8j">66.85</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">sex =&nbsp;&nbsp;&nbsp;Female</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">Male</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">16,192</td>
-        <td class="tg-8d8j">33.15</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">native-country&nbsp;&nbsp;&nbsp;= United-States</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">United-States</td>
-        <td class="tg-8d8j">274</td>
-        <td class="tg-8d8j">0.56</td>
-        <td class="tg-7zrl">43,832</td>
-        <td class="tg-8d8j">89.74</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">native-country&nbsp;&nbsp;&nbsp;= Mexico</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">United-States</td>
-        <td class="tg-8d8j">274</td>
-        <td class="tg-8d8j">0.56</td>
-        <td class="tg-7zrl">951</td>
-        <td class="tg-8d8j">1.95</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">native-country&nbsp;&nbsp;&nbsp;= ?</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">United-States</td>
-        <td class="tg-8d8j">274</td>
-        <td class="tg-8d8j">0.56</td>
-        <td class="tg-7zrl">583</td>
-        <td class="tg-8d8j">1.19</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">income&nbsp;&nbsp;&nbsp;= &lt;=50K</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">&lt;=50K</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">24,720</td>
-        <td class="tg-8d8j">50.61</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">income&nbsp;&nbsp;&nbsp;= &lt;=50K.</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">&lt;=50K</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">12,435</td>
-        <td class="tg-8d8j">25.46</td>
-    </tr>
-    <tr>
-        <td class="tg-7zrl">income&nbsp;&nbsp;&nbsp;= &gt;50K</td>
-        <td class="tg-7zrl">Categorical</td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-7zrl"></td>
-        <td class="tg-2b7s">&lt;=50K</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-8d8j">0</td>
-        <td class="tg-7zrl">7,841</td>
-        <td class="tg-8d8j">16.05</td>
-    </tr>
-    </tbody></table></div>
+    .tg {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 20px auto;
+    width: max-content;
+    min-width: 100%;
+    }
+    .tg td, .tg th {
+    border: 1px solid black;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    padding: 6px 8px;
+    word-break: normal;
+    white-space: nowrap;
+    }
+    .tg th {
+    font-weight: bold;
+    background-color: #f9f9f9;
+    text-align: center;
+    }
+    .tg td:first-child,
+    .tg th:first-child {
+    text-align: left;
+    }
+    .tg-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 auto;
+    max-width: 100%;
+    }
+    </style>
+
+    <div class="tg-wrap">
+    <table class="tg">
+        <thead>
+        <tr>
+            <th>Variable</th>
+            <th>Type</th>
+            <th>Mean</th>
+            <th>SD</th>
+            <th>Median</th>
+            <th>Min</th>
+            <th>Max</th>
+            <th>Mode</th>
+            <th>Missing (n)</th>
+            <th>Missing (%)</th>
+            <th>Count</th>
+            <th>Proportion (%)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>age</td><td>Continuous</td><td>38.64</td><td>13.71</td><td>37</td><td>17</td><td>90</td><td>36</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
+        <tr><td>capital-gain</td><td>Continuous</td><td>1,079.07</td><td>7,452.02</td><td>0</td><td>0</td><td>99,999.00</td><td>0</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
+        <tr><td>capital-loss</td><td>Continuous</td><td>87.5</td><td>403</td><td>0</td><td>0</td><td>4,356.00</td><td>0</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
+        <tr><td>education-num</td><td>Continuous</td><td>10.08</td><td>2.57</td><td>10</td><td>1</td><td>16</td><td>9</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
+        <tr><td>fnlwgt</td><td>Continuous</td><td>189,664.13</td><td>105,604.03</td><td>178,144.50</td><td>12,285.00</td><td>1,490,400.00</td><td>203,488.00</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
+        <tr><td>hours-per-week</td><td>Continuous</td><td>40.42</td><td>12.39</td><td>40</td><td>1</td><td>99</td><td>40</td><td>0</td><td>0</td><td>48,842</td><td>100</td></tr>
+        </tbody>
+    </table>
+    </div>
 
 
 .. raw:: html
