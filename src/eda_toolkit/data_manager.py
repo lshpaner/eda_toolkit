@@ -842,7 +842,7 @@ def table1_to_str(df, float_precision=2, max_col_width=18, padding=1):
 class TableWrapper:
     """
     Wraps a DataFrame to override its string output without affecting
-    Jupyter display.
+    Jupyter display. Preserves pretty-print when modifying the DataFrame.
     """
 
     def __init__(self, df, string):
@@ -863,6 +863,13 @@ class TableWrapper:
 
     def __iter__(self):
         return iter(self._df)
+
+    def drop(self, *args, **kwargs):
+        """
+        Allows dropping rows or columns while preserving pretty-print formatting.
+        """
+        dropped_df = self._df.drop(*args, **kwargs)
+        return TableWrapper(dropped_df, table1_to_str(dropped_df))
 
 
 def generate_table1(
