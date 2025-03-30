@@ -85,7 +85,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#dataframe-analysis">DataFrame Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#dataframe_columns"><code class="docutils literal notranslate"><span class="pre">dataframe_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dataframe_profiler"><code class="docutils literal notranslate"><span class="pre">dataframe_profiler()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#census-income-example">Census Income Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dataframe-column-names">DataFrame Column Names</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#calculation-details">Calculation Details</a></li>
@@ -641,10 +641,10 @@ entire column in a DataFrame.</p>
 <section id="dataframe-analysis">
 <h2>DataFrame Analysis<a class="headerlink" href="#dataframe-analysis" title="Link to this heading"></a></h2>
 <p><strong>Analyze DataFrame columns, including data type, null values, and unique value counts.</strong></p>
-<p>The <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code> function provides a comprehensive summary of a DataFrame’s columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dataframe_profiler</span></code> function provides a comprehensive summary of a DataFrame’s columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="dataframe_columns">
-<span class="sig-name descname"><span class="pre">dataframe_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_cols_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataframe_columns" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="dataframe_profiler">
+<span class="sig-name descname"><span class="pre">dataframe_profiler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_cols_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataframe_profiler" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -687,11 +687,11 @@ DataFrame with optional background styling.</p></li>
 </div>
 <section id="census-income-example">
 <h3>Census Income Example<a class="headerlink" href="#census-income-example" title="Link to this heading"></a></h3>
-<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
+<p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_profiler</span></code>
 function to analyze a DataFrame’s columns.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataframe_columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataframe_profiler</span>
 
-<span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">dataframe_profiler</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Output</strong></p>

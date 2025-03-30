@@ -529,9 +529,9 @@ DataFrame Analysis
 
 **Analyze DataFrame columns, including data type, null values, and unique value counts.**
 
-The ``dataframe_columns`` function provides a comprehensive summary of a DataFrame's columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.
+The ``dataframe_profiler`` function provides a comprehensive summary of a DataFrame's columns, including information on data types, null values, unique values, and the most frequent values. It can output either a plain DataFrame for further processing or a styled DataFrame for visual presentation in Jupyter environments.
 
-.. function:: dataframe_columns(df, background_color=None, return_df=False, sort_cols_alpha=False)
+.. function:: dataframe_profiler(df, background_color=None, return_df=False, sort_cols_alpha=False)
 
     :param df: The DataFrame to analyze.
     :type df: pandas.DataFrame
@@ -566,14 +566,14 @@ The ``dataframe_columns`` function provides a comprehensive summary of a DataFra
 Census Income Example
 """"""""""""""""""""""""""""""
 
-In the example below, we demonstrate how to use the ``dataframe_columns`` 
+In the example below, we demonstrate how to use the ``dataframe_profiler`` 
 function to analyze a DataFrame's columns. 
 
 .. code-block:: python
 
-    from eda_toolkit import dataframe_columns
+    from eda_toolkit import dataframe_profiler
 
-    dataframe_columns(df=df)
+    dataframe_profiler(df=df)
 
 
 **Output**
