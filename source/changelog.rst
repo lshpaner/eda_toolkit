@@ -24,6 +24,31 @@
 Changelog
 =========
 
+`Version 0.0.16`_
+----------------------
+
+.. _Version 0.0.16: https://lshpaner.github.io/eda_toolkit/v0.0.16/index.html
+
+* Enhanced Plotting (+) Text Wrap Functionality by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/82
+* added ``sklearn`` import by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/83
+* Changed ``dataframe_columns`` name to ``dataframe_profiler`` by @Oscar-Gil-Data in https://github.com/lshpaner/eda_toolkit/pull/84
+* Improve ``plot_3d_pdp`` Function: Fix UnboundLocalError & Update Docstring by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/85
+
+  * Moved ``plot_2d_pdp`` and ``plot_3d_pdp`` to https://github.com/lshpaner/model_metrics
+
+* Unit Tests LS by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/86
+* Unittests ls by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/87
+* Refactor, Feature Expansion & Test Separation by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/88
+* Add ``include_types`` filter to ``generate_table1()`` by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/89
+* Improve ``generate_table1`` Function for Enhanced Usability and Output Control by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/90
+* Improve formatting of integer columns in Table 1 summary by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/91
+* Fix Pretty Print Regression in ``generate_table1`` by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/92
+* Improve ``generate_table1`` Output Handling and Markdown Logic by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/93
+* Add ``.drop()`` method to ``TableWrapper`` for preserving pretty print by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/95
+
+**Full Changelog**: https://github.com/lshpaner/eda_toolkit/compare/0.0.15...0.0.16
+
+
 `Version 0.0.15`_
 ----------------------
 
