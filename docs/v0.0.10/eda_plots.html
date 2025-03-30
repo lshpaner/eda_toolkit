@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plotting and Theoretical Overview &mdash; EDA Toolkit 0.0.10 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -439,7 +439,7 @@ of each variable.</p>
 <p>Additionally, the font sizes for the axis labels and tick labels
 are set to <cite>16 points</cite> (<code class="docutils literal notranslate"><span class="pre">label_fontsize=16</span></code>) and <cite>14 points</cite> (<code class="docutils literal notranslate"><span class="pre">tick_fontsize=14</span></code>),
 respectively, ensuring that all text within the plots is legible and well-formatted.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -479,7 +479,7 @@ divided into <cite>10 bins</cite> (<code class="docutils literal notranslate"><s
 Font sizes for the axis labels and tick labels are set to <cite>16</cite> and <cite>14</cite> points,
 respectively, ensuring clarity in the visualizations. This setup focuses on the
 histogram representation without the KDE overlay.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -518,7 +518,7 @@ densities. The rest of the parameters remain the same as in the previous example
 with the plots arranged in a single row of four columns (<code class="docutils literal notranslate"><span class="pre">n_rows=1,</span> <span class="pre">n_cols=3</span></code>),
 a grid size of <cite>14x4 inches</cite>, and a bin count of <cite>10</cite>. This setup focuses on
 visualizing the raw counts in the dataset using orange-colored histograms.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -562,7 +562,7 @@ configured with a single row and multiple columns <code class="docutils literal 
 the grid size is set to <cite>15x5 inches</cite>. This example highlights how to visualize
 central tendencies within the data using a histogram that prominently displays
 the mean and median.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -619,7 +619,7 @@ statistical overlays to provide deeper insights into the data.</p>
 <p>You have the freedom to choose whether to plot the mean, median, and
 standard deviation lines. You can display one, none, or all of these simultaneously.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -798,7 +798,7 @@ with the appropriate labels and titles.</p>
 <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code> will be suppressed in the output. However, the dictionary
 is still available within the assigned variable for further use.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">stacked_crosstab_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">stacked_crosstab_plot</span>
 
 <span class="c1"># Call the stacked_crosstab_plot function</span>
 <span class="n">stacked_crosstabs</span> <span class="o">=</span> <span class="n">stacked_crosstab_plot</span><span class="p">(</span>
@@ -1232,7 +1232,7 @@ metrics across different age groups, with all plots saved for future reference o
 <span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_violin_plot</span>
 
 <span class="n">metrics_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
 
@@ -1258,7 +1258,7 @@ metrics across different age groups, with all plots saved for future reference o
 <p>In this example with the US census data <a class="footnote-reference brackets" href="#id16" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
 <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>. This adjustment will generate violin plots instead
 of boxplots while maintaining all other settings.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_violin_plot</span>
 
 <span class="n">metrics_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
 
@@ -1284,7 +1284,7 @@ of boxplots while maintaining all other settings.</p>
 <p>In this example with the US census data <a class="footnote-reference brackets" href="#id16" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
 to pivot the plot, changing the orientation of the axes while keeping the <code class="docutils literal notranslate"><span class="pre">x-axis</span></code> labels upright.
 This adjustment flips the axes, providing a different perspective on the data distribution.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_violin_plot</span>
 
 <span class="n">metrics_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
 
@@ -1411,7 +1411,7 @@ the variables, making it easier to identify trends and patterns in the data. The
 combination of the correlation coefficient and the best fit line offers both
 a quantitative and visual representation of the relationships, enhancing the
 interpretability of the scatter plots.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">scatter_fit_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter_fit_plot</span>
 
 <span class="n">scatter_fit_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1462,7 +1462,7 @@ helping to interpret the color coding of the data points.</p></li>
 of individuals, with custom color coding and without additional elements like a best
 fit line or correlation coefficient. The resulting grid of plots is then saved as
 images in the specified paths.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">scatter_fit_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter_fit_plot</span>
 
 <span class="n">hue_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;&lt;=50K&quot;</span><span class="p">:</span> <span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;50K&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">}</span>
 
@@ -1497,7 +1497,7 @@ images in the specified paths.</p>
 <li><p><strong>Correlation Coefficient</strong>: The <code class="docutils literal notranslate"><span class="pre">show_correlation</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, so the Pearson correlation coefficient will be displayed in the plot titles. This helps to quantify the strength of the relationship between the variables.</p></li>
 </ol>
 <p>These settings allow for the creation of scatter plots that comprehensively explore the relationships between all numeric variables in the DataFrame. The plots are saved in a grid format, with added best fit lines and correlation coefficients for deeper analysis. The resulting images can be stored in the specified directory for future reference.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">scatter_fit_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter_fit_plot</span>
 
 <span class="n">scatter_fit_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1606,7 +1606,7 @@ the strength and direction of the correlations.</p>
 <span class="n">df_num</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">flex_corr_matrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">flex_corr_matrix</span>
 
 <span class="n">flex_corr_matrix</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1641,7 +1641,7 @@ preferences. Additionally, by setting <code class="docutils literal notranslate"
 matrix is displayed, allowing users to view all pairwise correlations, including
 both upper and lower halves of the matrix. This approach is beneficial when you
 want a comprehensive view of all correlations in the dataset.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">flex_corr_matrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">flex_corr_matrix</span>
 
 <span class="n">flex_corr_matrix</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1743,10 +1743,10 @@ immediately obvious from a simple 1D analysis.</p>
 <p>Here’s how you can generate and visualize these 2D partial dependence plots using
 the California housing dataset:</p>
 <p><strong>Fetch The CA Housing Dataset and Prepare The DataFrame</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_california_housing</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">GradientBoostingRegressor</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_california_housing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingRegressor</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># Load the dataset</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_california_housing</span><span class="p">()</span>
@@ -1773,7 +1773,7 @@ the California housing dataset:</p>
 <p><strong>Create 2D Partial Dependence Plot Grid</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the plot_2d_pdp function from</span>
 <span class="c1"># the eda_toolkit library</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_2d_pdp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_2d_pdp</span>
 
 <span class="c1"># Feature names</span>
 <span class="n">names</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">feature_names</span>
@@ -1907,10 +1907,10 @@ using the California housing dataset:</p>
 <section id="static-plot">
 <h3>Static Plot<a class="headerlink" href="#static-plot" title="Link to this heading"></a></h3>
 <p><strong>Fetch The CA Housing Dataset and Prepare The DataFrame</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">GradientBoostingRegressor</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_california_housing</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_california_housing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># Load the dataset</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_california_housing</span><span class="p">()</span>
@@ -1937,7 +1937,7 @@ using the California housing dataset:</p>
 <p><strong>Create Static 3D Partial Dependence Plot</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the plot_3d_pdp function from</span>
 <span class="c1"># the eda_toolkit library</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_3d_pdp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_3d_pdp</span>
 
 <span class="c1"># Call the function to generate the plot</span>
 <span class="n">plot_3d_pdp</span><span class="p">(</span>
@@ -1965,7 +1965,7 @@ using the California housing dataset:</p>
 <h3>Interactive Plot<a class="headerlink" href="#interactive-plot" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the plot_3d_pdp function from</span>
 <span class="c1"># the eda_toolkit library</span>
-<span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">plot_3d_pdp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_3d_pdp</span>
 
 <span class="c1"># Call the function to generate the plot</span>
 <span class="n">plot_3d_pdp</span><span class="p">(</span>

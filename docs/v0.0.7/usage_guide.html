@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Description &mdash; EDA Toolkit 0.0.7 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=ef32455e" />
@@ -223,9 +223,9 @@ directory, both located one level up from the current directory.</p>
 <code class="docutils literal notranslate"><span class="pre">images</span></code> folder in the parent directory. Using the <code class="docutils literal notranslate"><span class="pre">ensure_directory</span></code>
 function, we then verify that these directories exist. If any of the specified
 directories do not exist, the function creates them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ensure_directory</span>
 
-<span class="kn">import</span> <span class="nn">os</span> <span class="c1"># import operating system for dir</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span> <span class="c1"># import operating system for dir</span>
 
 
 <span class="n">base_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
@@ -296,7 +296,7 @@ specifying the dataframe, the column name for the IDs, the number of digits for
 each ID, a seed for reproducibility, and whether to set the new ID column as the
 index. The function generates unique IDs for each row and adds them as the first
 column in the dataframe.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">add_ids</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_ids</span>
 
 <span class="c1"># Add a column of unique IDs with 9 digits and call it &quot;census_id&quot;</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">add_ids</span><span class="p">(</span>
@@ -444,7 +444,7 @@ that all float values are correctly represented.</p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to clean a
 column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame.
 We then use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to remove any trailing periods from the specified column.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">strip_trailing_period</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">strip_trailing_period</span>
 
 <span class="c1"># Create a sample dataframe with trailing periods in some values</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
@@ -573,7 +573,7 @@ cannot parse the date.</p>
 function to standardize date strings. We start by importing the necessary library
 and creating a sample list of date strings. We then use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
 function to parse and standardize each date string to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">parse_date_with_rule</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_date_with_rule</span>
 
 <span class="c1"># Sample date strings</span>
 <span class="n">date_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;15/04/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;04/15/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;01/12/2020&quot;</span><span class="p">,</span> <span class="s2">&quot;12/01/2020&quot;</span><span class="p">]</span>
@@ -652,7 +652,7 @@ converting date columns and replacing empty strings with Pandas <code class="doc
 <p><strong>Example Usage</strong></p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
 function to analyze a DataFrame’s columns.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">dataframe_columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataframe_columns</span>
 
 <span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
@@ -910,7 +910,7 @@ This is useful for understanding which combinations were analyzed and included i
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">summarize_all_combinations</span></code> function to generate summary tables for the specified
 variables from a DataFrame containing the census data <a class="footnote-reference brackets" href="#id20" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
 <span class="n">unique_vars</span> <span class="o">=</span> <span class="p">[</span>
@@ -1105,7 +1105,7 @@ formatting.</strong></p>
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> function to save two DataFrames:
 the original DataFrame and a filtered DataFrame with ages between <cite>18</cite> and <cite>40</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
 
 <span class="c1"># Example usage</span>
 <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;df_census.xlsx&quot;</span>  <span class="c1"># Name of the output Excel file</span>
@@ -1160,7 +1160,7 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
 from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id20" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">contingency_table</span>
 
 <span class="c1"># Example usage</span>
 <span class="n">contingency_table</span><span class="p">(</span>
@@ -1225,7 +1225,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 <p><strong>Example Usage</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
 columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id20" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">highlight_columns</span>
 
 <span class="c1"># Applying the highlight function</span>
 <span class="n">highlighted_df</span> <span class="o">=</span> <span class="n">highlight_columns</span><span class="p">(</span>
@@ -1595,7 +1595,7 @@ of each variable.</p>
 for each variable. Additionally, the font sizes for the axis labels and tick labels
 are set to <cite>16 points</cite> (<code class="docutils literal notranslate"><span class="pre">label_fontsize=16</span></code>) and <cite>14 points</cite> (<code class="docutils literal notranslate"><span class="pre">tick_fontsize=14</span></code>),
 respectively, ensuring that all text within the plots is legible and well-formatted.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -1639,7 +1639,7 @@ divided into <cite>10 bins</cite> (<code class="docutils literal notranslate"><s
 Font sizes for the axis labels and tick labels are set to <cite>16</cite> and <cite>14</cite> points,
 respectively, ensuring clarity in the visualizations. This setup focuses on the
 histogram representation without the KDE overlay.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -1682,7 +1682,7 @@ densities. The rest of the parameters remain the same as in the previous example
 with the plots arranged in a single row of four columns (<code class="docutils literal notranslate"><span class="pre">n_rows=1,</span> <span class="pre">n_cols=4</span></code>),
 a grid size of <cite>14x4 inches</cite>, and a bin count of <cite>10</cite>. This setup focuses on
 visualizing the raw counts in the dataset using orange-colored histograms.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">kde_distributions</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">kde_distributions</span>
 
 <span class="n">vars_of_interest</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;age&quot;</span><span class="p">,</span>
@@ -1853,7 +1853,7 @@ with the appropriate labels and titles.</p>
 <code class="docutils literal notranslate"><span class="pre">return_dict=True</span></code> will be suppressed in the output. However, the dictionary
 is still available within the assigned variable for further use.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">stacked_crosstab_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">stacked_crosstab_plot</span>
 
 <span class="c1"># Call the stacked_crosstab_plot function</span>
 <span class="n">stacked_crosstabs</span> <span class="o">=</span> <span class="n">stacked_crosstab_plot</span><span class="p">(</span>
@@ -2286,7 +2286,7 @@ metrics across different age groups, with all plots saved for future reference o
 <span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_violin_plot</span>
 
 <span class="n">metrics_boxplot_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
 
@@ -2314,7 +2314,7 @@ metrics across different age groups, with all plots saved for future reference o
 <p>In this example with the US census data <a class="footnote-reference brackets" href="#id20" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we keep everything the same as the prior example, but change the
 <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> to <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>. This adjustment will generate violin plots instead
 of boxplots while maintaining all other settings.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_violin_plot</span>
 
 <span class="n">metrics_boxplot_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
 
@@ -2342,7 +2342,7 @@ of boxplots while maintaining all other settings.</p>
 <p>In this example with the US census data <a class="footnote-reference brackets" href="#id20" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, we set <code class="docutils literal notranslate"><span class="pre">xlabel_rot=0</span></code> and <code class="docutils literal notranslate"><span class="pre">rotate_plot=True</span></code>
 to pivot the plot, changing the orientation of the axes while keeping the <code class="docutils literal notranslate"><span class="pre">`x-axis`</span></code> labels upright.
 This adjustment flips the axes, providing a different perspective on the data distribution.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">box_violin_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_violin_plot</span>
 
 <span class="n">metrics_boxplot_comp</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age_group&quot;</span><span class="p">]</span>
 
@@ -2512,7 +2512,7 @@ the variables, making it easier to identify trends and patterns in the data. The
 combination of the correlation coefficient and the best fit line offers both
 a quantitative and visual representation of the relationships, enhancing the
 interpretability of the scatter plots.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">scatter_fit_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter_fit_plot</span>
 
 <span class="n">scatter_fit_plot</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -2570,7 +2570,7 @@ helping to interpret the color coding of the data points.</p></li>
 of individuals, with custom color coding and without additional elements like a best
 fit line or correlation coefficient. The resulting grid of plots is then saved as
 images in the specified paths.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">scatter_fit_plot</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter_fit_plot</span>
 
 <span class="n">hue_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;&lt;=50K&quot;</span><span class="p">:</span> <span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;50K&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">}</span>
 
@@ -2692,7 +2692,7 @@ the strength and direction of the correlations.</p>
 <span class="n">df_num</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">flex_corr_matrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">flex_corr_matrix</span>
 
 <span class="n">flex_corr_matrix</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -2727,7 +2727,7 @@ preferences. Additionally, by setting <code class="docutils literal notranslate"
 matrix is displayed, allowing users to view all pairwise correlations, including
 both upper and lower halves of the matrix. This approach is beneficial when you
 want a comprehensive view of all correlations in the dataset.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">flex_corr_matrix</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">flex_corr_matrix</span>
 
 <span class="n">flex_corr_matrix</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data Management Overview &mdash; EDA Toolkit 0.0.12 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css" />
@@ -204,8 +204,8 @@ directory, both located one level up from the current directory.</p>
 <code class="docutils literal notranslate"><span class="pre">images</span></code> folder in the parent directory. Using the <code class="docutils literal notranslate"><span class="pre">ensure_directory</span></code>
 function, we then verify that these directories exist. If any of the specified
 directories do not exist, the function creates them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">ensure_directory</span>
-<span class="kn">import</span> <span class="nn">os</span> <span class="c1"># import operating system for dir</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">ensure_directory</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span> <span class="c1"># import operating system for dir</span>
 
 
 <span class="n">base_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">)</span>
@@ -290,7 +290,7 @@ specifying the dataframe, the column name for the IDs, the number of digits for
 each ID, a seed for reproducibility, and whether to set the new ID column as the
 index. The function generates unique IDs for each row and adds them as the first
 column in the dataframe.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">add_ids</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_ids</span>
 
 <span class="c1"># Add a column of unique IDs with 9 digits and call it &quot;census_id&quot;</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">add_ids</span><span class="p">(</span>
@@ -450,7 +450,7 @@ that all float values are correctly represented.</p>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to clean a
 column in a DataFrame. We start by importing the necessary libraries and creating a sample DataFrame.
 We then use the <code class="docutils literal notranslate"><span class="pre">strip_trailing_period</span></code> function to remove any trailing periods from the specified column.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">strip_trailing_period</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">strip_trailing_period</span>
 
 <span class="c1"># Create a sample dataframe with trailing periods in some values</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
@@ -582,7 +582,7 @@ cannot parse the date.</p>
 function to standardize date strings. We start by importing the necessary library
 and creating a sample list of date strings. We then use the <code class="docutils literal notranslate"><span class="pre">parse_date_with_rule</span></code>
 function to parse and standardize each date string to the <code class="docutils literal notranslate"><span class="pre">ISO</span> <span class="pre">8601</span></code> format.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">parse_date_with_rule</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_date_with_rule</span>
 
 <span class="n">date_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;15/04/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;04/15/2021&quot;</span><span class="p">,</span> <span class="s2">&quot;01/12/2020&quot;</span><span class="p">,</span> <span class="s2">&quot;12/01/2020&quot;</span><span class="p">]</span>
 
@@ -685,7 +685,7 @@ DataFrame with optional background styling.</p></li>
 <p>In the example below, we demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">dataframe_columns</span></code>
 function to analyze a DataFrame’s columns. You may notice a new variable,
 <code class="docutils literal notranslate"><span class="pre">age_group</span></code>, is introduced. The logic for generating this variable is <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">provided here</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">dataframe_columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataframe_columns</span>
 
 <span class="n">dataframe_columns</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
@@ -1008,7 +1008,7 @@ variables from a DataFrame containing the census data <a class="footnote-referen
 <p>Before proceeding with any further examples in this documentation, ensure that the <code class="docutils literal notranslate"><span class="pre">age</span></code> variable is binned into a new variable, <code class="docutils literal notranslate"><span class="pre">age_group</span></code>.
 Detailed instructions for this process can be found under <a class="reference internal" href="#binning-numerical-columns"><span class="std std-ref">Binning Numerical Columns</span></a>.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">summarize_all_combinations</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">summarize_all_combinations</span>
 
 <span class="c1"># Define unique variables for the analysis</span>
 <span class="n">unique_vars</span> <span class="o">=</span> <span class="p">[</span>
@@ -1221,7 +1221,7 @@ Excel file with customized formatting using the <code class="docutils literal no
 <p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">save_dataframes_to_excel</span></code> function to save two DataFrames:
 the original DataFrame and a filtered DataFrame with ages between <cite>18</cite> and <cite>40</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_dataframes_to_excel</span>
 
 <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;df_census.xlsx&quot;</span>  <span class="c1"># Name of the output Excel file</span>
 <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
@@ -1275,7 +1275,7 @@ between <cite>18</cite> and <cite>40</cite>, each on separate sheets with custom
 <p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">contingency_table</span></code> function to create a contingency table
 from the specified columns in a DataFrame containing census data <a class="footnote-reference brackets" href="#id9" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">contingency_table</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">contingency_table</span>
 
 <span class="n">contingency_table</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1344,7 +1344,7 @@ is set to <code class="docutils literal notranslate"><span class="pre">1</span><
 <p><strong>Implementation Example</strong></p>
 <p>Below, we use the <code class="docutils literal notranslate"><span class="pre">highlight_columns</span></code> function to highlight the <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">education</span></code>
 columns in the first 5 rows of the census <a class="footnote-reference brackets" href="#id9" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> DataFrame with a pink background color.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eda_toolkit</span> <span class="kn">import</span> <span class="n">highlight_columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eda_toolkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">highlight_columns</span>
 
 <span class="n">highlighted_df</span> <span class="o">=</span> <span class="n">highlight_columns</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(),</span>
