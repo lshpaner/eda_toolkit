@@ -1309,7 +1309,7 @@ def box_violin_plot(
     show_plot="both",  # Parameter to control plot display
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
-    subplot_figsize=None,  # Parameter to specify figure size for grid plots
+    subplot_figsize=None,  # Parameter to specify figure size for subplots
     label_fontsize=12,  # Parameter to control axis label fontsize
     tick_fontsize=10,  # Parameter to control tick label fontsize
     text_wrap=50,  # Add text_wrap parameter
@@ -1322,7 +1322,7 @@ def box_violin_plot(
     Create and save individual or subplot-based boxplots or violin plots for
     specified metrics and comparisons.
 
-    This function generates individual plots, grid plots, or both for the
+    This function generates individual plots, subplots, or both for the
     specified metrics and comparison categories in a DataFrame. It provides
     extensive customization options for plot appearance, saving options, and
     display preferences, including support for axis limits, label customization,
@@ -1708,7 +1708,7 @@ def scatter_fit_plot(
     show_plot="grid",  # Parameter to control plot display
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
-    subplot_figsize=None,  # Parameter to specify figure size for grid plots
+    subplot_figsize=None,  # Parameter to specify figure size for subplots
     label_fontsize=12,  # Parameter to control axis label fontsize
     tick_fontsize=10,  # Parameter to control tick label fontsize
     text_wrap=50,  # Parameter to control wrapping of text in title
@@ -1772,7 +1772,7 @@ def scatter_fit_plot(
     save_plots : str, optional
         Controls which plots to save: "all", "individual", or "grid".
         If None, plots will not be saved.
-        - "all": Saves both individual and grid plots.
+        - "all": Saves both individual and subplots.
         - "individual": Saves each scatter plot separately with a progress bar
           (powered by `tqdm`) to track saving progress.
         - "grid": Saves a single grid plot of all combinations.
@@ -1793,7 +1793,7 @@ def scatter_fit_plot(
         Width and height of the figure for individual plots.
 
     subplot_figsize : tuple or list, optional
-        Width and height of the figure for grid plots.
+        Width and height of the figure for subplots.
         If not specified, defaults to a calculated size based on the number of
         rows and columns.
 
