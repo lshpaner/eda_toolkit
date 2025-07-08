@@ -27,7 +27,7 @@ def kde_distributions(
     df,
     vars_of_interest=None,
     figsize=(5, 5),  # Unified figsize parameter
-    grid_figsize=None,  # Size of the overall grid
+    subplot_figsize=None,  # Size of the overall grid
     hist_color="#0000FF",  # Default color blue as hex code
     kde_color="#FF0000",  # Default color red as hex code
     mean_color="#000000",
@@ -90,7 +90,7 @@ def kde_distributions(
         one variable being plotted or when generating separate plots for each
         variable of interest.
 
-    grid_figsize : tuple of int, optional
+    subplot_figsize : tuple of int, optional
         Size of the overall grid of plots when there are multiple variables
         being plotted in a single grid. This parameter is ignored when only one
         variable is plotted or when using `single_var_image_filename`.
@@ -150,7 +150,7 @@ def kde_distributions(
         Filename to use when saving the separate distribution plots. The
         variable name will be appended to this filename. When using this
         parameter, the `figsize` parameter is used to determine the size of the
-        individual plots. The `grid_figsize` parameter is ignored in this context.
+        individual plots. The `subplot_figsize` parameter is ignored in this context.
 
     y_axis_label : str, optional (default='Density')
         The label to display on the y-axis. If set to `None`, no y-axis label
@@ -250,7 +250,7 @@ def kde_distributions(
         If `bins` and `binwidth` are both set, which can affect performance.
 
     ValueError
-        If `grid_figsize` is provided when only one plot is being created.
+        If `subplot_figsize` is provided when only one plot is being created.
 
     Warnings:
     ---------
@@ -277,9 +277,9 @@ def kde_distributions(
     # If only one variable is being plotted
     if num_vars == 1:
         n_rows, n_cols = 1, 1
-        if grid_figsize is not None:
+        if subplot_figsize is not None:
             raise ValueError(
-                f"Cannot use grid_figsize when there is only one "
+                f"Cannot use subplot_figsize when there is only one "
                 f"plot. Use figsize instead."
             )
     else:
@@ -289,10 +289,10 @@ def kde_distributions(
             n_rows = int(np.ceil(num_vars / n_cols))
 
         # Adjust figsize for grid if multiple plots
-        if grid_figsize is None:
+        if subplot_figsize is None:
             figsize = (figsize[0] * n_cols, figsize[1] * n_rows)
         else:
-            figsize = grid_figsize
+            figsize = subplot_figsize
 
     # Convert log_scale_vars to list if it's a single string
     if isinstance(log_scale_vars, str):
@@ -1309,7 +1309,7 @@ def box_violin_plot(
     show_plot="both",  # Parameter to control plot display
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
-    grid_figsize=None,  # Parameter to specify figure size for grid plots
+    subplot_figsize=None,  # Parameter to specify figure size for grid plots
     label_fontsize=12,  # Parameter to control axis label fontsize
     tick_fontsize=10,  # Parameter to control tick label fontsize
     text_wrap=50,  # Add text_wrap parameter
@@ -1319,7 +1319,7 @@ def box_violin_plot(
     **kwargs,  # To allow passing additional parameters to Seaborn
 ):
     """
-    Create and save individual or grid-based boxplots or violin plots for
+    Create and save individual or subplot-based boxplots or violin plots for
     specified metrics and comparisons.
 
     This function generates individual plots, grid plots, or both for the
@@ -1378,7 +1378,7 @@ def box_violin_plot(
     individual_figsize : tuple of int, optional (default=(6, 4))
         Dimensions (width, height) for individual plots.
 
-    grid_figsize : tuple of int, optional
+    subplot_figsize : tuple of int, optional
         Dimensions (width, height) for the grid plot. Defaults to a size
         proportional to the number of rows and columns.
 
@@ -1418,7 +1418,7 @@ def box_violin_plot(
         - If `save_plots` is True but `image_path_png` or `image_path_svg` is
           not specified.
         - If `rotate_plot` is not a boolean value.
-        - If `individual_figsize` or `grid_figsize` is not a tuple or list of
+        - If `individual_figsize` or `subplot_figsize` is not a tuple or list of
           two numbers.
 
     Notes:
@@ -1463,14 +1463,14 @@ def box_violin_plot(
             "of two numbers (width, height)."
         )
 
-    # Check for valid grid_figsize values if specified
-    if grid_figsize is not None and not (
-        isinstance(grid_figsize, (tuple, list))
-        and len(grid_figsize) == 2
-        and all(isinstance(x, (int, float)) for x in grid_figsize)
+    # Check for valid subplot_figsize values if specified
+    if subplot_figsize is not None and not (
+        isinstance(subplot_figsize, (tuple, list))
+        and len(subplot_figsize) == 2
+        and all(isinstance(x, (int, float)) for x in subplot_figsize)
     ):
         raise ValueError(
-            "Invalid `grid_figsize` value. It should be a tuple or list of two "
+            "Invalid `subplot_figsize` value. It should be a tuple or list of two "
             "numbers (width, height)."
         )
 
@@ -1492,8 +1492,8 @@ def box_violin_plot(
         n_rows = max(1, int(np.ceil(total_plots / n_cols)))
 
     # Set default grid figure size if not specified
-    if grid_figsize is None:
-        grid_figsize = (5 * n_cols, 5 * n_rows)
+    if subplot_figsize is None:
+        subplot_figsize = (5 * n_cols, 5 * n_rows)
 
     # Determine saving options based on `show_plot`
     save_individual = save_plots and show_plot in ["individual", "both"]
@@ -1600,7 +1600,7 @@ def box_violin_plot(
 
     # Save and/or show the entire grid if required
     if save_grid or show_plot in ["grid", "both"]:
-        fig, axs = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
+        fig, axs = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
         # Handle the case when axs is a single Axes object
         if n_rows * n_cols == 1:
             axs = [axs]
@@ -1708,7 +1708,7 @@ def scatter_fit_plot(
     show_plot="grid",  # Parameter to control plot display
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
-    grid_figsize=None,  # Parameter to specify figure size for grid plots
+    subplot_figsize=None,  # Parameter to specify figure size for grid plots
     label_fontsize=12,  # Parameter to control axis label fontsize
     tick_fontsize=10,  # Parameter to control tick label fontsize
     text_wrap=50,  # Parameter to control wrapping of text in title
@@ -1792,7 +1792,7 @@ def scatter_fit_plot(
     individual_figsize : tuple or list, optional (default=(6, 4))
         Width and height of the figure for individual plots.
 
-    grid_figsize : tuple or list, optional
+    subplot_figsize : tuple or list, optional
         Width and height of the figure for grid plots.
         If not specified, defaults to a calculated size based on the number of
         rows and columns.
@@ -1891,7 +1891,7 @@ def scatter_fit_plot(
         (width, height).
 
     ValueError
-        If `grid_figsize` is provided and is not a tuple or list of two numbers
+        If `subplot_figsize` is provided and is not a tuple or list of two numbers
         (width, height).
 
     ValueError
@@ -1976,8 +1976,8 @@ def scatter_fit_plot(
         n_rows = max(1, math.ceil(num_plots / n_cols))
 
     # Set default grid figure size if not specified
-    if grid_figsize is None:
-        grid_figsize = (5 * n_cols, 5 * n_rows)
+    if subplot_figsize is None:
+        subplot_figsize = (5 * n_cols, 5 * n_rows)
 
     # Validate the show_plot input
     valid_show_plot_values = ["individual", "grid", "both", "combinations"]
@@ -2010,14 +2010,14 @@ def scatter_fit_plot(
             "of two numbers (width, height)."
         )
 
-    # Validate the grid_figsize input if specified
-    if grid_figsize is not None and not (
-        isinstance(grid_figsize, (tuple, list))
-        and len(grid_figsize) == 2
-        and all(isinstance(x, (int, float)) for x in grid_figsize)
+    # Validate the subplot_figsize input if specified
+    if subplot_figsize is not None and not (
+        isinstance(subplot_figsize, (tuple, list))
+        and len(subplot_figsize) == 2
+        and all(isinstance(x, (int, float)) for x in subplot_figsize)
     ):
         raise ValueError(
-            "Invalid `grid_figsize` value. It should be a tuple or list of two "
+            "Invalid `subplot_figsize` value. It should be a tuple or list of two "
             "numbers (width, height)."
         )
 
@@ -2041,10 +2041,10 @@ def scatter_fit_plot(
 
     # Create subplots for individual or grid plotting
     if num_plots == 1:
-        fig, ax = plt.subplots(figsize=grid_figsize)
+        fig, ax = plt.subplots(figsize=subplot_figsize)
         axes = [ax]  # Wrap single axis in a list for consistency
     else:
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
         axes = axes.flatten()
 
     # Render and show individual plots
@@ -2245,7 +2245,7 @@ def scatter_fit_plot(
     # Save grid plot
     if save_plots == "grid":
         # Render the subplots
-        fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=grid_figsize)
+        fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
         axes = axes.flatten()  # Flatten axes for consistent handling
 
         for i, ax in enumerate(axes):
