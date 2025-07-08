@@ -27,7 +27,7 @@ def kde_distributions(
     df,
     vars_of_interest=None,
     figsize=(5, 5),  # Unified figsize parameter
-    subplot_figsize=None,  # Size of the overall grid
+    subplot_figsize=None,  # Size of the overall subplot grid
     hist_color="#0000FF",  # Default color blue as hex code
     kde_color="#FF0000",  # Default color red as hex code
     mean_color="#000000",
@@ -91,9 +91,9 @@ def kde_distributions(
         variable of interest.
 
     subplot_figsize : tuple of int, optional
-        Size of the overall grid of plots when there are multiple variables
-        being plotted in a single grid. This parameter is ignored when only one
-        variable is plotted or when using `single_var_image_filename`.
+        Size of the overall grid of subplots when there are multiple variables
+        being plotted in a single subplot grid. This parameter is ignored when
+        only one variable is plotted or when using `single_var_image_filename`.
 
     hist_color : str, optional (default='#0000FF')
         Color of the histogram bars.
@@ -288,7 +288,7 @@ def kde_distributions(
             n_cols = int(np.ceil(np.sqrt(num_vars)))
             n_rows = int(np.ceil(num_vars / n_cols))
 
-        # Adjust figsize for grid if multiple plots
+        # Adjust figsize for subplots if multiple plots
         if subplot_figsize is None:
             figsize = (figsize[0] * n_cols, figsize[1] * n_rows)
         else:
@@ -1357,7 +1357,7 @@ def box_violin_plot(
 
     save_plots : bool, optional
         If True, saves the plots specified by the `show_plot` parameter
-        ("individual", "grid", or "both"). Defaults to False.
+        ("individual", "subplots", or "both"). Defaults to False.
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
@@ -1369,7 +1369,7 @@ def box_violin_plot(
         Rotation angle for x-axis labels.
 
     show_plot : str, optional (default='both')
-        Specify the type of plots to display. Options are "individual", "grid",
+        Specify the type of plots to display. Options are "individual", "subplots",
         or "both".
 
     rotate_plot : bool, optional (default=False)
@@ -1379,7 +1379,7 @@ def box_violin_plot(
         Dimensions (width, height) for individual plots.
 
     subplot_figsize : tuple of int, optional
-        Dimensions (width, height) for the grid plot. Defaults to a size
+        Dimensions (width, height) of the subplots. Defaults to a size
         proportional to the number of rows and columns.
 
     label_fontsize : int, optional (default=12)
@@ -1414,7 +1414,7 @@ def box_violin_plot(
     Raises:
     -------
     ValueError
-        - If `show_plot` is not one of "individual", "grid", or "both".
+        - If `show_plot` is not one of "individual", "subplots", or "both".
         - If `save_plots` is True but `image_path_png` or `image_path_svg` is
           not specified.
         - If `rotate_plot` is not a boolean value.
@@ -1432,10 +1432,10 @@ def box_violin_plot(
     """
 
     # Check for valid show_plot values
-    if show_plot not in ["individual", "grid", "both"]:
+    if show_plot not in ["individual", "subplots", "both"]:
         raise ValueError(
             "Invalid `show_plot` value selected. Choose from 'individual', "
-            "'grid', or 'both'."
+            "'subplots', or 'both'."
         )
 
     # Check for valid save_plots value
@@ -1491,13 +1491,13 @@ def box_violin_plot(
         # Ensure at least 1 row
         n_rows = max(1, int(np.ceil(total_plots / n_cols)))
 
-    # Set default grid figure size if not specified
+    # Set default subplot figure size if not specified
     if subplot_figsize is None:
         subplot_figsize = (5 * n_cols, 5 * n_rows)
 
     # Determine saving options based on `show_plot`
     save_individual = save_plots and show_plot in ["individual", "both"]
-    save_grid = save_plots and show_plot in ["grid", "both"]
+    save_subplots = save_plots and show_plot in ["subplots", "both"]
 
     def get_palette(n_colors):
         """
@@ -1595,11 +1595,11 @@ def box_violin_plot(
                             bbox_inches="tight",
                         )
 
-                if show_plot in ["individual", "both", "grid"]:
+                if show_plot in ["individual", "both", "subplots"]:
                     plt.show()  # Display the plot
 
-    # Save and/or show the entire grid if required
-    if save_grid or show_plot in ["grid", "both"]:
+    # Save and/or show the entire subplot grid if required
+    if save_subplots or show_plot in ["subplots", "both"]:
         fig, axs = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
         # Handle the case when axs is a single Axes object
         if n_rows * n_cols == 1:
@@ -1664,7 +1664,7 @@ def box_violin_plot(
                 ax.set_visible(False)
 
         plt.tight_layout()
-        if save_grid:
+        if save_subplots:
             if image_path_png:
                 fig.savefig(
                     os.path.join(
@@ -1682,7 +1682,7 @@ def box_violin_plot(
                     bbox_inches="tight",
                 )
 
-        if show_plot in ["grid", "both"]:
+        if show_plot in ["subplots", "both"]:
             plt.show()  # Display the plot
 
 
@@ -1705,7 +1705,7 @@ def scatter_fit_plot(
     save_plots=None,  # Parameter to control saving plots
     show_legend=True,  # Parameter to toggle legend
     xlabel_rot=0,  # Parameter to rotate x-axis labels
-    show_plot="grid",  # Parameter to control plot display
+    show_plot="subplots",  # Parameter to control plot display
     rotate_plot=False,  # Parameter to rotate (pivot) plots
     individual_figsize=(6, 4),
     subplot_figsize=None,  # Parameter to specify figure size for subplots
@@ -1728,7 +1728,7 @@ def scatter_fit_plot(
     **kwargs,  # Additional keyword arguments to pass to sns.scatterplot
 ):
     """
-    Create and save scatter plots or a grid of scatter plots for given
+    Create and save scatter plots or a grid of scatter subplots for given
     x_vars and y_vars, with an optional best fit line, customizable
     point color, size, markers, and axis limits.
 
@@ -1770,12 +1770,12 @@ def scatter_fit_plot(
         Directory path to save SVG images of the scatter plots.
 
     save_plots : str, optional
-        Controls which plots to save: "all", "individual", or "grid".
+        Controls which plots to save: "all", "individual", or "subplots".
         If None, plots will not be saved.
         - "all": Saves both individual and subplots.
         - "individual": Saves each scatter plot separately with a progress bar
           (powered by `tqdm`) to track saving progress.
-        - "grid": Saves a single grid plot of all combinations.
+        - "subplots": Saves a single subplot grid of all combinations.
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
@@ -1783,8 +1783,8 @@ def scatter_fit_plot(
     xlabel_rot : int, optional (default=0)
         Rotation angle for x-axis labels.
 
-    show_plot : str, optional (default="grid")
-        Controls plot display: "individual", "grid", or "both".
+    show_plot : str, optional (default="subplots")
+        Controls plot display: "individual", "subplots", or "both".
 
     rotate_plot : bool, optional (default=False)
         Whether to rotate (pivot) the plots.
@@ -1874,10 +1874,10 @@ def scatter_fit_plot(
         If `hue_palette` is specified without `hue`.
 
     ValueError
-        If `show_plot` is not one of ["individual", "grid", "both", "combinations"].
+        If `show_plot` is not one of ["individual", "subplots", "both", "combinations"].
 
     ValueError
-        If `save_plots` is not one of [None, "all", "individual", "grid"].
+        If `save_plots` is not one of [None, "all", "individual", "subplots"].
 
     ValueError
         If `save_plots` is set without specifying either `image_path_png` or
@@ -1975,20 +1975,20 @@ def scatter_fit_plot(
     if n_rows is None:
         n_rows = max(1, math.ceil(num_plots / n_cols))
 
-    # Set default grid figure size if not specified
+    # Set default subplot grid figure size if not specified
     if subplot_figsize is None:
         subplot_figsize = (5 * n_cols, 5 * n_rows)
 
     # Validate the show_plot input
-    valid_show_plot_values = ["individual", "grid", "both", "combinations"]
+    valid_show_plot_values = ["individual", "subplots", "both", "combinations"]
     if show_plot not in valid_show_plot_values:
         raise ValueError(f"Invalid `show_plot`. Choose from {valid_show_plot_values}.")
 
     # Validate the save_plots input
-    if save_plots not in [None, "all", "individual", "grid"]:
+    if save_plots not in [None, "all", "individual", "subplots"]:
         raise ValueError(
             "Invalid `save_plots` value. Choose from 'all', "
-            "'individual', 'grid', or None."
+            "'individual', 'subplots', or None."
         )
 
     # Check if save_plots is set without image paths
@@ -2039,12 +2039,12 @@ def scatter_fit_plot(
         elif ax.legend_:
             ax.legend_.remove()
 
-    # Create subplots for individual or grid plotting
+    # Create grid for individual or subplots plotting
     if num_plots == 1:
-        fig, ax = plt.subplots(figsize=subplot_figsize)
+        _, ax = plt.subplots(figsize=subplot_figsize)
         axes = [ax]  # Wrap single axis in a list for consistency
     else:
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
+        _, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
         axes = axes.flatten()
 
     # Render and show individual plots
@@ -2112,8 +2112,8 @@ def scatter_fit_plot(
 
             plt.show()
 
-    # Render and show grid plot
-    if show_plot in ["grid", "both"]:
+    # Render and show subplots
+    if show_plot in ["subplots", "both"]:
 
         for i, ax in enumerate(axes):
             if i < num_plots:
@@ -2242,8 +2242,8 @@ def scatter_fit_plot(
                 plt.close(fig_individual)  # Clear memory
                 pbar.update(1)  # Update progress bar
 
-    # Save grid plot
-    if save_plots == "grid":
+    # Save subplots
+    if save_plots == "subplots":
         # Render the subplots
         fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
         axes = axes.flatten()  # Flatten axes for consistent handling
@@ -2291,17 +2291,17 @@ def scatter_fit_plot(
 
         plt.tight_layout()
 
-        # Save the grid plot without a progress bar
-        grid_filename_png = "scatter_plots_grid.png"
-        grid_filename_svg = "scatter_plots_grid.svg"
+        # Save the subplots without a progress bar
+        subplots_filename_png = "scatter_plots_subplots.png"
+        subplots_filename_svg = "scatter_plots_subplots .svg"
         if image_path_png:
             fig_grid.savefig(
-                os.path.join(image_path_png, grid_filename_png),
+                os.path.join(image_path_png, subplots_filename_png),
                 bbox_inches="tight",
             )
         if image_path_svg:
             fig_grid.savefig(
-                os.path.join(image_path_svg, grid_filename_svg),
+                os.path.join(image_path_svg, subplots_filename_svg),
                 bbox_inches="tight",
             )
 
