@@ -97,12 +97,12 @@ statistical graphics.
 
 - **Flexible Plotting**: The function supports creating histograms, KDE plots, or a combination of both for specified columns, allowing users to visualize data distributions effectively.
 - **Leverages Seaborn Library**: The function is built on the `seaborn` library, which provides high-level, attractive visualizations, making it easy to create complex plots with minimal code.
-- **Customization**: Users have control over plot aesthetics, such as colors, fill options, grid sizes, axis labels, tick marks, and more, allowing them to tailor the visualizations to their needs.
+- **Customization**: Users have control over plot aesthetics, such as colors, fill options, subplot sizes, axis labels, tick marks, and more, allowing them to tailor the visualizations to their needs.
 - **Scientific Notation Control**: The function allows disabling scientific notation on the axes, providing better readability for certain types of data.
 - **Log Scaling**: The function includes an option to apply logarithmic scaling to specific variables, which is useful when dealing with data that spans several orders of magnitude.
 - **Output Options**: The function supports saving plots as PNG or SVG files, with customizable filenames and output directories, making it easy to integrate the plots into reports or presentations.
 
-.. function:: kde_distributions(df, vars_of_interest=None, figsize=(5, 5), grid_figsize=None, hist_color="#0000FF", kde_color="#FF0000", mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, show_legend=True, **kwargs)
+.. function:: kde_distributions(df, vars_of_interest=None, figsize=(5, 5), subplot_figsize=None, hist_color="#0000FF", kde_color="#FF0000", mean_color="#000000", median_color="#000000", hist_edgecolor="#000000", hue=None, fill=True, fill_alpha=1, n_rows=None, n_cols=None, w_pad=1.0, h_pad=1.0, image_path_png=None, image_path_svg=None, image_filename=None, bbox_inches=None, single_var_image_filename=None, y_axis_label="Density", plot_type="both", log_scale_vars=None, bins="auto", binwidth=None, label_fontsize=10, tick_fontsize=10, text_wrap=50, disable_sci_notation=False, stat="density", xlim=None, ylim=None, plot_mean=False, plot_median=False, std_dev_levels=None, std_color="#808080", label_names=None, show_legend=True, **kwargs)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -110,8 +110,8 @@ statistical graphics.
     :type vars_of_interest: list of str, optional
     :param figsize: Size of each individual plot, default is ``(5, 5)``. Used when only one plot is being generated or when saving individual plots.
     :type figsize: tuple of int, optional
-    :param grid_figsize: Size of the overall grid of plots when multiple plots are generated in a grid. Ignored when only one plot is being generated or when saving individual plots. If not specified, it is calculated based on ``figsize``, ``n_rows``, and ``n_cols``.
-    :type grid_figsize: tuple of int, optional
+    :param subplot_figsize: Size of the overall grid of subplots when multiple plots are generated. Ignored when only one plot is being generated or when saving individual plots. If not specified, it is calculated based on ``figsize``, ``n_rows``, and ``n_cols``.
+    :type subplot_figsize: tuple of int, optional
     :param hist_color: Color of the histogram bars, default is ``'#0000FF'``.
     :type hist_color: str, optional
     :param kde_color: Color of the KDE plot, default is ``'#FF0000'``.
@@ -144,7 +144,7 @@ statistical graphics.
     :type image_filename: str, optional
     :param bbox_inches: Bounding box to use when saving the figure. For example, ``'tight'``.
     :type bbox_inches: str, optional
-    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename. This parameter uses ``figsize`` for determining the plot size, ignoring ``grid_figsize``.
+    :param single_var_image_filename: Filename to use when saving the separate distribution plots. The variable name will be appended to this filename. This parameter uses ``figsize`` for determining the plot size, ignoring ``subplot_figsize``.
     :type single_var_image_filename: str, optional
     :param y_axis_label: The label to display on the ``y-axis``, default is ``'Density'``.
     :type y_axis_label: str, optional
@@ -190,7 +190,7 @@ statistical graphics.
         - If ``stat`` is not one of ``'count'``, ``'density'``, ``'frequency'``, ``'probability'``, ``'proportion'``, ``'percent'``.
         - If ``log_scale_vars`` contains variables that are not present in the DataFrame.
         - If ``fill`` is set to ``False`` and ``hist_edgecolor`` is not the default.
-        - If ``grid_figsize`` is provided when only one plot is being created.
+        - If ``subplot_figsize`` is provided when only one plot is being created.
     
     :raises UserWarning:
         - If both ``bins`` and ``binwidth`` are specified, which may affect performance.
@@ -200,7 +200,7 @@ statistical graphics.
 .. admonition:: Notes
 
     If you do not set ``n_rows`` or ``n_cols`` to any values, the function will 
-    automatically calculate and create a grid based on the number of variables being 
+    automatically calculate and create a subplot space based on the number of variables being 
     plotted, ensuring an optimal arrangement of the plots.
 
     To save images, the paths for ``image_path_png`` or ``image_path_svg`` must be specified. 
@@ -225,8 +225,8 @@ Kernel Density Estimate (KDE) plot is overlaid on the histograms, providing a
 smoothed representation of the data's probability density.
 
 The visualizations are arranged in a single row of four columns, as specified 
-by ``n_rows=1`` and ``n_cols=3``, respectively. The overall size of the grid 
-figure is set to `14 inches` wide and `4 inches tall` (``grid_figsize=(14, 4)``), 
+by ``n_rows=1`` and ``n_cols=3``, respectively. The overall size of the subplot grid 
+figure is set to `14 inches` wide and `4 inches tall` (``subplot_figsize=(14, 4)``), 
 while each individual plot is configured to be `4 inches` by `4 inches` 
 (``single_figsize=(4, 4)``). The ``fill=True`` parameter fills the histogram 
 bars with color, and the spacing between the subplots is managed using 
@@ -265,7 +265,7 @@ respectively, ensuring that all text within the plots is legible and well-format
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4),  
+        subplot_figsize=(14, 4),  
         fill=True,
         fill_alpha=0.60,
         text_wrap=50,
@@ -303,7 +303,7 @@ In this example, the ``kde_distributions()`` function is used to generate histog
 the variables ``"age"``, ``"education-num"``, and ``"hours-per-week"`` but with 
 ``plot_type="hist"``, meaning no KDE plots are included—only histograms are displayed. 
 The plots are arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
-with a grid size of `14x4 inches` (``grid_figsize=(14, 4)``). The histograms are 
+with a subplot grid size of `14x4 inches` (``subplot_figsize=(14, 4)``). The histograms are 
 divided into `10 bins` (``bins=10``), and the ``y-axis`` is labeled "Density" (``y_axis_label="Density"``).
 Font sizes for the axis labels and tick labels are set to `16` and `14` points, 
 respectively, ensuring clarity in the visualizations. This setup focuses on the 
@@ -324,7 +324,7 @@ histogram representation without the KDE overlay.
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4), 
+        subplot_figsize=(14, 4), 
         fill=True,
         text_wrap=50,
         bbox_inches="tight",
@@ -365,7 +365,7 @@ reflecting that the histograms display the count of observations within each bin
 Additionally, the stat parameter is set to ``"Count"`` to show the actual counts instead of 
 densities. The rest of the parameters remain the same as in the previous example, 
 with the plots arranged in a single row of four columns (``n_rows=1, n_cols=3``), 
-a grid size of `14x4 inches`, and a bin count of `10`. This setup focuses on 
+a subplot grid size of `14x4 inches`, and a bin count of `10`. This setup focuses on 
 visualizing the raw counts in the dataset using orange-colored histograms.
 
 .. code-block:: python
@@ -382,7 +382,7 @@ visualizing the raw counts in the dataset using orange-colored histograms.
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4),  
+        subplot_figsize=(14, 4),  
         text_wrap=50,
         hist_color="orange",
         bbox_inches="tight",
@@ -425,7 +425,7 @@ represent the density of observations within each bin. The histogram bars are
 colored using ``hist_color="brown"``, with a ``fill_alpha=0.60`` while the s
 tatistical overlays enhance the interpretability of the data. The layout is 
 configured with a single row and multiple columns ``(n_rows=1, n_cols=3)``, and 
-the grid size is set to `15x5 inches`. This example highlights how to visualize 
+the subplot grid size is set to `15x5 inches`. This example highlights how to visualize 
 central tendencies within the data using a histogram that prominently displays 
 the mean and median.
 
@@ -443,7 +443,7 @@ the mean and median.
         df=df,
         n_rows=1,
         n_cols=3,
-        grid_figsize=(14, 4), 
+        subplot_figsize=(14, 4), 
         text_wrap=50,
         hist_color="brown",
         bbox_inches="tight",
@@ -495,7 +495,7 @@ Additionally, standard deviation bands are plotted using colors ``"purple"``,
 ``"green"``, and ``"silver"`` for one, two, and three standard deviations, respectively.
 
 The layout is configured with a single row and multiple columns ``(n_rows=1, n_cols=3)``, 
-and the grid size is set to `15x5 inches`. This setup is particularly useful for 
+and the subplot grid size is set to `15x5 inches`. This setup is particularly useful for 
 visualizing the central tendencies within the data while also providing a clear 
 view of the distribution and spread through the standard deviation bands. The 
 configuration used in this example showcases how histograms can be enhanced with 
@@ -2370,18 +2370,18 @@ regular bar plots for income by age, without stacking.
 Box and Violin Plots
 =====================
 
-**Create and save individual boxplots or violin plots, an entire grid of plots, or both for specified metrics and comparisons.**
+**Create and save individual boxplots or violin plots, an entire grid of subplots, or both for specified metrics and comparisons.**
 
-The ``box_violin_plot`` function generates individual and/or grid-based plots of boxplots or violin plots for specified metrics against comparison categories in a DataFrame. It offers extensive customization options, including control over plot type, display mode, axis label rotation, figure size, and saving preferences, making it suitable for a wide range of data visualization needs.
+The ``box_violin_plot`` function generates individual and/or subplot-based plots of boxplots or violin plots for specified metrics against comparison categories in a DataFrame. It offers extensive customization options, including control over plot type, display mode, axis label rotation, figure size, and saving preferences, making it suitable for a wide range of data visualization needs.
 
 This function supports:
 - Rotating plots (swapping x and y axes).
 - Adjusting font sizes for axis labels and tick labels.
 - Wrapping plot titles for better readability.
 - Saving plots in PNG and/or SVG format with customizable file paths.
-- Visualizing the distribution of metrics across categories, either individually, as a grid, or both.
+- Visualizing the distribution of metrics across categories, either individually, as subplots, or both.
 
-.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=False, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, label_names=None, **kwargs)
+.. function:: box_violin_plot(df, metrics_list, metrics_comp, n_rows=None, n_cols=None, image_path_png=None, image_path_svg=None, save_plots=False, show_legend=True, plot_type="boxplot", xlabel_rot=0, show_plot="both", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, xlim=None, ylim=None, label_names=None, **kwargs)
 
     :param df: The DataFrame containing the data to plot.
     :type df: pandas.DataFrame
@@ -2405,14 +2405,14 @@ This function supports:
     :type plot_type: str, optional
     :param xlabel_rot: Rotation angle for x-axis labels. Defaults to ``0``.
     :type xlabel_rot: int, optional
-    :param show_plot: Specify the plot display mode: ``"individual"``, ``"grid"``, or ``"both"``. Defaults to ``"both"``.
+    :param show_plot: Specify the plot display mode: ``"individual"``, ``"subplots"``, or ``"both"``. Defaults to ``"both"``.
     :type show_plot: str, optional
     :param rotate_plot: Whether to rotate the plots by swapping the x and y axes. Defaults to ``False``.
     :type rotate_plot: bool, optional
     :param individual_figsize: Dimensions (width, height) for individual plots. Defaults to ``(6, 4)``.
     :type individual_figsize: tuple, optional
-    :param grid_figsize: Dimensions (width, height) for the grid plot.
-    :type grid_figsize: tuple, optional
+    :param subplot_figsize: Dimensions (width, height) of the subplots.
+    :type subplot_figsize: tuple, optional
     :param label_fontsize: Font size for axis labels. Defaults to ``12``.
     :type label_fontsize: int, optional
     :param tick_fontsize: Font size for tick labels. Defaults to ``10``.
@@ -2429,39 +2429,39 @@ This function supports:
     :type kwargs: additional keyword arguments
 
     :raises ValueError:
-        - If ``show_plot`` is not one of ``"individual"``, ``"grid"``, or ``"both"``.
+        - If ``show_plot`` is not one of ``"individual"``, ``"subplots"``, or ``"both"``.
         - If ``save_plots`` is ``True`` but neither ``image_path_png`` nor ``image_path_svg`` is specified.
         - If ``rotate_plot`` is not a boolean value.
         - If ``individual_figsize`` is not a tuple or list of two numbers.
-        - If ``grid_figsize`` is provided and is not a tuple or list of two numbers.
+        - If ``subplot_figsize`` is provided and is not a tuple or list of two numbers.
 
     :returns: None
 
 .. admonition:: Notes
 
-    - Automatically calculates grid dimensions if ``n_rows`` and ``n_cols`` are not specified.
+    - Automatically calculates subplot dimensions if ``n_rows`` and ``n_cols`` are not specified.
     - Rotating plots swaps the roles of the x and y axes.
     - Saving plots requires specifying valid file paths for PNG and/or SVG formats.
     - Supports customization of plot labels, title wrapping, and font sizes for publication-quality visuals.
 
 
 
-This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, a grid of plots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.
+This function provides the ability to create and save boxplots or violin plots for specified metrics and comparison categories. It supports the generation of individual plots, subplots, or both. Users can customize the appearance, save the plots to specified directories, and control the display of legends and labels.
 
-Box Plots Grid Example
------------------------
+Box Plots: Subplots Example
+-----------------------------
 
-In this example with the US census data [1]_, the box_violin_plot function is employed to create a grid of 
+In this example with the US census data [1]_, the box_violin_plot function is employed to create subplots of 
 boxplots, comparing different metrics against the ``"age_group"`` column in the 
 DataFrame. The ``metrics_comp`` parameter is set to [``"age_group"``], meaning 
 that the comparison will be based on different age groups. The ``metrics_list`` is 
 provided as ``age_boxplot_list``, which contains the specific metrics to be visualized. 
-The function is configured to arrange the plots in a grid formatThe ``image_path_png`` and 
+The function is configured to arrange the plots in a subplots format. The ``image_path_png`` and 
 ``image_path_svg`` parameters are specified to save the plots in both PNG and 
 SVG formats, and the save_plots option is set to ``"all"``, ensuring that both 
-individual and grid plots are saved.
+individual and subplots are saved.
 
-The plots are displayed in a grid format, as indicated by the ``show_plot="grid"`` 
+The plots are displayed in a subplots format, as indicated by the ``show_plot="subplots"`` 
 parameter. The ``plot_type`` is set to ``"boxplot"``, so the function will generate 
 boxplots for each metric in the list. Additionally, the ```x-axis``` labels are rotated 
 by 90 degrees (``xlabel_rot=90``) to ensure that the labels are legible. The legend is 
@@ -2516,8 +2516,8 @@ metrics across different age groups, with all plots saved for future reference o
    
    <div style="height: 50px;"></div>
 
-Violin Plots Grid Example
---------------------------
+Violin Plots: Subplots Example
+-------------------------------
 
 In this example with the US census data [1]_, we keep everything the same as the prior example, but change the 
 ``plot_type`` to ``violinplot``. This adjustment will generate violin plots instead 
@@ -2561,8 +2561,8 @@ of boxplots while maintaining all other settings.
    <div style="height: 50px;"></div>
 
 
-Pivoted Violin Plots Grid Example
-------------------------------------
+Pivoted Violin Plots: Subplots Example
+---------------------------------------
 
 In this example with the US census data [1]_, we set ``xlabel_rot=0`` and ``rotate_plot=True`` 
 to pivot the plot, changing the orientation of the axes while keeping the ``x-axis`` labels upright. 
@@ -2609,9 +2609,9 @@ Scatter Plots and Best Fit Lines
 Scatter Fit Plot
 ------------------
 
-**Create and Save Scatter Plots or a Grid of Scatter Plots**
+**Create and Save Scatter Plots or Subplots of Scatter Plots**
 
-This function, ``scatter_fit_plot``, generates scatter plots for one or more pairs of variables (``x_vars`` and ``y_vars``) from a given DataFrame. The function can produce individual scatter plots or organize multiple scatter plots into a grid layout, enabling easy visualization of relationships between different pairs of variables in a unified view.
+This function, ``scatter_fit_plot``, generates scatter plots for one or more pairs of variables (``x_vars`` and ``y_vars``) from a given DataFrame. The function can produce individual scatter plots or organize multiple scatter plots into a subplots layout, enabling easy visualization of relationships between different pairs of variables in a unified view.
 
 **Optional Features**
 
@@ -2631,9 +2631,9 @@ The function provides a variety of parameters to customize the appearance and be
 
 **Plot Management**
 
-- **Display Options**: Control how plots are displayed, whether as individual plots, in a grid, or both.
+- **Display Options**: Control how plots are displayed: as individual plots, subplots, or both.
 
-- **Saving Options**: Save the generated plots in PNG or SVG formats. Specify which plots to save (e.g., ``"all"``, ``"individual"``, or ``"grid"``) and their respective file paths.
+- **Saving Options**: Save the generated plots in PNG or SVG formats. Specify which plots to save (e.g., ``"all"``, ``"individual"``, or ``"subplots"``) and their respective file paths.
 
 **Advanced Features**
 
@@ -2641,7 +2641,7 @@ The function provides a variety of parameters to customize the appearance and be
 
 - **Exclusion Rules**: Exclude specific (``x_var``, ``y_var``) combinations from being plotted using the ``exclude_combinations`` parameter.
 
-- **Legend and Aesthetic Adjustments**: Toggle legends, adjust plot size for individual or grid plots, and wrap long titles for clarity.
+- **Legend and Aesthetic Adjustments**: Toggle legends, adjust plot size for individual or subplots, and wrap long titles for clarity.
 
 **Error Handling**
 
@@ -2651,9 +2651,9 @@ The function performs comprehensive input validation to prevent common errors, s
 - Invalid or missing column names in the DataFrame.
 - Incorrectly specified parameters like axis limits or figure sizes.
 
-.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, all_vars=None, exclude_combinations=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="grid", rotate_plot=False, individual_figsize=(6, 4), grid_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, label_names=None, **kwargs)
+.. function:: scatter_fit_plot(df, x_vars=None, y_vars=None, all_vars=None, exclude_combinations=None, n_rows=None, n_cols=None, max_cols=4, image_path_png=None, image_path_svg=None, save_plots=None, show_legend=True, xlabel_rot=0, show_plot="subplots", rotate_plot=False, individual_figsize=(6, 4), subplot_figsize=None, label_fontsize=12, tick_fontsize=10, text_wrap=50, add_best_fit_line=False, scatter_color="C0", best_fit_linecolor="red", best_fit_linestyle="-", hue=None, hue_palette=None, size=None, sizes=None, marker="o", show_correlation=True, xlim=None, ylim=None, label_names=None, **kwargs)
 
-    Generate scatter plots or a grid of scatter plots for the given ``x_vars`` and ``y_vars``, with optional best fit lines, correlation coefficients, and customizable aesthetics.
+    Generate scatter plots or subplots of scatter plots for the given ``x_vars`` and ``y_vars``, with optional best fit lines, correlation coefficients, and customizable aesthetics.
 
     :param df: The DataFrame containing the data for the plots.
     :type df: pandas.DataFrame
@@ -2685,7 +2685,7 @@ The function performs comprehensive input validation to prevent common errors, s
     :param image_path_svg: Directory path to save SVG images of scatter plots.
     :type image_path_svg: str, optional
 
-    :param save_plots: Specify which plots to save (``"all"``, ``"individual"``, or ``"grid"``); uses a progress bar (``tqdm``) for saving.
+    :param save_plots: Specify which plots to save (``"all"``, ``"individual"``, or ``"subplots"``); uses a progress bar (``tqdm``) for saving.
     :type save_plots: str, optional
 
     :param show_legend: Toggle display of the plot legend. Default is ``True``.
@@ -2694,7 +2694,7 @@ The function performs comprehensive input validation to prevent common errors, s
     :param xlabel_rot: Angle to rotate ``x-axis`` labels. Default is ``0``.
     :type xlabel_rot: int, optional
 
-    :param show_plot: Controls plot display: ``"individual"``, ``"grid"``, ``"both"``, or ``"combinations"``. Default is ``"grid"``. Use ``"combinations"`` to return all valid (``x, y``) variable pairs without generating plots.
+    :param show_plot: Controls plot display: ``"individual"``, ``"subplots"``, ``"both"``, or ``"combinations"``. Default is ``"subplots"``. Use ``"combinations"`` to return all valid (``x, y``) variable pairs without generating plots.
     :type show_plot: str, optional
 
 
@@ -2704,8 +2704,8 @@ The function performs comprehensive input validation to prevent common errors, s
     :param individual_figsize: Dimensions for individual plot figures (width, height). Default is ``(6, 4)``.
     :type individual_figsize: tuple or list, optional
 
-    :param grid_figsize: Dimensions for grid plots (width, height). Calculated automatically if not specified.
-    :type grid_figsize: tuple or list, optional
+    :param subplot_figsize: Dimensions for subplots (width, height). Calculated automatically if not specified.
+    :type subplot_figsize: tuple or list, optional
 
     :param label_fontsize: Font size for axis labels. Default is ``12``.
     :type label_fontsize: int, optional
@@ -2788,8 +2788,8 @@ interpretability of the scatter plots.
         x_vars=["age", "education-num"],
         y_vars=["hours-per-week"],
         show_legend=True,
-        show_plot="grid",
-        grid_figsize=None,
+        show_plot="subplots",
+        subplot_figsize=None,
         label_fontsize=14,
         tick_fontsize=12,
         add_best_fit_line=True,
@@ -2818,7 +2818,7 @@ interpretability of the scatter plots.
 Scatter Plots Grouped by Category Example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In this example, the ``scatter_fit_plot`` function is used to generate a grid of 
+In this example, the ``scatter_fit_plot`` function is used to generate subplots of 
 scatter plots that examine the relationships between ``age`` and ``hours-per-week`` 
 as well as ``education-num`` and ``hours-per-week``. Compared to the previous 
 example, a few key inputs have been changed to adjust the appearance and functionality 
@@ -2849,7 +2849,7 @@ of the plots:
 
 These changes allow for the creation of scatter plots that highlight the income levels 
 of individuals, with custom color coding and without additional elements like a best 
-fit line or correlation coefficient. The resulting grid of plots is then saved as 
+fit line or correlation coefficient. The resulting subplots are then saved as 
 images in the specified paths.
 
 
@@ -2864,7 +2864,7 @@ images in the specified paths.
         x_vars=["age", "education-num"],
         y_vars=["hours-per-week"],
         show_legend=True,
-        show_plot="grid",
+        show_plot="subplots",
         label_fontsize=14,
         tick_fontsize=12,
         add_best_fit_line=False,
@@ -2895,11 +2895,11 @@ images in the specified paths.
 Scatter Plots (All Combinations Example)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In this example, the ``scatter_fit_plot`` function is used to generate a grid of scatter plots that explore the relationships between all numeric variables in the ``df`` DataFrame. The function automatically identifies and plots all possible combinations of these variables. Below are key aspects of this example:
+In this example, the ``scatter_fit_plot`` function is used to generate subplots of scatter plots that explore the relationships between all numeric variables in the ``df`` DataFrame. The function automatically identifies and plots all possible combinations of these variables. Below are key aspects of this example:
 
 1. **All Variables Combination**: The ``all_vars`` parameter is used to automatically generate scatter plots for all possible combinations of numerical variables in the DataFrame. This means you don't need to manually specify ``x_vars`` and ``y_vars``, as the function will iterate through each possible pair.
 
-2. **Grid Display**: The ``show_plot`` parameter is set to ``"grid"``, so the scatter plots are displayed in a grid format. This is useful for comparing multiple relationships simultaneously.
+2. **Subplot Display**: The ``show_plot`` parameter is set to ``"subplots"``, so the scatter plots are displayed in subplots format. This is useful for comparing multiple relationships simultaneously.
 
 3. **Font Sizes**: The ``label_fontsize`` and ``tick_fontsize`` parameters are set to ``14`` and ``12``, respectively. This increases the readability of axis labels and tick marks, making the plots more visually accessible.
 
@@ -2909,7 +2909,7 @@ In this example, the ``scatter_fit_plot`` function is used to generate a grid of
 
 6. **Correlation Coefficient**: The ``show_correlation`` parameter is set to ``True``, so the Pearson correlation coefficient will be displayed in the plot titles. This helps to quantify the strength of the relationship between the variables.
 
-These settings allow for the creation of scatter plots that comprehensively explore the relationships between all numeric variables in the DataFrame. The plots are saved in a grid format, with added best fit lines and correlation coefficients for deeper analysis. The resulting images can be stored in the specified directory for future reference.
+These settings allow for the creation of scatter plots that comprehensively explore the relationships between all numeric variables in the DataFrame. The plots are saved in subplots format, with added best fit lines and correlation coefficients for deeper analysis. The resulting images can be stored in the specified directory for future reference.
 
 .. code-block:: python
 
@@ -2919,7 +2919,7 @@ These settings allow for the creation of scatter plots that comprehensively expl
         df=df,
         all_vars=df.select_dtypes(np.number).columns.to_list(),
         show_legend=True,
-        show_plot="grid",
+        show_plot="subplots",
         label_fontsize=14,
         tick_fontsize=12,
         add_best_fit_line=True,
@@ -2951,13 +2951,13 @@ Scatter Plots: Excluding Specific Combinations
 Example 1
 ~~~~~~~~~~~
 
-In this example, the ``scatter_fit_plot`` function is used to generate a grid of 
+In this example, the ``scatter_fit_plot`` function is used to generate subplots of 
 scatter plots while excluding specific combinations of variables. This allows for 
 a more targeted exploration of relationships, omitting plots that may be redundant 
 or irrelevant. Below are key aspects of this example:
 
 1. **Exclude Combinations**: The ``exclude_combinations parameter`` is used to 
-specify pairs of variables that should be excluded from the scatter plot grid. 
+specify pairs of variables that should be excluded from the scatter plot subplot grid. 
 
 For example:
 
@@ -2973,7 +2973,7 @@ This ensures that the generated plots are more relevant to the analysis.
 is used to automatically generate scatter plots for all combinations of numerical 
 variables in the DataFrame, minus the excluded pairs.
 
-3. **Grid Display**: The ``show_plot`` parameter is set to ``"grid"``, allowing for 
+3. **Subplot Display**: The ``show_plot`` parameter is set to ``"subplots"``, allowing for 
 simultaneous visualization of multiple relationships in a cohesive layout.
 
 By excluding specific variable combinations, this example demonstrates how to fine-tune the generated scatter plots to focus only on the most meaningful comparisons.
@@ -2997,7 +2997,7 @@ By excluding specific variable combinations, this example demonstrates how to fi
         all_vars=df.select_dtypes(np.number).columns.to_list(),
         show_legend=True,
         exclude_combinations=exclude_combinations,
-        show_plot="grid",
+        show_plot="subplots",
         label_fontsize=14,
         tick_fontsize=12,
         add_best_fit_line=True,
@@ -3081,7 +3081,7 @@ Below is an example illustrating how to retrieve a list of combinations:
         show_correlation=True,
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        save_plots="grid",
+        save_plots="subplots",
     )
 
     print(combinations)
