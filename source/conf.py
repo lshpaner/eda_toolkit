@@ -12,7 +12,7 @@ from docutils.parsers.rst import roles
 project = "EDA Toolkit"
 copyright = "2024, Leonid Shpaner, Oscar Gil"
 author = "Leonid Shpaner, Oscar Gil"
-release = "0.0.16"
+release = "0.0.17"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -54,12 +54,9 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_rtd_theme"
-# html_static_path = ["_static"]
 
 # If your documentation is served from a subdirectory, set this to the subdirectory path
 html_show_sourcelink = False
-
-# html_static_path = ["_static"]
 
 html_context = {
     "display_github": False,
