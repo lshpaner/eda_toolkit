@@ -188,15 +188,15 @@ def test_kde_distributions_invalid_std_color_length(sample_dataframe):
         )
 
 
-def test_kde_distributions_single_var_grid_warning(sample_dataframe):
+def test_kde_distributions_single_var_subplot_warning(sample_dataframe):
     with pytest.raises(
         ValueError,
-        match="Cannot use grid_figsize when there is only one",
+        match="Cannot use subplot_figsize when there is only one",
     ):
         kde_distributions(
             df=sample_dataframe,
             vars_of_interest=["Feature1"],
-            grid_figsize=(5, 5),  # This must be passed
+            subplot_figsize=(5, 5),  # This must be passed
         )
 
 
@@ -810,7 +810,7 @@ def test_scatter_fit_plot_basic(sample_scatter_dataframe):
             sample_scatter_dataframe,
             x_vars="Feature1",
             y_vars="Feature2",
-            show_plot="grid",
+            show_plot="subplots",  # Default to subplots
         )
     except Exception as e:
         pytest.fail(f"scatter_fit_plot failed with default parameters: {e}")
@@ -837,7 +837,7 @@ def test_scatter_fit_plot_best_fit(sample_scatter_dataframe):
             x_vars="Feature1",
             y_vars="Feature2",
             add_best_fit_line=True,
-            show_plot="grid",
+            show_plot="subplots",
         )
     except Exception as e:
         pytest.fail(f"scatter_fit_plot failed with best fit line: {e}")
@@ -851,7 +851,7 @@ def test_scatter_fit_plot_hue(sample_scatter_dataframe):
             x_vars="Feature1",
             y_vars="Feature2",
             hue="Category",
-            show_plot="grid",
+            show_plot="subplots",
         )
     except Exception as e:
         pytest.fail(f"scatter_fit_plot failed with hue parameter: {e}")
@@ -890,7 +890,7 @@ def test_scatter_fit_plot_hue_palette_without_hue(sample_scatter_dataframe):
 def test_scatter_fit_plot_invalid_save_plots(sample_scatter_dataframe):
     with pytest.raises(
         ValueError,
-        match="Invalid `save_plots` value. Choose from 'all', 'individual', 'grid', or None.",
+        match="Invalid `save_plots` value. Choose from 'all', 'individual', 'subplots', or None.",
     ):
         scatter_fit_plot(
             sample_scatter_dataframe,
@@ -1047,12 +1047,12 @@ def test_scatter_fit_plot_invalid_figsize(sample_scatter_dataframe):
             individual_figsize="invalid_size",  # Not a tuple or list of two numbers
         )
 
-    with pytest.raises(ValueError, match="Invalid `grid_figsize` value"):
+    with pytest.raises(ValueError, match="Invalid `subplot_figsize` value"):
         scatter_fit_plot(
             sample_scatter_dataframe,
             x_vars=["Feature1"],
             y_vars=["Feature2"],
-            grid_figsize=[10],  # Should be a tuple or list of two numbers
+            subplot_figsize=[10],  # Should be a tuple or list of two numbers
         )
 
 
@@ -1063,7 +1063,7 @@ def test_scatter_fit_plot_legend_removal(sample_scatter_dataframe):
             sample_scatter_dataframe,
             x_vars=["Feature1"],
             y_vars=["Feature2"],
-            show_plot="grid",
+            show_plot="subplots",
         )
     except AttributeError as e:
         pytest.fail(f"scatter_fit_plot failed due to legend removal issue: {e}")
@@ -1078,7 +1078,7 @@ def test_scatter_fit_plot_xylim(sample_scatter_dataframe):
             y_vars=["Feature2"],
             xlim=(0, 100),
             ylim=(0, 200),
-            show_plot="grid",
+            show_plot="subplots",
         )
     except Exception as e:
         pytest.fail(f"scatter_fit_plot failed with xlim/ylim: {e}")
@@ -1157,11 +1157,11 @@ def test_box_violin_plot_invalid_input(sample_box_violin_dataframe):
         )
 
 
-# Test that `show_plot` only allows "individual", "grid", or "both"
+# Test that `show_plot` only allows "individual", "subplots", or "both"
 def test_box_violin_plot_invalid_show_plot(sample_box_violin_dataframe):
     with pytest.raises(
         ValueError,
-        match="Invalid `show_plot` value selected. Choose from 'individual', 'grid', or 'both'.",
+        match="Invalid `show_plot` value selected. Choose from 'individual', 'subplots', or 'both'.",
     ):
         box_violin_plot(
             sample_box_violin_dataframe,
@@ -1220,14 +1220,14 @@ def test_box_violin_plot_invalid_individual_figsize(sample_box_violin_dataframe)
         )
 
 
-# Test that `grid_figsize`, if specified, must be a tuple/list of two numbers
-def test_box_violin_plot_invalid_grid_figsize(sample_box_violin_dataframe):
-    with pytest.raises(ValueError, match="Invalid `grid_figsize` value"):
+# Test that `subplot_figsize`, if specified, must be a tuple/list of two numbers
+def test_box_violin_plot_invalid_subplot_figsize(sample_box_violin_dataframe):
+    with pytest.raises(ValueError, match="Invalid `subplot_figsize` value"):
         box_violin_plot(
             sample_box_violin_dataframe,
             metrics_list=["Metric1"],
             metrics_comp=["Category"],
-            grid_figsize=["too", "big"],  # Invalid values
+            subplot_figsize=["too", "big"],  # Invalid values
         )
 
 
