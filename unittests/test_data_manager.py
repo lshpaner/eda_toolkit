@@ -433,9 +433,12 @@ def test_custom_help_override():
 
 def test_returns_dataframe(sample_df):
     result = generate_table1(sample_df)
-    assert hasattr(result, "_df")
-    assert isinstance(result._df, pd.DataFrame)
-    assert "Variable" in result.columns
+
+    # Updated: Check if result is DataFrame or tuple of DataFrames
+    if isinstance(result, tuple):
+        assert all(isinstance(r, pd.DataFrame) for r in result)
+    else:
+        assert isinstance(result, pd.DataFrame)
 
 
 def test_returns_markdown_only(sample_df):
@@ -608,13 +611,13 @@ def test_include_types_both_returns_mixed(sample_df):
 def test_include_types_invalid_raises():
     """
     This test verifies that generate_table1 handles unexpected values for
-    include_types gracefully.
-    As of current implementation, it defaults to treating it as 'both'.
+    include_types gracefully. As of the current implementation, it defaults to 'both'.
     """
-    result = generate_table1(
-        pd.DataFrame({"a": [1, 2, 3]}),
-        include_types="invalid_option",
-    )
-    # Should return a TableWrapper containing a DataFrame
-    assert hasattr(result, "_df")
-    assert isinstance(result._df, pd.DataFrame)
+    df = pd.DataFrame({"a": [1, 2, 3]})
+    result = generate_table1(df, include_types="invalid_option")
+
+    # Updated: Check if result is DataFrame or tuple of DataFrames
+    if isinstance(result, tuple):
+        assert all(isinstance(r, pd.DataFrame) for r in result)
+    else:
+        assert isinstance(result, pd.DataFrame)

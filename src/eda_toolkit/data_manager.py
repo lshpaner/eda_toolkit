@@ -872,8 +872,19 @@ class TableWrapper:
         return TableWrapper(dropped_df, table1_to_str(dropped_df))
 
 
+import pandas as pd
+import numpy as np
+import sys
+from scipy.stats import ttest_ind, chi2_contingency
+
+
+from scipy.stats import fisher_exact
+
+
 def generate_table1(
     df,
+    apply_bonferroni=False,
+    apply_bh_fdr=False,
     categorical_cols=None,
     continuous_cols=None,
     decimal_places=2,
@@ -885,45 +896,17 @@ def generate_table1(
     value_counts=False,
     include_types="both",
     combine=True,
+    groupby_col=None,
+    use_fisher_exact=False,
 ):
+    if apply_bonferroni and apply_bh_fdr:
+        raise ValueError(
+            "Cannot apply both Bonferroni and Benjamini-Hochberg corrections simultaneously. Choose one."
+        )
+
     """
     Generate a summary table (Table 1) for a given DataFrame.
-
-    Parameters:
-    -----------
-    df : pandas.DataFrame
-        Input DataFrame.
-    categorical_cols : list, optional
-        List of categorical columns. If None, inferred.
-    continuous_cols : list, optional
-        List of continuous columns. If None, inferred.
-    decimal_places : int, default=2
-        Number of decimal places for rounding.
-    export_markdown : bool, default=False
-        If True, saves summary as Markdown file(s).
-    markdown_path : str, optional
-        Full path and base filename for Markdown export. Used as prefix for
-        _continuous.md and _categorical.md.
-    max_categories : int, optional
-        Max number of categories per categorical column to show.
-    detect_binary_numeric : bool, default=True
-        Whether to treat binary numerics as categorical.
-    return_markdown_only : bool, default=False
-        If True, return Markdown string(s) instead of DataFrame(s).
-    value_counts : bool, default=False
-        If True, show counts for each value of categorical features.
-    include_types : {'continuous', 'categorical', 'both'}
-        Which type(s) of variables to include in the summary.
-    combine : bool, default=True
-        If True and include_types='both', returns a single combined DataFrame.
-        If False, returns a tuple.
-
-    Returns:
-    --------
-    pd.DataFrame, tuple, or str/dict
-        Summary table(s) or Markdown string(s), depending on parameters.
     """
-
     if categorical_cols is None:
         categorical_cols = df.select_dtypes(
             include=["object", "category", "bool"]
@@ -946,29 +929,51 @@ def generate_table1(
     continuous_parts = []
     categorical_parts = []
 
+    if groupby_col:
+        group_vals = df[groupby_col].dropna().unique()
+        if len(group_vals) != 2:
+            raise ValueError(
+                "groupby_col must have exactly two groups for p-value calculation."
+            )
+        g1, g2 = group_vals
+        group1_label = f"{g1} (n = {len(df[df[groupby_col] == g1])})"
+        group2_label = f"{g2} (n = {len(df[df[groupby_col] == g2])})"
+
     for col in continuous_cols:
         series = df[col]
         non_missing = series.dropna()
-        continuous_parts.append(
-            {
-                "Variable": col,
-                "Type": "Continuous",
-                "Mean": round(non_missing.mean(), decimal_places),
-                "SD": round(non_missing.std(), decimal_places),
-                "Median": round(non_missing.median(), decimal_places),
-                "Min": round(non_missing.min(), decimal_places),
-                "Max": round(non_missing.max(), decimal_places),
-                "Mode": (
-                    round(non_missing.mode().iloc[0], decimal_places)
-                    if not non_missing.mode().empty
-                    else ""
-                ),
-                "Missing (n)": series.isna().sum(),
-                "Missing (%)": 100 * series.isna().mean(),
-                "Count": non_missing.count(),
-                "Proportion (%)": 100 * non_missing.count() / total_rows,
-            }
-        )
+        row = {
+            "Variable": col,
+            "Type": "Continuous",
+            "Mean": round(non_missing.mean(), decimal_places),
+            "SD": round(non_missing.std(), decimal_places),
+            "Median": round(non_missing.median(), decimal_places),
+            "Min": round(non_missing.min(), decimal_places),
+            "Max": round(non_missing.max(), decimal_places),
+            "Mode": (
+                round(non_missing.mode().iloc[0], decimal_places)
+                if not non_missing.mode().empty
+                else ""
+            ),
+            "Missing (n)": series.isna().sum(),
+            "Missing (%)": 100 * series.isna().mean(),
+            "Count": non_missing.count(),
+            "Proportion (%)": 100 * non_missing.count() / total_rows,
+        }
+        if groupby_col:
+            x1 = df[df[groupby_col] == g1][col].dropna()
+            x2 = df[df[groupby_col] == g2][col].dropna()
+            _, p = ttest_ind(
+                x1, x2, equal_var=False
+            )  # always use t-test for continuous
+            row[group1_label] = (
+                f"{x1.mean():.{decimal_places}f} ({x1.std():.{decimal_places}f})"
+            )
+            row[group2_label] = (
+                f"{x2.mean():.{decimal_places}f} ({x2.std():.{decimal_places}f})"
+            )
+            row["P-value"] = round(p, decimal_places)
+        continuous_parts.append(row)
 
     for col in categorical_cols:
         series = df[col]
@@ -976,14 +981,92 @@ def generate_table1(
         missing_pct = 100 * missing_n / total_rows
         mode_val = series.mode().iloc[0] if not series.mode().empty else ""
 
+        if groupby_col:
+            ct = pd.crosstab(df[col], df[groupby_col])
+            if ct.shape[1] == 2:
+                if use_fisher_exact:
+                    if ct.shape[0] == 2:
+                        print(f"Using Fisher's Exact Test for variable: {col}")
+                        _, p = fisher_exact(ct.to_numpy())
+                    else:
+                        print(
+                            f"Fisher's Exact Test requires a 2x2 table. Falling back to chi-squared for '{col}'."
+                        )
+                        _, p, _, _ = chi2_contingency(ct)
+                else:
+                    print(f"Using Chi-squared test for variable: {col}")
+                    _, p, _, _ = chi2_contingency(ct)
+                summary_row = {
+                    "Variable": col,
+                    "Type": "Categorical",
+                    "Mean": "",
+                    "SD": "",
+                    "Median": "",
+                    "Min": "",
+                    "Max": "",
+                    "Mode": mode_val,
+                    "Missing (n)": missing_n,
+                    "Missing (%)": missing_pct,
+                    "Count": series.notna().sum(),
+                    "Proportion (%)": 100 * series.notna().sum() / total_rows,
+                    group1_label: ct[g1].sum() if g1 in ct.columns else 0,
+                    group2_label: ct[g2].sum() if g2 in ct.columns else 0,
+                    "P-value": round(p, 4),
+                }
+                categorical_parts.append(summary_row)
+
+        elif not groupby_col:
+            summary_row = {
+                "Variable": col,
+                "Type": "Categorical",
+                "Mean": "",
+                "SD": "",
+                "Median": "",
+                "Min": "",
+                "Max": "",
+                "Mode": mode_val,
+                "Missing (n)": missing_n,
+                "Missing (%)": missing_pct,
+                "Count": series.notna().sum(),
+                "Proportion (%)": 100 * series.notna().sum() / total_rows,
+            }
+            categorical_parts.append(summary_row)
+
         if value_counts:
             counts = series.value_counts(dropna=False)
             if max_categories:
                 counts = counts.head(max_categories)
             for cat_val, count in counts.items():
                 label = f"{col} = {cat_val}" if pd.notna(cat_val) else f"{col} = NaN"
-                categorical_parts.append(
-                    {
+                if groupby_col:
+                    g1_mask = (df[col] == cat_val) & (df[groupby_col] == g1)
+                    g2_mask = (df[col] == cat_val) & (df[groupby_col] == g2)
+                    g1_count = g1_mask.sum()
+                    g2_count = g2_mask.sum()
+                    g1_total = (df[groupby_col] == g1).sum()
+                    g2_total = (df[groupby_col] == g2).sum()
+                    g1_prop = 100 * g1_count / g1_total if g1_total else 0
+                    g2_prop = 100 * g2_count / g2_total if g2_total else 0
+                    g1_str = f"{g1_count} ({g1_prop:.{decimal_places}f}%)"
+                    g2_str = f"{g2_count} ({g2_prop:.{decimal_places}f}%)"
+                    row = {
+                        "Variable": label,
+                        "Type": "Categorical",
+                        "Mean": "",
+                        "SD": "",
+                        "Median": "",
+                        "Min": "",
+                        "Max": "",
+                        "Mode": mode_val,
+                        "Missing (n)": missing_n,
+                        "Missing (%)": missing_pct,
+                        "Count": count,
+                        "Proportion (%)": 100 * count / total_rows,
+                        group1_label: g1_str,
+                        group2_label: g2_str,
+                    }
+                else:
+                    row = {
                         "Variable": label,
                         "Type": "Categorical",
                         "Mean": "",
@@ -997,27 +1080,51 @@ def generate_table1(
                         "Count": count,
                         "Proportion (%)": 100 * count / total_rows,
                     }
-                )
+                categorical_parts.append(row)
+
+    if apply_bonferroni:
+        all_pval_keys = []
+        all_raw_pvals = []
+
+        # Collect continuous p-values
+        for i, row in enumerate(continuous_parts):
+            if "P-value" in row:
+                all_pval_keys.append(("continuous", i))
+                all_raw_pvals.append(row["P-value"])
+
+        # Collect categorical p-values
+        for i, row in enumerate(categorical_parts):
+            if "P-value" in row:
+                all_pval_keys.append(("categorical", i))
+                all_raw_pvals.append(row["P-value"])
+
+        # Apply Bonferroni or Benjamini-Hochberg correction globally
+        if apply_bonferroni:
+            corrected = [min(p * len(all_raw_pvals), 1.0) for p in all_raw_pvals]
+        elif apply_bh_fdr:
+            sorted_indices = np.argsort(all_raw_pvals)
+            sorted_pvals = np.array(all_raw_pvals)[sorted_indices]
+            n = len(sorted_pvals)
+            bh_adjusted = np.empty(n)
+            for i in range(n):
+                bh_adjusted[i] = sorted_pvals[i] * n / (i + 1)
+            bh_adjusted = np.minimum.accumulate(bh_adjusted[::-1])[
+                ::-1
+            ]  # enforce monotonicity
+            bh_adjusted = np.clip(bh_adjusted, 0, 1.0)
+            corrected = np.empty_like(bh_adjusted)
+            corrected[sorted_indices] = bh_adjusted
         else:
-            count = series.notna().sum()
-            categorical_parts.append(
-                {
-                    "Variable": col,
-                    "Type": "Categorical",
-                    "Mean": "",
-                    "SD": "",
-                    "Median": "",
-                    "Min": "",
-                    "Max": "",
-                    "Mode": mode_val,
-                    "Missing (n)": missing_n,
-                    "Missing (%)": missing_pct,
-                    "Count": count,
-                    "Proportion (%)": 100 * count / total_rows,
-                }
-            )
+            corrected = all_raw_pvals
+
+        for (section, i), p_adj in zip(all_pval_keys, corrected):
+            if section == "continuous":
+                continuous_parts[i]["P-value"] = round(p_adj, 4)
+            else:
+                categorical_parts[i]["P-value"] = round(p_adj, 4)
 
     df_continuous = pd.DataFrame(continuous_parts).replace({np.nan: ""})
+
     df_categorical = pd.DataFrame(categorical_parts).replace({np.nan: ""})
 
     def format_numeric_cols(df):
@@ -1066,7 +1173,6 @@ def generate_table1(
     df_continuous = format_numeric_cols(df_continuous)
     df_categorical = format_numeric_cols(df_categorical)
 
-    # Drop numeric-only columns from categorical table
     drop_cols = ["Mean", "SD", "Median", "Min", "Max"]
     df_categorical.drop(columns=drop_cols, inplace=True, errors="ignore")
 
@@ -1088,39 +1194,25 @@ def generate_table1(
             markdown_str = df_to_markdown(df_continuous)
             if not markdown_path:
                 markdown_path = "table1.md"
-            with open(
-                markdown_path.replace(".md", "_continuous.md"),
-                "w",
-            ) as f:
+            with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
                 f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
-
         elif include_types == "categorical":
             markdown_str = df_to_markdown(df_categorical)
             if not markdown_path:
                 markdown_path = "table1.md"
-            with open(
-                markdown_path.replace(".md", "_categorical.md"),
-                "w",
-            ) as f:
+            with open(markdown_path.replace(".md", "_categorical.md"), "w") as f:
                 f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
-
         else:
             md_cont = df_to_markdown(df_continuous)
             md_cat = df_to_markdown(df_categorical)
             if markdown_path:
-                with open(
-                    markdown_path.replace(".md", "_continuous.md"),
-                    "w",
-                ) as f:
+                with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
                     f.write(md_cont)
-                with open(
-                    markdown_path.replace(".md", "_categorical.md"),
-                    "w",
-                ) as f:
+                with open(markdown_path.replace(".md", "_categorical.md"), "w") as f:
                     f.write(md_cat)
             if return_markdown_only:
                 return {"continuous": md_cont, "categorical": md_cat}
@@ -1143,22 +1235,13 @@ def generate_table1(
         result = result.fillna("")
 
     def attach_pretty_string(df, string):
-        return TableWrapper(df, string)
+        return df
 
     if isinstance(result, pd.DataFrame):
-        result = attach_pretty_string(
-            result, table1_to_str(result, float_precision=decimal_places)
-        )
+        result = attach_pretty_string(result, "")
     elif isinstance(result, tuple):
-        result = tuple(
-            attach_pretty_string(
-                r,
-                table1_to_str(r, float_precision=decimal_places),
-            )
-            for r in result
-        )
+        result = tuple(attach_pretty_string(r, "") for r in result)
 
-    # If user requested to return only markdown string(s), do that and skip DataFrame(s)
     if return_markdown_only:
         if include_types == "continuous":
             return df_to_markdown(df_continuous)
@@ -1170,7 +1253,6 @@ def generate_table1(
                 "categorical": df_to_markdown(df_categorical),
             }
 
-    # Automatically print each table when not assigned (e.g., in Jupyter or console)
     if not combine:
         if (
             hasattr(sys, "_getframe")
@@ -1180,7 +1262,7 @@ def generate_table1(
                 for i, r in enumerate(result):
                     print(r)
                     if i < len(result) - 1:
-                        print()  # blank line
+                        print()
             else:
                 print(result)
 
