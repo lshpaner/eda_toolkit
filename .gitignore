@@ -80,6 +80,7 @@ docs/_build/
 src/*.doctree
 *.doctree
 .doctrees/
+**/.doctrees/
 docs/**/*.doctrees
 docs/**/*.doctree
 
