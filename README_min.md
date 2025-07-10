@@ -44,7 +44,7 @@ pip install eda_toolkit
 
 ## 📄 Official Documentation
 
-https://lshpaner.github.io/eda_toolkit 
+https://lshpaner.github.io/eda_toolkit_docs 
 
 
 ## 🌐 Authors' Websites
