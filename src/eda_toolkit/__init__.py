@@ -31,7 +31,7 @@ University of San Diego for providing an exceptional learning environment and
 supporting our educational endeavors.
 
 
-Version: 0.0.16
+Version: 0.0.17
 """
 
 # Assign only the detailed documentation to __doc__

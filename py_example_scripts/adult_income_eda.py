@@ -17,12 +17,8 @@ from eda_toolkit import (
     box_violin_plot,
     scatter_fit_plot,
     flex_corr_matrix,
-    plot_2d_pdp,
-    plot_3d_pdp,
 )
-from sklearn.datasets import fetch_california_housing
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import GradientBoostingRegressor
+
 import pandas as pd
 
 
@@ -38,7 +34,8 @@ base_path = os.path.join(os.pardir)
 
 # Go up one level from 'notebooks' to parent directory,
 # then into the 'data' folder
-data_path = os.path.join(os.pardir, "data")
+script_dir = os.path.dirname(__file__)
+data_path = os.path.join(script_dir, "..", "data")
 data_output = os.path.join(os.pardir, "data_output")
 
 # create image paths
@@ -123,7 +120,7 @@ kde_distributions(
     df=df,
     n_rows=1,
     n_cols=3,
-    grid_figsize=(14, 4),  # Size of the overall grid figure
+    subplot_figsize=(14, 4),  # Size of the overall subplots figure
     fill=True,
     fill_alpha=0.60,
     text_wrap=50,
@@ -145,7 +142,7 @@ kde_distributions(
     df=df,
     n_rows=1,
     n_cols=3,
-    grid_figsize=(14, 4),  # Size of the overall grid figure
+    subplot_figsize=(14, 4),  # Size of the overall subplots figure
     fill=True,
     text_wrap=50,
     bbox_inches="tight",
@@ -167,7 +164,7 @@ kde_distributions(
     df=df,
     n_rows=1,
     n_cols=3,
-    grid_figsize=(14, 4),  # Size of the overall grid figure
+    subplot_figsize=(14, 4),  # Size of the overall subplots figure
     text_wrap=50,
     hist_color="orange",
     bbox_inches="tight",
@@ -190,7 +187,7 @@ kde_distributions(
     df=df,
     n_rows=1,
     n_cols=3,
-    grid_figsize=(14, 4),  # Size of the overall grid figure
+    subplot_figsize=(14, 4),  # Size of the overall subplots figure
     text_wrap=50,
     hist_color="brown",
     bbox_inches="tight",
@@ -723,7 +720,7 @@ print("*" * terminal_width)
 
 ################################################################################
 ## Box and Violin Plots
-## Box Plots Grid Example
+## Box Plots Subplots Example
 ################################################################################
 
 age_boxplot_list = df[
@@ -748,7 +745,7 @@ box_violin_plot(
     xlabel_rot=90,
 )
 
-## Violin Plots Grid Example
+## Violin Plots Subplots Example
 
 metrics_comp = ["age_group"]
 
@@ -765,7 +762,7 @@ box_violin_plot(
     xlabel_rot=90,
 )
 
-## Pivoted Violin Plots Grid Example
+## Pivoted Violin Plots Subplots Example
 
 metrics_comp = ["age_group"]
 
@@ -793,8 +790,8 @@ scatter_fit_plot(
     x_vars=["age", "education-num"],
     y_vars=["hours-per-week"],
     show_legend=True,
-    show_plot="grid",
-    grid_figsize=None,
+    show_plot="subplots",
+    subplot_figsize=None,
     label_fontsize=14,
     tick_fontsize=12,
     add_best_fit_line=True,
@@ -816,7 +813,7 @@ scatter_fit_plot(
     x_vars=["age", "education-num"],
     y_vars=["hours-per-week"],
     show_legend=True,
-    show_plot="grid",
+    show_plot="subplots",
     label_fontsize=14,
     tick_fontsize=12,
     add_best_fit_line=False,
@@ -843,7 +840,7 @@ scatter_fit_plot(
     df=df,
     all_vars=df.select_dtypes(np.number).columns.to_list(),
     show_legend=True,
-    show_plot="grid",
+    show_plot="subplots",
     label_fontsize=14,
     tick_fontsize=12,
     add_best_fit_line=True,
@@ -909,98 +906,37 @@ flex_corr_matrix(
     save_plots=True,
 )
 
-################################################################################
-## Partial Dependence Plots
-################################################################################
-
-## Load the dataset
-data = fetch_california_housing()
-df = pd.DataFrame(data.data, columns=data.feature_names)
-
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(
-    df, data.target, test_size=0.2, random_state=42
-)
-
-model = GradientBoostingRegressor(
-    n_estimators=100,
-    max_depth=4,
-    learning_rate=0.1,
-    loss="huber",
-    random_state=42,
-)
-model.fit(X_train, y_train)
-
-# Feature names
-names = data.feature_names
-
-# Generate 2D partial dependence plots
-plot_2d_pdp(
-    model=model,
-    X_train=X_train,
-    feature_names=names,
-    features=[
-        "MedInc",
-        "AveOccup",
-        "HouseAge",
-        "AveRooms",
-        "Population",
-        ("AveOccup", "HouseAge"),
-    ],
-    title="PDP of house value on CA non-location features",
-    grid_figsize=(14, 10),
-    individual_figsize=(12, 4),
-    label_fontsize=14,
-    tick_fontsize=12,
-    text_wrap=120,
-    plot_type="grid",
-    image_path_png=image_path_png,
-    save_plots="all",
-)
-
-################################################################################
-## 3D Partial Dependence Plots
-################################################################################
-
-## Static Plot
-
-# Load the dataset
-data = fetch_california_housing()
-df = pd.DataFrame(data.data, columns=data.feature_names)
-
-
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(
-    df, data.target, test_size=0.2, random_state=42
-)
-
-# Train a GradientBoostingRegressor Model
-model = GradientBoostingRegressor(
-    n_estimators=100,
-    max_depth=4,
-    learning_rate=0.1,
-    loss="huber",
-    random_state=1,
-)
-model.fit(X_train, y_train)
-
-# Create Static 3D Partial Dependence Plot
-# Call the function to generate the plot
-plot_3d_pdp(
-    model=model,
-    dataframe=X_test,  # Use the test dataset
-    feature_names=["HouseAge", "AveOccup"],
-    x_label="House Age",
-    y_label="Average Occupancy",
-    z_label="Partial Dependence",
-    title="3D Partial Dependence Plot of House Age vs. Average Occupancy",
-    image_filename="3d_pdp",
-    plot_type="static",
-    figsize=[8, 5],
-    text_wrap=40,
-    wireframe_color="black",
-    image_path_png=image_path_png,
-    grid_resolution=30,
-)
 
 input("Press ENTER to quit...")
+
+## Outcome CrossTab Plot Examples
+### Clean up income column by removing trailing period
+
+df["income"] = df["income"].astype(str)
+## Clean target column by removing trailing period
+df.loc[:, "income"] = df["income"].str.rstrip(".")
+
+# Display class balance
+print(f"\nBreakdown of y:\n{df['income'].value_counts()}\n")
+
+
+bar_list = ["race", "sex"]
+
+
+from eda_toolkit import outcome_crosstab_plot
+
+outcome_crosstab_plot(
+    df=df,
+    list_name=bar_list,
+    label_0="<=50k",
+    label_1=">50K",
+    figsize=(10, 6),
+    normalize=False,
+    image_path_svg=image_path_svg,
+    image_path_png=image_path_png,
+    string="outcome_by_feature",
+    save_plots=True,
+    outcome="income",
+    show_value_counts=True,
+    # color_schema=surg_tech_color,
+)
