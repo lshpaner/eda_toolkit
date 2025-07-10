@@ -3400,3 +3400,161 @@ def data_doctor(
                 bbox_inches="tight",
             )
             print(f"Plot saved as SVG at {svg_filename}")
+
+
+#################################################################################
+######################### Crosstab Plotting Function ############################
+#################################################################################
+
+
+def outcome_crosstab_plot(
+    df,
+    list_name,
+    outcome,
+    bbox_to_anchor=(0.5, -0.25),
+    w_pad=4,
+    h_pad=4,
+    figsize=(12, 8),
+    label_fontsize=12,
+    tick_fontsize=10,
+    n_rows=None,
+    n_cols=None,
+    label_0=None,
+    label_1=None,
+    normalize=False,
+    show_value_counts=False,
+    color_schema=None,
+    save_plots=False,
+    image_path_png=None,
+    image_path_svg=None,
+    string=None,
+):
+    """
+    Generates crosstab bar plots visualizing the relationship between an outcome
+    variable and multiple categorical variables.
+
+    Color control (via color_schema):
+      - None: default two-tone plus extras.
+      - list/tuple: applies to all subplots, repeating if needed.
+      - dict: map column names to specific color lists.
+
+    Parameters:
+    - df: pandas.DataFrame to plot.
+    - list_name: list of str, categorical columns to include.
+    - outcome: str, name of the outcome column.
+    - bbox_to_anchor: tuple, legend anchor coordinates.
+    - w_pad, h_pad: floats, padding for tight_layout.
+    - figsize: tuple, figure size.
+    - label_fontsize: int, font size for axis labels, titles, legend.
+    - tick_fontsize: int, font size for tick labels.
+    - n_rows, n_cols: ints, optional grid rows/columns; auto-calculated if omitted.
+    - label_0, label_1: str, custom x-axis labels for outcome levels.
+    - normalize: bool, False for raw counts, True for normalized proportions.
+    - show_value_counts: bool, append counts or percentages to legend entries.
+    - color_schema: None, list, or dict for color customization.
+    - save_plots: bool, save figures if True.
+    - image_path_png, image_path_svg: str paths for saving.
+    - string: base filename for saving (sanitized).
+    """
+    n_vars = len(list_name)
+
+    # Determine grid size
+    if n_rows is None and n_cols is None:
+        n_cols = math.ceil(math.sqrt(n_vars))
+        n_rows = math.ceil(n_vars / n_cols)
+    elif n_rows is None:
+        n_rows = math.ceil(n_vars / n_cols)
+    elif n_cols is None:
+        n_cols = math.ceil(n_vars / n_rows)
+
+    # Default color schemes
+    default_colors = ["#00BFC4", "#F8766D"]
+    extra_colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
+    axes = axes.flatten() if hasattr(axes, "flatten") else [axes]
+
+    for item, ax in zip(list_name, axes[:n_vars]):
+        # Compute crosstab
+        if not normalize:
+            ylabel = "Count"
+            ctab = pd.crosstab(df[outcome], df[item])
+        else:
+            ylabel = "Percentage"
+            ax.yaxis.set_major_formatter(
+                plt.FuncFormatter(lambda v, _: f"{v*100:.0f}%")
+            )
+            ctab = pd.crosstab(df[outcome], df[item], normalize="index")
+
+        # Select colors
+        n_cats = len(ctab.columns)
+        if isinstance(color_schema, dict) and item in color_schema:
+            scheme = color_schema[item]
+        elif isinstance(color_schema, (list, tuple)):
+            scheme = list(color_schema)
+        else:
+            scheme = default_colors.copy()
+        if len(scheme) < n_cats:
+            needed = n_cats - len(scheme)
+            pool = extra_colors if color_schema is None else scheme
+            scheme = (scheme + pool * math.ceil(needed / len(pool)))[:n_cats]
+
+        # Plot
+        ctab.plot(kind="bar", stacked=True, rot=0, ax=ax, color=scheme)
+
+        # Formatting
+        ax.set_ylabel(ylabel, fontsize=label_fontsize)
+        ax.set_xlabel("Outcome", fontsize=label_fontsize)
+        ax.tick_params(labelsize=tick_fontsize)
+        if label_0 and label_1:
+            ax.set_xticklabels([label_0, label_1], fontsize=tick_fontsize)
+        ax.set_title(f"Outcome vs. {item}", fontsize=label_fontsize)
+
+        # Legend labels: counts or percentages
+        labels = [str(col) for col in ctab.columns]
+        if show_value_counts:
+            if not normalize:
+                counts = df[item].value_counts()
+                labels = [
+                    f"{lbl} (n={counts.get(col, 0)})"
+                    for lbl, col in zip(labels, ctab.columns)
+                ]
+            else:
+                proportions = df[item].value_counts(normalize=True)
+                labels = [
+                    f"{lbl} ({proportions.get(col, 0)*100:.0f}%)"
+                    for lbl, col in zip(labels, ctab.columns)
+                ]
+
+        handles, _ = ax.get_legend_handles_labels()
+        leg = ax.legend(
+            handles,
+            labels,
+            loc="upper center",
+            bbox_to_anchor=bbox_to_anchor,
+            ncol=1,
+            fontsize=label_fontsize,
+        )
+        for text in leg.get_texts():
+            text.set_fontsize(label_fontsize)
+
+    # Hide extra subplots
+    for ax in axes[n_vars:]:
+        ax.axis("off")
+
+    plt.tight_layout(w_pad=w_pad, h_pad=h_pad)
+
+    # Save logic
+    if save_plots:
+        base = string or "crosstab_plot"
+        safe = base.replace(" ", "_").replace(":", "").lower()
+        if image_path_png:
+            plt.savefig(
+                os.path.join(image_path_png, f"{safe}.png"), bbox_inches="tight"
+            )
+        if image_path_svg:
+            plt.savefig(
+                os.path.join(image_path_svg, f"{safe}.svg"), bbox_inches="tight"
+            )
+
+    plt.show()
