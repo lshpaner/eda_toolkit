@@ -27,7 +27,7 @@ Changelog
 `Version 0.0.16`_
 ----------------------
 
-.. _Version 0.0.16: https://lshpaner.github.io/eda_toolkit/v0.0.16/index.html
+.. _Version 0.0.16: https://lshpaner.github.io/eda_toolkit_docs/v0.0.16/index.html
 
 * Enhanced Plotting (+) Text Wrap Functionality by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/82
 * added ``sklearn`` import by @lshpaner in https://github.com/lshpaner/eda_toolkit/pull/83
@@ -52,7 +52,7 @@ Changelog
 `Version 0.0.15`_
 ----------------------
 
-.. _Version 0.0.15: https://lshpaner.github.io/eda_toolkit/v0.0.15/index.html
+.. _Version 0.0.15: https://lshpaner.github.io/eda_toolkit_docs/v0.0.15/index.html
 
 Scatter Plot Function Updates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -97,7 +97,7 @@ Updated ``tqdm`` Saving Logic in ``scatter_fit_plot``
 `Version 0.0.14`_
 ----------------------
 
-.. _Version 0.0.14: https://lshpaner.github.io/eda_toolkit/v0.0.14/index.html
+.. _Version 0.0.14: https://lshpaner.github.io/eda_toolkit_docs/v0.0.14/index.html
 
 Ensure Crosstabs Dictionary is Populated with ``return_dict=True``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -154,7 +154,7 @@ but the saved filename will still use ``"correlation_matrix"``.
 `Version 0.0.13`_
 ----------------------
 
-.. _Version 0.0.13: https://lshpaner.github.io/eda_toolkit/v0.0.13/index.html
+.. _Version 0.0.13: https://lshpaner.github.io/eda_toolkit_docs/v0.0.13/index.html
 
 This version introduces a series of updates and fixes across multiple functions to enhance error handling, improve cross-environment compatibility, streamline usability, and optimize performance. These changes address critical issues, add new features, and ensure consistent behavior in both terminal and notebook environments.
 
@@ -290,7 +290,7 @@ Other Enhancements and Fixes
 `Version 0.0.12`_
 ----------------------
 
-.. _Version 0.0.12: https://lshpaner.github.io/eda_toolkit/v0.0.12/index.html
+.. _Version 0.0.12: https://lshpaner.github.io/eda_toolkit_docs/v0.0.12/index.html
 
 New Features
 ^^^^^^^^^^^^^^^^^^
@@ -349,7 +349,7 @@ The updated implementation removes custom logic for ID generation, leveraging Nu
 `Version 0.0.11`_
 ----------------------
 
-.. _Version 0.0.11: https://lshpaner.github.io/eda_toolkit/v0.0.11/index.html
+.. _Version 0.0.11: https://lshpaner.github.io/eda_toolkit_docs/v0.0.11/index.html
 
 
 **Description**
@@ -370,7 +370,7 @@ Fixes a ``TypeError`` in the ``stacked_crosstab_plot`` function when ``save_form
 `Version 0.0.10`_
 ----------------------
 
-.. _Version 0.0.10: https://lshpaner.github.io/eda_toolkit/v0.0.10/index.html
+.. _Version 0.0.10: https://lshpaner.github.io/eda_toolkit_docs/v0.0.10/index.html
 
 **Legend Handling**
 
@@ -387,7 +387,7 @@ This update prevents empty legend squares from appearing and maintains the inten
 `Version 0.0.9`_
 ----------------------
 
-.. _Version 0.0.9: https://lshpaner.github.io/eda_toolkit/v0.0.9/index.html
+.. _Version 0.0.9: https://lshpaner.github.io/eda_toolkit_docs/v0.0.9/index.html
 
 **Bug Fixes and Minor Improvements**
 
@@ -423,7 +423,7 @@ DataFrame columns to provide summary statistics.
 `Version 0.0.8`_
 ----------------------
 
-.. _Version 0.0.8: https://lshpaner.github.io/eda_toolkit/v0.0.8/index.html
+.. _Version 0.0.8: https://lshpaner.github.io/eda_toolkit_docs/v0.0.8/index.html
 
 
 :class:`stacked_crosstab_plot` 
@@ -646,7 +646,7 @@ the usability and functionality of the EDA Toolkit.
 `Version 0.0.7`_
 ----------------------
 
-.. _Version 0.0.7: https://lshpaner.github.io/eda_toolkit/v0.0.7/index.html
+.. _Version 0.0.7: https://lshpaner.github.io/eda_toolkit_docs/v0.0.7/index.html
 
 **Added Function for Customizable Correlation Matrix Visualization**
 
@@ -690,7 +690,7 @@ Convert all columns in the DataFrame to object type to prevent issues with numer
 `Version 0.0.6`_
 ----------------------
 
-.. _Version 0.0.6: https://lshpaner.github.io/eda_toolkit/v0.0.6/index.html
+.. _Version 0.0.6: https://lshpaner.github.io/eda_toolkit_docs/v0.0.6/index.html
 
 **Added validation for Plot Type Parameter in KDE Distributions Function**
 
@@ -709,7 +709,7 @@ This release adds a validation step for the ``plot_type`` parameter in the ``kde
 `Version 0.0.5`_
 ----------------------
 
-.. _Version 0.0.5: https://lshpaner.github.io/eda_toolkit/v0.0.5/index.html
+.. _Version 0.0.5: https://lshpaner.github.io/eda_toolkit_docs/v0.0.5/index.html
 
 
 **Ensure Consistent Font Size and Text Wrapping Across Plot Elements**
