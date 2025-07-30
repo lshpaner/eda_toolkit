@@ -24,6 +24,11 @@ from eda_toolkit import (
     detailed_doc,
 )
 
+from eda_toolkit.data_manager import (
+    TableWrapper,
+    table1_to_str,
+)
+
 
 @pytest.fixture
 def sample_dataframe():
@@ -621,3 +626,174 @@ def test_include_types_invalid_raises():
         assert all(isinstance(r, pd.DataFrame) for r in result)
     else:
         assert isinstance(result, pd.DataFrame)
+
+
+def test_generate_table1_fisher_and_chi2():
+    df = pd.DataFrame(
+        {
+            "sex": ["M", "F", "M", "F", "M", "F"],
+            "smoker": [1, 0, 1, 0, 0, 1],
+            "group": ["A", "A", "B", "B", "A", "B"],
+        }
+    )
+    result = generate_table1(
+        df,
+        include_types="categorical",
+        groupby_col="group",
+        use_fisher_exact=True,
+    )
+    assert isinstance(result, pd.DataFrame)
+
+
+def test_table1_fisher_fallback_to_chi2():
+    df = pd.DataFrame(
+        {
+            "group": ["A", "B", "A", "B", "A", "B"],
+            "category": ["X", "Y", "Z", "X", "Y", "Z"],  # not 2x2
+        }
+    )
+    table = generate_table1(
+        df,
+        include_types="categorical",
+        groupby_col="group",
+        use_fisher_exact=True,
+    )
+    assert isinstance(table, pd.DataFrame)
+
+
+def test_table_wrapper_methods():
+    df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+    pretty_str = table1_to_str(df)  # Assumes this returns a string representation
+
+    wrapped = TableWrapper(df, pretty_str)
+
+    # __str__
+    assert str(wrapped) == pretty_str
+
+    # __getattr__ (e.g., .shape)
+    assert wrapped.shape == (2, 2)
+
+    # __getitem__
+    assert wrapped["a"].equals(df["a"])
+
+    # __len__
+    assert len(wrapped) == 2
+
+    # __iter__
+    assert list(iter(wrapped)) == list(df)
+
+    # .drop
+    dropped = wrapped.drop(columns="a")
+    assert isinstance(dropped, TableWrapper)
+    assert "a" not in dropped.columns
+    assert isinstance(str(dropped), str)  # verify repr still works
+
+
+def test_table_wrapper_behavior():
+    df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+    wrapper = TableWrapper(df, "Custom String")
+
+    # Test __str__
+    assert str(wrapper) == "Custom String"
+
+    # Test passthrough behavior
+    assert len(wrapper) == 3
+    assert list(wrapper["A"]) == [1, 2, 3]
+    assert isinstance(wrapper.drop(columns="B"), TableWrapper)
+
+
+def test_include_types_invalid_raises():
+    """
+    This test verifies that generate_table1 raises a ValueError
+    when include_types is passed an invalid string.
+    """
+    df = pd.DataFrame({"a": [1, 2, 3]})
+
+    with pytest.raises(
+        ValueError,
+        match="Invalid include_types: 'invalid_option'",
+    ):
+        generate_table1(df, include_types="invalid_option")
+
+
+def test_table1_custom_column_lists():
+    df = pd.DataFrame(
+        {
+            "sex": ["M", "F", "F", "M"],
+            "age": [30, 40, 35, 29],
+            "group": ["A", "B", "A", "B"],
+        }
+    )
+    result = generate_table1(
+        df,
+        categorical_cols=["sex"],
+        continuous_cols=["age"],
+    )
+    assert isinstance(result, pd.DataFrame)
+    assert "Variable" in result.columns
+
+
+def test_table1_groupby_col():
+    df = pd.DataFrame(
+        {
+            "sex": ["M", "F", "F", "M"],
+            "age": [30, 40, 35, 29],
+            "group": ["A", "B", "A", "B"],
+        }
+    )
+    result = generate_table1(df, groupby_col="group")
+    assert isinstance(result, pd.DataFrame)
+
+
+def test_table1_bonferroni_and_fdr_individual():
+    df = pd.DataFrame(
+        {
+            "sex": ["M", "F", "F", "M"],
+            "age": [30, 40, 35, 29],
+            "group": ["A", "B", "A", "B"],
+        }
+    )
+    result_bonferroni = generate_table1(
+        df,
+        groupby_col="group",
+        apply_bonferroni=True,
+    )
+    result_fdr = generate_table1(df, groupby_col="group", apply_bh_fdr=True)
+    assert isinstance(result_bonferroni, pd.DataFrame)
+    assert isinstance(result_fdr, pd.DataFrame)
+
+
+def test_table1_value_counts():
+    df = pd.DataFrame({"x": ["A", "A", "B", "B", "C"]})
+    result = generate_table1(df, value_counts=True)
+    assert isinstance(result, pd.DataFrame)
+
+
+def test_table1_return_markdown_only():
+    df = pd.DataFrame({"x": ["A", "A", "B", "B", "C"]})
+    result = generate_table1(df, return_markdown_only=True)
+
+    # The function returns a dict when both continuous and categorical are included
+    assert isinstance(result, dict)
+    assert "categorical" in result
+    assert isinstance(result["categorical"], str)
+    assert "| Variable | Type | Mode" in result["categorical"]
+
+
+def test_table1_detect_binary_numeric_false():
+    df = pd.DataFrame({"binary_num": [0, 1, 1, 0], "group": ["A", "B", "A", "B"]})
+    result = generate_table1(df, groupby_col="group", detect_binary_numeric=False)
+    assert isinstance(result, pd.DataFrame)
+
+
+def test_table1_markdown_export(tmp_path):
+    df = pd.DataFrame({"x": ["A", "B", "A", "C"]})
+    path = tmp_path / "table1.md"
+    result = generate_table1(df, export_markdown=True, markdown_path=str(path))
+    assert (tmp_path / "table1_categorical.md").exists()
+
+
+def test_table1_max_categories_limit():
+    df = pd.DataFrame({"x": [f"cat{i}" for i in range(20)]})
+    result = generate_table1(df, max_categories=5)
+    assert isinstance(result, pd.DataFrame)
