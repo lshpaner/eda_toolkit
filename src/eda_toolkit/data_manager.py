@@ -896,6 +896,7 @@ def generate_table1(
     continuous_cols: Optional[List[str]] = None,
     decimal_places: int = 2,
     export_markdown: bool = False,
+    drop_columns: Optional[List[str]] = None,
     markdown_path: Optional[Union[str, Path]] = None,
     max_categories: Optional[int] = None,
     detect_binary_numeric: bool = True,
@@ -1226,6 +1227,10 @@ def generate_table1(
             markdown_path = "table1.md"
         else:
             markdown_path = str(markdown_path)
+
+        if drop_columns:
+            df_continuous = df_continuous.drop(columns=drop_columns, errors="ignore")
+            df_categorical = df_categorical.drop(columns=drop_columns, errors="ignore")
 
         if include_types == "continuous":
             markdown_str = df_to_markdown(df_continuous)
