@@ -48,6 +48,14 @@ set of tools designed for clarity, reproducibility, and high-quality presentatio
 It supports both academic research and applied data science use cases, with an 
 emphasis on producing outputs that are publication-ready and easy to interpret.
 
+Several examples throughout the documentation and figures in this paper are based 
+on the Adult Income dataset from the UCI Machine Learning Repository 
+[@uci_adult; @kohavi1996census]. This real-world tabular dataset offers a rich 
+foundation for testing demographic segmentation, group comparisons, and reporting 
+tools, particularly in contexts involving income classification and social variables. 
+It serves as a practical benchmark for demonstrating the capabilities of functions 
+such as `generate_table1()` and outlier visualization utilities within the EDA Toolkit.
+
 # Key Features
 
 ## Table 1 Generation
@@ -57,6 +65,12 @@ descriptive tables often used in clinical and academic research. The output
 includes summaries by group and supports filtering by data type, making it 
 easier to communicate sample characteristics without relying on external tools 
 like Excel.
+
+See \autoref{tab:table1} for a demonstration of the `generate_table1()` output on the UCI dataset.
+
+\begin{table}
+\caption{Group-wise descriptive statistics using `generate_table1()` on the UCI Adult Income dataset.}
+\label{tab:table1}
 
 | Variable | Type | Mode | Count | Proportion (%) | <=50K (n = 37155) | >50K (n = 11687) |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -79,6 +93,18 @@ like Excel.
 | marital-status = Widowed | Categorical | Married-civ-spouse | 1,518 | 3.11 | 1390 (3.74%) | 128 (1.10%) |
 | marital-status = Married-spouse-absent | Categorical | Married-civ-spouse | 628 | 1.29 | 570 (1.53%) | 58 (0.50%) |
 | marital-status = Married-AF-spouse | Categorical | Married-civ-spouse | 37 | 0.08 | 23 (0.06%) | 14 (0.12%) |
+
+\end{table}
+
+
+
+## Outlier and anomaly detection support
+
+The library includes functions to identify and visualize outliers based on 
+distributional thresholds or robust statistics. This capability supports 
+detecting data quality issues early, understanding variable spreads, and guiding 
+preprocessing decisions.
+
 
 # Mathematics
 
