@@ -18,55 +18,57 @@ import warnings
 from sklearn.preprocessing import PowerTransformer, RobustScaler
 from tqdm import tqdm
 
+from typing import Any
+
 ################################################################################
 ############################ KDE Distribution Plots ############################
 ################################################################################
 
 
 def kde_distributions(
-    df,
-    vars_of_interest=None,
-    figsize=(5, 5),  # Unified figsize parameter
-    subplot_figsize=None,  # Size of the overall subplot grid
-    hist_color="#0000FF",  # Default color blue as hex code
-    kde_color="#FF0000",  # Default color red as hex code
-    mean_color="#000000",
-    median_color="#000000",
-    hist_edgecolor="#000000",  # Default edge color black as hex code
-    hue=None,  # Added hue parameter
-    fill=True,  # Added fill parameter
-    fill_alpha=1,  # Transparency level for the fill
-    n_rows=None,
-    n_cols=None,
-    w_pad=1.0,
-    h_pad=1.0,
-    image_path_png=None,
-    image_path_svg=None,
-    image_filename=None,
-    bbox_inches=None,
-    single_var_image_filename=None,
-    y_axis_label="Density",  # Parameter to control y-axis label
-    plot_type="both",  # To control plot type ('hist', 'kde', or 'both')
-    log_scale_vars=None,  # To specify which variables to apply log scale
-    bins="auto",  # Default to 'auto' as per sns
-    binwidth=None,  # Parameter to control the width of bins
-    label_fontsize=10,  # Fontsize control for labels
-    tick_fontsize=10,  # Fontsize control for tick labels
-    text_wrap=50,
-    disable_sci_notation=False,  # Toggle for scientific notation
-    stat="density",  # Control the aggregate statistic for histograms
-    xlim=None,
-    ylim=None,
-    plot_mean=False,
-    plot_median=False,
-    std_dev_levels=None,  # Parameter to control how many stdev to plot
-    std_color="#808080",
-    label_names=None,
-    show_legend=True,  # New parameter to toggle the legend
-    custom_xlabels=None,  # New parameter to customize x-axis labels
-    custom_titles=None,  # New parameter to customize plot titles
-    **kwargs,  # To capture additional keyword arguments
-):
+    df: pd.DataFrame,
+    vars_of_interest: list[str] | None = None,
+    figsize: tuple[int, int] = (5, 5),
+    subplot_figsize: tuple[int, int] | None = None,
+    hist_color: str = "#0000FF",
+    kde_color: str = "#FF0000",
+    mean_color: str = "#000000",
+    median_color: str = "#000000",
+    hist_edgecolor: str = "#000000",
+    hue: str | None = None,
+    fill: bool = True,
+    fill_alpha: float = 1.0,
+    n_rows: int | None = None,
+    n_cols: int | None = None,
+    w_pad: float = 1.0,
+    h_pad: float = 1.0,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    image_filename: str | None = None,
+    bbox_inches: str | None = None,
+    single_var_image_filename: str | None = None,
+    y_axis_label: str = "Density",
+    plot_type: str = "both",
+    log_scale_vars: str | list[str] | None = None,
+    bins: str | int | list | np.ndarray = "auto",
+    binwidth: float | None = None,
+    label_fontsize: int = 10,
+    tick_fontsize: int = 10,
+    text_wrap: int = 50,
+    disable_sci_notation: bool = False,
+    stat: str = "density",
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
+    plot_mean: bool = False,
+    plot_median: bool = False,
+    std_dev_levels: list[int] | int | None = None,
+    std_color: str | list[str] = "#808080",
+    label_names: dict[str, str] | None = None,
+    show_legend: bool = True,
+    custom_xlabels: dict[str, str] | None = None,
+    custom_titles: dict[str, str] | None = None,
+    **kwargs: dict[str, Any],
+) -> None:
     """
     Generate KDE and/or histogram distribution plots for columns in a DataFrame.
 
@@ -773,35 +775,35 @@ def kde_distributions(
 
 
 def stacked_crosstab_plot(
-    df,
-    col,
-    func_col,
-    legend_labels_list,
-    title,
-    kind="bar",
-    width=0.9,
-    rot=0,
-    custom_order=None,
-    image_path_png=None,
-    image_path_svg=None,
-    save_formats=None,
-    color=None,
-    output="both",
-    return_dict=False,
-    x=None,
-    y=None,
-    p=None,
-    file_prefix=None,
-    logscale=False,
-    plot_type="both",
-    show_legend=True,
-    label_fontsize=12,
-    tick_fontsize=10,
-    text_wrap=50,
-    remove_stacks=False,
-    xlim=None,
-    ylim=None,
-):
+    df: pd.DataFrame,
+    col: str,
+    func_col: list[str],
+    legend_labels_list: list[list[str]],
+    title: list[str],
+    kind: str = "bar",
+    width: float = 0.9,
+    rot: int = 0,
+    custom_order: list | None = None,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    save_formats: list[str] | None = None,
+    color: list[str] | str | None = None,
+    output: str = "both",
+    return_dict: bool = False,
+    x: int | None = None,
+    y: int | None = None,
+    p: int | None = None,
+    file_prefix: str | None = None,
+    logscale: bool = False,
+    plot_type: str = "both",
+    show_legend: bool = True,
+    label_fontsize: int = 12,
+    tick_fontsize: int = 10,
+    text_wrap: int = 50,
+    remove_stacks: bool = False,
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
+) -> dict[str, pd.DataFrame] | None:
     """
     Generates stacked or regular bar plots and crosstabs for specified columns.
 
@@ -1295,29 +1297,29 @@ def stacked_crosstab_plot(
 
 
 def box_violin_plot(
-    df,
-    metrics_list,
-    metrics_comp,
-    n_rows=None,  # Allow users to define the number of rows
-    n_cols=None,  # Allow users to define the number of columns
-    image_path_png=None,  # Make image paths optional
-    image_path_svg=None,  # Make image paths optional
-    save_plots=False,  # Parameter to control saving plots
-    show_legend=True,  # Parameter to toggle legend
-    plot_type="boxplot",  # Parameter to specify plot type
-    xlabel_rot=0,  # Parameter to rotate x-axis labels
-    show_plot="both",  # Parameter to control plot display
-    rotate_plot=False,  # Parameter to rotate (pivot) plots
-    individual_figsize=(6, 4),
-    subplot_figsize=None,  # Parameter to specify figure size for subplots
-    label_fontsize=12,  # Parameter to control axis label fontsize
-    tick_fontsize=10,  # Parameter to control tick label fontsize
-    text_wrap=50,  # Add text_wrap parameter
-    xlim=None,  # New parameter for setting x-axis limits
-    ylim=None,  # New parameter for setting y-axis limits
-    label_names=None,
-    **kwargs,  # To allow passing additional parameters to Seaborn
-):
+    df: pd.DataFrame,
+    metrics_list: list[str],
+    metrics_comp: list[str],
+    n_rows: int | None = None,
+    n_cols: int | None = None,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    save_plots: bool = False,
+    show_legend: bool = True,
+    plot_type: str = "boxplot",
+    xlabel_rot: int = 0,
+    show_plot: str = "both",
+    rotate_plot: bool = False,
+    individual_figsize: tuple[int, int] = (6, 4),
+    subplot_figsize: tuple[int, int] | None = None,
+    label_fontsize: int = 12,
+    tick_fontsize: int = 10,
+    text_wrap: int = 50,
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
+    label_names: dict[str, str] | None = None,
+    **kwargs,
+) -> None:
     """
     Create and save individual or subplot-based boxplots or violin plots for
     specified metrics and comparisons.
@@ -1692,41 +1694,41 @@ def box_violin_plot(
 
 
 def scatter_fit_plot(
-    df,
-    x_vars=None,
-    y_vars=None,
-    all_vars=None,
-    exclude_combinations=None,
-    n_rows=None,
-    n_cols=None,
-    max_cols=4,
-    image_path_png=None,  # Make image paths optional
-    image_path_svg=None,  # Make image paths optional
-    save_plots=None,  # Parameter to control saving plots
-    show_legend=True,  # Parameter to toggle legend
-    xlabel_rot=0,  # Parameter to rotate x-axis labels
-    show_plot="subplots",  # Parameter to control plot display
-    rotate_plot=False,  # Parameter to rotate (pivot) plots
-    individual_figsize=(6, 4),
-    subplot_figsize=None,  # Parameter to specify figure size for subplots
-    label_fontsize=12,  # Parameter to control axis label fontsize
-    tick_fontsize=10,  # Parameter to control tick label fontsize
-    text_wrap=50,  # Parameter to control wrapping of text in title
-    add_best_fit_line=False,  # Parameter to add best fit line
-    scatter_color="C0",  # Parameter to control the color of scattered points
-    best_fit_linecolor="red",  # Parameter to control color of best fit line
-    best_fit_linestyle="-",  # Parameter to control linestyle of best fit line
-    hue=None,  # Parameter to add hue to scatterplot
-    hue_palette=None,  # Parameter to specify colors for each hue level
-    size=None,  # Parameter to control the size of scatter points
-    sizes=None,  # Parameter to define a range of sizes for scatter points
-    marker="o",  # Parameter to control the marker style
-    show_correlation=True,  # Parameter to toggle showing correlation in title
-    xlim=None,  # Parameter to set x-axis limits
-    ylim=None,  # Parameter to set y-axis limits
-    label_names=None,  # New parameter for custom column renames
-    **kwargs,  # Additional keyword arguments to pass to sns.scatterplot
-):
+    df: pd.DataFrame,
+    x_vars: list[str] | str | None = None,
+    y_vars: list[str] | str | None = None,
+    all_vars: list[str] | None = None,
+    exclude_combinations: list[tuple[str, str]] | None = None,
+    n_rows: int | None = None,
+    n_cols: int | None = None,
+    max_cols: int = 4,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    save_plots: str | None = None,
+    show_legend: bool = True,
+    xlabel_rot: int = 0,
+    show_plot: str = "subplots",
+    rotate_plot: bool = False,
+    individual_figsize: tuple[int, int] = (6, 4),
+    subplot_figsize: tuple[int, int] | None = None,
+    label_fontsize: int = 12,
+    tick_fontsize: int = 10,
+    text_wrap: int = 50,
+    add_best_fit_line: bool = False,
+    scatter_color: str = "C0",
+    best_fit_linecolor: str = "red",
+    best_fit_linestyle: str = "-",
+    hue: str | None = None,
+    hue_palette: dict | list | str | None = None,
+    size: str | None = None,
+    sizes: dict | None = None,
+    marker: str = "o",
+    show_correlation: bool = True,
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
+    label_names: dict[str, str] | None = None,
+    **kwargs,
+) -> None:
     """
     Create and save scatter plots or a grid of scatter subplots for given
     x_vars and y_vars, with an optional best fit line, customizable
@@ -2314,32 +2316,32 @@ def scatter_fit_plot(
 
 
 def flex_corr_matrix(
-    df,
-    cols=None,
-    annot=True,
-    cmap="coolwarm",
-    save_plots=False,
-    image_path_png=None,
-    image_path_svg=None,
-    figsize=(10, 10),
-    title=None,
-    label_fontsize=12,
-    tick_fontsize=10,
-    xlabel_rot=45,
-    ylabel_rot=0,
-    xlabel_alignment="right",
-    ylabel_alignment="center_baseline",
-    text_wrap=50,
-    vmin=-1,
-    vmax=1,
-    cbar_label="Correlation Index",
-    triangular=True,  # New parameter to control triangular vs full matrix
-    label_names=None,
-    cbar_padding=0.8,
-    cbar_width_ratio=0.05,
-    show_colorbar=True,
+    df: pd.DataFrame,
+    cols: list[str] | None = None,
+    annot: bool = True,
+    cmap: str = "coolwarm",
+    save_plots: bool = False,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    figsize: tuple[int, int] = (10, 10),
+    title: str | None = None,
+    label_fontsize: int = 12,
+    tick_fontsize: int = 10,
+    xlabel_rot: int = 45,
+    ylabel_rot: int = 0,
+    xlabel_alignment: str = "right",
+    ylabel_alignment: str = "center_baseline",
+    text_wrap: int = 50,
+    vmin: float = -1,
+    vmax: float = 1,
+    cbar_label: str = "Correlation Index",
+    triangular: bool = True,
+    label_names: dict[str, str] | None = None,
+    cbar_padding: float = 0.8,
+    cbar_width_ratio: float = 0.05,
+    show_colorbar: bool = True,
     **kwargs,
-):
+) -> None:
     """
     Creates a correlation heatmap with extensive customization options, including
     triangular masking, alignment adjustments, title wrapping, and dynamic
@@ -2659,33 +2661,33 @@ def flex_corr_matrix(
 
 
 def data_doctor(
-    df,
-    feature_name,
-    data_fraction=1,
-    scale_conversion=None,
-    scale_conversion_kws=None,
-    apply_cutoff=False,
-    lower_cutoff=None,
-    upper_cutoff=None,
-    show_plot=True,
-    plot_type="all",
-    xlim=None,
-    kde_ylim=None,
-    hist_ylim=None,
-    box_violin_ylim=None,
-    save_plot=False,
-    image_path_png=None,
-    image_path_svg=None,
-    apply_as_new_col_to_df=False,
-    kde_kws=None,
-    hist_kws=None,
-    box_violin_kws=None,
-    box_violin="boxplot",
-    label_fontsize=12,
-    tick_fontsize=10,
-    random_state=None,
-    figsize=(18, 6),
-):
+    df: pd.DataFrame,
+    feature_name: str,
+    data_fraction: float = 1.0,
+    scale_conversion: str | None = None,
+    scale_conversion_kws: dict | None = None,
+    apply_cutoff: bool = False,
+    lower_cutoff: float | None = None,
+    upper_cutoff: float | None = None,
+    show_plot: bool = True,
+    plot_type: str = "all",
+    xlim: tuple[float, float] | None = None,
+    kde_ylim: tuple[float, float] | None = None,
+    hist_ylim: tuple[float, float] | None = None,
+    box_violin_ylim: tuple[float, float] | None = None,
+    save_plot: bool = False,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    apply_as_new_col_to_df: bool = False,
+    kde_kws: dict | None = None,
+    hist_kws: dict | None = None,
+    box_violin_kws: dict | None = None,
+    box_violin: str = "boxplot",
+    label_fontsize: int = 12,
+    tick_fontsize: int = 10,
+    random_state: int | None = None,
+    figsize: tuple[int, int] = (18, 6),
+) -> pd.DataFrame:
     """
     Analyze and transform a specific feature in a DataFrame, with options for
     scaling, applying cutoffs, and visualizing the results. This function also
@@ -3408,27 +3410,27 @@ def data_doctor(
 
 
 def outcome_crosstab_plot(
-    df,
-    list_name,
-    outcome,
-    bbox_to_anchor=(0.5, -0.25),
-    w_pad=4,
-    h_pad=4,
-    figsize=(12, 8),
-    label_fontsize=12,
-    tick_fontsize=10,
-    n_rows=None,
-    n_cols=None,
-    label_0=None,
-    label_1=None,
-    normalize=False,
-    show_value_counts=False,
-    color_schema=None,
-    save_plots=False,
-    image_path_png=None,
-    image_path_svg=None,
-    string=None,
-):
+    df: pd.DataFrame,
+    list_name: list[str],
+    outcome: str,
+    bbox_to_anchor: tuple[float, float] = (0.5, -0.25),
+    w_pad: float = 4,
+    h_pad: float = 4,
+    figsize: tuple[int, int] = (12, 8),
+    label_fontsize: int = 12,
+    tick_fontsize: int = 10,
+    n_rows: int | None = None,
+    n_cols: int | None = None,
+    label_0: str | None = None,
+    label_1: str | None = None,
+    normalize: bool = False,
+    show_value_counts: bool = False,
+    color_schema: list[str] | None = None,
+    save_plots: bool = False,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    string: str | None = None,
+) -> None:
     """
     Generates crosstab bar plots visualizing the relationship between an outcome
     variable and multiple categorical variables.

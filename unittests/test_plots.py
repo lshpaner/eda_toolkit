@@ -15,6 +15,7 @@ from eda_toolkit import (
     scatter_fit_plot,
     box_violin_plot,
     stacked_crosstab_plot,
+    outcome_crosstab_plot,
 )
 
 
@@ -1354,3 +1355,35 @@ def test_stacked_crosstab_plot_save_multiple_formats(
 
     except Exception as e:
         pytest.fail(f"stacked_crosstab_plot failed with multiple save formats: {e}")
+
+
+def test_outcome_crosstab_plot_full(tmp_path):
+    df = pd.DataFrame(
+        {
+            "sex": ["M", "F", "F", "M", "M", "F"],
+            "outcome": [1, 0, 1, 0, 1, 0],
+        }
+    )
+
+    outcome_crosstab_plot(
+        df=df,
+        list_name=["sex"],
+        outcome="outcome",
+        figsize=(6, 4),
+        label_fontsize=10,
+        tick_fontsize=8,
+        normalize=True,
+        show_value_counts=True,
+        color_schema=["#123456", "#654321"],
+        save_plots=True,
+        image_path_png=str(tmp_path),
+        image_path_svg=str(tmp_path),
+        string="Test Save",
+        label_0="Negative",
+        label_1="Positive",
+    )
+
+    assert (tmp_path / "test_save.png").exists()
+    assert (tmp_path / "test_save.svg").exists()
+
+    plt.close("all")
