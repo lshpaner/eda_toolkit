@@ -896,7 +896,8 @@ def generate_table1(
     continuous_cols: Optional[List[str]] = None,
     decimal_places: int = 2,
     export_markdown: bool = False,
-    drop_columns: Optional[List[str]] = None,
+    drop_columns: Optional[Union[str, List[str]]] = None,
+    drop_variables: Optional[Union[str, List[str]]] = None,
     markdown_path: Optional[Union[str, Path]] = None,
     max_categories: Optional[int] = None,
     detect_binary_numeric: bool = True,
@@ -929,6 +930,11 @@ def generate_table1(
         raise ValueError(
             f"Invalid include_types: '{include_types}'. Must be one of {valid_types}."
         )
+
+    if isinstance(drop_columns, str):
+        drop_columns = [drop_columns]
+    if isinstance(drop_variables, str):
+        drop_variables = [drop_variables]
 
     if categorical_cols is None:
         categorical_cols = df.select_dtypes(
@@ -1231,6 +1237,30 @@ def generate_table1(
         if drop_columns:
             df_continuous = df_continuous.drop(columns=drop_columns, errors="ignore")
             df_categorical = df_categorical.drop(columns=drop_columns, errors="ignore")
+
+        if drop_variables:
+            if not df_continuous.empty and "Variable" in df_continuous.columns:
+                df_continuous = df_continuous[
+                    ~df_continuous["Variable"]
+                    .astype(str)
+                    .apply(
+                        lambda x: any(
+                            x == var or x.startswith(f"{var} =")
+                            for var in drop_variables
+                        )
+                    )
+                ]
+            if not df_categorical.empty and "Variable" in df_categorical.columns:
+                df_categorical = df_categorical[
+                    ~df_categorical["Variable"]
+                    .astype(str)
+                    .apply(
+                        lambda x: any(
+                            x == var or x.startswith(f"{var} =")
+                            for var in drop_variables
+                        )
+                    )
+                ]
 
         if include_types == "continuous":
             markdown_str = df_to_markdown(df_continuous)
