@@ -401,7 +401,6 @@ def kde_distributions(
             std_value = data[col].std() if std_dev_levels else None
 
             try:
-                # Your existing plot code
                 if plot_type == "hist":
                     sns.histplot(
                         data=data,
