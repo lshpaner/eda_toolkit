@@ -965,8 +965,8 @@ def generate_table1(
                 "groupby_col must have exactly two groups for p-value calculation."
             )
         g1, g2 = group_vals
-        group1_label = f"{g1} (n = {len(df[df[groupby_col] == g1])})"
-        group2_label = f"{g2} (n = {len(df[df[groupby_col] == g2])})"
+        group1_label = f"{g1} (n = {len(df[df[groupby_col] == g1]):,})"
+        group2_label = f"{g2} (n = {len(df[df[groupby_col] == g2]):,})"
 
     if include_types in ["continuous", "both"]:
         for col in continuous_cols:
@@ -1004,11 +1004,15 @@ def generate_table1(
                     _, p = ttest_ind(x1, x2, equal_var=True)
                     # always use t-test for continuous
                 row[group1_label] = (
-                    f"{x1.mean():.{decimal_places}f} ({x1.std():.{decimal_places}f})"
+                    f"{len(x1):,} "
+                    f"({len(x1) / len(df[df[groupby_col] == g1]) * 100:.2f}%)"
                 )
+
                 row[group2_label] = (
-                    f"{x2.mean():.{decimal_places}f} ({x2.std():.{decimal_places}f})"
+                    f"{len(x2):,} "
+                    f"({len(x2) / len(df[df[groupby_col] == g2]) * 100:.2f}%)"
                 )
+
                 row["P-value"] = round(p, decimal_places)
             continuous_parts.append(row)
 
@@ -1086,8 +1090,9 @@ def generate_table1(
                     g2_total = (df[groupby_col] == g2).sum()
                     g1_prop = 100 * g1_count / g1_total if g1_total else 0
                     g2_prop = 100 * g2_count / g2_total if g2_total else 0
-                    g1_str = f"{g1_count} ({g1_prop:.{decimal_places}f}%)"
-                    g2_str = f"{g2_count} ({g2_prop:.{decimal_places}f}%)"
+                    g1_str = f"{g1_count:,} ({g1_prop:.{decimal_places}f}%)"
+                    g2_str = f"{g2_count:,} ({g2_prop:.{decimal_places}f}%)"
+
                     row = {
                         "Variable": label,
                         "Type": "Categorical",
@@ -1167,6 +1172,7 @@ def generate_table1(
     df_categorical = pd.DataFrame(categorical_parts).replace({np.nan: ""})
 
     def format_numeric_cols(df):
+        # which floats to format
         float_cols = [
             "Mean",
             "SD",
@@ -1176,8 +1182,13 @@ def generate_table1(
             "Mode",
             "Missing (%)",
             "Proportion (%)",
+            "P-value",  # now gets the same decimal/comma formatting
         ]
+        # which ints to format
         int_cols = ["Count", "Missing (n)"]
+        # include the two dynamic group columns if we're grouped
+        if groupby_col:
+            int_cols.extend([group1_label, group2_label])
 
         def is_numeric_string(x):
             try:
@@ -1187,6 +1198,7 @@ def generate_table1(
             except:
                 return False
 
+        # format all float columns with commas and fixed decimal places
         for col in float_cols:
             if col in df.columns:
                 df[col] = df[col].apply(
@@ -1197,6 +1209,7 @@ def generate_table1(
                     )
                 )
 
+        # format all int columns with commas
         for col in int_cols:
             if col in df.columns:
                 df[col] = df[col].apply(
@@ -1332,6 +1345,16 @@ def generate_table1(
                         print()
             else:
                 print(result)
+
+    if isinstance(result, pd.DataFrame):
+        pretty = table1_to_str(result, float_precision=decimal_places)
+        return TableWrapper(result, pretty)
+
+    if isinstance(result, tuple):
+        cont, cat = result
+        pretty_cont = table1_to_str(cont, float_precision=decimal_places)
+        pretty_cat = table1_to_str(cat, float_precision=decimal_places)
+        return TableWrapper(cont, pretty_cont), TableWrapper(cat, pretty_cat)
 
     return result
 
