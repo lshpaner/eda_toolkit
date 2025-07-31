@@ -31,6 +31,11 @@ from eda_toolkit.data_manager import (
 )
 
 
+base_path = os.getcwd()
+data_path = os.path.join(base_path, "data")
+data_output = os.path.join(base_path, "data_output")
+
+
 @pytest.fixture
 def sample_dataframe():
     return pd.DataFrame(
@@ -529,11 +534,18 @@ def test_returns_dataframe(sample_df):
 
 
 def test_returns_markdown_only(sample_df):
+    # ensure the data_output folder exists
+    ensure_directory(data_output)
+    # ask generate_table1 to export and return markdown, writing into data_output/test_table1_summary.md
+    md_path = os.path.join(data_output, "test_table1_summary.md")
     result = generate_table1(
         sample_df,
         export_markdown=True,
         return_markdown_only=True,
+        markdown_path=md_path,
     )
+
+    # it should still return the markdown strings
     assert isinstance(result, dict)
     assert "continuous" in result and "categorical" in result
     assert (
@@ -541,17 +553,29 @@ def test_returns_markdown_only(sample_df):
         or "| Variable |" in result["categorical"]
     )
 
+    # and it should have written the files
+    cont_file = os.path.join(data_output, "test_table1_summary_continuous.md")
+    cat_file = os.path.join(data_output, "test_table1_summary_categorical.md")
+    assert os.path.exists(cont_file), f"{cont_file} not found"
+    assert os.path.exists(cat_file), f"{cat_file} not found"
 
-def test_exports_markdown_to_file(sample_df, tmp_path):
-    md_path = tmp_path / "table1.md"
+
+def test_exports_markdown_to_file(sample_df):
+    # ensure the data_output folder exists
+    ensure_directory(data_output)
+    # tell generate_table1 to write to data_output/test_table1_summary.md
+    md_path = os.path.join(data_output, "test_table1_summary.md")
+
     generate_table1(
         sample_df,
         export_markdown=True,
-        markdown_path=str(md_path),
-        include_types="categorical",  # Control file suffix
+        markdown_path=md_path,
+        include_types="categorical",
     )
-    expected_file = tmp_path / "table1_categorical.md"
-    assert expected_file.exists()
+
+    # generate_table1 appends "_categorical.md"
+    expected_file = os.path.join(data_output, "test_table1_summary_categorical.md")
+    assert os.path.exists(expected_file)
 
 
 def test_detect_binary_numeric_moves_column(sample_df):
@@ -866,11 +890,21 @@ def test_table1_detect_binary_numeric_false():
     assert isinstance(result, (pd.DataFrame, TableWrapper))
 
 
-def test_table1_markdown_export(tmp_path):
+def test_table1_markdown_export():
+    # ensure the data_output folder exists
+    ensure_directory(data_output)
     df = pd.DataFrame({"x": ["A", "B", "A", "C"]})
-    path = tmp_path / "table1.md"
-    result = generate_table1(df, export_markdown=True, markdown_path=str(path))
-    assert (tmp_path / "table1_categorical.md").exists()
+    # ask generate_table1 to write to data_output/test_table1_summary.md
+    md_path = os.path.join(data_output, "test_table1_summary.md")
+
+    generate_table1(
+        df,
+        export_markdown=True,
+        markdown_path=md_path,
+    )
+
+    expected_file = os.path.join(data_output, "test_table1_summary_categorical.md")
+    assert os.path.exists(expected_file)
 
 
 def test_table1_max_categories_limit():
