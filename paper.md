@@ -171,9 +171,10 @@ The transformed `age_boxcox` variable exhibits improved symmetry and reduced kur
 making it more suitable for statistical modeling and visualization.
 
 
-This transformation was applied using the `data_doctor()` function from the `eda_toolkit` library, 
-which also produced visual diagnostics (KDE, histogram, and boxplot), computed summary statistics,
-and added a new column `age_boxcox` to preserve the transformed values.
+This transformation was applied using the `data_doctor()` function from the 
+`eda_toolkit` library, which also produced visual diagnostics (KDE, histogram, 
+and boxplot), computed summary statistics, and added a new column `age_boxcox` 
+to preserve the transformed values.
 
 
 The function outputs distribution plots (KDE, histogram, boxplot) on the 
