@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="eda_toolkit",
-    version="0.0.17",
+    version="0.0.18",
     author="Leonid Shpaner, Oscar Gil",
     author_email="lshpaner@ucla.edu",
     description="A Python library for EDA, including visualizations, directory management, data preprocessing, reporting, and more.",
     long_description=open("README_min.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",  # Type of the long description
-    package_dir={"": "src"},  # Directory where your package files are located
+    package_dir={"": "src"},  # Directory where package files are located
     # Automatically find packages in the specified directory
     packages=find_packages(where="src"),
     project_urls={  # Optional
