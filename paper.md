@@ -57,7 +57,7 @@ tools, particularly in contexts involving income classification and social varia
 It serves as a practical benchmark for demonstrating the capabilities of functions 
 such as `generate_table1()` and outlier visualization utilities within the EDA Toolkit.
 
-You can install eda_toolkit directly from PyPI:
+You can install `eda_toolkit` directly from PyPI:
 
 ```text
 pip install eda_toolkit
@@ -82,11 +82,12 @@ dominate in population size, but a higher proportion of individuals earning over
 The bottom panel presents a normalized version of the chart, where each bar sums 
 to 1. This highlights relative prevalence: while most younger individuals earn 
 less than $50K, the proportion of higher earners increases notably in the 30–59 
-age range. The chart helps identify trends not just in absolute counts but in 
+age range. The graph helps identify trends not just in absolute counts but in 
 income composition across demographic segments.
 
-![Figure 1](./assets/age_distribution_mean_median_std.svg)
+Figure 1: Stacked Bar Graphs of Income by Age Group  
 
+![Figure 1](./assets/stacked_bar_income.svg)
 
 
 # Table 1 Generation
@@ -97,29 +98,27 @@ includes summaries by group and supports filtering by data type, making it
 easier to communicate sample characteristics without relying on external tools 
 like Excel.
 
-Table: Group-wise descriptive statistics using the `generate_table1()` function on the UCI Adult Income dataset.
+Table 1: Group-wise descriptive statistics using the `generate_table1()` function on the UCI Adult Income dataset.
 
-| Variable | Count | Proportion (%) | <=50K (n = 37155) | >50K (n = 11687) |
-| --- | --- | --- | --- | --- |
-| age_group | 48842 | 100.00 | 37155 | 11687 |
-| age_group = 18-29 | 13920 | 28.50 | 13174 (35.46%) | 746 (6.38%) |
-| age_group = 30-39 | 12929 | 26.47 | 9468 (25.48%) | 3461 (29.61%) |
-| age_group = 40-49 | 10724 | 21.96 | 6738 (18.13%) | 3986 (34.11%) |
-| age_group = 50-59 | 6619 | 13.55 | 4110 (11.06%) | 2509 (21.47%) |
-| age_group = 60-69 | 3054 | 6.25 | 2245 (6.04%) | 809 (6.92%) |
-| age_group = 70-79 | 815 | 1.67 | 668 (1.80%) | 147 (1.26%) |
-| age_group = < 18 | 595 | 1.22 | 595 (1.60%) | 0 (0.00%) |
-| age_group = 80-89 | 131 | 0.27 | 115 (0.31%) | 16 (0.14%) |
-| age_group = 90-99 | 55 | 0.11 | 42 (0.11%) | 13 (0.11%) |
-| age_group = 100 + | 0 | 0.00 | 0 (0.00%) | 0 (0.00%) |
-| marital-status | 48842 | 100.00 | 37155 | 11687 |
-| marital-status = Married-civ-spouse | 22379 | 45.82 | 12395 (33.36%) | 9984 (85.43%) |
-| marital-status = Never-married | 16117 | 33.00 | 15384 (41.40%) | 733 (6.27%) |
-| marital-status = Divorced | 6633 | 13.58 | 5962 (16.05%) | 671 (5.74%) |
-| marital-status = Separated | 1530 | 3.13 | 1431 (3.85%) | 99 (0.85%) |
-| marital-status = Widowed | 1518 | 3.11 | 1390 (3.74%) | 128 (1.10%) |
-| marital-status = Married-spouse-absent | 628 | 1.29 | 570 (1.53%) | 58 (0.50%) |
-| marital-status = Married-AF-spouse | 37 | 0.08 | 23 (0.06%) | 14 (0.12%) |
+ Variable           | Count  | Proportion (%) | <=50K (n = 37,155) | >50K (n = 11,687) | P-value 
+--------------------|--------|----------------|--------------------|-------------------|---------
+ fnlwgt_bin         | 48,842 | 100.00         | 37,155             | 11,687            | 0.66    
+ fnlwgt_bin = Bin 1 | 42,729 | 87.48          | 32,517 (87.52%)    | 10,212 (87.38%)   |         
+ fnlwgt_bin = Bin 2 | 5,898  | 12.08          | 4,466 (12.02%)     | 1,432 (12.25%)    |         
+ fnlwgt_bin = Bin 3 | 186    | 0.38           | 148 (0.40%)        | 38 (0.33%)        |         
+ fnlwgt_bin = Bin 4 | 22     | 0.05           | 18 (0.05%)         | 4 (0.03%)         |         
+ fnlwgt_bin = Bin 5 | 7      | 0.01           | 6 (0.02%)          | 1 (0.01%)         |         
+ age_group          | 48,842 | 100.00         | 37,155             | 11,687            | 0.00    
+ age_group = 18-29  | 13,920 | 28.50          | 13,174 (35.46%)    | 746 (6.38%)       |         
+ age_group = 30-39  | 12,929 | 26.47          | 9,468 (25.48%)     | 3,461 (29.61%)    |         
+ age_group = 40-49  | 10,724 | 21.96          | 6,738 (18.13%)     | 3,986 (34.11%)    |         
+ age_group = 50-59  | 6,619  | 13.55          | 4,110 (11.06%)     | 2,509 (21.47%)    |         
+ age_group = 60-69  | 3,054  | 6.25           | 2,245 (6.04%)      | 809 (6.92%)       |         
+ age_group = 70-79  | 815    | 1.67           | 668 (1.80%)        | 147 (1.26%)       |         
+ age_group = < 18   | 595    | 1.22           | 595 (1.60%)        | 0 (0.00%)         |         
+ age_group = 80-89  | 131    | 0.27           | 115 (0.31%)        | 16 (0.14%)        |         
+ age_group = 90-99  | 55     | 0.11           | 42 (0.11%)         | 13 (0.11%)        |         
+ age_group = 100 +  | 0      | 0.00           | 0 (0.00%)          | 0 (0.00%)         |         
 
 
 # Outlier and anomaly detection support
@@ -143,6 +142,9 @@ observations beyond 70 or below 10 are uncommon. The presence of skewness and a 
 of extreme values justifies the use of a Box-Cox transformation, which was applied in 
 subsequent analysis to normalize the distribution and support downstream modeling assumptions.
 
+Figure 2: Distribution of Age  
+
+![Figure 2](./assets/age_distribution_mean_median_std.svg)
 
 ## Box-Cox Transformation
 
@@ -182,7 +184,7 @@ transformed scale, computes summary statistics, and calculates the interquartile
 range (IQR) for potential outlier detection. For this analysis, cutoff filtering 
 was disabled, but the lower and upper bounds are shown for reference.
 
-A new column age_boxcox was added to the DataFrame to retain the transformed values 
+A new column `age_boxcox` was added to the DataFrame to retain the transformed values 
 without overwriting the original data.
 
 ```text
@@ -216,6 +218,8 @@ New Column Name: age_boxcox
 Box-Cox Lambda: 0.1748
 
 ```
+
+Figure 3: Box-Cox Transformed Age
 
 ![Figure 2](./assets/age_boxcox_kde_hist_violinplot.svg)
 
