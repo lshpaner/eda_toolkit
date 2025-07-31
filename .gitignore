@@ -154,4 +154,4 @@ data_output/
 mlruns/
 Images/
 --stdin*/
-.DS_store
+.DS_store_build/
