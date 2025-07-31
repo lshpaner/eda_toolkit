@@ -1,6 +1,7 @@
 import pytest
 from collections import Counter
 import pandas as pd
+from pandas.io.formats.style import Styler
 import numpy as np
 import sys
 import os
@@ -256,6 +257,43 @@ def test_strip_trailing_period(sample_dataframe_with_text):
     ), "All values should remain as strings or NaN"
 
 
+def test_strip_trailing_period_convert_back_to_float():
+    import pandas as pd
+    from eda_toolkit.data_manager import strip_trailing_period
+
+    class FloatLike:
+        def __str__(self):
+            return "123."
+
+    df = pd.DataFrame({"col": [FloatLike(), None]})
+    out = strip_trailing_period(df.copy(), "col")
+    val = out["col"].iloc[0]
+
+    # should have stripped the dot and converted to float
+    assert isinstance(val, float)
+    assert val == 123.0
+
+    # None should remain None/NaN
+    assert pd.isna(out["col"].iloc[1])
+
+
+def test_strip_trailing_period_fallback_to_string():
+    import pandas as pd
+    from eda_toolkit.data_manager import strip_trailing_period
+
+    class NoParse:
+        def __str__(self):
+            return "abc."  # not a number
+
+    df = pd.DataFrame({"col": [NoParse()]})
+    out = strip_trailing_period(df.copy(), "col")
+    val = out["col"].iloc[0]
+
+    # conversion to float should fail, so we fall back to the stripped string
+    assert isinstance(val, str)
+    assert val == "abc"
+
+
 def test_parse_date_with_rule(sample_dataframe_dates):
     assert parse_date_with_rule(sample_dataframe_dates.iloc[0, 0]) == "2023-12-25"
     assert parse_date_with_rule(sample_dataframe_dates.iloc[1, 0]) == "2023-12-25"
@@ -266,6 +304,50 @@ def test_dataframe_profiler(sample_dataframe_profiler):
     profile = dataframe_profiler(sample_dataframe_profiler, return_df=True)
     assert "column" in profile.columns
     assert "null_total" in profile.columns
+
+
+def test_dataframe_profiler_styles_in_notebook(monkeypatch, sample_dataframe_profiler):
+    # Simulate notebook environment
+    monkeypatch.setitem(dataframe_profiler.__globals__, "is_notebook", True)
+
+    result = dataframe_profiler(sample_dataframe_profiler, return_df=False)
+    # Should return a DataFrame
+    assert isinstance(result, pd.DataFrame)
+    # One row per input column
+    assert len(result) == len(sample_dataframe_profiler.columns)
+    # Should have exactly these profiling columns
+    expected = {
+        "column",
+        "dtype",
+        "null_total",
+        "null_pct",
+        "unique_values_total",
+        "max_unique_value",
+        "max_unique_value_total",
+        "max_unique_value_pct",
+    }
+    assert set(result.columns) == expected
+
+
+def test_dataframe_profiler_hide_index_fallback(monkeypatch, sample_dataframe_profiler):
+    # Simulate notebook environment
+    monkeypatch.setitem(dataframe_profiler.__globals__, "is_notebook", True)
+
+    # Remove hide_index to hit the except-path
+    hide_attr = getattr(Styler, "hide_index", None)
+    if hide_attr is not None:
+        delattr(Styler, "hide_index")
+
+    try:
+        result = dataframe_profiler(sample_dataframe_profiler, return_df=False)
+        assert isinstance(result, pd.DataFrame)
+        assert len(result) == len(sample_dataframe_profiler.columns)
+        # Basic sanity check on columns
+        assert "null_total" in result.columns
+    finally:
+        # Restore hide_index
+        if hide_attr is not None:
+            setattr(Styler, "hide_index", hide_attr)
 
 
 def test_contingency_table(sample_dataframe_contingency):
@@ -439,11 +521,11 @@ def test_custom_help_override():
 def test_returns_dataframe(sample_df):
     result = generate_table1(sample_df)
 
-    # Updated: Check if result is DataFrame or tuple of DataFrames
     if isinstance(result, tuple):
         assert all(isinstance(r, pd.DataFrame) for r in result)
     else:
-        assert isinstance(result, pd.DataFrame)
+        # accept either raw DataFrame or TableWrapper
+        assert isinstance(result, (pd.DataFrame, TableWrapper))
 
 
 def test_returns_markdown_only(sample_df):
@@ -642,7 +724,7 @@ def test_generate_table1_fisher_and_chi2():
         groupby_col="group",
         use_fisher_exact=True,
     )
-    assert isinstance(result, pd.DataFrame)
+    assert isinstance(result, (pd.DataFrame, TableWrapper))
 
 
 def test_table1_fisher_fallback_to_chi2():
@@ -658,7 +740,7 @@ def test_table1_fisher_fallback_to_chi2():
         groupby_col="group",
         use_fisher_exact=True,
     )
-    assert isinstance(table, pd.DataFrame)
+    assert isinstance(table, (pd.DataFrame, TableWrapper))
 
 
 def test_table_wrapper_methods():
@@ -729,7 +811,8 @@ def test_table1_custom_column_lists():
         categorical_cols=["sex"],
         continuous_cols=["age"],
     )
-    assert isinstance(result, pd.DataFrame)
+    # you return either a DataFrame or a TableWrapper, both expose .columns
+    assert isinstance(result, (pd.DataFrame, TableWrapper))
     assert "Variable" in result.columns
 
 
@@ -742,7 +825,7 @@ def test_table1_groupby_col():
         }
     )
     result = generate_table1(df, groupby_col="group")
-    assert isinstance(result, pd.DataFrame)
+    assert isinstance(result, (pd.DataFrame, TableWrapper))
 
 
 def test_table1_bonferroni_and_fdr_individual():
@@ -753,20 +836,17 @@ def test_table1_bonferroni_and_fdr_individual():
             "group": ["A", "B", "A", "B"],
         }
     )
-    result_bonferroni = generate_table1(
-        df,
-        groupby_col="group",
-        apply_bonferroni=True,
-    )
+    result_bonferroni = generate_table1(df, groupby_col="group", apply_bonferroni=True)
+    assert isinstance(result_bonferroni, (pd.DataFrame, TableWrapper))
+
     result_fdr = generate_table1(df, groupby_col="group", apply_bh_fdr=True)
-    assert isinstance(result_bonferroni, pd.DataFrame)
-    assert isinstance(result_fdr, pd.DataFrame)
+    assert isinstance(result_fdr, (pd.DataFrame, TableWrapper))
 
 
 def test_table1_value_counts():
     df = pd.DataFrame({"x": ["A", "A", "B", "B", "C"]})
     result = generate_table1(df, value_counts=True)
-    assert isinstance(result, pd.DataFrame)
+    assert isinstance(result, (pd.DataFrame, TableWrapper))
 
 
 def test_table1_return_markdown_only():
@@ -783,7 +863,7 @@ def test_table1_return_markdown_only():
 def test_table1_detect_binary_numeric_false():
     df = pd.DataFrame({"binary_num": [0, 1, 1, 0], "group": ["A", "B", "A", "B"]})
     result = generate_table1(df, groupby_col="group", detect_binary_numeric=False)
-    assert isinstance(result, pd.DataFrame)
+    assert isinstance(result, (pd.DataFrame, TableWrapper))
 
 
 def test_table1_markdown_export(tmp_path):
@@ -796,4 +876,13 @@ def test_table1_markdown_export(tmp_path):
 def test_table1_max_categories_limit():
     df = pd.DataFrame({"x": [f"cat{i}" for i in range(20)]})
     result = generate_table1(df, max_categories=5)
-    assert isinstance(result, pd.DataFrame)
+    assert isinstance(result, (pd.DataFrame, TableWrapper))
+
+
+def test_include_types_invalid_option_raises():
+    """
+    Passing an invalid include_types should raise a ValueError.
+    """
+    df = pd.DataFrame({"a": [1, 2, 3]})
+    with pytest.raises(ValueError, match="Invalid include_types"):
+        generate_table1(df, include_types="invalid_option")

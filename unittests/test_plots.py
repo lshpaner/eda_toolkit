@@ -8,6 +8,8 @@ from unittest.mock import patch
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import itertools
+
 from eda_toolkit import (
     kde_distributions,
     data_doctor,
@@ -1387,3 +1389,89 @@ def test_outcome_crosstab_plot_full(tmp_path):
     assert (tmp_path / "test_save.svg").exists()
 
     plt.close("all")
+
+
+#################################################################################
+#################################################################################
+
+
+@pytest.fixture(autouse=True)
+def disable_show(monkeypatch):
+    # Prevent plt.show() from blocking
+    monkeypatch.setattr("matplotlib.pyplot.show", lambda *args, **kw: None)
+
+
+def test_show_plot_combinations():
+    df = pd.DataFrame(
+        {
+            "a": [1, 2, 3],
+            "b": [2, 4, 6],
+            "c": [3, 6, 9],
+        }
+    )
+    combos = scatter_fit_plot(df, all_vars=["a", "b", "c"], show_plot="combinations")
+    expected = list(itertools.combinations(["a", "b", "c"], 2))
+    assert isinstance(combos, list)
+    assert set(combos) == set(expected)
+
+
+@pytest.mark.parametrize(
+    "bad,kwargs",
+    [
+        ("all_vars_conflict", dict(x_vars="a", y_vars="b", all_vars=["a", "b"])),
+        ("no_vars", dict()),
+        ("invalid_show_plot", dict(x_vars="a", y_vars="b", show_plot="oops")),
+        ("invalid_save_plots", dict(x_vars="a", y_vars="b", save_plots="oops")),
+        ("save_without_path", dict(x_vars="a", y_vars="b", save_plots="all")),
+        ("hue_palette_no_hue", dict(x_vars="a", y_vars="b", hue_palette="Blues")),
+        ("rotate_not_bool", dict(x_vars="a", y_vars="b", rotate_plot="yes")),
+        (
+            "bad_individual_figsize",
+            dict(x_vars="a", y_vars="b", individual_figsize=(1,)),
+        ),
+        (
+            "bad_subplot_figsize",
+            dict(x_vars="a", y_vars="b", subplot_figsize=(1, 2, 3)),
+        ),
+    ],
+)
+def test_invalid_inputs_raise(bad, kwargs):
+    df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+    with pytest.raises(ValueError):
+        scatter_fit_plot(df, **kwargs)
+
+
+@pytest.mark.parametrize(
+    "excludes",
+    [
+        [("a", "x")],  # x exists, y doesn’t
+        [("x", "y")],  # both missing
+    ],
+)
+def test_exclude_combinations_invalid(excludes):
+    df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+    with pytest.raises(ValueError):
+        scatter_fit_plot(df, x_vars="a", y_vars="b", exclude_combinations=excludes)
+
+
+def test_individual_plot_with_best_fit_and_limits(tmp_path):
+    # Should exercise: individual branch, best-fit line, xlim/ylim, rotate_plot, label_names
+    df = pd.DataFrame({"x": [0, 1, 2, 3], "y": [0, 1, 4, 9]})
+    labels = {"x": "X Axis", "y": "Y Axis"}
+    # Save each individual plot into tmp_path
+    scatter_fit_plot(
+        df,
+        x_vars="x",
+        y_vars="y",
+        show_plot="individual",
+        add_best_fit_line=True,
+        xlim=(0, 3),
+        ylim=(0, 10),
+        rotate_plot=True,
+        label_names=labels,
+        save_plots="individual",
+        image_path_png=str(tmp_path),
+    )
+    # Verify at least one file was written
+    files = os.listdir(tmp_path)
+    assert any(f.startswith("scatter_x_vs_y") and f.endswith(".png") for f in files)
