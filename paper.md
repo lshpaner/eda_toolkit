@@ -28,12 +28,23 @@ bibliography: paper.bib
 
 # Summary
 
-EDA Toolkit is a lightweight Python package for conducting and visualizing 
+EDA Toolkit is a lightweight Python library for conducting and visualizing 
 exploratory data analysis (EDA). It provides flexible plotting tools, profiling 
 summaries, and exportable Excel reports tailored for both academic and industry 
 workflows. Designed to be highly customizable and easily integrated into notebooks 
-or pipelines, EDA Toolkit helps users rapidly understand and communicate data 
+or pipelines, it helps users rapidly understand and communicate data 
 characteristics.
+
+You can install `eda_toolkit` directly from PyPI:
+
+```text
+pip install eda_toolkit
+```
+
+Source code: https://github.com/lshpaner/eda_toolkit  
+Documentation: https://lshpaner.github.io/eda_toolkit_docs  
+DOI: https://doi.org/10.5281/zenodo.13162633
+
 
 # Statement of need
 
@@ -49,29 +60,20 @@ set of tools designed for clarity, reproducibility, and high-quality presentatio
 It supports both academic research and applied data science use cases, with an 
 emphasis on producing outputs that are publication-ready and easy to interpret.
 
-More than several examples throughout the documentation and figures in this paper are based 
+Most examples throughout the documentation and figures in this paper are based 
 on the Adult Income dataset from the UCI Machine Learning Repository 
-[@uci_adult; @kohavi1996census]. This real-world tabular dataset offers a rich 
-foundation for testing demographic segmentation, group comparisons, and reporting 
-tools, particularly in contexts involving income classification and social variables. 
+[@uci_adult; @kohavi1996census]. This tabular dataset offers a rich foundation 
+for testing demographic segmentation, group comparisons, and reporting tools, 
+particularly in contexts involving income classification and social variables. 
 It serves as a practical benchmark for demonstrating the capabilities of functions 
 such as `generate_table1()` and outlier visualization utilities within the EDA Toolkit.
 
-You can install `eda_toolkit` directly from PyPI:
-
-```text
-pip install eda_toolkit
-```
-
-Source code: https://github.com/lshpaner/eda_toolkit  
-Documentation: https://lshpaner.github.io/eda_toolkit_docs  
-DOI: https://doi.org/10.5281/zenodo.13162633
 
 # Income Distribution by Age Group
 
-To explore income distribution patterns across age groups, we used the 
+To explore income distribution patterns across age groups, we use the 
 `stacked_crosstabs()` function. This function generates both raw and normalized 
-stacked bar charts, allowing for quick visual comparison of categorical variable 
+stacked bar charts, allowing for quick visual comparisons of categorical variable 
 relationships.
 
 The top panel of the figure displays the count of individuals in each age group, 
@@ -98,7 +100,7 @@ includes summaries by group and supports filtering by data type, making it
 easier to communicate sample characteristics without relying on external tools 
 like Excel.
 
-Table 1: Group-wise descriptive statistics using the `generate_table1()` function on the UCI Adult Income dataset.
+Table 1: Group-wise descriptive statistics using `generate_table1()` on the Adult Income dataset.
 
  Variable           | Count  | Proportion (%) | <=50K (n = 37,155) | >50K (n = 11,687) | P-value 
 --------------------|--------|----------------|--------------------|-------------------|---------
@@ -124,9 +126,8 @@ Table 1: Group-wise descriptive statistics using the `generate_table1()` functio
 # Outlier and anomaly detection support
 
 The library includes functions to identify and visualize outliers based on 
-distributional thresholds or robust statistics. This capability supports 
-detecting data quality issues early, understanding variable spreads, and guiding 
-preprocessing decisions.
+distributional thresholds or robust statistics. This helps detect data quality 
+issues early, understanding variable spreads, and guiding preprocessing decisions.
 
 When we examine the age distribution using the `kde_distributions()`, the 
 distribution of the age variable is visibly right-skewed, with the kernel density 
@@ -148,11 +149,11 @@ Figure 2: Distribution of Age
 
 ## Box-Cox Transformation
 
-To correct for right skewness and enhance model interpretability, we applied the 
+To correct for right skewness and enhance model interpretability, we apply the 
 Box-Cox transformation to the `age` variable using the `data_doctor()` function.
-This transformation is designed to normalize positively skewed continuous variables 
-by applying a power transformation governed by a parameter $\lambda$, which was 
-empirically estimated at **0.1748** for this variable.
+This normalizes positively skewed continuous variables by applying a power 
+transformation governed by a parameter $\lambda$, which is empirically estimated 
+at **0.1748** for this variable.
 
 The Box-Cox transformation is defined as:
 
@@ -171,21 +172,6 @@ Where:
 
 The transformed `age_boxcox` variable exhibits improved symmetry and reduced kurtosis, 
 making it more suitable for statistical modeling and visualization.
-
-
-This transformation was applied using the `data_doctor()` function from the 
-`eda_toolkit` library, which also produced visual diagnostics (KDE, histogram, 
-and boxplot), computed summary statistics, and added a new column `age_boxcox` 
-to preserve the transformed values.
-
-
-The function outputs distribution plots (KDE, histogram, boxplot) on the 
-transformed scale, computes summary statistics, and calculates the interquartile 
-range (IQR) for potential outlier detection. For this analysis, cutoff filtering 
-was disabled, but the lower and upper bounds are shown for reference.
-
-A new column `age_boxcox` was added to the DataFrame to retain the transformed values 
-without overwriting the original data.
 
 ```text
 
@@ -216,21 +202,18 @@ without overwriting the original data.
 
 New Column Name: age_boxcox
 Box-Cox Lambda: 0.1748
-
 ```
 
 Figure 3: Box-Cox Transformed Age
 
-![Figure 2](./assets/age_boxcox_kde_hist_violinplot.svg)
+![Figure 3](./assets/age_boxcox_kde_hist_violinplot.svg)
 
 
 # Acknowledgements
 
-We would like to express our deepest gratitude to Dr. Ebrahim Tarshizi, PhD, our 
+We would like to express our gratitude to Dr. Ebrahim Tarshizi, PhD, our 
 mentor during our time in the University of San Diego M.S. Applied Data Science 
-Program. His unwavering dedication and mentorship played a pivotal role in our 
-academic journey, guiding us to successfully graduate from the program and pursue 
-successful careers as data scientists. 
+Program. His unwavering dedication played a pivotal role in our academic journey.
 
 We also extend our thanks to the Shiley-Marcos School of Engineering at the 
 University of San Diego for providing an exceptional learning environment and 
