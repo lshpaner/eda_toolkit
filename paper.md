@@ -125,11 +125,8 @@ Figure 2: Distribution of Age
 
 ## Box-Cox Transformation
 
-To correct for right skewness and enhance model interpretability, the Box-Cox 
-transformation is applied to the `age` variable using the `data_doctor()` function.
-This normalizes positively skewed continuous variables by applying a power 
-transformation governed by $\lambda$, which is empirically estimated at **0.1748** 
-for this variable.
+To correct right skewness, the Box-Cox transformation is applied to the age 
+variable using `data_doctor()`, with $\lambda$ empirically estimated at 0.1748.
 
 The Box-Cox transformation is defined as:
 
