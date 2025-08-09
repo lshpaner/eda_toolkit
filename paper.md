@@ -28,12 +28,11 @@ bibliography: paper.bib
 
 # Summary
 
-EDA Toolkit is a lightweight Python library for conducting and visualizing 
-exploratory data analysis (EDA). It provides flexible plotting tools, profiling 
-summaries, and exportable Excel reports tailored for both academic and industry 
-workflows. Designed to be highly customizable and easily integrated into notebooks 
-or pipelines, it helps users rapidly understand and communicate data 
-characteristics.
+EDA Toolkit is a Python library for conducting and visualizing exploratory data 
+analysis (EDA). It provides flexible plotting tools, profiling summaries, and 
+exportable Excel reports tailored for both academic and industry workflows. 
+Designed to be highly customizable and easily integrated into notebooks or 
+pipelines, it helps users rapidly understand and communicate data characteristics.
 
 You can install `eda_toolkit` directly from PyPI:
 
@@ -50,42 +49,31 @@ DOI: https://doi.org/10.5281/zenodo.13162633
 
 Exploratory Data Analysis (EDA) is a critical step in any data science project. 
 It helps researchers understand the structure of a dataset, detect data quality 
-issues, identify meaningful patterns, and shape the direction of analysis. While 
-tools such as `pandas_profiling` and `sweetviz` provide automated reports, they 
-often lack the flexibility, transparency, and formatting needed in professional 
-or academic settings.
+issues, identify meaningful patterns, and shape the direction of analysis.
 
-EDA Toolkit addresses these limitations by offering a modular and customizable 
-set of tools designed for clarity, reproducibility, and high-quality presentation. 
-It supports both academic research and applied data science use cases, with an 
-emphasis on producing outputs that are publication-ready and easy to interpret.
+EDA Toolkit offers a modular and customizable set of tools designed for clarity, 
+reproducibility, and high-quality presentation. It supports both academic research 
+and applied data science use cases, with an emphasis on producing outputs that 
+are publication-ready and easy to interpret.
 
-Most examples throughout the documentation and figures in this paper are based 
-on the Adult Income dataset from the UCI Machine Learning Repository 
-[@uci_adult; @kohavi1996census]. This tabular dataset offers a rich foundation 
-for testing demographic segmentation, group comparisons, and reporting tools, 
-particularly in contexts involving income classification and social variables. 
-It serves as a practical benchmark for demonstrating the capabilities of functions 
-such as `generate_table1()` and outlier visualization utilities within the EDA Toolkit.
+The figures in this paper are based on the Adult Income dataset from the UCI 
+Machine Learning Repository [@uci_adult; @kohavi1996census]. This tabular dataset 
+offers a rich foundation for testing demographic segmentation, group comparisons, 
+and reporting tools. It serves as a practical benchmark for demonstrating the 
+capabilities of functions such as `generate_table1()` and outlier visualization 
+utilities within the EDA Toolkit.
 
 
 # Income Distribution by Age Group
 
-To explore income distribution patterns across age groups, we use the 
-`stacked_crosstabs()` function. This function generates both raw and normalized 
-stacked bar charts, allowing for quick visual comparisons of categorical variable 
-relationships.
+The `stacked_crosstabs()` function creates raw and normalized stacked bar charts 
+for categorical comparisons.
 
-The top panel of the figure displays the count of individuals in each age group, 
-broken down by income level (<=50K vs >50K). Younger age groups (18–29 and 30–39)
-dominate in population size, but a higher proportion of individuals earning over 
-\$50K is observed in the 40–59 range.
-
-The bottom panel presents a normalized version of the chart, where each bar sums 
-to 1. This highlights relative prevalence: while most younger individuals earn 
-less than $50K, the proportion of higher earners increases notably in the 30–59 
-age range. The graph helps identify trends not just in absolute counts but in 
-income composition across demographic segments.
+Figure 1's top panel shows counts of individuals in each age group by 
+income level (<=50K vs >50K). Younger groups dominate in size, but higher-income 
+proportions peak in ages 40–59. The bottom panel normalizes bars to 1, 
+highlighting that while most younger individuals earn under $50K, the share of 
+higher earners rises sharply from ages 30–59.
 
 Figure 1: Stacked Bar Graphs of Income by Age Group  
 
@@ -94,11 +82,9 @@ Figure 1: Stacked Bar Graphs of Income by Age Group
 
 # Table 1 Generation
 
-The `generate_table1()` function allows users to produce clean, formatted 
-descriptive tables often used in clinical and academic research. The output 
-includes summaries by group and supports filtering by data type, making it 
-easier to communicate sample characteristics without relying on external tools 
-like Excel.
+The `generate_table1()` function produces formatted descriptive tables common in 
+clinical and academic research. Outputs summarize by group, filter by type, and 
+avoid reliance on external tools.
 
 Table 1: Group-wise descriptive statistics using `generate_table1()` on the Adult Income dataset.
 
@@ -125,23 +111,19 @@ Table 1: Group-wise descriptive statistics using `generate_table1()` on the Adul
 
 # Outlier and anomaly detection support
 
-The library includes functions to identify and visualize outliers based on 
-distributional thresholds or robust statistics. This helps detect data quality 
-issues early, understanding variable spreads, and guiding preprocessing decisions.
+The toolkit includes functions to identify outliers based on distributional 
+thresholds or robust statistics. This helps detect data quality issues early, 
+understanding variable spreads, and guiding preprocessing decisions.
 
-When we examine the age distribution using the `kde_distributions()`, the 
-distribution of the age variable is visibly right-skewed, with the kernel density 
-estimate (KDE) curve exhibiting a longer tail on the upper end of the age spectrum. 
-This indicates that the dataset contains a larger proportion of individuals in the 
-younger to middle-aged range, while older individuals are less frequent. The mean age, 
-represented by a blue dashed line, is slightly greater than the median (black dashed line), 
-further confirming the right-skewed nature of the data. Most of the data fall within 
-the $\pm$ 1 standard deviation interval (purple dashed lines), which ranges 
-approximately from 25 to 55 years. The $\pm$ 2 and $\pm$ 3 standard deviation bands 
-(green and gray lines, respectively) extend out to include nearly the full age range, but 
-observations beyond 70 or below 10 are uncommon. The presence of skewness and a small number 
-of extreme values justifies the use of a Box-Cox transformation, which was applied in 
-subsequent analysis to normalize the distribution and support downstream modeling assumptions.
+Using `kde_distributions()`, the age distribution is visibly right-skewed, with 
+the KDE curve showing a longer upper tail. Most individuals are younger to middle-aged, 
+while older ages are less common. The mean (blue dashed) slightly exceeds the median 
+(black dashed), reinforcing the skew. Most values fall within ±1 standard deviation 
+(purple dashed, ~25–55 years). ±2 and ±3 SD bands (green, gray) span nearly the 
+full range, though ages over 70 or under 10 are rare. This skewness and the few 
+extreme values justify applying a Box-Cox transformation to improve normality for 
+modeling.
+
 
 Figure 2: Distribution of Age  
 
@@ -211,12 +193,8 @@ Figure 3: Box-Cox Transformed Age
 
 # Acknowledgements
 
-We would like to express our gratitude to Dr. Ebrahim Tarshizi, PhD, our 
-mentor during our time in the University of San Diego M.S. Applied Data Science 
-Program. His unwavering dedication played a pivotal role in our academic journey.
-
-We also extend our thanks to the Shiley-Marcos School of Engineering at the 
-University of San Diego for providing an exceptional learning environment and 
-supporting our educational endeavors.
+We thank Dr. Ebrahim Tarshizi, PhD, our mentor during the University of San Diego 
+M.S. Applied Data Science Program, and the Shiley-Marcos School of Engineering 
+for their support.
 
 # References
