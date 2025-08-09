@@ -32,7 +32,7 @@ EDA Toolkit is a Python library for conducting and visualizing exploratory data
 analysis (EDA). It provides flexible plotting tools, profiling summaries, and 
 exportable Excel reports tailored for both academic and industry workflows. 
 Designed to be highly customizable and easily integrated into notebooks or 
-pipelines, it helps users rapidly understand and communicate data characteristics.
+pipelines, it helps users understand and communicate data characteristics.
 
 You can install `eda_toolkit` directly from PyPI:
 
@@ -47,22 +47,19 @@ DOI: https://doi.org/10.5281/zenodo.13162633
 
 # Statement of need
 
-Exploratory Data Analysis (EDA) is a critical step in any data science project. 
+Exploratory Data Analysis (EDA) is a crucial step in data science projects. 
 It helps researchers understand the structure of a dataset, detect data quality 
 issues, identify meaningful patterns, and shape the direction of analysis.
 
-EDA Toolkit offers a modular and customizable set of tools designed for clarity, 
-reproducibility, and high-quality presentation. It supports both academic research 
-and applied data science use cases, with an emphasis on producing outputs that 
-are publication-ready and easy to interpret.
+EDA Toolkit offers a modular set of tools designed for clarity, reproducibility, 
+and high-quality presentation. It supports both academic research and applied 
+data science use cases, with an emphasis on producing outputs that are 
+publication-ready and easy to interpret.
 
 The figures in this paper are based on the Adult Income dataset from the UCI 
 Machine Learning Repository [@uci_adult; @kohavi1996census]. This tabular dataset 
 offers a rich foundation for testing demographic segmentation, group comparisons, 
-and reporting tools. It serves as a practical benchmark for demonstrating the 
-capabilities of functions such as `generate_table1()` and outlier visualization 
-utilities within the EDA Toolkit.
-
+and reporting tools. 
 
 # Income Distribution by Age Group
 
@@ -111,11 +108,10 @@ Table 1: Group-wise descriptive statistics using `generate_table1()` on the Adul
 
 # Outlier and anomaly detection support
 
-The toolkit includes functions to identify outliers based on distributional 
-thresholds or robust statistics. This helps detect data quality issues early, 
-understanding variable spreads, and guiding preprocessing decisions.
+The toolkit detects outliers using distributional thresholds or robust statistics, 
+aiding early data quality checks and preprocessing decisions.
 
-Using `kde_distributions()`, the age variable shows a right skew, with the KDE 
+Using `kde_distributions()`, the age variable exhibits a right skew, with the KDE 
 curve extending into a longer upper tail. The population is concentrated in 
 younger to middle ages, with older individuals less frequent. The mean (blue dashed) 
 lies slightly above the median (black dashed), confirming the skew. Most observations 
