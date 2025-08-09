@@ -115,15 +115,13 @@ The toolkit includes functions to identify outliers based on distributional
 thresholds or robust statistics. This helps detect data quality issues early, 
 understanding variable spreads, and guiding preprocessing decisions.
 
-Using `kde_distributions()`, the age distribution is visibly right-skewed, with 
-the KDE curve showing a longer upper tail. Most individuals are younger to middle-aged, 
-while older ages are less common. The mean (blue dashed) slightly exceeds the median 
-(black dashed), reinforcing the skew. Most values fall within ±1 standard deviation 
-(purple dashed, ~25–55 years). ±2 and ±3 SD bands (green, gray) span nearly the 
-full range, though ages over 70 or under 10 are rare. This skewness and the few 
-extreme values justify applying a Box-Cox transformation to improve normality for 
-modeling.
-
+Using `kde_distributions()`, the age variable shows a right skew, with the KDE 
+curve extending into a longer upper tail. The population is concentrated in 
+younger to middle ages, with older individuals less frequent. The mean (blue dashed) 
+lies slightly above the median (black dashed), confirming the skew. Most observations 
+fall within ±1 standard deviation (purple dashed, ~25–55 years), while ±2 and ±3 
+SD bands (green and gray) cover nearly the full range. Ages above 70 or below 10 
+are uncommon. 
 
 Figure 2: Distribution of Age  
 
@@ -131,11 +129,11 @@ Figure 2: Distribution of Age
 
 ## Box-Cox Transformation
 
-To correct for right skewness and enhance model interpretability, we apply the 
-Box-Cox transformation to the `age` variable using the `data_doctor()` function.
+To correct for right skewness and enhance model interpretability, the Box-Cox 
+transformation is applied to the `age` variable using the `data_doctor()` function.
 This normalizes positively skewed continuous variables by applying a power 
-transformation governed by a parameter $\lambda$, which is empirically estimated 
-at **0.1748** for this variable.
+transformation governed by $\lambda$, which is empirically estimated at **0.1748** 
+for this variable.
 
 The Box-Cox transformation is defined as:
 
@@ -152,8 +150,7 @@ Where:
 - $(y)$ is the original, strictly positive continuous variable  
 - $(\lambda)$ is the transformation parameter selected to best approximate normality
 
-The transformed `age_boxcox` variable exhibits improved symmetry and reduced kurtosis, 
-making it more suitable for statistical modeling and visualization.
+The transformed `age_boxcox` variable exhibits improved symmetry and reduced kurtosis.
 
 ```text
 
