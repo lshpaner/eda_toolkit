@@ -2923,10 +2923,14 @@ def data_doctor(
     # Sample the data once to ensure consistency in transformations
     # Convert data according to scale_conversion selection
 
-    sampled_feature = df.sample(
-        frac=data_fraction,
-        random_state=random_state,
-    )[feature_name]
+    if apply_as_new_col_to_df:
+        if data_fraction != 1:
+            print(f"[info] apply_as_new_col_to_df=True → overriding data_fraction={data_fraction} to 1.0")
+        data_fraction = 1.0
+        sampled_feature = df[feature_name]
+    else:
+        sampled_feature = df.sample(frac=data_fraction, random_state=random_state)[feature_name]
+
 
     # New column name options when apply_as_new_col_to_df
     if apply_as_new_col_to_df:
@@ -2997,9 +3001,8 @@ def data_doctor(
             with_centering=with_centering,
             quantile_range=quantile_range,
         )
-        feature_ = scaler.fit_transform(
-            sampled_feature.values.reshape(-1, 1),
-        ).flatten()
+        feature_ = scaler.fit_transform(sampled_feature.values.reshape(-1, 1)).flatten()
+        feature_ = pd.Series(feature_, index=sampled_feature.index)
 
     elif scale_conversion == "maxabs":
         max_abs = np.max(np.abs(sampled_feature))
@@ -3067,7 +3070,8 @@ def data_doctor(
         feature_array = pt.fit_transform(
             sampled_feature.values.reshape(-1, 1)
         ).flatten()
-        feature_ = pd.Series(feature_array)  # Do not specify index
+        #feature_ = pd.Series(feature_array)  # Do not specify index
+        feature_ = pd.Series(feature_array, index=sampled_feature.index)
 
     else:
         feature_ = sampled_feature.copy()
@@ -3076,18 +3080,8 @@ def data_doctor(
 
     # Apply cutoffs if specified
     if apply_cutoff:
-        if lower_cutoff is not None:
-            feature_ = np.where(
-                feature_ < lower_cutoff,
-                lower_cutoff,
-                feature_,
-            )
-        if upper_cutoff is not None:
-            feature_ = np.where(
-                feature_ > upper_cutoff,
-                upper_cutoff,
-                feature_,
-            )
+        feature_ = feature_.clip(lower=lower_cutoff, upper=upper_cutoff)
+
 
     # Ensure feature_ is a pandas Series
     if not isinstance(feature_, pd.Series):
@@ -3159,7 +3153,7 @@ def data_doctor(
             )
 
         # Assign values directly
-        df[new_col_name] = feature_.values
+        df[new_col_name] = feature_.reindex(df.index)
         print()
         print("New Column Name:", new_col_name)
         # Print lambda if 'lmbda' was specified
