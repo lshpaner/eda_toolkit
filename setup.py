@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="eda_toolkit",
-    version="0.0.18",
+    version="0.0.19",
     author="Leonid Shpaner, Oscar Gil",
     author_email="lshpaner@ucla.edu",
     description="A Python library for EDA, including visualizations, directory management, data preprocessing, reporting, and more.",
