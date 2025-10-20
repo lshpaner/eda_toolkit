@@ -2925,12 +2925,17 @@ def data_doctor(
 
     if apply_as_new_col_to_df:
         if data_fraction != 1:
-            print(f"[info] apply_as_new_col_to_df=True → overriding data_fraction={data_fraction} to 1.0")
+            print(
+                f"[info] apply_as_new_col_to_df=True → overriding "
+                f"data_fraction={data_fraction} to 1.0"
+            )
         data_fraction = 1.0
         sampled_feature = df[feature_name]
     else:
-        sampled_feature = df.sample(frac=data_fraction, random_state=random_state)[feature_name]
-
+        sampled_feature = df.sample(
+            frac=data_fraction,
+            random_state=random_state,
+        )[feature_name]
 
     # New column name options when apply_as_new_col_to_df
     if apply_as_new_col_to_df:
@@ -3070,7 +3075,7 @@ def data_doctor(
         feature_array = pt.fit_transform(
             sampled_feature.values.reshape(-1, 1)
         ).flatten()
-        #feature_ = pd.Series(feature_array)  # Do not specify index
+        # feature_ = pd.Series(feature_array)  # Do not specify index
         feature_ = pd.Series(feature_array, index=sampled_feature.index)
 
     else:
@@ -3081,7 +3086,6 @@ def data_doctor(
     # Apply cutoffs if specified
     if apply_cutoff:
         feature_ = feature_.clip(lower=lower_cutoff, upper=upper_cutoff)
-
 
     # Ensure feature_ is a pandas Series
     if not isinstance(feature_, pd.Series):
