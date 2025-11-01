@@ -489,14 +489,14 @@ def dataframe_profiler(
 def summarize_all_combinations(
     df: pd.DataFrame,
     variables: List[str],
-    data_path: Union[str, Path],
-    data_name: str,
+    data_path: Union[str, Path] = None,
+    data_name: str = None,
     min_length: int = 2,
 ) -> Tuple[Dict[Tuple[str, ...], pd.DataFrame], List[Tuple[str, ...]]]:
     """
     Generate summary tables for all possible combinations of the specified
-    variables in the DataFrame and save them to an Excel file with detailed
-    formatting.
+    variables in the DataFrame and optionally save them to an Excel file
+    with detailed formatting.
 
     Parameters:
     -----------
@@ -506,11 +506,13 @@ def summarize_all_combinations(
     variables : list of str
         List of column names from the DataFrame to generate combinations.
 
-    data_path : str
-        Directory path where the output Excel file will be saved.
+    data_path : str, optional
+        Directory path where the output Excel file will be saved. Required
+        only if saving the results to a file.
 
-    data_name : str
-        Name of the output Excel file.
+    data_name : str, optional
+        Name of the output Excel file. Required only if saving the results
+        to a file.
 
     min_length : int, optional (default=2)
         Minimum size of the combinations to generate.
@@ -531,10 +533,10 @@ def summarize_all_combinations(
         - Generates all combinations of the specified variables with a size
           greater than or equal to `min_length`.
         - Uses **`tqdm`** for progress tracking during combination generation.
-    - **Excel Output**:
-        - Each combination is saved as a separate sheet in an Excel file.
-        - A "Table of Contents" sheet is created with hyperlinks to each
-          combination's summary table.
+    - **Excel Output (optional)**:
+        - If both `data_path` and `data_name` are provided, results are saved
+          to an Excel file with a "Table of Contents" sheet linking to each
+          combination sheet.
         - Sheet names are truncated to 31 characters to meet Excel's limitations.
     - **Formatting**:
         - Headers in all sheets are bold, left-aligned, and borderless.
@@ -548,15 +550,18 @@ def summarize_all_combinations(
     Raises:
     -------
     ValueError
-        If the `variables` list is empty or not provided, or if `data_path` or
-        `data_name` is invalid.
+        If the `variables` list is empty or not provided.
 
     Outputs:
     --------
-    - An Excel file at the specified path with the following:
-        - A "Table of Contents" sheet linking to all combination sheets.
-        - Individual sheets for each variable combination, summarizing the
-          counts and proportions of combinations in the DataFrame.
+    - If `data_path` and `data_name` are provided:
+        - An Excel file at the specified path with the following:
+            - A "Table of Contents" sheet linking to all combination sheets.
+            - Individual sheets for each variable combination summarizing counts
+              and proportions.
+    - If not provided:
+        - The function still returns all generated summary tables and combinations
+          without writing any files.
     """
 
     summary_tables = {}
@@ -602,86 +607,90 @@ def summarize_all_combinations(
 
     file_path = f"{data_path}/{data_name}"
 
-    # Writing to Excel with progress tracking
-    with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
-        # Write the Table of Contents (legend sheet)
-        legend_df.to_excel(writer, sheet_name="Table of Contents", index=False)
+    if data_path and data_name:
+        file_path = Path(data_path) / data_name
+        # Writing to Excel with progress tracking
+        with pd.ExcelWriter(file_path, engine="xlsxwriter") as writer:
+            # Write the Table of Contents (legend sheet)
+            legend_df.to_excel(writer, sheet_name="Table of Contents", index=False)
 
-        workbook = writer.book
-        toc_worksheet = writer.sheets["Table of Contents"]
+            workbook = writer.book
+            toc_worksheet = writer.sheets["Table of Contents"]
 
-        # Add hyperlinks to the sheet names
-        for i, sheet_name in enumerate(
-            tqdm(sheet_names, desc="Writing Table of Contents", leave=False),
-            start=2,
-        ):
-            cell = f"A{i}"
-            toc_worksheet.write_url(cell, f"#'{sheet_name}'!A1", string=sheet_name)
+            # Add hyperlinks to the sheet names
+            for i, sheet_name in enumerate(
+                tqdm(sheet_names, desc="Writing Table of Contents", leave=False),
+                start=2,
+            ):
+                cell = f"A{i}"
+                toc_worksheet.write_url(cell, f"#'{sheet_name}'!A1", string=sheet_name)
 
-        # Set column widths and alignment for Table of Contents
-        toc_worksheet.set_column("A:A", 50)  # Set width for column A (Sheet Name)
-        toc_worksheet.set_column("B:B", 100)  # Set width for column B (Description)
+            # Set column widths and alignment for Table of Contents
+            toc_worksheet.set_column("A:A", 50)  # Set width for column A (Sheet Name)
+            toc_worksheet.set_column("B:B", 100)  # Set width for column B (Description)
 
-        # Create a format for left-aligned text
-        cell_format = workbook.add_format({"align": "left"})
-        toc_worksheet.set_column("A:A", 50, cell_format)  # Column A
-        toc_worksheet.set_column("B:B", 100, cell_format)  # Column B
+            # Create a format for left-aligned text
+            cell_format = workbook.add_format({"align": "left"})
+            toc_worksheet.set_column("A:A", 50, cell_format)  # Column A
+            toc_worksheet.set_column("B:B", 100, cell_format)  # Column B
 
-        # Format the header row of Table of Contents
-        header_format_toc = workbook.add_format(
-            {"bold": True, "align": "left", "border": 0}
-        )
-        toc_worksheet.write_row("A1", legend_df.columns, header_format_toc)
+            # Format the header row of Table of Contents
+            header_format_toc = workbook.add_format(
+                {"bold": True, "align": "left", "border": 0}
+            )
+            toc_worksheet.write_row("A1", legend_df.columns, header_format_toc)
 
-        # Define a format with no borders for the header row in other sheets
-        header_format_no_border = workbook.add_format(
-            {"bold": True, "border": 0, "align": "left"}
-        )
+            # Define a format with no borders for the header row in other sheets
+            header_format_no_border = workbook.add_format(
+                {"bold": True, "border": 0, "align": "left"}
+            )
 
-        # Define a format for left-aligned text in other sheets
-        left_align_format = workbook.add_format({"align": "left"})
+            # Define a format for left-aligned text in other sheets
+            left_align_format = workbook.add_format({"align": "left"})
 
-        # Third tqdm for writing summary tables
-        for sheet_name, table in tqdm(
-            summary_tables.items(),
-            desc="Writing summary tables",
-            leave=True,
-        ):
-            sheet_name_str = "_".join(sheet_name)[
-                :31
-            ]  # Ensure sheet name is <= 31 characters
-            table.to_excel(writer, sheet_name=sheet_name_str, index=False)
+            # Third tqdm for writing summary tables
+            for sheet_name, table in tqdm(
+                summary_tables.items(),
+                desc="Writing summary tables",
+                leave=True,
+            ):
+                sheet_name_str = "_".join(sheet_name)[
+                    :31
+                ]  # Ensure sheet name is <= 31 characters
+                table.to_excel(writer, sheet_name=sheet_name_str, index=False)
 
-            worksheet = writer.sheets[sheet_name_str]
+                worksheet = writer.sheets[sheet_name_str]
 
-            # Apply format to the header row (top row)
-            for col_num, col_name in enumerate(table.columns):
-                worksheet.write(0, col_num, col_name, header_format_no_border)
+                # Apply format to the header row (top row)
+                for col_num, col_name in enumerate(table.columns):
+                    worksheet.write(0, col_num, col_name, header_format_no_border)
 
-            # Apply left alignment to all columns
-            for row_num in range(1, len(table) + 1):
-                for col_num in range(len(table.columns)):
-                    worksheet.write(
-                        row_num,
-                        col_num,
-                        table.iloc[row_num - 1, col_num],
-                        left_align_format,
+                # Apply left alignment to all columns
+                for row_num in range(1, len(table) + 1):
+                    for col_num in range(len(table.columns)):
+                        worksheet.write(
+                            row_num,
+                            col_num,
+                            table.iloc[row_num - 1, col_num],
+                            left_align_format,
+                        )
+
+                # Auto-fit all columns with added space
+                for col_num, col_name in enumerate(table.columns):
+                    max_length = max(
+                        table[col_name].astype(str).map(len).max(), len(col_name)
                     )
+                    worksheet.set_column(
+                        col_num, col_num, max_length + 2, left_align_format
+                    )
+        # Add the Writing to Excel progress bar after everything else
+        with tqdm(desc="Finalizing Excel file", total=1, leave=True) as pbar:
+            pbar.update(1)
 
-            # Auto-fit all columns with added space
-            for col_num, col_name in enumerate(table.columns):
-                max_length = max(
-                    table[col_name].astype(str).map(len).max(), len(col_name)
-                )
-                worksheet.set_column(
-                    col_num, col_num, max_length + 2, left_align_format
-                )
+        print(f"Data saved to {file_path}")
 
-    # Add the Writing to Excel progress bar after everything else
-    with tqdm(desc="Finalizing Excel file", total=1, leave=True) as pbar:
-        pbar.update(1)
-
-    print(f"Data saved to {file_path}")
+    else:
+        print("Excel export skipped (no path or filename provided).")
 
     return summary_tables, all_combinations
 
