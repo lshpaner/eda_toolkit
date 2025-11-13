@@ -37,3 +37,20 @@ df = pd.DataFrame(data)
 
 # Display the first few rows to check
 print(df.head())
+
+
+################################################################################
+############################## Group_by Imputer ################################
+################################################################################
+
+from eda_toolkit import groupby_imputer
+
+# Suppose X has: age (with nulls), workclass, education
+X_imputed = groupby_imputer(
+    df=X,
+    target="age",
+    by=["workclass", "education"],
+    stat="mean",
+    fallback="global",
+    as_new_col=True  # create a new column instead of overwriting
+)
