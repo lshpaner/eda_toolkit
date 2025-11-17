@@ -37,3 +37,5 @@ df = pd.DataFrame(data)
 
 # Display the first few rows to check
 print(df.head())
+
+dataframe_profiler(df=df)
