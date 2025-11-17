@@ -23,6 +23,7 @@ from eda_toolkit import (
     custom_help,
     eda_toolkit_logo,
     detailed_doc,
+    groupby_imputer,
 )
 
 from eda_toolkit.data_manager import (
@@ -920,3 +921,196 @@ def test_include_types_invalid_option_raises():
     df = pd.DataFrame({"a": [1, 2, 3]})
     with pytest.raises(ValueError, match="Invalid include_types"):
         generate_table1(df, include_types="invalid_option")
+
+
+def test_groupby_imputer_as_new_col_global_mean():
+    df = pd.DataFrame(
+        {
+            "grp": ["A", "A", "B", "B", "C"],
+            "value": [1.0, np.nan, 3.0, np.nan, np.nan],
+        }
+    )
+
+    out = groupby_imputer(
+        df=df,
+        impute_col="value",
+        by="grp",
+        stat="mean",
+        fallback="global",
+        as_new_col=True,
+    )
+
+    # new column created with the expected default name
+    assert "value_mean_imputed" in out.columns
+
+    # original column should remain unchanged (still has NaNs)
+    assert df["value"].isna().sum() == 3
+    assert out["value"].isna().sum() == 3
+
+    # imputed column should have no NaNs
+    assert out["value_mean_imputed"].isna().sum() == 0
+
+    # expected imputed values:
+    # grp A: mean = 1
+    # grp B: mean = 3
+    # grp C: no non-null in group -> fallback = global mean = (1 + 3) / 2 = 2
+    expected = pd.Series([1.0, 1.0, 3.0, 3.0, 2.0], name="value_mean_imputed")
+    assert np.allclose(out["value_mean_imputed"].values, expected.values)
+
+
+def test_groupby_imputer_overwrites_when_as_new_col_false():
+    df = pd.DataFrame(
+        {
+            "grp": ["A", "A", "B", "B"],
+            "value": [1.0, np.nan, 3.0, np.nan],
+        }
+    )
+    df_orig = df.copy()
+
+    out = groupby_imputer(
+        df=df,
+        impute_col="value",
+        by="grp",
+        stat="mean",
+        fallback="global",
+        as_new_col=False,
+    )
+
+    # result should not add an extra column
+    assert "value_mean_imputed" not in out.columns
+
+    # original df should be unchanged (function works on a copy)
+    assert df.equals(df_orig)
+
+    # output should have no missing values in 'value'
+    assert out["value"].isna().sum() == 0
+
+    # A: mean=1, B: mean=3
+    expected = pd.Series([1.0, 1.0, 3.0, 3.0], name="value")
+    assert np.allclose(out["value"].values, expected.values)
+
+
+def test_groupby_imputer_fixed_numeric_fallback_for_empty_group():
+    df = pd.DataFrame(
+        {
+            "grp": ["A", "A", "B"],
+            "subgrp": ["x", "y", "x"],
+            "value": [np.nan, np.nan, 10.0],
+        }
+    )
+
+    out = groupby_imputer(
+        df=df,
+        impute_col="value",
+        by=["grp", "subgrp"],
+        stat="mean",
+        fallback=0.0,
+        as_new_col=True,
+    )
+
+    # groups:
+    # (A, x): only NaN -> fallback = 0
+    # (A, y): only NaN -> fallback = 0
+    # (B, x): 10
+    expected = pd.Series([0.0, 0.0, 10.0], name="value_mean_imputed")
+
+    assert "value_mean_imputed" in out.columns
+    assert np.allclose(out["value_mean_imputed"].values, expected.values)
+    assert out["value_mean_imputed"].isna().sum() == 0
+
+
+def test_groupby_imputer_by_str_and_list_equivalent():
+    df = pd.DataFrame(
+        {
+            "grp": ["A", "A", "B", "B"],
+            "value": [1.0, np.nan, 3.0, np.nan],
+        }
+    )
+
+    out_str = groupby_imputer(
+        df=df,
+        impute_col="value",
+        by="grp",
+        stat="mean",
+        fallback="global",
+        as_new_col=True,
+    )
+    out_list = groupby_imputer(
+        df=df,
+        impute_col="value",
+        by=["grp"],
+        stat="mean",
+        fallback="global",
+        as_new_col=True,
+    )
+
+    # both approaches should produce identical imputed columns
+    col_name = "value_mean_imputed"
+    assert col_name in out_str.columns
+    assert col_name in out_list.columns
+    assert np.allclose(out_str[col_name].values, out_list[col_name].values)
+
+
+def test_groupby_imputer_custom_new_col_name():
+    df = pd.DataFrame(
+        {
+            "grp": ["A", "A", "B", "B"],
+            "value": [1.0, np.nan, 3.0, np.nan],
+        }
+    )
+
+    out = groupby_imputer(
+        df=df,
+        impute_col="value",
+        by="grp",
+        stat="mean",
+        fallback="global",
+        as_new_col=True,
+        new_col_name="value_imputed",
+    )
+
+    assert "value_imputed" in out.columns
+    assert "value_mean_imputed" not in out.columns  # default name not used
+    assert out["value_imputed"].isna().sum() == 0
+
+
+@pytest.mark.parametrize("stat", ["mean", "median", "min", "max"])
+def test_groupby_imputer_supported_stats(stat):
+    df = pd.DataFrame(
+        {
+            "grp": ["A", "A", "B", "B"],
+            "value": [1.0, np.nan, 3.0, 4.0],
+        }
+    )
+
+    out = groupby_imputer(
+        df=df,
+        impute_col="value",
+        by="grp",
+        stat=stat,
+        fallback="global",
+        as_new_col=True,
+    )
+
+    # should create the expected column and have no NaNs
+    col = f"value_{stat}_imputed"
+    assert col in out.columns
+    assert out[col].isna().sum() == 0
+
+
+def test_groupby_imputer_invalid_stat_raises_valueerror():
+    df = pd.DataFrame(
+        {
+            "grp": ["A", "A", "B", "B"],
+            "value": [1.0, np.nan, 3.0, np.nan],
+        }
+    )
+
+    with pytest.raises(ValueError, match="stat must be one of"):
+        groupby_imputer(
+            df=df,
+            impute_col="value",
+            by="grp",
+            stat="std",  # invalid
+            fallback="global",
+        )
