@@ -1518,9 +1518,10 @@ def highlight_columns(
 ############################## Group_by Imputer ################################
 ################################################################################
 
+
 def groupby_imputer(
     df: pd.DataFrame,
-    target: str,
+    impute_col: str,
     by: list[str] | str,
     stat: str = "mean",
     fallback: str | float | int = "global",
@@ -1530,7 +1531,7 @@ def groupby_imputer(
     """
     Impute missing values in `target` using group-level statistics from `by`.
 
-    - target: column with nulls (e.g. "age")
+    - impute_col: column with nulls (e.g. "age")
     - by: one or more categorical columns to group on (e.g. ["sex", "education"])
     - stat: "mean", "median", "min", "max"
     - fallback: what to use if a group has no non-null target
@@ -1545,47 +1546,46 @@ def groupby_imputer(
 
     # 1) compute group-level stats
     if stat == "mean":
-        grp = df_out.groupby(by)[target].mean()
+        grp = df_out.groupby(by)[impute_col].mean()
     elif stat == "median":
-        grp = df_out.groupby(by)[target].median()
+        grp = df_out.groupby(by)[impute_col].median()
     elif stat == "min":
-        grp = df_out.groupby(by)[target].min()
+        grp = df_out.groupby(by)[impute_col].min()
     elif stat == "max":
-        grp = df_out.groupby(by)[target].max()
+        grp = df_out.groupby(by)[impute_col].max()
     else:
         raise ValueError("stat must be one of: mean, median, min, max")
 
     # 2) attach back to df
     # this gives you a column with group-level value for every row
     df_out["_grp_stat"] = df_out[by].merge(
-        grp.rename("_grp_stat"),
-        left_on=by,
-        right_index=True,
-        how="left"
+        grp.rename("_grp_stat"), left_on=by, right_index=True, how="left"
     )["_grp_stat"]
 
     # 3) compute fallback
     if fallback == "global":
         if stat == "mean":
-            fb_val = df_out[target].mean()
+            fb_val = df_out[impute_col].mean()
         elif stat == "median":
-            fb_val = df_out[target].median()
+            fb_val = df_out[impute_col].median()
         elif stat == "min":
-            fb_val = df_out[target].min()
+            fb_val = df_out[impute_col].min()
         elif stat == "max":
-            fb_val = df_out[target].max()
+            fb_val = df_out[impute_col].max()
     else:
         fb_val = fallback
 
     # 4) build final series
     if as_new_col:
-        out_col = new_col_name or f"{target}_{stat}_imputed"
-        df_out[out_col] = df_out[target]
+        out_col = new_col_name or f"{impute_col}_{stat}_imputed"
+        df_out[out_col] = df_out[impute_col]
     else:
-        out_col = target
+        out_col = impute_col
 
     # where target is null → use group stat → if still null → fallback
-    df_out.loc[df_out[out_col].isna(), out_col] = df_out.loc[df_out[out_col].isna(), "_grp_stat"]
+    df_out.loc[df_out[out_col].isna(), out_col] = df_out.loc[
+        df_out[out_col].isna(), "_grp_stat"
+    ]
     df_out.loc[df_out[out_col].isna(), out_col] = fb_val
 
     # clean up helper
