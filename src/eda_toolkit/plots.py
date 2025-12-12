@@ -2244,7 +2244,7 @@ def scatter_fit_plot(
                 pbar.update(1)  # Update progress bar
 
     # Save subplots
-    if save_plots == "subplots":
+    if save_plots in ["all", "subplots"]:
         # Render the subplots
         fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
         axes = axes.flatten()  # Flatten axes for consistent handling
@@ -2294,7 +2294,7 @@ def scatter_fit_plot(
 
         # Save the subplots without a progress bar
         subplots_filename_png = "scatter_plots_subplots.png"
-        subplots_filename_svg = "scatter_plots_subplots .svg"
+        subplots_filename_svg = "scatter_plots_subplots.svg"
         if image_path_png:
             fig_grid.savefig(
                 os.path.join(image_path_png, subplots_filename_png),
