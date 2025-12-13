@@ -20,18 +20,31 @@ from tqdm import tqdm
 
 from typing import Any
 
+from ._plot_utils import _plot_density_overlays
+
+
 ################################################################################
-############################ KDE Distribution Plots ############################
+############################## Plot Distributions ##############################
 ################################################################################
 
 
-def kde_distributions(
+def kde_distributions(*args, **kwargs):
+    warnings.warn(
+        "`kde_distributions` is deprecated and will be removed in a future release. "
+        "Use `plot_distributions` instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return plot_distributions(*args, **kwargs)
+
+
+def plot_distributions(
     df: pd.DataFrame,
     vars_of_interest: list[str] | None = None,
     figsize: tuple[int, int] = (5, 5),
     subplot_figsize: tuple[int, int] | None = None,
     hist_color: str = "#0000FF",
-    kde_color: str = "#FF0000",
+    density_color: str | None = None,
     mean_color: str = "#000000",
     median_color: str = "#000000",
     hist_edgecolor: str = "#000000",
@@ -49,6 +62,8 @@ def kde_distributions(
     single_var_image_filename: str | None = None,
     y_axis_label: str = "Density",
     plot_type: str = "both",
+    density_function: str | list[str] | None = "kde",
+    density_fit: str = "MLE",
     log_scale_vars: str | list[str] | None = None,
     bins: str | int | list | np.ndarray = "auto",
     binwidth: float | None = None,
@@ -70,7 +85,8 @@ def kde_distributions(
     **kwargs: dict[str, Any],
 ) -> None:
     """
-    Generate KDE and/or histogram distribution plots for columns in a DataFrame.
+    Generate histogram and/or density distribution plots (KDE or parametric)
+    for columns in a DataFrame.
 
     This function provides a flexible way to visualize the distribution of
     data for specified columns in a DataFrame. It supports both kernel density
@@ -100,7 +116,7 @@ def kde_distributions(
     hist_color : str, optional (default='#0000FF')
         Color of the histogram bars.
 
-    kde_color : str, optional (default='#FF0000')
+    density_color : str, optional (default='#FF0000')
         Color of the KDE plot.
 
     mean_color : str, optional (default='#000000')
@@ -159,7 +175,7 @@ def kde_distributions(
         will be displayed.
 
     plot_type : str, optional (default='both')
-        The type of plot to generate ('hist', 'kde', or 'both').
+        The type of plot to generate ('hist', 'density', or 'both').
 
     log_scale_vars : str or list of str, optional
         Variable name(s) to apply log scaling. Can be a single string or a
@@ -316,7 +332,8 @@ def kde_distributions(
         )
 
     # Validate plot_type parameter
-    valid_plot_types = ["hist", "kde", "both"]
+    valid_plot_types = ["hist", "density", "both"]
+
     if plot_type.lower() not in valid_plot_types:
         raise ValueError(
             f"Invalid plot_type value. Expected one of {valid_plot_types}, "
@@ -358,6 +375,37 @@ def kde_distributions(
             "Specifying both bins and binwidth may affect performance.",
             UserWarning,
         )
+
+    # Normalize density_function
+    if density_function is None:
+        density_function = []
+    elif isinstance(density_function, str):
+        density_function = [density_function]
+
+    # Validate density_function entries
+    invalid_density = [
+        d for d in density_function if d != "kde" and not hasattr(stats, d)
+    ]
+
+    available_density_functions = sorted(
+        name
+        for name in dir(stats)
+        if hasattr(getattr(stats, name), "pdf") and hasattr(getattr(stats, name), "fit")
+    )
+
+    if invalid_density:
+        wrapped = textwrap.fill(", ".join(available_density_functions), width=100)
+
+        raise ValueError(
+            "Invalid density_function value(s): "
+            f"{invalid_density}.\n"
+            "Valid options are 'kde' or any distribution available in scipy.stats:\n"
+            f"{wrapped}"
+        )
+
+    density_fit = density_fit.upper()
+    if density_fit not in ["MLE", "MM"]:
+        raise ValueError("density_fit must be 'MLE' or 'MM'")
 
     # Create subplots grid
     fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=figsize)
@@ -418,15 +466,16 @@ def kde_distributions(
                         binwidth=binwidth,
                         **kwargs,
                     )
-                elif plot_type == "kde":
-                    sns.kdeplot(
-                        data=data,
-                        x=col,
+                elif plot_type == "density":
+                    _plot_density_overlays(
                         ax=ax,
+                        data=data,
+                        col=col,
+                        density_function=density_function,
+                        density_fit=density_fit,
                         hue=hue,
-                        color=kde_color,
-                        fill=True,
                         log_scale=log_scale,
+                        density_color=density_color,
                         **kwargs,
                     )
                 elif plot_type == "both":
@@ -446,17 +495,17 @@ def kde_distributions(
                         binwidth=binwidth,
                         **kwargs,
                     )
-                    sns.kdeplot(
-                        data=data,
-                        x=col,
+                    _plot_density_overlays(
                         ax=ax,
+                        data=data,
+                        col=col,
+                        density_function=density_function,
+                        density_fit=density_fit,
                         hue=hue,
-                        color=kde_color if hue is None else None,
                         log_scale=log_scale,
-                        label="KDE",
+                        density_color=density_color,
                         **kwargs,
                     )
-
                 # Plot mean as a vertical dotted line if plot_mean is True
                 if plot_mean and mean_value is not None:
                     ax.axvline(
@@ -604,15 +653,16 @@ def kde_distributions(
                             binwidth=binwidth,
                             **kwargs,
                         )
-                    elif plot_type == "kde":
-                        sns.kdeplot(
-                            data=data,
-                            x=var,
+                    elif plot_type == "density":
+                        _plot_density_overlays(
                             ax=ax,
+                            data=data,
+                            col=var,
+                            density_function=density_function,
+                            density_fit=density_fit,
                             hue=hue,
-                            color=kde_color,
-                            fill=True,
                             log_scale=log_scale,
+                            density_color=density_color,
                             **kwargs,
                         )
                     elif plot_type == "both":
@@ -632,14 +682,15 @@ def kde_distributions(
                             binwidth=binwidth,
                             **kwargs,
                         )
-                        sns.kdeplot(
-                            data=data,
-                            x=var,
+                        _plot_density_overlays(
                             ax=ax,
+                            data=data,
+                            col=col,
+                            density_function=density_function,
+                            density_fit=density_fit,
                             hue=hue,
-                            color=kde_color if hue is None else None,
                             log_scale=log_scale,
-                            label="KDE",
+                            density_color=density_color,
                             **kwargs,
                         )
 
@@ -691,7 +742,7 @@ def kde_distributions(
                 except Exception as e:
                     # Handle different Python versions or issues w/ legends & labels
                     if "No artists with labels found to put in legend." in str(e):
-                        print(f"Warning encountered while plotting '{col}': {str(e)}")
+                        print(f"Warning encountered while plotting '{var}': {str(e)}")
                         handles, labels = ax.get_legend_handles_labels()
                         if show_legend and len(handles) > 0 and len(labels) > 0:
                             ax.legend(loc="best")
@@ -701,6 +752,12 @@ def kde_distributions(
 
                 finally:
                     pass  # Ensures the try block is valid
+
+                xlabel = (
+                    custom_xlabels[var]
+                    if custom_xlabels and var in custom_xlabels
+                    else f"{get_label(var)} (Log)" if log_scale else get_label(var)
+                )
 
                 ax.set_xlabel(
                     (
