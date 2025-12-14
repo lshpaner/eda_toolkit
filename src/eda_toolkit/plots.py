@@ -20,7 +20,12 @@ from tqdm import tqdm
 
 from typing import Any
 
-from ._plot_utils import _plot_density_overlays
+from ._plot_utils import (
+    _plot_density_overlays,
+    _fit_distribution,
+    _qq_plot,
+    _cdf_exceedance_plot,
+)
 
 
 ################################################################################
@@ -587,9 +592,10 @@ def plot_distributions(
             )  # Control tick fontsize separately
 
             # Set axis limits if specified
-            if xlim:
+            if xlim is not None:
                 ax.set_xlim(xlim)
-            if ylim:
+
+            if ylim is not None:
                 ax.set_ylim(ylim)
 
             # Disable scientific notation if requested
@@ -3616,5 +3622,287 @@ def outcome_crosstab_plot(
             plt.savefig(
                 os.path.join(image_path_svg, f"{safe}.svg"), bbox_inches="tight"
             )
+
+    plt.show()
+
+
+################################################################################
+###################### Distribution Goodness-of-Fit Plots ######################
+################################################################################
+
+
+def distribution_gof_plots(
+    df: pd.DataFrame,
+    var: str,
+    dist: str | list[str] = "norm",
+    fit_method: str = "MLE",
+    plot_types: list[str] | str = ("qq", "cdf"),
+    qq_type: str = "theoretical",
+    reference_data: np.ndarray | None = None,
+    scale: str = "linear",
+    tail: str = "both",
+    figsize: tuple[int, int] = (6, 5),
+    xlim: tuple[float, float] | None = None,
+    ylim: tuple[float, float] | None = None,
+    show_reference: bool = True,
+    label_fontsize: int = 10,
+    tick_fontsize: int = 10,
+    legend_loc: str = "best",
+    text_wrap: int = 50,
+    palette: dict[str, str] | None = None,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    image_filename: str | None = None,
+    save_plots: bool = False,
+):
+    """
+    Generate goodness-of-fit (GOF) diagnostic plots for comparing empirical data
+    to theoretical or empirical reference distributions.
+
+    This function produces distributional diagnostics to assess how well one or
+    more candidate probability distributions fit a given variable. Currently
+    supported diagnostics include:
+
+    - Quantile–Quantile (QQ) plots
+    - Cumulative Distribution Function (CDF) plots
+    - Exceedance (survival) plots via tail control
+
+    Both theoretical (parametric) and empirical reference comparisons are supported
+    for QQ plots.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame containing the data.
+
+    var : str
+        Column name in `df` to evaluate.
+
+    dist : str or list of str, default="norm"
+        Distribution name(s) to evaluate. Each entry must correspond to a valid
+        continuous distribution in `scipy.stats` (e.g., "norm", "lognorm", "gamma").
+
+    fit_method : {"MLE", "MM"}, default="MLE"
+        Parameter estimation method for theoretical distributions:
+        - "MLE": maximum likelihood estimation
+        - "MM": method of moments
+
+    plot_types : str or list of {"qq", "cdf"}, default=("qq", "cdf")
+        Diagnostic plot type(s) to generate:
+        - "qq": quantile–quantile plot
+        - "cdf": cumulative distribution function or exceedance plot
+        (controlled via `tail`)
+
+    qq_type : {"theoretical", "empirical"}, default="theoretical"
+        Type of QQ plot to generate:
+        - "theoretical": sample quantiles vs fitted theoretical distribution
+        - "empirical": sample quantiles vs reference empirical distribution
+
+    reference_data : np.ndarray, optional
+        Reference empirical sample used when `qq_type="empirical"`.
+        Required for empirical QQ plots and ignored otherwise.
+        Must contain at least two observations.
+
+    scale : {"linear", "log"}, default="linear"
+        Scale applied to the y-axis of applicable plots.
+
+    tail : {"lower", "upper", "both"}, default="both"
+        Tail behavior for CDF-based plots:
+        - "lower": plot CDF only
+        - "upper": plot exceedance probability (1 - CDF)
+        - "both": plot both CDF and exceedance curves
+
+    figsize : tuple of int, default=(6, 5)
+        Base figure size for each diagnostic plot. When multiple plot types are
+        requested, the total figure width scales accordingly.
+
+    xlim : tuple of (float, float), optional
+        Limits for the x-axis. Applied after all distributions are plotted to
+        ensure consistent scaling.
+
+    ylim : tuple of (float, float), optional
+        Limits for the y-axis. Applied after all distributions are plotted to
+        ensure consistent scaling.
+
+    show_reference : bool, default=True
+        Whether to draw a reference (identity) line on theoretical QQ plots.
+        Ignored for empirical QQ plots.
+
+    label_fontsize : int, default=10
+        Font size for axis labels and titles.
+
+    tick_fontsize : int, default=10
+        Font size for axis tick labels.
+
+    legend_loc : str, default="best"
+        Legend placement passed to Matplotlib.
+
+    text_wrap : int, default=50
+        Maximum line width before wrapping titles and labels.
+
+    palette : dict[str, str], optional
+        Mapping from distribution name to color. Keys must match entries in `dist`.
+        If not provided, default Matplotlib colors are used.
+
+    image_path_png : str, optional
+        Directory path for saving PNG output.
+
+    image_path_svg : str, optional
+        Directory path for saving SVG output.
+
+    image_filename : str, optional
+        Base filename used when saving plots (without extension).
+
+    save_plots : bool, default=False
+        Whether to save plots to disk.
+
+    Returns
+    -------
+    None
+        The function generates GOF diagnostic plots and optionally saves them.
+
+    Raises
+    ------
+    ValueError
+        If invalid distribution names, plot types, or fitting methods are provided.
+
+    ValueError
+        If `qq_type="empirical"` is used without valid `reference_data`.
+
+    Notes
+    -----
+    - Reference lines are drawn only for theoretical QQ plots and only when
+    `show_reference=True`.
+    - Empirical QQ plots compare matched quantiles between samples and do not
+    assume a 1:1 identity line.
+    - Axis limits (`xlim`, `ylim`) are applied after plotting all distributions to
+    maintain comparability across fits.
+    """
+
+    # -------------------------
+    # Normalize inputs
+    # -------------------------
+    if isinstance(dist, str):
+        dist = [dist]
+
+    if isinstance(plot_types, str):
+        plot_types = [plot_types]
+
+    valid_plot_types = {"qq", "cdf"}
+    invalid = set(plot_types) - valid_plot_types
+    if invalid:
+        raise ValueError(
+            f"Invalid plot_types: {invalid}. "
+            f"Valid options are {sorted(valid_plot_types)}."
+        )
+
+    if qq_type not in {"theoretical", "empirical"}:
+        raise ValueError("qq_type must be one of {'theoretical', 'empirical'}")
+
+    if scale not in {"linear", "log"}:
+        raise ValueError("scale must be 'linear' or 'log'")
+
+    if tail not in {"both", "lower", "upper"}:
+        raise ValueError("tail must be 'both', 'lower', or 'upper'")
+
+    if palette:
+        missing = set(dist) - set(palette)
+        if missing:
+            raise ValueError(
+                f"Palette is missing color definitions for: {sorted(missing)}"
+            )
+
+    if qq_type == "empirical":
+        if reference_data is None:
+            raise ValueError("reference_data must be provided when qq_type='empirical'")
+        if len(reference_data) < 2:
+            raise ValueError("reference_data must contain at least 2 observations")
+
+    # -------------------------
+    # Extract data
+    # -------------------------
+    data = df[var].dropna().values
+
+    # -------------------------
+    # Create figure
+    # -------------------------
+    n_plots = len(plot_types)
+    fig, axes = plt.subplots(
+        1,
+        n_plots,
+        figsize=(figsize[0] * n_plots, figsize[1]),
+    )
+
+    axes = np.atleast_1d(axes)
+
+    # -------------------------
+    # Plot diagnostics
+    # -------------------------
+    for ax, plot_type in zip(axes, plot_types):
+
+        for i, d in enumerate(dist):
+            color = palette.get(d) if palette else None
+            dist_obj, params = _fit_distribution(data, d, fit_method)
+
+            # Apply axis limits if provided
+            if xlim is not None:
+                ax.set_xlim(xlim)
+
+            if ylim is not None:
+                ax.set_ylim(ylim)
+
+            if plot_type == "qq":
+                _qq_plot(
+                    ax=ax,
+                    data=data,
+                    dist_obj=dist_obj,
+                    params=params,
+                    label=d,
+                    scale=scale,
+                    label_fontsize=label_fontsize,
+                    tick_fontsize=tick_fontsize,
+                    qq_type=qq_type,
+                    reference_data=reference_data,
+                    show_reference=show_reference,
+                    color=color,
+                )
+
+            elif plot_type == "cdf":
+                _cdf_exceedance_plot(
+                    ax=ax,
+                    data=data,
+                    dist_obj=dist_obj,
+                    params=params,
+                    label=d,
+                    scale=scale,
+                    tail=tail,
+                    label_fontsize=label_fontsize,
+                    color=color,
+                )
+
+        # Titles and formatting
+        title = f"{plot_type.upper()} Plot for {var}"
+        ax.set_title(
+            "\n".join(textwrap.wrap(title, width=text_wrap)),
+            fontsize=label_fontsize,
+        )
+
+        ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+        legend = ax.legend(loc=legend_loc)
+        if legend:
+            for text in legend.get_texts():
+                text.set_fontsize(label_fontsize)
+
+    # -------------------------
+    # Layout and saving
+    # -------------------------
+    plt.tight_layout()
+
+    if save_plots and image_filename:
+        if image_path_png:
+            plt.savefig(os.path.join(image_path_png, f"{image_filename}.png"))
+        if image_path_svg:
+            plt.savefig(os.path.join(image_path_svg, f"{image_filename}.svg"))
 
     plt.show()
