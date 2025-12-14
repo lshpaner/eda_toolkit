@@ -2098,12 +2098,12 @@ def scatter_fit_plot(
             ax.legend_.remove()
 
     # Create grid for individual or subplots plotting
-    if num_plots == 1:
-        _, ax = plt.subplots(figsize=subplot_figsize)
-        axes = [ax]  # Wrap single axis in a list for consistency
-    else:
-        _, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
+    _, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
+
+    if isinstance(axes, np.ndarray):
         axes = axes.flatten()
+    else:
+        axes = [axes]
 
     # Render and show individual plots
     if show_plot in ["individual", "both"]:
@@ -2304,7 +2304,11 @@ def scatter_fit_plot(
     if save_plots in ["all", "subplots"]:
         # Render the subplots
         fig_grid, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
-        axes = axes.flatten()  # Flatten axes for consistent handling
+        # Normalize axes to a list
+        if isinstance(axes, np.ndarray):
+            axes = axes.flatten()
+        else:
+            axes = [axes]
 
         for i, ax in enumerate(axes):
             if i < num_plots:

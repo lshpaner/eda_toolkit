@@ -104,8 +104,8 @@ def suppress_plot_show():
         ("both", None),
         ("hist", "all"),
         ("hist", None),
-        ("kde", "all"),
-        ("kde", None),
+        ("density", "all"),
+        ("density", None),
     ],
 )
 
@@ -999,7 +999,6 @@ def test_scatter_fit_plot_progress_bar(tmp_path, sample_scatter_dataframe):
 
 
 def test_scatter_fit_plot_memory_cleanup(tmp_path, sample_scatter_dataframe):
-    """Test that scatter_fit_plot clears memory after saving to prevent leaks"""
     save_path = str(tmp_path)
     os.makedirs(save_path, exist_ok=True)
 
@@ -1010,6 +1009,8 @@ def test_scatter_fit_plot_memory_cleanup(tmp_path, sample_scatter_dataframe):
             y_vars=["Feature2"],
             save_plots="all",
             image_path_png=save_path,
+            n_rows=1,
+            n_cols=2,  # <- FORCE axes to be an array
         )
     except Exception as e:
         pytest.fail(f"scatter_fit_plot failed memory cleanup check: {e}")
@@ -1017,9 +1018,7 @@ def test_scatter_fit_plot_memory_cleanup(tmp_path, sample_scatter_dataframe):
     plt.close("all")
 
     remaining_figs = plt.get_fignums()
-    assert (
-        len(remaining_figs) == 0
-    ), f"Figures were not properly closed after saving. Open figures: {remaining_figs}"
+    assert len(remaining_figs) == 0
 
 
 def test_scatter_fit_plot_invalid_show_plot(sample_scatter_dataframe):
