@@ -17,6 +17,8 @@ from eda_toolkit import (
     box_violin_plot,
     scatter_fit_plot,
     flex_corr_matrix,
+    conditional_histograms,
+    distribution_gof_plots,
 )
 
 import pandas as pd
@@ -245,6 +247,45 @@ kde_distributions(
     image_filename="age_distribution_mean_median_std",
 )
 
+
+## from eda_toolkit import plot_distributions
+
+vars_of_interest = [
+    "age",
+    "education-num",
+    "hours-per-week",
+]
+
+kde_distributions(
+    df=df,
+    vars_of_interest=vars_of_interest,
+    # layout
+    n_rows=1,
+    n_cols=3,
+    hue=None,
+    hist_color="yellow",
+    subplot_figsize=(14, 4),
+    # plotting intent
+    plot_type="both",  # histogram + density overlay
+    stat="density",
+    density_function=["kde", "norm", "lognorm"],
+    density_color=["blue", "black", "red"],
+    density_fit="MLE",
+    # histogram controls
+    bins=10,
+    fill=True,
+    # labels & formatting
+    y_axis_label="Density",
+    text_wrap=50,
+    label_fontsize=16,
+    tick_fontsize=14,
+    # output
+    bbox_inches="tight",
+    image_filename="age_distribution_norm_fit",
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
+)
+
 ################################################################################
 ## Feature Scaling and Outliers
 ################################################################################
@@ -281,7 +322,7 @@ def data_doctor_1():
         figsize=(10, 3),
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        save_plot=True,
+        image_filename="data_doctor_age_box_cox_adult_income",
     )
     """
 
@@ -308,7 +349,7 @@ data_doctor(
     figsize=(10, 3),
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    save_plot=True,
+    image_filename="data_doctor_age_box_cox_adult_income",
 )
 
 print("*" * terminal_width)
@@ -343,7 +384,7 @@ def data_doctor_2():
         figsize=(8, 4),
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        save_plot=True,
+        image_filename="data_doctor_age_box_cox_full_data_adult_income",
         random_state=111,
     )
     """
@@ -372,7 +413,7 @@ data_doctor(
     figsize=(10, 3),
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    save_plot=True,
+    image_filename="data_doctor_age_box_cox_full_data_adult_income",
 )
 
 print()
@@ -428,7 +469,7 @@ def data_doctor_3():
         figsize=(8, 4),
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        save_plot=True,
+        image_filename="data_doctor_fnlwgt_adult_income",
         random_state=111,
     )
 
@@ -447,7 +488,7 @@ data_doctor(
     figsize=(8, 4),
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    save_plot=True,
+    image_filename="data_doctor_fnlwgt_adult_income",
     random_state=111,
 )
 
@@ -491,7 +532,7 @@ def data_doctor_4():
         figsize=(8, 4),
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        save_plot=True,
+        image_filename="data_doctor_fnlwgt_cutoff_adult_income",
         random_state=111,
     )
 
@@ -515,7 +556,7 @@ data_doctor(
     figsize=(8, 4),
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    save_plot=True,
+    image_filename="data_doctor_fnlwgt_cutoff_adult_income",
     random_state=111,
 )
 
@@ -563,7 +604,7 @@ def data_doctor_5():
         random_state=111,
         image_path_png=image_path_png,
         image_path_svg=image_path_svg,
-        save_plot=True,
+        image_filename="data_doctor_age_robust_scaling_adult_income",
     )
 
     """
@@ -585,7 +626,66 @@ data_doctor(
     random_state=111,
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    save_plot=True,
+    image_filename="data_doctor_age_robust_scaling_adult_income",
+)
+
+print("*" * terminal_width)
+print()
+
+
+def data_doctor_example_multi_plot():
+    """
+    Multi-Plot Diagnostic Example
+    ------------------------------
+
+    In this example using the US Census Adult Income dataset, we demonstrate how
+    to generate multiple diagnostic plots for a single feature using the
+    `data_doctor` function.
+
+    Rather than generating all available plots, we explicitly request a custom
+    subset of visualizations by passing a list to the `plot_type` argument.
+    This allows fine-grained control over which diagnostics are displayed while
+    keeping everything within a single, aligned figure.
+
+    For this example, we apply the following configuration:
+
+    Feature analyzed:
+    - age
+
+    Transformation:
+    - Natural logarithm (`scale_conversion="log"`) to reduce right skew and
+      compress large values.
+
+    Plot types requested:
+    - KDE: to visualize the smoothed density of the transformed feature
+    - ECDF: to inspect the cumulative distribution and tail behavior
+    - Box/Violin: to summarize central tendency and dispersion
+
+    This combination is especially useful for quickly assessing distribution
+    shape, skewness, and outliers after a transformation.
+
+    The following code demonstrates this workflow:
+
+
+    print("\\nRunning data_doctor with plot_type=['kde', 'ecdf', 'box_violin'] ...\\n")
+
+    data_doctor(
+        df=adult_df,
+        feature_name="age",
+        plot_type=["kde", "ecdf", "box_violin"],
+        scale_conversion="log",
+    )
+
+    """
+
+
+print("\\nRunning data_doctor with plot_type=['kde', 'ecdf', 'box_violin'] ...\\n")
+
+data_doctor(
+    df=df,
+    feature_name="age",
+    plot_type=["kde", "ecdf", "box_violin"],
+    scale_conversion="log",
 )
 
 print("*" * terminal_width)
@@ -907,8 +1007,6 @@ flex_corr_matrix(
 )
 
 
-input("Press ENTER to quit...")
-
 ## Outcome CrossTab Plot Examples
 ### Clean up income column by removing trailing period
 
@@ -940,3 +1038,225 @@ outcome_crosstab_plot(
     show_value_counts=True,
     # color_schema=surg_tech_color,
 )
+
+################################################################################
+## Conditional Histograms
+################################################################################
+
+features = [
+    "age",
+    "education-num",
+    "hours-per-week",
+    "capital-gain",
+    "capital-loss",
+]
+
+conditional_histograms(
+    df=df,
+    features=features,
+    by="income",
+    bins=30,
+    normalize="density",
+    alpha=0.6,
+    # figsize=(10, 6),
+    plot_style="density",
+    label_fontsize=10,
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
+    image_filename="conditional_histograms_adult_income",
+    # tick_fontsize=16,
+    # text_wrap=10,
+)
+
+################################################################################
+## Distribution Goodness-of-Fit Plots
+################################################################################
+
+from eda_toolkit import distribution_gof_plots
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "lognorm", "gamma"],
+    plot_types="qq",
+    qq_type="theoretical",
+    show_reference=True,
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
+    palette={
+        "norm": "tab:blue",
+        "lognorm": "tab:orange",
+        "gamma": "tab:green",
+    },
+    image_filename="gof_qq_age_adult_income",
+    xlim=(5, 100),
+    ylim=(5, 100),
+)
+distribution_gof_plots(
+    df,
+    var="age",
+    dist="norm",
+    plot_types="qq",
+    ylim=(0, 100),
+    xlim=(0, 100),
+)
+
+### 2. Multiple distributions, theoretical QQ
+# What this shows:
+
+# - Multiple fitted distributions overlaid
+# - Same sample, same axis
+# - Color auto-assigned by Matplotlib
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "lognorm", "gamma"],
+    plot_types="qq",
+)
+### 3. Theoretical QQ with explicit color palette
+# What this shows:
+
+# - Deterministic, user-controlled colors
+# - One color per distribution
+# - Preferred API over positional `color=`
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "lognorm", "gamma"],
+    plot_types="qq",
+    palette={
+        "norm": "red",
+        "lognorm": "blue",
+        "gamma": "green",
+    },
+)
+
+### 4. Empirical QQ plot (sample vs reference data)
+# What this shows:
+
+# - Sample quantiles vs reference empirical distribution
+# - Distribution name still used for labeling
+# - No theoretical distribution involved in the QQ geometry
+
+reference_data = df.loc[df["sex"] == "Male", "age"].dropna().values
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist="norm",
+    plot_types="qq",
+    qq_type="empirical",
+    reference_data=reference_data,
+)
+### 5. Empirical QQ with multiple fitted distributions (labeling only)
+# What this shows:
+
+# - Same empirical QQ geometry
+# - Multiple overlays for visual comparison
+# - Distribution names are semantic labels, not geometry drivers
+
+reference_data = df.loc[df["sex"] == "Female", "age"].dropna().values
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "lognorm"],
+    plot_types="qq",
+    qq_type="empirical",
+    reference_data=reference_data,
+    palette={
+        "norm": "purple",
+        "lognorm": "orange",
+    },
+)
+
+### 6. CDF plot (both tails)
+# What this shows:
+
+# - CDF and exceedance probability
+# - Full distribution behavior
+# - Linear scale
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "lognorm"],
+    plot_types="cdf",
+)
+### 7. Lower-tail CDF only
+# What this shows:
+
+# - Focus on lower tail behavior
+# - Useful for minimum-risk analysis
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "gamma"],
+    plot_types="cdf",
+    tail="lower",
+)
+### 8. Upper-tail exceedance probability only
+
+# What this shows:
+
+# - Exceedance probability
+# - Heavy-tail diagnostics
+# - Risk modeling use cases
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "gamma"],
+    plot_types="cdf",
+    tail="upper",
+)
+### 9. Combined QQ + CDF diagnostics
+# What this shows:
+
+# - Side-by-side diagnostics
+# - QQ for shape
+# - CDF for tail behavior
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "lognorm", "gamma"],
+    plot_types=["qq", "cdf"],
+    show_reference=False,
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
+    image_filename="gof_qq_cdf_age_adult_income",
+)
+### 10. Log-scaled QQ plot
+# What this shows:
+
+# - Emphasizes upper-tail deviations
+# - Useful for skewed distributions
+# - Log scaling applied to quantile axis
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["lognorm", "gamma"],
+    plot_types="qq",
+    scale="log",
+)
+### 11. Method-of-Moments fitting
+# What this shows:
+
+# - Alternative fitting strategy
+# - Shape sensitivity comparison
+# - Educational contrast vs MLE
+
+distribution_gof_plots(
+    df,
+    var="age",
+    dist=["norm", "gamma"],
+    fit_method="MM",
+    plot_types=["qq", "cdf"],
+)
+
+input("Press ENTER to quit...")
