@@ -27,6 +27,7 @@ from ._plot_utils import (
     _cdf_exceedance_plot,
 )
 
+from scipy.stats import norm
 
 ################################################################################
 ############################## Plot Distributions ##############################
@@ -2813,14 +2814,15 @@ def data_doctor(
         Upper bound to apply if `apply_cutoff=True`. Defaults to None.
 
     show_plot : bool, optional (default=True)
-        Whether to display plots of the transformed feature: KDE, histogram, and
+        Whether to display plots of the transformed feature: KDE, histogram/ecdf, and
         boxplot/violinplot.
 
     plot_type : str, list, or tuple, optional (default="all")
         Specifies the type of plot(s) to produce. Options are:
-            - 'all': Generates KDE, histogram, and boxplot/violinplot.
+            - 'all': Generates KDE, histogram/ecdf, and boxplot/violinplot.
             - 'kde': KDE plot only.
             - 'hist': Histogram plot only.
+            - 'ecdf': ECDF plot only.
             - 'box_violin': Boxplot or violin plot only (specified by
                             `box_violin`).
         If a list or tuple is provided (e.g., `plot_type=["kde", "hist"]`),
@@ -3269,7 +3271,7 @@ def data_doctor(
         raise ValueError("plot_type must be a string, list, or tuple.")
 
     # Verify that all plot types are valid
-    valid_plot_types = ["kde", "hist", "box_violin"]
+    valid_plot_types = ["kde", "hist", "ecdf", "box_violin"]
     invalid_plots = [ptype for ptype in plot_type if ptype not in valid_plot_types]
     if invalid_plots:
         raise ValueError(
@@ -3337,6 +3339,70 @@ def data_doctor(
                     ax.set_xlim(xlim)
                 if hist_ylim:
                     ax.set_ylim(hist_ylim)
+
+            elif ptype == "ecdf":
+                # Convert to 1D numpy array and drop NaNs
+                x_raw = np.asarray(feature_)
+                x_raw = x_raw[~np.isnan(x_raw)]
+
+                # Handle empty after dropping NaNs
+                if x_raw.size == 0:
+                    ax.text(
+                        0.5, 0.5,
+                        f"No valid values for {feature_name}",
+                        ha="center", va="center",
+                        transform=ax.transAxes,
+                    )
+                    ax.set_title(
+                        f"ECDF: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25,
+                    )
+                else:
+                    # ECDF
+                    x = np.sort(x_raw)
+                    n = x.size
+                    y = np.arange(1, n + 1) / n
+
+                    # Optional normal CDF overlay (same idea as your example)
+                    mu = float(np.mean(x_raw))
+                    sigma = float(np.std(x_raw, ddof=1)) if n > 1 else 0.0
+
+                    x_smooth = np.linspace(x.min(), x.max(), 300)
+                    if sigma > 0:
+                        y_smooth = norm.cdf(x_smooth, loc=mu, scale=sigma)
+                    else:
+                        # If sigma is 0 (all values equal), the normal CDF isn't meaningful
+                        y_smooth = None
+
+                    # Plot ECDF (steps + dots)
+                    ax.step(x, y, where="post", color="black", linewidth=0.55)
+                    ax.plot(x, y, "o", color="black", markersize=2, alpha=0.6)
+
+                    # Plot normal overlay if possible
+                    if y_smooth is not None:
+                        ax.plot(x_smooth, y_smooth, linewidth=1.45)
+
+                    # Dashed 0 and 1 lines like R
+                    ax.axhline(0, color="grey", linestyle="--", linewidth=0.7)
+                    ax.axhline(1, color="grey", linestyle="--", linewidth=0.7)
+
+                    # Labels and styling
+                    ax.set_title(
+                        f"ECDF: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25,
+                    )
+                    ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+                    ax.set_ylabel("F(x)", fontsize=label_fontsize)
+                    ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                    ax.set_ylim(-0.02, 1.02)
+                    ax.grid(alpha=0.2)
+
+                if xlim:
+                    ax.set_xlim(xlim)
+
 
             elif ptype == "box_violin":
                 if box_violin == "boxplot":
