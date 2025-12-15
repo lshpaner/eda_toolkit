@@ -32,6 +32,7 @@ setup(
         "pandas>=1.3.5",  # Minimum version of pandas required
         "plotly>=5.18.0",  # Minimum version of plotly required
         "scikit-learn>=1.0.2",  # Minimum version of scikit-learn required
+        "scipy>=1.5.4",  # Minimum version of scipy required
         "seaborn>=0.12.2",  # Minimum version of seaborn required
         "tqdm>=4.66.4",  # Minimum version of tqdm required
         "xlsxwriter>=3.2.0",  # Minimum version of xlsxwriter required
