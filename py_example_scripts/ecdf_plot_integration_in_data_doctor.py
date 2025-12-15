@@ -17,11 +17,10 @@ adult = fetch_ucirepo(id=2)
 # data (as pandas dataframes)
 X = adult.data.features
 y = adult.data.targets
-
 # Combine X and y into entire df
 adult_df = X.join(y, how="inner")
 
-# %%
+
 ################################################################################
 ## data_doctor with ECDF
 ################################################################################
@@ -34,5 +33,3 @@ data_doctor(
     plot_type=["kde", "ecdf", "box_violin"],
     scale_conversion="log",
 )
-
-
