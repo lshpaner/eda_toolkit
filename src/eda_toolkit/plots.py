@@ -2821,6 +2821,7 @@ def data_doctor(
             - 'all': Generates KDE, histogram, and boxplot/violinplot.
             - 'kde': KDE plot only.
             - 'hist': Histogram plot only.
+            - 'ecdf': ECDF plot only.
             - 'box_violin': Boxplot or violin plot only (specified by
                             `box_violin`).
         If a list or tuple is provided (e.g., `plot_type=["kde", "hist"]`),
@@ -3269,7 +3270,7 @@ def data_doctor(
         raise ValueError("plot_type must be a string, list, or tuple.")
 
     # Verify that all plot types are valid
-    valid_plot_types = ["kde", "hist", "box_violin"]
+    valid_plot_types = ["kde", "hist", "ecdf", "box_violin"]
     invalid_plots = [ptype for ptype in plot_type if ptype not in valid_plot_types]
     if invalid_plots:
         raise ValueError(
@@ -3292,6 +3293,20 @@ def data_doctor(
 
     # Plot based on specified plot types
     if show_plot:
+        # Build a finite, plot-ready vector AFTER transforms + optional cutoff
+        feature_plot = pd.to_numeric(feature_, errors="coerce").replace([np.inf, -np.inf], np.nan).dropna()
+        x_plot = feature_plot.to_numpy(dtype=float)
+
+        # Use user cutoffs if provided, otherwise derive clip from finite data
+        if apply_cutoff and (lower_cutoff is not None or upper_cutoff is not None):
+            clip_low = float(lower_cutoff) if lower_cutoff is not None else float(np.min(x_plot)) if x_plot.size else None
+            clip_high = float(upper_cutoff) if upper_cutoff is not None else float(np.max(x_plot)) if x_plot.size else None
+        else:
+            clip_low = float(np.min(x_plot)) if x_plot.size else None
+            clip_high = float(np.max(x_plot)) if x_plot.size else None
+
+        clip = (clip_low, clip_high) if (clip_low is not None and clip_high is not None) else None
+
         for i, ptype in enumerate(plot_type):
             ax = axes[i]
 
@@ -3303,25 +3318,42 @@ def data_doctor(
                 )  # Set only for 100,000+
 
             if ptype == "kde":
-                sns.kdeplot(
-                    x=feature_,
-                    ax=ax,
-                    clip=(lower_cutoff, upper_cutoff),
-                    warn_singular=False,
-                    **(kde_kws or {}),
-                )
-                ax.set_title(
-                    f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
-                    fontsize=label_fontsize,
-                    pad=25,  # Increased padding between title and plot
-                )
-                ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
-                ax.set_ylabel("Density", fontsize=label_fontsize)
-                ax.tick_params(axis="both", labelsize=tick_fontsize)
-                if xlim:
-                    ax.set_xlim(xlim)
-                if kde_ylim:
-                    ax.set_ylim(kde_ylim)
+                if x_plot.size == 0:
+                    ax.text(
+                        0.5, 0.5,
+                        f"No valid values for {feature_name}",
+                        ha="center", va="center",
+                        transform=ax.transAxes,
+                    )
+                    ax.set_title(
+                        f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25,
+                    )
+                else:
+                    kws = dict(kde_kws or {})
+                    kws.setdefault("cut", 0)
+                    kws.setdefault("bw_adjust", 1.2)
+
+                    with warnings.catch_warnings():
+                        warnings.filterwarnings(
+                            "ignore",
+                            message="overflow encountered in vecdot",
+                            category=RuntimeWarning,
+                        )
+                        sns.kdeplot(
+                            x=x_plot,
+                            ax=ax,
+                            clip=clip,
+                            warn_singular=False,
+                            **kws,
+                        )
+
+                    ax.set_title(
+                        f"KDE Plot: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25,
+                    )
 
             elif ptype == "hist":
                 sns.histplot(x=feature_, ax=ax, **(hist_kws or {}))
@@ -3338,29 +3370,120 @@ def data_doctor(
                 if hist_ylim:
                     ax.set_ylim(hist_ylim)
 
+            elif ptype == "ecdf":
+                # Convert to 1D numpy array and drop NaNs
+                x_raw = np.asarray(feature_)
+                x_raw = x_raw[~np.isnan(x_raw)]
+
+                # Handle empty after dropping NaNs
+                if x_raw.size == 0:
+                    ax.text(
+                        0.5, 0.5,
+                        f"No valid values for {feature_name}",
+                        ha="center", va="center",
+                        transform=ax.transAxes,
+                    )
+                    ax.set_title(
+                        f"ECDF: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25,
+                    )
+                else:
+                    # ECDF
+                    x = np.sort(x_raw)
+                    n = x.size
+                    y = np.arange(1, n + 1) / n
+
+                    # Optional normal CDF overlay (SciPy-free; Python 3.7.4+)
+                    mu = float(np.mean(x_raw))
+                    sigma = float(np.std(x_raw, ddof=1)) if n > 1 else 0.0
+
+                    x_smooth = np.linspace(x.min(), x.max(), 300)
+                    if sigma > 0:
+                        # Normal CDF via error function:
+                        # Phi(x) = 0.5 * (1 + erf((x - mu) / (sigma * sqrt(2))))
+                        z = (x_smooth - mu) / (sigma * math.sqrt(2.0))
+                        y_smooth = 0.5 * (1.0 + np.vectorize(math.erf)(z))
+                    else:
+                        # If sigma is 0 (all values equal), the normal CDF isn't meaningful
+                        y_smooth = None
+
+                    # Plot ECDF (steps + dots)
+                    ax.step(x, y, where="post", color="black", linewidth=0.55)
+                    ax.plot(x, y, "o", color="black", markersize=2, alpha=0.6)
+
+                    # Plot normal overlay if possible
+                    if y_smooth is not None:
+                        ax.plot(x_smooth, y_smooth, linewidth=1.45)
+
+                    # Dashed 0 and 1 lines like R
+                    ax.axhline(0, color="grey", linestyle="--", linewidth=0.7)
+                    ax.axhline(1, color="grey", linestyle="--", linewidth=0.7)
+
+                    # Labels and styling
+                    ax.set_title(
+                        f"ECDF: {feature_name} (Scale: {scale_conversion})",
+                        fontsize=label_fontsize,
+                        pad=25,
+                    )
+                    ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
+                    ax.set_ylabel("F(x)", fontsize=label_fontsize)
+                    ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+                    ax.set_ylim(-0.02, 1.02)
+                    ax.grid(alpha=0.2)
+
+                if xlim:
+                    ax.set_xlim(xlim)
+
             elif ptype == "box_violin":
-                if box_violin == "boxplot":
-                    sns.boxplot(
-                        x=feature_,
-                        ax=ax,
-                        **(box_violin_kws or {}),
+                # feature_ is already a pd.Series by this point in your function
+                x = feature_.copy()
+
+                # Drop non-finite values without coercing the whole series
+                x = x.replace([np.inf, -np.inf], np.nan).dropna()
+
+                if x.empty:
+                    ax.text(
+                        0.5, 0.5,
+                        f"No valid values for {feature_name}",
+                        ha="center", va="center",
+                        transform=ax.transAxes,
                     )
                     ax.set_title(
-                        f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+                        f"{'Boxplot' if box_violin == 'boxplot' else 'Violinplot'}: {feature_name} (Scale: {scale_conversion})",
                         fontsize=label_fontsize,
-                        pad=25,  # Increased padding
+                        pad=25,
                     )
-                elif box_violin == "violinplot":
-                    sns.violinplot(
-                        x=feature_,
-                        ax=ax,
-                        **(box_violin_kws or {}),
-                    )
-                    ax.set_title(
-                        f"Violinplot: {feature_name} (Scale: {scale_conversion})",
-                        fontsize=label_fontsize,
-                        pad=25,  # Increased padding
-                    )
+                else:
+                    if box_violin == "boxplot":
+                        sns.boxplot(
+                            x=x,  # IMPORTANT: use x, not feature_
+                            ax=ax,
+                            **(box_violin_kws or {}),
+                        )
+                        ax.set_title(
+                            f"Boxplot: {feature_name} (Scale: {scale_conversion})",
+                            fontsize=label_fontsize,
+                            pad=25,
+                        )
+
+                    elif box_violin == "violinplot":
+                        bv_kws = dict(box_violin_kws or {})
+                        bv_kws.setdefault("cut", 0)
+                        bv_kws.setdefault("bw_adjust", 1.2)
+
+                        sns.violinplot(
+                            x=x,  # IMPORTANT: use x, not feature_
+                            ax=ax,
+                            **bv_kws,
+                        )
+                        ax.set_title(
+                            f"Violinplot: {feature_name} (Scale: {scale_conversion})",
+                            fontsize=label_fontsize,
+                            pad=25,
+                        )
+
                 ax.set_xlabel(f"{feature_name}", fontsize=label_fontsize)
                 ax.set_ylabel("", fontsize=label_fontsize)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
@@ -3368,6 +3491,7 @@ def data_doctor(
                     ax.set_xlim(xlim)
                 if box_violin_ylim:
                     ax.set_ylim(box_violin_ylim)
+
 
     # Display the cutoff text universally
     if plot_type == ["kde", "hist", "box_violin"]:  # When using "all"
