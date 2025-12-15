@@ -27,6 +27,7 @@ from ._plot_utils import (
     _cdf_exceedance_plot,
 )
 
+from scipy.stats import norm
 
 ################################################################################
 ############################## Plot Distributions ##############################
