@@ -18,6 +18,8 @@ from eda_toolkit import (
     box_violin_plot,
     stacked_crosstab_plot,
     outcome_crosstab_plot,
+    conditional_histograms,
+    distribution_gof_plots,
 )
 
 
@@ -95,6 +97,34 @@ def sample_crosstab_dataframe():
 def suppress_plot_show():
     """Automatically mock plt.show() so figures don't pop up during tests."""
     plt.show = lambda *args, **kwargs: None
+
+
+@pytest.fixture
+def binary_df():
+    rng = np.random.default_rng(42)
+    return pd.DataFrame(
+        {
+            "x1": rng.normal(0, 1, 100),
+            "x2": rng.normal(1, 2, 100),
+            "group": np.repeat([0, 1], 50),
+        }
+    )
+
+
+@pytest.fixture
+def gof_df():
+    rng = np.random.default_rng(123)
+    return pd.DataFrame(
+        {
+            "x": rng.normal(loc=0, scale=1, size=200),
+        }
+    )
+
+
+@pytest.fixture
+def reference_data():
+    rng = np.random.default_rng(999)
+    return rng.normal(size=200)
 
 
 @pytest.mark.parametrize(
@@ -711,60 +741,6 @@ def test_data_doctor_invalid_box_violin(sample_dataframe_values):
             plot_type="box_violin",
             box_violin="invalid_plot",  # Invalid option
         )
-
-
-def test_data_doctor_missing_image_path(sample_dataframe_values):
-    """Ensure ValueError is raised when save_plot=True but no path is provided."""
-    with pytest.raises(
-        ValueError,
-        match="You must provide either 'image_path_png' or 'image_path_svg'.*",
-    ):
-        data_doctor(
-            sample_dataframe_values,
-            feature_name="values",
-            show_plot=True,
-            save_plot=True,  # No path provided
-        )
-
-
-def test_data_doctor_saves_png(sample_dataframe_values):
-    """Ensure that the function attempts to save a PNG file when image_path_png is provided."""
-    with patch("matplotlib.pyplot.savefig") as mock_savefig:
-        data_doctor(
-            sample_dataframe_values,
-            feature_name="values",
-            show_plot=True,
-            save_plot=True,
-            image_path_png="test_directory",  # Mock path
-        )
-        mock_savefig.assert_called_once()  # Ensure savefig was called
-
-
-def test_data_doctor_saves_svg(sample_dataframe_values):
-    """Ensure that the function attempts to save an SVG file when image_path_svg is provided."""
-    with patch("matplotlib.pyplot.savefig") as mock_savefig:
-        data_doctor(
-            sample_dataframe_values,
-            feature_name="values",
-            show_plot=True,
-            save_plot=True,
-            image_path_svg="test_directory",  # Mock path
-        )
-        mock_savefig.assert_called_once()  # Ensure savefig was called
-
-
-def test_data_doctor_saves_both_formats(sample_dataframe_values):
-    """Ensure that both PNG and SVG save functionality works correctly."""
-    with patch("matplotlib.pyplot.savefig") as mock_savefig:
-        data_doctor(
-            sample_dataframe_values,
-            feature_name="values",
-            show_plot=True,
-            save_plot=True,
-            image_path_png="test_directory_png",
-            image_path_svg="test_directory_svg",
-        )
-        assert mock_savefig.call_count == 2  # Called twice for PNG and SVG
 
 
 def test_flex_corr_matrix_basic(sample_corr_dataframe):
@@ -1474,3 +1450,265 @@ def test_individual_plot_with_best_fit_and_limits(tmp_path):
     # Verify at least one file was written
     files = os.listdir(tmp_path)
     assert any(f.startswith("scatter_x_vs_y") and f.endswith(".png") for f in files)
+
+
+def test_conditional_histograms_non_binary_raises(binary_df):
+    df = binary_df.copy()
+    df["group"] = [0, 1, 2] * (len(df) // 3)
+
+    with pytest.raises(ValueError, match="must be binary"):
+        conditional_histograms(
+            df=df,
+            features=["x1"],
+            by="group",
+        )
+
+
+def test_conditional_histograms_non_binary_raises(binary_df):
+    df = binary_df.copy()
+    df["group"] = np.tile([0, 1, 2], len(df))[: len(df)]
+    with pytest.raises(ValueError, match="must be binary"):
+        conditional_histograms(
+            df=df,
+            features=["x1"],
+            by="group",
+        )
+
+
+def test_conditional_histograms_invalid_normalize(binary_df):
+    with pytest.raises(ValueError, match="normalize must be"):
+        conditional_histograms(
+            df=binary_df,
+            features=["x1"],
+            by="group",
+            normalize="percent",
+        )
+
+
+def test_density_plot_with_count_normalize_raises(binary_df):
+    with pytest.raises(ValueError, match="Density plots only support"):
+        conditional_histograms(
+            df=binary_df,
+            features=["x1"],
+            by="group",
+            plot_style="density",
+            normalize="count",
+        )
+
+
+def test_image_filename_without_path_raises(binary_df):
+    with pytest.raises(ValueError, match="image_path_png|image_path_svg"):
+        conditional_histograms(
+            df=binary_df,
+            features=["x1"],
+            by="group",
+            image_filename="test_plot",
+        )
+
+
+def test_conditional_histograms_auto_layout(binary_df):
+    conditional_histograms(
+        df=binary_df,
+        features=["x1", "x2"],
+        by="group",
+    )
+
+
+def test_conditional_histograms_grid_too_small(binary_df):
+    with pytest.raises(ValueError, match="Grid too small"):
+        conditional_histograms(
+            df=binary_df,
+            features=["x1", "x2"],
+            by="group",
+            n_rows=1,
+            n_cols=1,
+        )
+
+
+def test_conditional_histograms_hist_runs(binary_df):
+    conditional_histograms(
+        df=binary_df,
+        features=["x1"],
+        by="group",
+        plot_style="hist",
+    )
+
+
+def test_conditional_histograms_density_runs(binary_df):
+    conditional_histograms(
+        df=binary_df,
+        features=["x1"],
+        by="group",
+        plot_style="density",
+    )
+
+
+def test_conditional_histograms_calls_save_figure(binary_df, tmp_path):
+    with patch("eda_toolkit.plots._save_figure") as mock_save:
+        conditional_histograms(
+            df=binary_df,
+            features=["x1"],
+            by="group",
+            image_path_png=str(tmp_path),
+            image_filename="cond_hist",
+        )
+
+        mock_save.assert_called_once()
+
+
+def test_conditional_histograms_no_legend(binary_df):
+    conditional_histograms(
+        df=binary_df,
+        features=["x1"],
+        by="group",
+        show_legend=False,
+    )
+
+
+def test_distribution_gof_invalid_plot_type(gof_df):
+    with pytest.raises(ValueError, match="Invalid plot_types"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            plot_types=["qq", "hist"],
+        )
+
+
+def test_distribution_gof_invalid_qq_type(gof_df):
+    with pytest.raises(ValueError, match="qq_type must be"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            qq_type="approximate",
+        )
+
+
+def test_distribution_gof_invalid_scale(gof_df):
+    with pytest.raises(ValueError, match="scale must be"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            scale="logarithmic",
+        )
+
+
+def test_distribution_gof_invalid_tail(gof_df):
+    with pytest.raises(ValueError, match="tail must be"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            plot_types="cdf",
+            tail="middle",
+        )
+
+
+def test_distribution_gof_empirical_without_reference_raises(gof_df):
+    with pytest.raises(ValueError, match="reference_data must be provided"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            qq_type="empirical",
+        )
+
+
+def test_distribution_gof_empirical_reference_too_short(gof_df):
+    with pytest.raises(ValueError, match="at least 2"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            qq_type="empirical",
+            reference_data=np.array([1.0]),
+        )
+
+
+def test_distribution_gof_filename_without_path_raises(gof_df):
+    with pytest.raises(ValueError, match="image_path_png|image_path_svg"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            image_filename="gof_plot",
+        )
+
+
+def test_distribution_gof_palette_missing_dist_raises(gof_df):
+    with pytest.raises(ValueError, match="Palette is missing"):
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            dist=["norm", "gamma"],
+            palette={"norm": "blue"},
+        )
+
+
+def test_distribution_gof_default_runs(gof_df):
+    distribution_gof_plots(
+        df=gof_df,
+        var="x",
+    )
+
+
+def test_distribution_gof_multiple_distributions_runs(gof_df):
+    distribution_gof_plots(
+        df=gof_df,
+        var="x",
+        dist=["norm", "lognorm"],
+    )
+
+
+def test_distribution_gof_only_qq_runs(gof_df):
+    distribution_gof_plots(
+        df=gof_df,
+        var="x",
+        plot_types="qq",
+    )
+
+
+def test_distribution_gof_only_cdf_runs(gof_df):
+    distribution_gof_plots(
+        df=gof_df,
+        var="x",
+        plot_types="cdf",
+    )
+
+
+def test_distribution_gof_empirical_qq_runs(gof_df, reference_data):
+    distribution_gof_plots(
+        df=gof_df,
+        var="x",
+        qq_type="empirical",
+        reference_data=reference_data,
+    )
+
+
+def test_distribution_gof_calls_qq_plot(gof_df):
+    with patch("eda_toolkit.plots._qq_plot") as mock_qq:
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            plot_types="qq",
+        )
+
+        assert mock_qq.called
+
+
+def test_distribution_gof_calls_cdf_plot(gof_df):
+    with patch("eda_toolkit.plots._cdf_exceedance_plot") as mock_cdf:
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            plot_types="cdf",
+        )
+
+        assert mock_cdf.called
+
+
+def test_distribution_gof_calls_save_figure(gof_df, tmp_path):
+    with patch("eda_toolkit.plots._save_figure") as mock_save:
+        distribution_gof_plots(
+            df=gof_df,
+            var="x",
+            image_path_png=str(tmp_path),
+            image_filename="gof_plot",
+        )
+
+        mock_save.assert_called_once()

@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import math
 import scipy.stats as stats
+from scipy.stats import gaussian_kde
 import itertools  # Import itertools for combinations
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -21,13 +22,16 @@ from tqdm import tqdm
 from typing import Any
 
 from ._plot_utils import (
+    _save_figure,
+    _add_best_fit,
+    _get_label,
     _plot_density_overlays,
     _fit_distribution,
     _qq_plot,
     _cdf_exceedance_plot,
+    _get_palette,
 )
 
-from scipy.stats import norm
 
 ################################################################################
 ############################## Plot Distributions ##############################
@@ -283,6 +287,8 @@ def plot_distributions(
         impacts is raised.
     """
 
+    get_label = lambda v: _get_label(v, label_names)
+
     # Handle the "all" option for vars_of_interest
     if vars_of_interest == "all":
         vars_of_interest = df.select_dtypes(include=np.number).columns.tolist()
@@ -418,12 +424,6 @@ def plot_distributions(
 
     # Flatten the axes array to simplify iteration
     axes = np.atleast_1d(axes).flatten()
-
-    def get_label(var):
-        """
-        Helper function to get the custom label or original column name.
-        """
-        return label_names[var] if label_names and var in label_names else var
 
     # Iterate over the provided column list and corresponding axes
     for ax, col in zip(axes[: len(vars_of_interest)], vars_of_interest):
@@ -616,15 +616,12 @@ def plot_distributions(
     plt.tight_layout(w_pad=w_pad, h_pad=h_pad)
 
     # Save files if paths are provided
-    if image_path_png and image_filename:
-        plt.savefig(
-            os.path.join(image_path_png, f"{image_filename}.png"),
-            bbox_inches=bbox_inches,
-        )
-    if image_path_svg and image_filename:
-        plt.savefig(
-            os.path.join(image_path_svg, f"{image_filename}.svg"),
-            bbox_inches=bbox_inches,
+    if image_path_png or image_path_svg:
+        _save_figure(
+            fig=fig,
+            image_path_png=image_path_png,
+            image_path_svg=image_path_svg,
+            filename=image_filename,
         )
     plt.show()
 
@@ -1380,7 +1377,6 @@ def box_violin_plot(
     text_wrap: int = 50,
     xlim: tuple[float, float] | None = None,
     ylim: tuple[float, float] | None = None,
-    label_names: dict[str, str] | None = None,
     **kwargs,
 ) -> None:
     """
@@ -1463,10 +1459,6 @@ def box_violin_plot(
     ylim : tuple of float, optional
         Limits for the y-axis as (min, max).
 
-    label_names : dict, optional
-        Dictionary to map original column names to custom labels for display
-        purposes.
-
     **kwargs : additional keyword arguments
         Additional parameters passed to the Seaborn plotting function.
 
@@ -1492,8 +1484,6 @@ def box_violin_plot(
       the number of plots.
     - Supports rotating the plot layout using the `rotate_plot` parameter.
     - Saves plots to the specified paths if `save_plots` is True.
-    - Handles axis label customization using `label_names` and supports text
-      wrapping for plot titles.
     """
 
     # Check for valid show_plot values
@@ -1564,18 +1554,6 @@ def box_violin_plot(
     save_individual = save_plots and show_plot in ["individual", "both"]
     save_subplots = save_plots and show_plot in ["subplots", "both"]
 
-    def get_palette(n_colors):
-        """
-        Returns a 'tab10' color palette with the specified number of colors.
-        """
-        return sns.color_palette("tab10", n_colors=n_colors)
-
-    def get_label(var):
-        """
-        Helper function to get the custom label or original column name.
-        """
-        return label_names[var] if label_names and var in label_names else var
-
     # Map plot_type to the corresponding seaborn function
     plot_function = getattr(sns, plot_type)
 
@@ -1583,7 +1561,7 @@ def box_violin_plot(
     if save_individual or show_plot in ["individual", "both"]:
         for met_comp in metrics_comp:
             unique_vals = df[met_comp].value_counts().count()
-            palette = get_palette(unique_vals)
+            palette = _get_palette(unique_vals)
             for met_list in metrics_list:
                 plt.figure(figsize=individual_figsize)  # Adjust size as needed
                 # Use original column names for plotting
@@ -1599,7 +1577,7 @@ def box_violin_plot(
 
                 # Use custom labels only for display purposes
                 title = (
-                    f"Distribution of {get_label(met_list)} by {get_label(met_comp)}"
+                    f"Distribution of {_get_label(met_list)} by {_get_label(met_comp)}"
                 )
                 plt.title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
@@ -1608,7 +1586,11 @@ def box_violin_plot(
                 plt.xlabel(
                     "\n".join(
                         textwrap.wrap(
-                            get_label(met_list) if rotate_plot else get_label(met_comp),
+                            (
+                                _get_label(met_list)
+                                if rotate_plot
+                                else _get_label(met_comp)
+                            ),
                             width=text_wrap,
                         )
                     ),
@@ -1617,7 +1599,11 @@ def box_violin_plot(
                 plt.ylabel(
                     "\n".join(
                         textwrap.wrap(
-                            get_label(met_comp) if rotate_plot else get_label(met_list),
+                            (
+                                _get_label(met_comp)
+                                if rotate_plot
+                                else _get_label(met_list)
+                            ),
                             width=text_wrap,
                         )
                     ),
@@ -1677,7 +1663,7 @@ def box_violin_plot(
                 met_comp = metrics_comp[i // len(metrics_list)]
                 met_list = metrics_list[i % len(metrics_list)]
                 unique_vals = df[met_comp].value_counts().count()
-                palette = get_palette(unique_vals)
+                palette = _get_palette(unique_vals)
                 plot_function(
                     x=met_list if rotate_plot else met_comp,
                     y=met_comp if rotate_plot else met_list,
@@ -1689,7 +1675,7 @@ def box_violin_plot(
                     **kwargs,
                 )
                 title = (
-                    f"Distribution of {get_label(met_list)} by {get_label(met_comp)}"
+                    f"Distribution of {_get_label(met_list)} by {_get_label(met_comp)}"
                 )
 
                 ax.set_title(
@@ -1699,7 +1685,11 @@ def box_violin_plot(
                 ax.set_xlabel(
                     "\n".join(
                         textwrap.wrap(
-                            get_label(met_list) if rotate_plot else get_label(met_comp),
+                            (
+                                _get_label(met_list)
+                                if rotate_plot
+                                else _get_label(met_comp)
+                            ),
                             width=text_wrap,
                         )
                     ),
@@ -1708,7 +1698,11 @@ def box_violin_plot(
                 ax.set_ylabel(
                     "\n".join(
                         textwrap.wrap(
-                            get_label(met_comp) if rotate_plot else get_label(met_list),
+                            (
+                                _get_label(met_comp)
+                                if rotate_plot
+                                else _get_label(met_list)
+                            ),
                             width=text_wrap,
                         )
                     ),
@@ -2086,24 +2080,6 @@ def scatter_fit_plot(
             "numbers (width, height)."
         )
 
-    # Validation checks (already present)
-    def get_label(var):
-        return label_names.get(var, var) if label_names else var
-
-    def add_best_fit(ax, x, y, linestyle, linecolor):
-        m, b = np.polyfit(x, y, 1)
-        ax.plot(
-            x,
-            m * x + b,
-            color=linecolor,
-            linestyle=linestyle,
-            label=f"y = {m:.2f}x + {b:.2f}",
-        )
-        if show_legend:
-            ax.legend(loc="best")
-        elif ax.legend_:
-            ax.legend_.remove()
-
     # Create grid for individual or subplots plotting
     _, axes = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
 
@@ -2132,16 +2108,19 @@ def scatter_fit_plot(
             if add_best_fit_line:
                 x_data = df[x_var] if not rotate_plot else df[y_var]
                 y_data = df[y_var] if not rotate_plot else df[x_var]
-                add_best_fit(
-                    ax,
-                    x_data,
-                    y_data,
-                    best_fit_linestyle,
-                    best_fit_linecolor,
+                _add_best_fit(
+                    ax=ax,
+                    x=x_data,
+                    y=y_data,
+                    linestyle=best_fit_linestyle,
+                    linecolor=best_fit_linecolor,
+                    show_legend=show_legend,
                 )
 
             r_value = df[x_var].corr(df[y_var])
-            title = f"{get_label(x_var)} vs. {get_label(y_var)}"
+            title = (
+                f"{_get_label(x_var, label_names)} vs. {_get_label(y_var, label_names)}"
+            )
             if show_correlation:
                 title += f" ($r$ = {r_value:.2f})"
             plt.title(
@@ -2151,7 +2130,11 @@ def scatter_fit_plot(
             plt.xlabel(
                 "\n".join(
                     textwrap.wrap(
-                        get_label(x_var) if not rotate_plot else get_label(y_var),
+                        (
+                            _get_label(x_var, label_names)
+                            if not rotate_plot
+                            else _get_label(y_var, label_names)
+                        ),
                         width=text_wrap,
                     )
                 ),
@@ -2160,7 +2143,11 @@ def scatter_fit_plot(
             plt.ylabel(
                 "\n".join(
                     textwrap.wrap(
-                        get_label(y_var) if not rotate_plot else get_label(x_var),
+                        (
+                            _get_label(y_var, label_names)
+                            if not rotate_plot
+                            else _get_label(x_var, label_names)
+                        ),
                         width=text_wrap,
                     )
                 ),
@@ -2200,16 +2187,17 @@ def scatter_fit_plot(
                 if add_best_fit_line:
                     x_data = df[x_var] if not rotate_plot else df[y_var]
                     y_data = df[y_var] if not rotate_plot else df[x_var]
-                    add_best_fit(
-                        ax,
-                        x_data,
-                        y_data,
-                        best_fit_linestyle,
-                        best_fit_linecolor,
+                    _add_best_fit(
+                        ax=ax,
+                        x=x_data,
+                        y=y_data,
+                        linestyle=best_fit_linestyle,
+                        linecolor=best_fit_linecolor,
+                        show_legend=show_legend,
                     )
 
                 r_value = df[x_var].corr(df[y_var])
-                title = f"{get_label(x_var)} vs. {get_label(y_var)}"
+                title = f"{_get_label(x_var, label_names)} vs. {_get_label(y_var, label_names)}"
                 if show_correlation:
                     title += f" ($r$ = {r_value:.2f})"
                 ax.set_title(
@@ -2219,7 +2207,11 @@ def scatter_fit_plot(
                 ax.set_xlabel(
                     "\n".join(
                         textwrap.wrap(
-                            get_label(x_var) if not rotate_plot else get_label(y_var),
+                            (
+                                _get_label(x_var, label_names)
+                                if not rotate_plot
+                                else _get_label(y_var, label_names)
+                            ),
                             width=text_wrap,
                         )
                     ),
@@ -2228,7 +2220,11 @@ def scatter_fit_plot(
                 ax.set_ylabel(
                     "\n".join(
                         textwrap.wrap(
-                            get_label(y_var) if not rotate_plot else get_label(x_var),
+                            (
+                                _get_label(y_var, label_names)
+                                if not rotate_plot
+                                else _get_label(x_var, label_names)
+                            ),
                             width=text_wrap,
                         )
                     ),
@@ -2271,16 +2267,17 @@ def scatter_fit_plot(
                 )
 
                 if add_best_fit_line:
-                    add_best_fit(
-                        ax,
-                        df[x_var] if not rotate_plot else df[y_var],
-                        df[y_var] if not rotate_plot else df[x_var],
-                        best_fit_linestyle,
-                        best_fit_linecolor,
+                    _add_best_fit(
+                        ax=ax,
+                        x=x_data,
+                        y=y_data,
+                        linestyle=best_fit_linestyle,
+                        linecolor=best_fit_linecolor,
+                        show_legend=show_legend,
                     )
 
                 ax.set_title(
-                    f"{get_label(x_var)} vs. {get_label(y_var)}",
+                    f"{_get_label(x_var, label_names)} vs. {_get_label(y_var, label_names)}",
                     fontsize=label_fontsize,
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
@@ -2337,16 +2334,17 @@ def scatter_fit_plot(
                 if add_best_fit_line:
                     x_data = df[x_var] if not rotate_plot else df[y_var]
                     y_data = df[y_var] if not rotate_plot else df[x_var]
-                    add_best_fit(
-                        ax,
-                        x_data,
-                        y_data,
-                        best_fit_linestyle,
-                        best_fit_linecolor,
+                    _add_best_fit(
+                        ax=ax,
+                        x=x_data,
+                        y=y_data,
+                        linestyle=best_fit_linestyle,
+                        linecolor=best_fit_linecolor,
+                        show_legend=show_legend,
                     )
 
                 r_value = df[x_var].corr(df[y_var])
-                title = f"{get_label(x_var)} vs. {get_label(y_var)}"
+                title = f"{_get_label(x_var, label_names)} vs. {_get_label(y_var, label_names)}"
                 if show_correlation:
                     title += f" ($r$ = {r_value:.2f})"
                 ax.set_title(
@@ -2742,9 +2740,9 @@ def data_doctor(
     kde_ylim: tuple[float, float] | None = None,
     hist_ylim: tuple[float, float] | None = None,
     box_violin_ylim: tuple[float, float] | None = None,
-    save_plot: bool = False,
     image_path_png: str | None = None,
     image_path_svg: str | None = None,
+    image_filename: str | None = None,
     apply_as_new_col_to_df: bool = False,
     kde_kws: dict | None = None,
     hist_kws: dict | None = None,
@@ -2759,189 +2757,158 @@ def data_doctor(
     Analyze and transform a specific feature in a DataFrame, with options for
     scaling, applying cutoffs, and visualizing the results. This function also
     allows for the creation of a new column with the transformed data if
-    specified. Plots can be saved in PNG or SVG format with filenames that
-    incorporate the `plot_type`, `feature_name`, `scale_conversion`, and
-    `cutoff` if cutoffs are applied.
+    specified.
 
-    Parameters:
-    -----------
+    Plots are displayed by default. If `image_filename` is provided, the figure
+    is saved as PNG and/or SVG depending on which output directories are supplied
+    via `image_path_png` and/or `image_path_svg`.
+
+    Parameters
+    ----------
     df : pandas.DataFrame
         The DataFrame containing the feature to analyze.
 
     feature_name : str
         The name of the feature (column) to analyze.
 
-    data_fraction : float, optional (default=1)
+    data_fraction : float, optional (default=1.0)
         Fraction of the data to analyze. Useful for large datasets where a
-        sample can represent the population. If `apply_as_new_col_to_df=True`,
-        the full dataset is used (data_fraction=1).
+        representative sample is sufficient. If
+        `apply_as_new_col_to_df=True`, the full dataset is always used.
 
     scale_conversion : str, optional
-        Type of conversion to apply to the feature. Options include:
-            - 'abs': Absolute values
-            - 'log': Natural logarithm
-            - 'sqrt': Square root
-            - 'cbrt': Cube root
-            - 'reciprocal': Reciprocal transformation
-            - 'stdrz': Standardized (z-score)
-            - 'minmax': Min-Max scaling
-            - 'boxcox': Box-Cox transformation (positive values only; supports
-                        `lmbda` for specific lambda or `alpha` for confidence
-                        interval)
-            - 'robust': Robust scaling (median and IQR)
-            - 'maxabs': Max-abs scaling
-            - 'exp': Exponential transformation
-            - 'logit': Logit transformation (values between 0 and 1)
-            - 'arcsinh': Inverse hyperbolic sine
-            - 'square': Squaring the values
-            - 'power': Power transformation (Yeo-Johnson).
-        Defaults to None (no conversion).
+        Transformation applied to the feature. Supported options include:
+            - "abs": absolute value
+            - "log": natural logarithm
+            - "sqrt": square root
+            - "cbrt": cube root
+            - "reciprocal": reciprocal transformation
+            - "stdrz": z-score standardization
+            - "minmax": min–max scaling
+            - "robust": robust scaling using median and IQR
+            - "maxabs": max-absolute scaling
+            - "exp": exponential transformation
+            - "logit": logit transform (values strictly between 0 and 1)
+            - "arcsinh": inverse hyperbolic sine
+            - "square": square of values
+            - "boxcox": Box–Cox transform (positive values only)
+            - "power": Yeo–Johnson power transform
+        If None, no transformation is applied.
 
     scale_conversion_kws : dict, optional
-        Additional keyword arguments to pass to the scaling functions, such as:
-            - 'alpha' for Box-Cox transformation (returns a confidence interval
-               for lambda)
-            - 'lmbda' for a specific Box-Cox transformation value
-            - 'quantile_range' for robust scaling.
+        Additional keyword arguments passed to the transformation method.
+        Examples include:
+            - "alpha" or "lmbda" for Box–Cox
+            - "quantile_range" for robust scaling
 
     apply_cutoff : bool, optional (default=False)
-        Whether to apply upper and/or lower cutoffs to the feature.
+        Whether to apply lower and/or upper cutoffs to the feature.
 
     lower_cutoff : float, optional
-        Lower bound to apply if `apply_cutoff=True`. Defaults to None.
+        Lower bound applied when `apply_cutoff=True`.
 
     upper_cutoff : float, optional
-        Upper bound to apply if `apply_cutoff=True`. Defaults to None.
+        Upper bound applied when `apply_cutoff=True`.
 
     show_plot : bool, optional (default=True)
-        Whether to display plots of the transformed feature: KDE, histogram, and
-        boxplot/violinplot.
+        Whether to display plots for the transformed feature.
 
-    plot_type : str, list, or tuple, optional (default="all")
-        Specifies the type of plot(s) to produce. Options are:
-            - 'all': Generates KDE, histogram, and boxplot/violinplot.
-            - 'kde': KDE plot only.
-            - 'hist': Histogram plot only.
-            - 'ecdf': ECDF plot only.
-            - 'box_violin': Boxplot or violin plot only (specified by
-                            `box_violin`).
-        If a list or tuple is provided (e.g., `plot_type=["kde", "hist"]`),
-        the specified plots are displayed in a single row with sufficient
-        spacing. A `ValueError` is raised if an invalid plot type is included.
+    plot_type : str or list of str, optional (default="all")
+        Plot types to generate. Supported values are:
+            - "all": KDE, histogram, and box/violin plot
+            - "kde": kernel density estimate
+            - "hist": histogram
+            - "ecdf": empirical CDF
+            - "box_violin": boxplot or violin plot
+        When multiple plot types are provided, they are arranged in a single
+        figure row.
 
-    figsize : tuple or list, optional (default=(18, 6))
-        Specifies the figure size for the plots. This applies to all plot types,
-        including single plots (when `plot_type` is set to "kde", "hist", or
-        "box_violin") and multi-plot layout when `plot_type` is "all".
+    figsize : tuple of int, optional (default=(18, 6))
+        Figure size in inches.
 
-    xlim : tuple or list, optional
-        Limits for the x-axis in all plots, specified as (xmin, xmax).
+    xlim : tuple of (float, float), optional
+        Limits for the x-axis applied across plots.
 
-    kde_ylim : tuple or list, optional
-        Limits for the y-axis in the KDE plot, specified as (ymin, ymax).
+    kde_ylim : tuple of (float, float), optional
+        Limits for the KDE y-axis.
 
-    hist_ylim : tuple or list, optional
-        Limits for the y-axis in the histogram plot, specified as (ymin, ymax).
+    hist_ylim : tuple of (float, float), optional
+        Limits for the histogram y-axis.
 
-    box_violin_ylim : tuple or list, optional
-        Limits for the y-axis in the boxplot or violin plot, specified as
-        (ymin, ymax).
+    box_violin_ylim : tuple of (float, float), optional
+        Limits for the boxplot or violin plot y-axis.
 
-    save_plot : bool, optional (default=False)
-        Whether to save the plots as PNG and/or SVG images. If `True`, the user
-        must specify at least one of `image_path_png` or `image_path_svg`,
-        otherwise a `ValueError` is raised.
+    image_filename : str, optional
+        Base filename (without extension) used when saving plots. If provided,
+        the figure is saved to disk using the directories specified by
+        `image_path_png` and/or `image_path_svg`.
 
     image_path_png : str, optional
-        Directory path to save the plot as a PNG file. Only used if
-        `save_plot=True`.
+        Directory path used to save a PNG version of the figure.
 
     image_path_svg : str, optional
-        Directory path to save the plot as an SVG file. Only used if
-        `save_plot=True`.
+        Directory path used to save an SVG version of the figure.
 
     apply_as_new_col_to_df : bool, optional (default=False)
-        Whether to create a new column in the DataFrame with the transformed
-        values. If True, the new column name is generated based on the
-        feature name and the transformation applied:
-            - `<feature_name>_<scale_conversion>`: If a transformation is
-            applied.
-            - `<feature_name>_w_cutoff`: If only cutoffs are applied.
-        For Box-Cox transformation, if `alpha` is specified, the confidence
-        interval for lambda is displayed. If `lmbda` is specified, the lambda
-        value is displayed.
+        Whether to add the transformed feature back to the DataFrame as a new
+        column. The column name is derived from the feature name and applied
+        transformation.
 
     kde_kws : dict, optional
-        Additional keyword arguments to pass to the KDE plot (seaborn.kdeplot).
+        Keyword arguments passed to seaborn.kdeplot.
 
     hist_kws : dict, optional
-        Additional keyword arguments to pass to the histogram plot
-        (seaborn.histplot).
+        Keyword arguments passed to seaborn.histplot.
 
     box_violin_kws : dict, optional
-        Additional keyword arguments to pass to either boxplot or violinplot.
+        Keyword arguments passed to seaborn.boxplot or seaborn.violinplot.
 
-    box_violin : str, optional (default="boxplot")
-        Specifies whether to plot a 'boxplot' or 'violinplot' if `plot_type` is
-        set to 'box_violin'.
+    box_violin : {"boxplot", "violinplot"}, optional (default="boxplot")
+        Specifies the plot style used when `plot_type="box_violin"`.
 
     label_fontsize : int, optional (default=12)
-        Font size for the axis labels and plot titles.
+        Font size used for axis labels and titles.
 
     tick_fontsize : int, optional (default=10)
-        Font size for the tick labels on both axes.
+        Font size used for axis tick labels.
 
     random_state : int, optional
-        Seed for reproducibility when sampling the data.
+        Random seed used when sampling the data.
 
-    Returns:
-    --------
-    None
-        Displays the feature name, descriptive statistics, quartile information,
-        and outlier details. If a new column is created, confirms the new
-        column's addition to the DataFrame. Also, for Box-Cox transformation,
-        prints the lambda value (if provided) or confidence interval for lambda
-        (if `alpha` is provided).
-
-    Raises:
+    Returns
     -------
-    ValueError
-        If an invalid `scale_conversion` is provided.
+    None
+        The function prints a summary report and generates plots. If
+        `apply_as_new_col_to_df=True`, the DataFrame is modified in place.
 
-    ValueError
-        If Box-Cox transformation is applied to non-positive values.
-
-    ValueError
-        If `save_plot=True` but neither `image_path_png` nor `image_path_svg` is
-        provided.
-
-    ValueError
-        If an invalid option is provided for `box_violin`.
-
-    ValueError
-        If an invalid option is provided for `plot_type`.
-
-    ValueError
-        If the length of transformed data does not match the original feature
-        length.
-
-    Notes:
+    Raises
     ------
-    - When saving plots, the filename will include the `feature_name`,
-      `scale_conversion`, and each selected `plot_type` to allow easy
-      identification. If `plot_type` includes 'box_violin', the filename will
-      reflect the user's specific choice of either 'boxplot' or 'violinplot' as
-      set in `box_violin`. Additionally, if `apply_cutoff=True`, "cutoff" is
-      appended to the filename. For example, if `feature_name` is "age",
-      `scale_conversion` is "boxcox", and `plot_type` is ["kde", "hist",
-      "box_violin"] with `box_violin` set to "boxplot", the filename will be:
-      `age_boxcox_kde_hist_boxplot_cutoff.png` or
-      `age_boxcox_kde_hist_boxplot_cutoff.svg`.
+    ValueError
+        If an invalid `scale_conversion` is specified.
 
-    - The cutoff values (if applied) are displayed as text at the bottom of
-      the figure, with thousands separators for readability. If `plot_type="all"`,
-      the text is displayed in a separate row. For custom plot lists, the text
-      appears centered below the figure.
+    ValueError
+        If Box–Cox transformation is applied to non-positive values.
+
+    ValueError
+        If an invalid `plot_type` or `box_violin` option is provided.
+
+    ValueError
+        If `image_filename` is provided but neither `image_path_png` nor
+        `image_path_svg` is specified.
+
+    ValueError
+        If the length of the transformed data does not match the original
+        feature length.
+
+    Notes
+    -----
+    - Saving is filename-driven: plots are written only when
+    `image_filename` is provided.
+    - File extensions are handled internally; users supply directory paths
+    and a filename stem only.
+    - Output filenames encode the feature name, transformation, plot types,
+    and whether cutoffs were applied.
+    - Cutoff values, when used, are displayed beneath the plots for clarity.
     """
 
     # Suppress warnings for division by zero, or invalid values in subtract
@@ -3374,6 +3341,12 @@ def data_doctor(
                         pad=25,
                     )
 
+                if xlim:
+                    ax.set_xlim(xlim)
+
+                if kde_ylim:
+                    ax.set_ylim(kde_ylim)
+
             elif ptype == "hist":
                 sns.histplot(x=feature_, ax=ax, **(hist_kws or {}))
                 ax.set_title(
@@ -3562,56 +3535,37 @@ def data_doctor(
             f"Valid options are 'boxplot' or 'violinplot'."
         )
 
-    # Check if save_plots=True but no image path is provided
-    if save_plot and not image_path_png and not image_path_svg:
+    if image_filename and not (image_path_png or image_path_svg):
         raise ValueError(
             "You must provide either 'image_path_png' or 'image_path_svg' "
-            "when 'save_plots=True'."
+            "when 'image_filename' is provided."
         )
 
-    # Save the plots if save_plot is True and the paths are provided
-    if save_plot:
+    # ------------------------------------------------------------------
+    # Save figure (optional)
+    # ------------------------------------------------------------------
+    if image_filename and (image_path_png or image_path_svg):
         # Adjust plot_type for custom labeling of boxplot or violinplot
         adjusted_plot_type = [
             box_violin if ptype == "box_violin" else ptype for ptype in plot_type
         ]
 
-        # Generate a filename based on the feature name, scale conversion, and
-        # selected plot types
-        plot_type_str = (
-            "_".join(adjusted_plot_type)
-            if isinstance(plot_type, (list, tuple))
-            else adjusted_plot_type[0]
-        )
+        plot_type_str = "_".join(adjusted_plot_type)
 
-        # Add 'cutoff' to filename if cutoff is applied
         cutoff_str = "_cutoff" if apply_cutoff else ""
 
-        default_filename = (
+        filename = (
             f"{feature_name}_"
             f"{scale_conversion if scale_conversion else 'original'}_"
             f"{plot_type_str}{cutoff_str}"
         )
 
-        # Save as PNG if path is provided
-        if image_path_png:
-            png_filename = f"{image_path_png}/{default_filename}.png"
-            plt.savefig(
-                png_filename,
-                format="png",
-                bbox_inches="tight",
-            )
-            print(f"Plot saved as PNG at {png_filename}")
-
-        # Save as SVG if path is provided
-        if image_path_svg:
-            svg_filename = f"{image_path_svg}/{default_filename}.svg"
-            plt.savefig(
-                svg_filename,
-                format="svg",
-                bbox_inches="tight",
-            )
-            print(f"Plot saved as SVG at {svg_filename}")
+        _save_figure(
+            fig=fig,
+            image_path_png=image_path_png,
+            image_path_svg=image_path_svg,
+            filename=filename,
+        )
 
 
 #################################################################################
@@ -3799,7 +3753,6 @@ def distribution_gof_plots(
     image_path_png: str | None = None,
     image_path_svg: str | None = None,
     image_filename: str | None = None,
-    save_plots: bool = False,
 ):
     """
     Generate goodness-of-fit (GOF) diagnostic plots for comparing empirical data
@@ -3899,8 +3852,6 @@ def distribution_gof_plots(
     image_filename : str, optional
         Base filename used when saving plots (without extension).
 
-    save_plots : bool, default=False
-        Whether to save plots to disk.
 
     Returns
     -------
@@ -3914,6 +3865,10 @@ def distribution_gof_plots(
 
     ValueError
         If `qq_type="empirical"` is used without valid `reference_data`.
+
+    ValueError
+        If `image_filename` is provided but neither `image_path_png` nor
+        `image_path_svg` is specified.
 
     Notes
     -----
@@ -3963,6 +3918,13 @@ def distribution_gof_plots(
             raise ValueError("reference_data must be provided when qq_type='empirical'")
         if len(reference_data) < 2:
             raise ValueError("reference_data must contain at least 2 observations")
+
+    if image_filename:
+        if not (image_path_png or image_path_svg):
+            raise ValueError(
+                "You must provide either 'image_path_png' or 'image_path_svg' "
+                "when 'image_filename' is provided."
+            )
 
     # -------------------------
     # Extract data
@@ -4045,10 +4007,302 @@ def distribution_gof_plots(
     # -------------------------
     plt.tight_layout()
 
-    if save_plots and image_filename:
-        if image_path_png:
-            plt.savefig(os.path.join(image_path_png, f"{image_filename}.png"))
-        if image_path_svg:
-            plt.savefig(os.path.join(image_path_svg, f"{image_filename}.svg"))
+    if image_filename and (image_path_png or image_path_svg):
+        _save_figure(
+            fig=fig,
+            image_path_png=image_path_png,
+            image_path_svg=image_path_svg,
+            filename=image_filename,
+        )
+
+    plt.show()
+
+
+################################################################################
+######################### Conditional Histogram Function #######################
+################################################################################
+
+
+def conditional_histograms(
+    df,
+    features,
+    by,
+    *,
+    bins=30,
+    normalize="density",  # "density" or "count" (hist only)
+    plot_style="hist",  # "hist" or "density"
+    alpha=0.6,
+    colors=None,  # dict: {class_value: color}
+    n_rows=None,
+    n_cols=None,
+    common_bins=True,
+    show_legend=True,
+    label_fontsize=12,
+    tick_fontsize=10,
+    text_wrap: int = 50,
+    figsize=(10, 6),
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    image_filename: str | None = None,
+):
+    """
+    Plot conditional distributions of numeric features given a binary variable.
+
+    This function visualizes how selected numeric features are distributed
+    conditional on a binary grouping variable (e.g., outcome or class label).
+    For each feature, the distributions of the two groups are overlaid on the
+    same axis, either as histograms or as filled density curves.
+
+    Supported plot styles:
+    - "hist": overlaid histograms using shared bins
+    - "density": overlaid kernel density envelopes (always normalized)
+
+    Normalization behavior:
+    - normalize="count": raw counts (histograms only)
+    - normalize="density": probability density (histograms or density plots)
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Input DataFrame containing the features and grouping variable.
+
+    features : list of str
+        List of numeric feature column names to plot.
+
+    by : str
+        Name of the binary column used to condition the distributions.
+        Must contain exactly two unique, non-null values.
+
+    bins : int or sequence, optional (default=30)
+        Number of bins or explicit bin edges for histogram plots.
+
+    normalize : {"density", "count"}, optional (default="density")
+        Controls histogram normalization. Ignored for density plots, which
+        always use probability density.
+
+    plot_style : {"hist", "density"}, optional (default="hist")
+        Plot type to generate:
+        - "hist": overlaid histograms
+        - "density": overlaid filled KDE curves
+
+    overlay : bool, optional (default=True)
+        Currently informational only. Distributions are always overlaid on
+        the same axis regardless of this value.
+
+    alpha : float, optional (default=0.6)
+        Transparency level for histogram bars or density fills.
+
+    colors : dict, optional
+        Mapping from group value to color. Keys must match the two unique
+        values in the `by` column. If None, a default color scheme is used.
+
+    n_rows : int, optional
+        Number of subplot rows. If None, determined automatically.
+
+    n_cols : int, optional
+        Number of subplot columns. If None, determined automatically.
+
+    common_bins : bool, optional (default=True)
+        If True, both groups share identical histogram bin edges.
+        Ignored for density plots.
+
+    show_legend : bool, optional (default=True)
+        Whether to display a legend identifying the two groups.
+
+    label_fontsize : int, optional (default=12)
+        Font size for axis labels.
+
+    tick_fontsize : int, optional (default=10)
+        Font size for tick labels and legend text.
+
+    figsize : tuple of (int, int), optional (default=(24, 20))
+        Size of the overall figure in inches.
+
+    save_plot : bool, optional (default=False)
+        Whether to save the figure to disk.
+
+    image_path_png : str, optional
+        Directory path to save the PNG image.
+
+    image_path_svg : str, optional
+        Directory path to save the SVG image.
+
+    image_filename : str, optional
+        Base filename (without extension) for saving the figure.
+
+    Raises
+    ------
+    ValueError
+        If the `by` column is not binary.
+        If an invalid plot_style or normalize option is provided.
+
+    ValueError
+        If `image_filename` is provided but neither `image_path_png` nor
+        `image_path_svg` is specified.
+
+    Notes
+    -----
+    - Font sizes are specified in absolute points and may appear small on
+    large figures or dense subplot grids.
+    - All distributions are plotted as overlays on a single axis per feature.
+    - The `overlay` parameter is reserved for future extensions and does not
+    currently alter behavior.
+    """
+
+    # ------------------------------------------------------------------
+    # Validation
+    # ------------------------------------------------------------------
+
+    # Check if save_plots=True but no image path is provided
+    if image_filename and not (image_path_png or image_path_svg):
+        raise ValueError(
+            "You must provide either 'image_path_png' or 'image_path_svg' "
+            "when 'image_filename' is provided."
+        )
+
+    if by not in df.columns:
+        raise ValueError(f"Column '{by}' not found in DataFrame.")
+
+    unique_vals = df[by].dropna().unique()
+    if len(unique_vals) != 2:
+        raise ValueError(f"Column '{by}' must be binary. Found values: {unique_vals}")
+
+    if plot_style not in {"hist", "density"}:
+        raise ValueError("plot_style must be 'hist' or 'density'.")
+
+    if plot_style == "density" and normalize != "density":
+        raise ValueError("Density plots only support normalize='density'.")
+
+    if normalize not in {"density", "count"}:
+        raise ValueError("normalize must be 'density' or 'count'.")
+
+    features = list(features)
+    n_features = len(features)
+
+    # ------------------------------------------------------------------
+    # Layout
+    # ------------------------------------------------------------------
+    if n_rows is None and n_cols is None:
+        n_cols = int(np.ceil(np.sqrt(n_features)))
+        n_rows = int(np.ceil(n_features / n_cols))
+    elif n_rows is None:
+        n_rows = int(np.ceil(n_features / n_cols))
+    elif n_cols is None:
+        n_cols = int(np.ceil(n_features / n_rows))
+
+    if n_rows * n_cols < n_features:
+        raise ValueError(
+            f"Grid too small: n_rows*n_cols={n_rows*n_cols}, but n_features={n_features}. "
+            f"Increase n_rows or n_cols."
+        )
+
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
+    axes = np.atleast_1d(axes).flatten()
+
+    # ------------------------------------------------------------------
+    # Colors
+    # ------------------------------------------------------------------
+    if colors is None:
+        colors = {
+            unique_vals[0]: "#1f77b4",
+            unique_vals[1]: "#ff7f0e",
+        }
+
+    # ------------------------------------------------------------------
+    # Plotting
+    # ------------------------------------------------------------------
+    for ax, feature in zip(axes, features):
+        x0 = df.loc[df[by] == unique_vals[0], feature].dropna().values
+        x1 = df.loc[df[by] == unique_vals[1], feature].dropna().values
+
+        # -----------------------
+        # Histogram style
+        # -----------------------
+        if plot_style == "hist":
+            if common_bins:
+                combined = np.concatenate([x0, x1])
+                bin_edges = np.histogram_bin_edges(combined, bins=bins)
+            else:
+                bin_edges = bins
+
+            density_flag = normalize == "density"
+
+            ax.hist(
+                x0,
+                bins=bin_edges,
+                alpha=alpha,
+                color=colors[unique_vals[0]],
+                label=str(unique_vals[0]),
+                density=density_flag,
+            )
+            ax.hist(
+                x1,
+                bins=bin_edges,
+                alpha=alpha,
+                color=colors[unique_vals[1]],
+                label=str(unique_vals[1]),
+                density=density_flag,
+            )
+
+        # -----------------------
+        # Filled density style
+        # -----------------------
+        else:  # plot_style == "density"
+            for vals, label in [(x0, unique_vals[0]), (x1, unique_vals[1])]:
+                if len(vals) < 2:
+                    continue
+
+                kde = gaussian_kde(vals)
+                x_grid = np.linspace(vals.min(), vals.max(), 500)
+                y = kde(x_grid)
+
+                ax.fill_between(
+                    x_grid,
+                    y,
+                    alpha=alpha,
+                    color=colors[label],
+                    label=str(label),
+                )
+
+        # -----------------------
+        # Axis labels
+        # -----------------------
+        ax.set_xlabel(feature, fontsize=label_fontsize)
+
+        if plot_style == "density" or normalize == "density":
+            ax.set_ylabel("Percentage", fontsize=label_fontsize)
+        else:
+            ax.set_ylabel("Count", fontsize=label_fontsize)
+
+        ax.tick_params(axis="both", labelsize=tick_fontsize)
+
+        if show_legend:
+            ax.legend(fontsize=tick_fontsize)
+
+        title = f"{feature} by {by}"
+
+        ax.set_title(
+            "\n".join(textwrap.wrap(title, width=text_wrap)),
+            fontsize=label_fontsize,
+        )
+
+    # ------------------------------------------------------------------
+    # Hide unused axes
+    # ------------------------------------------------------------------
+    for ax in axes[n_features:]:
+        ax.axis("off")
+
+    plt.tight_layout()
+
+    # ------------------------------------------------------------------
+    # Save
+    # ------------------------------------------------------------------
+    if image_path_png or image_path_svg:
+        _save_figure(
+            fig=fig,
+            image_path_png=image_path_png,
+            image_path_svg=image_path_svg,
+            filename=image_filename,
+        )
 
     plt.show()
