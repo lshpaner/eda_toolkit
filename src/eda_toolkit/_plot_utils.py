@@ -1,8 +1,133 @@
 import numpy as np
 import pandas as pd
+import os
+import matplotlib.pyplot as plt
 import seaborn as sns
 import scipy.stats as stats
 import warnings
+
+
+################################################################################
+# Figure Saving Utility
+################################################################################
+
+
+def _save_figure(
+    *,
+    fig: plt.Figure | None = None,
+    image_path_png: str | None = None,
+    image_path_svg: str | None = None,
+    filename: str | None = None,
+    bbox_inches: str = "tight",
+    dpi: int | None = None,
+) -> None:
+    """
+    Save a matplotlib figure to PNG and/or SVG.
+
+    This helper centralizes all figure-saving logic. Callers provide
+    output directories and a base filename. Full file paths are
+    constructed internally.
+
+    Parameters
+    ----------
+    fig : matplotlib.figure.Figure or None
+        Figure to save. If None, uses the current active figure.
+
+    image_path_png : str or None
+        Directory path where the PNG file should be saved.
+        If None, PNG output is skipped.
+
+    image_path_svg : str or None
+        Directory path where the SVG file should be saved.
+        If None, SVG output is skipped.
+
+    filename : str or None
+        Base filename without extension. If None, no files are saved.
+
+    bbox_inches : str, optional
+        Bounding box option passed to savefig.
+
+    dpi : int or None, optional
+        DPI for raster outputs such as PNG.
+    """
+    # Nothing to do
+    if filename is None or (image_path_png is None and image_path_svg is None):
+        return
+
+    fig = fig or plt.gcf()
+
+    if image_path_png:
+        png_path = os.path.join(image_path_png, f"{filename}.png")
+        fig.savefig(
+            png_path,
+            bbox_inches=bbox_inches,
+            dpi=dpi,
+        )
+
+    if image_path_svg:
+        svg_path = os.path.join(image_path_svg, f"{filename}.svg")
+        fig.savefig(
+            svg_path,
+            bbox_inches=bbox_inches,
+        )
+
+
+################################################################################
+# Best-Fit Line Utilitys
+################################################################################
+
+
+def _add_best_fit(
+    *,
+    ax,
+    x,
+    y,
+    linestyle,
+    linecolor,
+    show_legend: bool,
+) -> None:
+    m, b = np.polyfit(x, y, 1)
+
+    ax.plot(
+        x,
+        m * x + b,
+        color=linecolor,
+        linestyle=linestyle,
+        label=f"y = {m:.2f}x + {b:.2f}",
+    )
+
+    if show_legend:
+        ax.legend(loc="best")
+    else:
+        if ax.legend_ is not None:
+            ax.legend_.remove()
+
+
+################################################################################
+# Labeling and Palette Utilities
+################################################################################
+
+
+def _get_label(var: str, label_names: dict | None = None) -> str:
+    """
+    Return a display label for a variable.
+
+    If label_names is provided and contains the variable, return the mapped
+    label. Otherwise return the variable name.
+    """
+    if not label_names:
+        return var
+
+    ## used, for example, in scatter_fit_plot
+    return label_names.get(var, var)
+
+
+def _get_palette(n_colors):
+    """
+    Returns a 'tab10' color palette with the specified number of colors.
+    """
+    return sns.color_palette("tab10", n_colors=n_colors)
+
 
 ################################################################################
 # Density Overlay Plotting Utils
