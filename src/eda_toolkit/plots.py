@@ -71,7 +71,7 @@ def plot_distributions(
     bbox_inches: str | None = None,
     single_var_image_filename: str | None = None,
     y_axis_label: str = "Density",
-    plot_type: str = "both",
+    plot_type: str = "hist",
     density_function: str | list[str] | None = "kde",
     density_fit: str = "MLE",
     log_scale_vars: str | list[str] | None = None,
@@ -184,7 +184,7 @@ def plot_distributions(
         The label to display on the y-axis. If set to `None`, no y-axis label
         will be displayed.
 
-    plot_type : str, optional (default='both')
+    plot_type : str, optional (default='hist')
         The type of plot to generate ('hist', 'density', or 'both').
 
     log_scale_vars : str or list of str, optional
