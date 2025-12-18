@@ -90,6 +90,7 @@ def plot_distributions(
     std_color: str | list[str] = "#808080",
     label_names: dict[str, str] | None = None,
     show_legend: bool = True,
+    legend_loc: str = "best",
     custom_xlabels: dict[str, str] | None = None,
     custom_titles: dict[str, str] | None = None,
     **kwargs: dict[str, Any],
@@ -238,6 +239,12 @@ def plot_distributions(
 
     show_legend : bool, optional (default=True)
         Whether to show the legend on the plots.
+
+    legend_loc : str, optional (default="best")
+        Location of the legend on the plot. Passed directly to
+        `matplotlib.axes.Axes.legend`. Common options include
+        "best", "upper right", "upper left", "lower left",
+        "lower right", and "center".
 
     custom_xlabels : dict, optional
         Dictionary to customize x-axis labels. Keys are column names, and values
@@ -549,7 +556,7 @@ def plot_distributions(
                 handles, labels = ax.get_legend_handles_labels()
 
                 if show_legend and len(handles) > 0:
-                    ax.legend(loc="best")
+                    ax.legend(loc=legend_loc)
                 else:
                     if ax.get_legend() is not None:
                         ax.get_legend().remove()
@@ -560,7 +567,7 @@ def plot_distributions(
                     print(f"Warning encountered while plotting '{col}': {str(e)}")
                     handles, labels = ax.get_legend_handles_labels()
                     if show_legend and len(handles) > 0 and len(labels) > 0:
-                        ax.legend(loc="best")
+                        ax.legend(loc=legend_loc)
                     else:
                         if ax.get_legend() is not None:
                             ax.get_legend().remove()
@@ -738,7 +745,7 @@ def plot_distributions(
                     handles, labels = ax.get_legend_handles_labels()
 
                     if show_legend and len(handles) > 0 and len(labels) > 0:
-                        ax.legend(loc="best")
+                        ax.legend(loc=legend_loc)
                     else:
                         if ax.get_legend() is not None:
                             ax.get_legend().remove()
@@ -749,7 +756,7 @@ def plot_distributions(
                         print(f"Warning encountered while plotting '{var}': {str(e)}")
                         handles, labels = ax.get_legend_handles_labels()
                         if show_legend and len(handles) > 0 and len(labels) > 0:
-                            ax.legend(loc="best")
+                            ax.legend(loc=legend_loc)
                         else:
                             if ax.get_legend() is not None:
                                 ax.get_legend().remove()
