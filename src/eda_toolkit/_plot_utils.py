@@ -85,7 +85,17 @@ def _add_best_fit(
     linestyle,
     linecolor,
     show_legend: bool,
+    legend_loc: str = "best",
 ) -> None:
+    """
+    Add a linear least-squares best-fit line to an existing Axes.
+
+    This utility computes a first-order (linear) polynomial fit using
+    ``numpy.polyfit`` and overlays the resulting line on the provided
+    Matplotlib Axes. The fitted equation is added as the line label and
+    the legend is optionally shown or removed.
+    """
+
     m, b = np.polyfit(x, y, 1)
 
     ax.plot(
@@ -97,7 +107,7 @@ def _add_best_fit(
     )
 
     if show_legend:
-        ax.legend(loc="best")
+        ax.legend(loc=legend_loc)
     else:
         if ax.legend_ is not None:
             ax.legend_.remove()
