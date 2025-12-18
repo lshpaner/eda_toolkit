@@ -864,6 +864,7 @@ def stacked_crosstab_plot(
     logscale: bool = False,
     plot_type: str = "both",
     show_legend: bool = True,
+    legend_loc: str = "best",
     label_fontsize: int = 12,
     tick_fontsize: int = 10,
     text_wrap: int = 50,
@@ -951,6 +952,11 @@ def stacked_crosstab_plot(
 
     show_legend : bool, optional (default=True)
         Specify whether to show the legend.
+
+    legend_loc : str, optional (default="best")
+        Location of the legend, passed directly to Matplotlib's `legend(loc=...)`.
+        Common options include "best", "upper right", "upper left", "lower left",
+        and "lower right".
 
     label_fontsize : int, optional (default=12)
         Font size for axis labels.
@@ -1141,9 +1147,15 @@ def stacked_crosstab_plot(
                 ax0.tick_params(axis="both", labelsize=tick_fontsize)
 
                 if show_legend:
-                    ax0.legend([col], fontsize=12)
+                    ax0.legend(
+                        legend,
+                        loc=legend_loc,
+                        fontsize=label_fontsize,
+                    )
                 else:
-                    ax0.legend().remove()
+                    leg = ax0.get_legend()
+                    if leg is not None:
+                        leg.remove()
 
             else:
                 # Define crosstabdest to avoid UnboundLocalError
@@ -1201,9 +1213,15 @@ def stacked_crosstab_plot(
 
                     # Set legend font size to match label_fontsize
                     if show_legend:
-                        ax0.legend(legend, fontsize=label_fontsize)
+                        ax0.legend(
+                            legend,
+                            loc=legend_loc,
+                            fontsize=label_fontsize,
+                        )
                     else:
-                        ax0.legend().remove()
+                        leg = ax0.get_legend()
+                        if leg is not None:
+                            leg.remove()
 
                 if plot_type in ["both", "normalized"]:
                     # Plotting the second, normalized stacked bar graph
@@ -1256,9 +1274,15 @@ def stacked_crosstab_plot(
 
                     # Set legend font size to match label_fontsize
                     if show_legend:
-                        ax1.legend(legend, fontsize=label_fontsize)
+                        ax1.legend(
+                            legend,
+                            loc=legend_loc,
+                            fontsize=label_fontsize,
+                        )
                     else:
-                        ax1.legend().remove()
+                        leg = ax1.get_legend()
+                        if leg is not None:
+                            leg.remove()
 
             fig.align_ylabels()
 
@@ -1373,6 +1397,7 @@ def box_violin_plot(
     image_path_svg: str | None = None,
     save_plots: bool = False,
     show_legend: bool = True,
+    legend_loc: str = "best",
     plot_type: str = "boxplot",
     xlabel_rot: int = 0,
     show_plot: str = "both",
@@ -1429,6 +1454,9 @@ def box_violin_plot(
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
+
+    legend_loc : str, optional (default="best")
+        Location of the legend, passed to Matplotlib's legend(loc=...).
 
     plot_type : str, optional (default='boxplot')
         Type of plot to generate. Options are "boxplot" or "violinplot".
@@ -1579,6 +1607,7 @@ def box_violin_plot(
                     hue=met_comp,
                     palette=palette,
                     dodge=False,
+                    legend=True,
                     **kwargs,
                 )
 
@@ -1626,7 +1655,9 @@ def box_violin_plot(
                     ax.set_ylim(ylim)
 
                 # Toggle legend
-                if not show_legend and ax.legend_:
+                if show_legend and ax.legend_:
+                    ax.legend(loc=legend_loc, fontsize=tick_fontsize)
+                elif ax.legend_:
                     ax.legend_.remove()
 
                 if save_individual:
@@ -1679,6 +1710,7 @@ def box_violin_plot(
                     ax=ax,
                     palette=palette,
                     dodge=False,
+                    legend=True,
                     **kwargs,
                 )
                 title = (
@@ -1724,8 +1756,11 @@ def box_violin_plot(
                     ax.set_ylim(ylim)
 
                 # Toggle legend
-                if not show_legend and ax.legend_:
+                if show_legend and ax.legend_:
+                    ax.legend(loc=legend_loc, fontsize=tick_fontsize)
+                elif ax.legend_:
                     ax.legend_.remove()
+
             else:
                 ax.set_visible(False)
 
@@ -1770,6 +1805,7 @@ def scatter_fit_plot(
     image_path_svg: str | None = None,
     save_plots: str | None = None,
     show_legend: bool = True,
+    legend_loc: str = "best",
     xlabel_rot: int = 0,
     show_plot: str = "subplots",
     rotate_plot: bool = False,
@@ -1845,6 +1881,9 @@ def scatter_fit_plot(
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
+
+    legend_loc : str, default="best"
+        Legend placement passed to Matplotlib.
 
     xlabel_rot : int, optional (default=0)
         Rotation angle for x-axis labels.
@@ -2111,6 +2150,10 @@ def scatter_fit_plot(
                 marker=marker,
                 **kwargs,
             )
+            if show_legend and ax.legend_:
+                ax.legend(loc=legend_loc, fontsize=tick_fontsize)
+            elif ax.legend_:
+                ax.legend_.remove()
 
             if add_best_fit_line:
                 x_data = df[x_var] if not rotate_plot else df[y_var]
@@ -2122,6 +2165,7 @@ def scatter_fit_plot(
                     linestyle=best_fit_linestyle,
                     linecolor=best_fit_linecolor,
                     show_legend=show_legend,
+                    legend_loc=legend_loc,
                 )
 
             r_value = df[x_var].corr(df[y_var])
@@ -2191,6 +2235,11 @@ def scatter_fit_plot(
                     **kwargs,
                 )
 
+                if show_legend and ax.legend_:
+                    ax.legend(loc=legend_loc, fontsize=tick_fontsize)
+                elif ax.legend_:
+                    ax.legend_.remove()
+
                 if add_best_fit_line:
                     x_data = df[x_var] if not rotate_plot else df[y_var]
                     y_data = df[y_var] if not rotate_plot else df[x_var]
@@ -2201,6 +2250,7 @@ def scatter_fit_plot(
                         linestyle=best_fit_linestyle,
                         linecolor=best_fit_linecolor,
                         show_legend=show_legend,
+                        legend_loc=legend_loc,
                     )
 
                 r_value = df[x_var].corr(df[y_var])
@@ -2281,6 +2331,7 @@ def scatter_fit_plot(
                         linestyle=best_fit_linestyle,
                         linecolor=best_fit_linecolor,
                         show_legend=show_legend,
+                        legend_loc=legend_loc,
                     )
 
                 ax.set_title(
@@ -2348,6 +2399,7 @@ def scatter_fit_plot(
                         linestyle=best_fit_linestyle,
                         linecolor=best_fit_linecolor,
                         show_legend=show_legend,
+                        legend_loc=legend_loc,
                     )
 
                 r_value = df[x_var].corr(df[y_var])
@@ -4031,23 +4083,24 @@ def distribution_gof_plots(
 
 
 def conditional_histograms(
-    df,
-    features,
-    by,
+    df: pd.DataFrame,
+    features: list[str],
+    by: str,
     *,
-    bins=30,
-    normalize="density",  # "density" or "count" (hist only)
-    plot_style="hist",  # "hist" or "density"
-    alpha=0.6,
-    colors=None,  # dict: {class_value: color}
-    n_rows=None,
-    n_cols=None,
-    common_bins=True,
-    show_legend=True,
-    label_fontsize=12,
-    tick_fontsize=10,
+    bins: int | list | np.ndarray = 30,
+    normalize: str = "density",
+    plot_style: str = "hist",
+    alpha: float = 0.6,
+    colors: dict[str, str] | None = None,
+    n_rows: int | None = None,
+    n_cols: int | None = None,
+    common_bins: bool = True,
+    show_legend: bool = True,
+    legend_loc: str = "best",
+    label_fontsize: int = 12,
+    tick_fontsize: int = 10,
     text_wrap: int = 50,
-    figsize=(10, 6),
+    figsize: tuple[int, int] = (10, 6),
     image_path_png: str | None = None,
     image_path_svg: str | None = None,
     image_filename: str | None = None,
@@ -4115,6 +4168,9 @@ def conditional_histograms(
 
     show_legend : bool, optional (default=True)
         Whether to display a legend identifying the two groups.
+
+    legend_loc : str, default="best"
+        Legend placement passed to Matplotlib.
 
     label_fontsize : int, optional (default=12)
         Font size for axis labels.
@@ -4284,7 +4340,7 @@ def conditional_histograms(
         ax.tick_params(axis="both", labelsize=tick_fontsize)
 
         if show_legend:
-            ax.legend(fontsize=tick_fontsize)
+            ax.legend(loc=legend_loc, fontsize=tick_fontsize)
 
         title = f"{feature} by {by}"
 
