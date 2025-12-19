@@ -1,4 +1,5 @@
 import os
+import gc
 import sys
 import pandas as pd
 import numpy as np
@@ -7,7 +8,7 @@ from itertools import combinations
 from tqdm import tqdm
 from pathlib import Path
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, Iterable, Optional, Union
 
 if TYPE_CHECKING:
     from pandas.io.formats.style import Styler
@@ -21,6 +22,22 @@ if sys.version_info >= (3, 7):
     from datetime import datetime
 else:
     import datetime
+
+
+# ---------------------------------------------
+# optional imports for del_inactive_dataframes
+# ---------------------------------------------
+try:
+    import psutil  # optional, for process memory
+except Exception:  # pragma: no cover
+    psutil = None
+
+try:
+    from rich.console import Console  # optional, for pretty tables
+    from rich.table import Table
+except Exception:  # pragma: no cover
+    Console = None
+    Table = None
 
 
 ################################################################################
@@ -1592,3 +1609,333 @@ def groupby_imputer(
     df_out = df_out.drop(columns=["_grp_stat"])
 
     return df_out
+
+
+################################################################################
+######################### Delete Inactive Dataframes ###########################
+################################################################################
+
+
+def del_inactive_dataframes(
+    dfs_to_keep: Union[str, Iterable[str]],
+    del_dataframes: bool = False,
+    namespace: Optional[Dict[str, Any]] = None,
+    include_ipython_cache: bool = False,
+    dry_run: bool = False,
+    run_gc: bool = True,
+    track_memory: bool = False,
+    memory_mode: str = "dataframes",  # "dataframes" or "all"
+    verbose: bool = True,
+) -> Dict[str, Any]:
+    """
+    Delete inactive pandas DataFrames from a namespace to help reduce memory usage,
+    while keeping only the DataFrames named in `dfs_to_keep`.
+
+    This utility is notebook friendly and cloud friendly:
+    - It can optionally include IPython/Jupyter output-cache variables like `_14`, `_15`.
+      These can hold references to large DataFrames and keep memory from being reclaimed.
+    - It uses Rich for pretty tables when available (Python 3.8+ and rich installed).
+      Otherwise it falls back to plain-text output (works on Python 3.7+).
+    - It can optionally report memory usage before and after. Process memory reporting uses
+      `psutil` if installed. DataFrame memory reporting uses pandas `memory_usage(deep=True)`.
+
+    Parameters
+    ----------
+    dfs_to_keep : str or Iterable[str]
+        Name or names of DataFrame variables to keep. Anything not in this list may be deleted
+        if `del_dataframes=True`.
+
+    del_dataframes : bool, default False
+        If True, delete DataFrames not listed in `dfs_to_keep`.
+        If False, do not delete anything (list and report only).
+
+    namespace : dict or None, default None
+        The namespace dictionary to inspect and optionally modify.
+        - If None, uses globals() of the module where this function is executed.
+        - In notebooks or scripts, passing `namespace=globals()` is often what you want.
+        - In other contexts, you can pass `locals()` or a custom dict.
+
+        Mental model:
+        - A namespace is simply a dictionary mapping variable names (strings) to objects.
+          This function searches that dictionary for values that are pandas DataFrames and,
+          if requested, deletes them by removing their names from the dictionary.
+
+        When to use which:
+        - Use `globals()` when DataFrames are defined at the notebook or script top level.
+        - Use `locals()` when DataFrames are defined inside a function and you want to inspect them there.
+        - Use a custom dict when you explicitly manage DataFrames in a container (for example, `frames`).
+
+        Important note about `locals()`:
+        - Modifying `locals()` inside a function is not guaranteed to affect actual local variables.
+          For reliable memory cleanup inside functions, prefer storing DataFrames in a dict and
+          passing that dict as `namespace`.
+
+    include_ipython_cache : bool, default False
+        If True, include IPython output-cache names of the form `_<number>` (example: `_14`)
+        when searching for and deleting DataFrames.
+        If False, these names are ignored.
+
+    dry_run : bool, default False
+        If True, compute and display what would be deleted, but do not actually delete anything.
+
+    run_gc : bool, default True
+        If True and deletions occur, call `gc.collect()` afterward.
+
+    track_memory : bool, default False
+        If True, capture and report memory usage before and after.
+
+    memory_mode : {"dataframes", "all"}, default "dataframes"
+        Controls which memory metrics are reported:
+        - "dataframes": report only total DataFrame memory using pandas `memory_usage(deep=True)`.
+        - "all": also report process RSS if `psutil` is installed.
+
+        Notes:
+        - Process RSS is an advisory metric and may not decrease immediately.
+
+    verbose : bool, default True
+        If True, print results (Rich tables if available, otherwise plain text).
+        If False, do not print anything and only return the summary dictionary.
+
+    Returns
+    -------
+    dict
+        Summary dictionary with:
+        - "active": sorted list of DataFrame names found before deletion
+        - "to_delete": sorted list of DataFrame names marked for deletion
+        - "deleted": sorted list of DataFrame names actually deleted
+        - "remaining": sorted list of DataFrame names remaining after deletion
+        - "used_rich": bool indicating whether Rich output was used
+        - "memory": dict with dataframe memory (and optional RSS) when track_memory=True
+    """
+
+    ns = globals() if namespace is None else namespace
+    used_rich = Console is not None and Table is not None
+
+    if memory_mode not in {"dataframes", "all"}:
+        raise ValueError("memory_mode must be one of: 'dataframes', 'all'")
+
+    # Normalize keep list
+    if isinstance(dfs_to_keep, str):
+        keep = {dfs_to_keep}
+    else:
+        keep = set(dfs_to_keep or [])
+
+    def is_ipython_cache_name(name: str) -> bool:
+        return name.startswith("_") and name[1:].isdigit()
+
+    def get_process_mem_mb() -> Optional[float]:
+        if psutil is None:
+            return None
+        try:
+            proc = psutil.Process(os.getpid())
+            return proc.memory_info().rss / (1024**2)
+        except Exception:
+            return None
+
+    def get_total_df_mem_mb(namespace_dict: Dict[str, Any]) -> float:
+        total_bytes = 0
+        for name, obj in namespace_dict.items():
+            if isinstance(obj, pd.DataFrame):
+                if (not include_ipython_cache) and is_ipython_cache_name(name):
+                    continue
+                try:
+                    total_bytes += int(obj.memory_usage(deep=True).sum())
+                except Exception:
+                    pass
+        return total_bytes / (1024**2)
+
+    # Output helpers
+    def plain_rule(title: str) -> None:
+        print("\n" + "=" * len(title))
+        print(title)
+        print("=" * len(title))
+
+    def plain_list(title: str, names: Iterable[str]) -> None:
+        print(title)
+        names = list(names)
+        if not names:
+            print("  (none)")
+            return
+        for n in names:
+            print(f"  - {n}")
+
+    def make_rich_table(title: str, names: Iterable[str], color: str):
+        table = Table(title=title)
+        table.add_column("DataFrame Name", justify="left", style=color, no_wrap=True)
+        for n in names:
+            table.add_row(n)
+        return table
+
+    def make_rich_memory_table(mem: Dict[str, Any]):
+        table = Table(title="Memory Usage (MB)")
+        table.add_column("Metric", no_wrap=True)
+        table.add_column("Before", justify="right")
+        table.add_column("After", justify="right")
+        table.add_column("Delta", justify="right")
+
+        rows = [("DataFrames total", mem["dataframes_mb"])]
+
+        if mem.get("mode") == "all" and "process_mb" in mem:
+            rows.insert(0, ("Process RSS", mem["process_mb"]))
+
+        for label, payload in rows:
+            b, a, d = payload["before"], payload["after"], payload["delta"]
+            if b is None or a is None or d is None:
+                table.add_row(label, "n/a", "n/a", "n/a")
+            else:
+                table.add_row(label, f"{b:.1f}", f"{a:.1f}", f"{d:+.1f}")
+
+        return table
+
+    def plain_memory_block(mem: Dict[str, Any]) -> None:
+        plain_rule("Memory Usage (MB)")
+
+        rows = [("DataFrames total", mem["dataframes_mb"])]
+
+        if mem.get("mode") == "all" and "process_mb" in mem:
+            rows.insert(0, ("Process RSS", mem["process_mb"]))
+
+        for label, payload in rows:
+            b, a, d = payload["before"], payload["after"], payload["delta"]
+            if b is None or a is None or d is None:
+                print(f"{label}: (unavailable)")
+            else:
+                print(f"{label}: {b:.1f} -> {a:.1f} ({d:+.1f})")
+
+    # Memory snapshot before
+    want_rss = memory_mode == "all"
+    mem_before_proc = get_process_mem_mb() if (track_memory and want_rss) else None
+    mem_before_df = get_total_df_mem_mb(ns) if track_memory else None
+
+    # Collect active DataFrames
+    active = {}
+    for name, obj in ns.items():
+        if isinstance(obj, pd.DataFrame):
+            if (not include_ipython_cache) and is_ipython_cache_name(name):
+                continue
+            active[name] = obj
+    active_names = sorted(active.keys())
+
+    # Determine deletions
+    to_delete = sorted(
+        [name for name in active.keys() if del_dataframes and name not in keep]
+    )
+
+    # Perform deletions
+    deleted = []
+    if del_dataframes and (not dry_run):
+        for name in to_delete:
+            if name in ns:
+                ns.pop(name, None)
+                deleted.append(name)
+        if run_gc and deleted:
+            gc.collect()
+    deleted = sorted(deleted)
+
+    # Remaining
+    remaining = []
+    if del_dataframes:
+        remaining = sorted(
+            name
+            for name, obj in ns.items()
+            if isinstance(obj, pd.DataFrame)
+            and (include_ipython_cache or not is_ipython_cache_name(name))
+        )
+
+    # Memory snapshot after
+    mem_after_proc = get_process_mem_mb() if (track_memory and want_rss) else None
+    mem_after_df = get_total_df_mem_mb(ns) if track_memory else None
+
+    memory = None
+    if track_memory:
+
+        def _delta(b, a):
+            return None if (b is None or a is None) else (a - b)
+
+        memory = {
+            "dataframes_mb": {
+                "before": mem_before_df,
+                "after": mem_after_df,
+                "delta": _delta(mem_before_df, mem_after_df),
+            },
+            "mode": memory_mode,
+        }
+
+        if want_rss:
+            memory["process_mb"] = {
+                "before": mem_before_proc,
+                "after": mem_after_proc,
+                "delta": _delta(mem_before_proc, mem_after_proc),
+            }
+
+    # Output
+    if verbose:
+        if used_rich:
+            console = Console()
+
+            console.rule("[bold cyan]Active DataFrames[/bold cyan]")
+            console.print(
+                make_rich_table("Current Active DataFrames", active_names, "magenta")
+            )
+
+            if del_dataframes:
+                console.rule("[bold yellow]Planned Deletions[/bold yellow]")
+                if to_delete:
+                    console.print(
+                        make_rich_table(
+                            "DataFrames Marked for Deletion", to_delete, "yellow"
+                        )
+                    )
+                else:
+                    console.print("[dim]No DataFrames match deletion criteria.[/dim]")
+
+                if dry_run:
+                    console.print(
+                        "[dim]Dry run enabled. No DataFrames were deleted.[/dim]"
+                    )
+                else:
+                    console.rule("[bold red]Deleted DataFrames[/bold red]")
+                    if deleted:
+                        console.print(
+                            make_rich_table("Deleted DataFrames", deleted, "red")
+                        )
+                    else:
+                        console.print("[dim]No DataFrames were deleted.[/dim]")
+
+                console.rule("[bold green]Remaining DataFrames[/bold green]")
+                console.print(
+                    make_rich_table("Remaining Active DataFrames", remaining, "green")
+                )
+
+            if track_memory and memory is not None:
+                console.rule("[bold blue]Memory[/bold blue]")
+                console.print(make_rich_memory_table(memory))
+
+        else:
+            plain_rule("Active DataFrames")
+            plain_list("Current Active DataFrames:", active_names)
+
+            if del_dataframes:
+                plain_rule("Planned Deletions")
+                plain_list("DataFrames Marked for Deletion:", to_delete)
+
+                if dry_run:
+                    print("Dry run enabled. No DataFrames were deleted.")
+                else:
+                    plain_rule("Deleted DataFrames")
+                    plain_list("Deleted DataFrames:", deleted)
+
+                plain_rule("Remaining DataFrames")
+                plain_list("Remaining Active DataFrames:", remaining)
+
+            if track_memory and memory is not None:
+                plain_memory_block(memory)
+
+    return {
+        "active": active_names,
+        "to_delete": to_delete,
+        "deleted": deleted,
+        "remaining": remaining if del_dataframes else [],
+        "used_rich": used_rich,
+        "memory": memory,
+    }
