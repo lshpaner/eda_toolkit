@@ -1624,7 +1624,7 @@ def del_inactive_dataframes(
     dry_run: bool = False,
     run_gc: bool = True,
     track_memory: bool = False,
-    memory_mode: str = "dataframes",  # "dataframes" or "all"
+    memory_mode: str = "dataframes",
     verbose: bool = True,
 ) -> Dict[str, Any]:
     """
