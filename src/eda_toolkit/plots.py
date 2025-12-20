@@ -4084,7 +4084,7 @@ def distribution_gof_plots(
 ################################################################################
 
 
-def conditional_histograms(
+def grouped_distributions(
     df: pd.DataFrame,
     features: List[str],
     by: str,
