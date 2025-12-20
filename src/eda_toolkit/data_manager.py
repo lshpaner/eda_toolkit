@@ -8,6 +8,7 @@ from itertools import combinations
 from tqdm import tqdm
 from pathlib import Path
 
+
 from typing import TYPE_CHECKING, Any, Dict, Iterable, Optional, Union
 
 if TYPE_CHECKING:
@@ -22,22 +23,6 @@ if sys.version_info >= (3, 7):
     from datetime import datetime
 else:
     import datetime
-
-
-# ---------------------------------------------
-# optional imports for del_inactive_dataframes
-# ---------------------------------------------
-try:
-    import psutil  # optional, for process memory
-except Exception:  # pragma: no cover
-    psutil = None
-
-try:
-    from rich.console import Console  # optional, for pretty tables
-    from rich.table import Table
-except Exception:  # pragma: no cover
-    Console = None
-    Table = None
 
 
 ################################################################################
@@ -1614,6 +1599,21 @@ def groupby_imputer(
 ################################################################################
 ######################### Delete Inactive Dataframes ###########################
 ################################################################################
+
+# ---------------------------------------------
+# optional imports for del_inactive_dataframes
+# ---------------------------------------------
+try:
+    import psutil  # optional, for process memory
+except Exception:  # pragma: no cover
+    psutil = None
+
+try:
+    from rich.console import Console  # type: ignore[import-not-found]
+    from rich.table import Table  # type: ignore[import-not-found]
+except Exception:  # pragma: no cover
+    Console = None
+    Table = None
 
 
 def del_inactive_dataframes(
