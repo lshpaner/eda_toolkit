@@ -55,10 +55,13 @@ https://lshpaner.github.io/eda_toolkit_docs
 
 ## 🙏 Acknowledgements
 
-We would like to express our deepest gratitude to Dr. Ebrahim Tarshizi, our mentor during our time in the University of San Diego M.S. Applied Data Science Program. His unwavering dedication and mentorship played a pivotal role in our academic journey, guiding us to successfully graduate from the program and pursue successful careers as data scientists. 
+We would like to express our deepest gratitude to Dr. Ebrahim Tarshizi of the Shiley-Marcos School of Engineering at the University of San Diego for his mentorship in the M.S. in Applied Data Science Program. His unwavering dedication and guidance played a pivotal role in our academic journey, supporting our successful completion of the program and our pursuit of careers as data scientists.
 
-We also extend our thanks to the Shiley-Marcos School of Engineering at the University of San Diego for providing an exceptional learning environment and supporting our educational endeavors.
+We would also like to thank Robert Lanzafame, PhD, for his feedback, encouragement, and thoughtful discussion following our presentation at JupyterCon. His engagement and perspective are sincerely appreciated.
 
+We further thank Panayiotis Petousis, PhD, and Arthur Funnell from the CTSI UCLA Health data science team for their helpful comments, constructive feedback, and continued encouragement throughout the development of this library.
+
+Finally, Leon Shpaner would like to personally acknowledge his mentor, former manager, and friend, Gustavo Prado, who hired him at the Los Angeles Film School. Gustavo believed in him early on, gave him the opportunity to grow, and was patient as he developed professionally. He saw potential before it was fully formed and sparked an early interest in data by demonstrating the importance of tools like VLOOKUP. His guidance and trust had a lasting impact. May he rest in peace.
 
 ## ⚖️ License
 
