@@ -3492,7 +3492,7 @@ def data_doctor(
                     ax.set_xlim(xlim)
 
             elif ptype == "box_violin":
-                # feature_ is already a pd.Series by this point in your function
+                # feature_ is already a pd.Series by this point in the function
                 x = feature_.copy()
 
                 # Drop non-finite values without coercing the whole series
