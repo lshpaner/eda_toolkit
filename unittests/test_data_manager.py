@@ -3,6 +3,7 @@ from collections import Counter
 import pandas as pd
 from pandas.io.formats.style import Styler
 import numpy as np
+import gc
 import sys
 import os
 import datetime
@@ -24,13 +25,10 @@ from eda_toolkit import (
     eda_toolkit_logo,
     detailed_doc,
     groupby_imputer,
-)
-
-from eda_toolkit.data_manager import (
-    TableWrapper,
+    del_inactive_dataframes,
     table1_to_str,
+    TableWrapper,
 )
-
 
 base_path = os.getcwd()
 data_path = os.path.join(base_path, "data")
@@ -1114,3 +1112,366 @@ def test_groupby_imputer_invalid_stat_raises_valueerror():
             stat="std",  # invalid
             fallback="global",
         )
+
+
+@pytest.fixture
+def namespace_with_dataframes():
+    return {
+        "df_keep": pd.DataFrame({"a": [1, 2, 3]}),
+        "df_del": pd.DataFrame({"b": [4, 5, 6]}),
+        "not_df": 123,
+    }
+
+
+@pytest.fixture
+def namespace_with_ipython_cache():
+    return {
+        "df1": pd.DataFrame({"a": [1]}),
+        "_14": pd.DataFrame({"b": [2]}),  # simulated IPython cache
+    }
+
+
+def test_lists_active_dataframes_without_deleting(namespace_with_dataframes):
+    ns = namespace_with_dataframes.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep="df_keep",
+        del_dataframes=False,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert result["active"] == ["df_del", "df_keep"]
+    assert result["to_delete"] == []
+    assert result["deleted"] == []
+    assert result["remaining"] == []
+    assert "df_del" in ns
+    assert "df_keep" in ns
+
+
+def test_deletes_unkept_dataframes(namespace_with_dataframes):
+    ns = namespace_with_dataframes.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep="df_keep",
+        del_dataframes=True,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert result["to_delete"] == ["df_del"]
+    assert result["deleted"] == ["df_del"]
+    assert result["remaining"] == ["df_keep"]
+    assert "df_del" not in ns
+    assert "df_keep" in ns
+
+
+def test_dry_run_does_not_delete(namespace_with_dataframes):
+    ns = namespace_with_dataframes.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep="df_keep",
+        del_dataframes=True,
+        dry_run=True,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert result["to_delete"] == ["df_del"]
+    assert result["deleted"] == []
+    assert "df_del" in ns  # still present
+    assert "df_keep" in ns
+
+
+def test_multiple_keep_names(namespace_with_dataframes):
+    ns = namespace_with_dataframes.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=["df_keep", "df_del"],
+        del_dataframes=True,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert result["to_delete"] == []
+    assert result["deleted"] == []
+    assert sorted(result["remaining"]) == ["df_del", "df_keep"]
+
+
+def test_ipython_cache_ignored_by_default(namespace_with_ipython_cache):
+    ns = namespace_with_ipython_cache.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=True,
+        namespace=ns,
+        verbose=False,
+    )
+
+    # _14 should be ignored entirely
+    assert result["active"] == ["df1"]
+    assert result["deleted"] == ["df1"]
+    assert "_14" in ns
+    assert "df1" not in ns
+
+
+def test_ipython_cache_included_when_enabled(namespace_with_ipython_cache):
+    ns = namespace_with_ipython_cache.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=True,
+        include_ipython_cache=True,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert sorted(result["active"]) == ["_14", "df1"]
+    assert sorted(result["deleted"]) == ["_14", "df1"]
+    assert ns == {}  # everything removed
+
+
+def test_invalid_memory_mode_raises():
+    with pytest.raises(ValueError, match="memory_mode must be one of"):
+        del_inactive_dataframes(
+            dfs_to_keep=[],
+            memory_mode="invalid",
+            verbose=False,
+        )
+
+
+def test_track_memory_returns_memory_block(namespace_with_dataframes):
+    ns = namespace_with_dataframes.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep="df_keep",
+        del_dataframes=True,
+        namespace=ns,
+        track_memory=True,
+        memory_mode="dataframes",
+        verbose=False,
+    )
+
+    memory = result["memory"]
+    assert memory is not None
+    assert memory["mode"] == "dataframes"
+    assert "dataframes_mb" in memory
+    assert {"before", "after", "delta"} <= set(memory["dataframes_mb"].keys())
+
+
+def test_remaining_empty_when_del_dataframes_false(namespace_with_dataframes):
+    ns = namespace_with_dataframes.copy()
+
+    result = del_inactive_dataframes(
+        dfs_to_keep="df_keep",
+        del_dataframes=False,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert result["remaining"] == []
+
+
+def test_non_dataframe_objects_ignored():
+    ns = {
+        "df": pd.DataFrame({"x": [1]}),
+        "arr": np.array([1, 2, 3]),
+        "text": "hello",
+    }
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=True,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert result["deleted"] == ["df"]
+    assert "arr" in ns
+    assert "text" in ns
+
+
+def test_run_gc_false_does_not_call_gc(mocker):
+
+    ns = {
+        "df1": pd.DataFrame({"a": [1]}),
+        "df2": pd.DataFrame({"b": [2]}),
+    }
+
+    gc_mock = mocker.patch.object(gc, "collect")
+
+    result = del_inactive_dataframes(
+        dfs_to_keep="df1",
+        del_dataframes=True,
+        run_gc=False,
+        namespace=ns,
+        verbose=False,
+    )
+
+    assert result["deleted"] == ["df2"]
+    gc_mock.assert_not_called()
+
+
+def test_dataframe_memory_usage_exception_is_swallowed(monkeypatch):
+    df = pd.DataFrame({"a": [1, 2, 3]})
+
+    def bad_memory_usage(*args, **kwargs):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(
+        pd.DataFrame,
+        "memory_usage",
+        bad_memory_usage,
+    )
+
+    ns = {"df": df}
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=False,
+        namespace=ns,
+        track_memory=True,
+        verbose=False,
+    )
+
+    # memory exists but calculation didn't crash
+    assert result["memory"] is not None
+
+
+def test_process_memory_exception_handled(monkeypatch):
+    class BadProcess:
+        def memory_info(self):
+            raise RuntimeError("psutil fail")
+
+    class BadPsutil:
+        def Process(self, pid):
+            return BadProcess()
+
+    monkeypatch.setitem(
+        del_inactive_dataframes.__globals__,
+        "psutil",
+        BadPsutil(),
+    )
+
+    ns = {"df": pd.DataFrame({"a": [1]})}
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=True,
+        namespace=ns,
+        track_memory=True,
+        memory_mode="all",
+        verbose=False,
+    )
+
+    mem = result["memory"]["process_mb"]
+    assert mem["before"] is None
+    assert mem["after"] is None
+
+
+def test_memory_delta_none_when_before_or_after_missing(monkeypatch):
+    monkeypatch.setitem(
+        del_inactive_dataframes.__globals__,
+        "psutil",
+        None,
+    )
+
+    ns = {"df": pd.DataFrame({"a": [1]})}
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=True,
+        namespace=ns,
+        track_memory=True,
+        memory_mode="all",
+        verbose=False,
+    )
+
+    proc = result["memory"]["process_mb"]
+    assert proc["delta"] is None
+
+
+def test_plain_memory_output_path(monkeypatch, capsys):
+    monkeypatch.setitem(
+        del_inactive_dataframes.__globals__,
+        "Console",
+        None,
+    )
+    monkeypatch.setitem(
+        del_inactive_dataframes.__globals__,
+        "Table",
+        None,
+    )
+
+    ns = {"df": pd.DataFrame({"a": [1, 2, 3]})}
+
+    del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=True,
+        namespace=ns,
+        track_memory=True,
+        verbose=True,
+    )
+
+    out = capsys.readouterr().out
+    assert "Memory Usage" in out
+
+
+def test_rich_memory_table_rendering(monkeypatch):
+    # Fake Console/Table objects to force branch execution
+    class DummyConsole:
+        def rule(self, *a, **k):
+            pass
+
+        def print(self, *a, **k):
+            pass
+
+    class DummyTable:
+        def __init__(self, *a, **k):
+            pass
+
+        def add_column(self, *a, **k):
+            pass
+
+        def add_row(self, *a, **k):
+            pass
+
+    monkeypatch.setitem(
+        del_inactive_dataframes.__globals__,
+        "Console",
+        DummyConsole,
+    )
+    monkeypatch.setitem(
+        del_inactive_dataframes.__globals__,
+        "Table",
+        DummyTable,
+    )
+
+    ns = {"df": pd.DataFrame({"a": [1]})}
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=True,
+        namespace=ns,
+        track_memory=True,
+        verbose=True,
+    )
+
+    assert result["used_rich"] is True
+
+
+def test_ipython_cache_name_predicate_covered():
+    ns = {
+        "_123": pd.DataFrame({"a": [1]}),
+        "df": pd.DataFrame({"b": [2]}),
+    }
+
+    result = del_inactive_dataframes(
+        dfs_to_keep=[],
+        del_dataframes=False,
+        namespace=ns,
+        include_ipython_cache=False,
+        verbose=False,
+    )
+
+    assert result["active"] == ["df"]
