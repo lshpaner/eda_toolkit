@@ -4,10 +4,9 @@ import sys
 import pandas as pd
 import numpy as np
 from itertools import combinations
-
+from scipy.stats import ttest_ind, chi2_contingency, fisher_exact
 from tqdm import tqdm
 from pathlib import Path
-
 
 from typing import TYPE_CHECKING, Any, Dict, Iterable, Optional, Union
 
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
 
 from typing import Optional, List, Union, Tuple, Dict, Any
 
-from scipy.stats import ttest_ind, chi2_contingency, fisher_exact
+PathLike = Union[str, Path]
 
 
 if sys.version_info >= (3, 7):
@@ -30,7 +29,7 @@ else:
 ################################################################################
 
 
-def ensure_directory(path: Union[str, Path]) -> None:
+def ensure_directory(path: PathLike) -> None:
     """
     Ensure that the directory exists. If not, create it.
     """
@@ -1524,11 +1523,11 @@ def highlight_columns(
 def groupby_imputer(
     df: pd.DataFrame,
     impute_col: str,
-    by: list[str] | str,
+    by: Union[List[str], str],
     stat: str = "mean",
-    fallback: str | float | int = "global",
+    fallback: Union[str, float, int] = "global",
     as_new_col: bool = True,
-    new_col_name: str | None = None,
+    new_col_name: Optional[str] = None,
 ):
     """
     Impute missing values in `target` using group-level statistics from `by`.

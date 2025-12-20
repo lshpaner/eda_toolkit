@@ -1,20 +1,18 @@
--e .
-fastparquet==2024.11.0
+### Dependencies for development and documentation
 jinja2==3.1.4
 matplotlib>=3.5.3, <=3.9.2
 nbformat>=4.2.0, <=5.10.4
+-e .
 nbstripout>=0.4.0, <=0.8.1
 numpy>=1.21.6, <=2.1.2
 pandas>=1.3.5, <=2.2.3
 plotly>=5.18.0, <=5.24.1
-pytest==8.3.4
-pytest-cov==6.0.0
-pytest-mock==3.14.0
+pytest>=7.4.4
+pytest-cov>=4.1.0
+pytest-mock>=3.11.1
 scikit-learn>=1.0.2, <=1.5.2
 scipy>=1.5.4, <=1.7.3
 seaborn>=0.12.2, <=0.13.2
 tqdm>=4.66.4, <=4.67.1
 ucimlrepo==0.0.7
 xlsxwriter==3.2.0
-
-

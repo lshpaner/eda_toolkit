@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import scipy.stats as stats
 import warnings
+from typing import Optional, List, Dict, Union, Tuple
 
 
 ################################################################################
@@ -14,12 +15,12 @@ import warnings
 
 def _save_figure(
     *,
-    fig: plt.Figure | None = None,
-    image_path_png: str | None = None,
-    image_path_svg: str | None = None,
-    filename: str | None = None,
+    fig: Optional[plt.Figure] = None,
+    image_path_png: Optional[str] = None,
+    image_path_svg: Optional[str] = None,
+    filename: Optional[str] = None,
     bbox_inches: str = "tight",
-    dpi: int | None = None,
+    dpi: Optional[int] = None,
 ) -> None:
     """
     Save a matplotlib figure to PNG and/or SVG.
@@ -118,7 +119,7 @@ def _add_best_fit(
 ################################################################################
 
 
-def _get_label(var: str, label_names: dict | None = None) -> str:
+def _get_label(var: str, label_names: Optional[Dict[str, str]] = None) -> str:
     """
     Return a display label for a variable.
 
@@ -149,11 +150,11 @@ def _plot_density_overlays(
     ax,
     data: pd.DataFrame,
     col: str,
-    density_function: list[str],
+    density_function: List[str],
     density_fit: str,
-    hue: str | None,
+    hue: Optional[str],
     log_scale: bool,
-    density_color: str | list[str] | dict[str, str] | None,
+    density_color: Optional[Union[str, List[str], Dict[str, str]]],
     **kwargs,
 ) -> None:
     """
@@ -250,9 +251,10 @@ def _plot_density_overlays(
 
 
 def _resolve_density_colors(
-    density_function: list[str],
-    density_color: str | list[str] | dict[str, str] | None,
-) -> dict[str, str | None]:
+    density_function: List[str],
+    density_color: Optional[Union[str, List[str], Dict[str, str]]],
+) -> Dict[str, Optional[str]]:
+
     if density_color is None:
         return {d: None for d in density_function}
 
@@ -307,15 +309,15 @@ def _qq_plot(
     ax,
     data: np.ndarray,
     dist_obj,
-    params: tuple,
+    params: Tuple,
     label: str,
     scale: str,
     label_fontsize: int,
     tick_fontsize: int,
     qq_type: str = "theoretical",
-    reference_data: np.ndarray | None = None,
+    reference_data: Optional[np.ndarray] = None,
     show_reference: bool = True,
-    color: str | None = None,
+    color: Optional[str] = None,
 ):
     """
     Quantile–Quantile plot.
@@ -400,12 +402,12 @@ def _cdf_exceedance_plot(
     ax,
     data: np.ndarray,
     dist_obj,
-    params: tuple,
+    params: Tuple,
     label: str,
     scale: str,
     tail: str,
     label_fontsize: int,
-    color: str | None = None,
+    color: Optional[str] = None,
 ):
     """
     Plot CDF or exceedance probability with optional log scaling.
