@@ -832,7 +832,7 @@ box_violin_plot(
     metrics_comp=metrics_comp,
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    save_plots=True,
+    image_filename="adult_income_boxplot",
     show_plot="both",
     show_legend=False,
     plot_type="boxplot",
@@ -849,7 +849,7 @@ box_violin_plot(
     metrics_comp=metrics_comp,
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    save_plots=True,
+    image_filename="adult_income_violin_subplots",
     show_plot="both",
     show_legend=False,
     plot_type="violinplot",
@@ -864,11 +864,14 @@ box_violin_plot(
     df=df,
     metrics_list=age_boxplot_list,
     metrics_comp=metrics_comp,
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
     show_plot="both",
     rotate_plot=True,
     show_legend=False,
     plot_type="violinplot",
     xlabel_rot=0,
+    image_filename="adult_income_violin_pivoted",
 )
 
 ################################################################################

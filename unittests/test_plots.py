@@ -44,7 +44,6 @@ def sample_corr_dataframe():
         }
     )
 
-
 @pytest.fixture
 def sample_scatter_dataframe():
     np.random.seed(42)
@@ -1148,30 +1147,26 @@ def test_box_violin_plot_invalid_show_plot(sample_box_violin_dataframe):
             show_plot="invalid_option",
         )
 
-
-# Test that `save_plots` must be a boolean value
+# Test that `image_filename` without a path raises an error
 def test_box_violin_plot_invalid_save_plots(sample_box_violin_dataframe):
-    with pytest.raises(ValueError, match="`save_plots` must be a boolean value"):
+    with pytest.raises(ValueError, match="image_filename"):
         box_violin_plot(
             sample_box_violin_dataframe,
             metrics_list=["Metric1"],
             metrics_comp=["Category"],
-            save_plots="not_a_boolean",
+            image_filename="test_output",  # No path provided
         )
 
 
-# Test that `save_plots=True` requires `image_path_png` or `image_path_svg`
+# Test that `image_filename` requires `image_path_png` or `image_path_svg`
 def test_box_violin_plot_missing_image_path(sample_box_violin_dataframe):
-    with pytest.raises(
-        ValueError, match="To save plots, specify `image_path_png` or `image_path_svg`."
-    ):
+    with pytest.raises(ValueError, match="image_path_png.*image_path_svg|image_path_svg.*image_path_png"):
         box_violin_plot(
             sample_box_violin_dataframe,
             metrics_list=["Metric1"],
             metrics_comp=["Category"],
-            save_plots=True,  # Should fail since no path is provided
+            image_filename="test_output",  # Should fail since no path is provided
         )
-
 
 # Test that `rotate_plot` must be a boolean value
 def test_box_violin_plot_invalid_rotate_plot(sample_box_violin_dataframe):

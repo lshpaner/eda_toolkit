@@ -1568,13 +1568,14 @@ def box_violin_plot(
     n_cols: Optional[int] = None,
     image_path_png: Optional[str] = None,
     image_path_svg: Optional[str] = None,
-    save_plots: bool = False,
+    image_filename: Optional[str] = None,
     show_legend: bool = True,
     legend_loc: str = "best",
     plot_type: str = "boxplot",
     xlabel_rot: int = 0,
     show_plot: str = "both",
     rotate_plot: bool = False,
+    custom_order: Optional[List] = None,
     individual_figsize: Tuple[int, int] = (6, 4),
     subplot_figsize: Optional[Tuple[int, int]] = None,
     label_fontsize: int = 12,
@@ -1594,6 +1595,9 @@ def box_violin_plot(
     display preferences, including support for axis limits, label customization,
     and rotated layouts.
 
+    Figures are saved only when ``image_filename`` is provided along with at
+    least one of ``image_path_png`` or ``image_path_svg``.
+
     Parameters:
     -----------
     df : pandas.DataFrame
@@ -1602,8 +1606,9 @@ def box_violin_plot(
     metrics_list : list of str
         List of column names representing the metrics to be plotted.
 
-    metrics_comp : list of str
-        List of column names representing the comparison categories.
+    metrics_comp : list of str or str
+        List of column names representing the comparison categories. A plain
+        string is automatically coerced to a single-element list.
 
     n_rows : int, optional
         Number of rows in the subplot grid. Calculated automatically if not
@@ -1614,16 +1619,18 @@ def box_violin_plot(
         provided.
 
     image_path_png : str, optional
-        Directory path to save plots in PNG format. If not specified, plots will
-        not be saved as PNG.
+        Directory path to save plots in PNG format. If not specified, plots
+        will not be saved as PNG.
 
     image_path_svg : str, optional
-        Directory path to save plots in SVG format. If not specified, plots will
-        not be saved as SVG.
+        Directory path to save plots in SVG format. If not specified, plots
+        will not be saved as SVG.
 
-    save_plots : bool, optional
-        If True, saves the plots specified by the `show_plot` parameter
-        ("individual", "subplots", or "both"). Defaults to False.
+    image_filename : str, optional
+        Base filename (without extension) used when saving figures. No files
+        are saved if this is not provided. For individual plots, the metric
+        name and plot type are appended to this base. For subplot grids, the
+        plot type is appended.
 
     show_legend : bool, optional (default=True)
         Whether to display the legend on the plots.
@@ -1633,16 +1640,24 @@ def box_violin_plot(
 
     plot_type : str, optional (default='boxplot')
         Type of plot to generate. Options are "boxplot" or "violinplot".
+        Shorthand aliases "box" and "violin" are also accepted.
 
     xlabel_rot : int, optional (default=0)
         Rotation angle for x-axis labels.
 
     show_plot : str, optional (default='both')
-        Specify the type of plots to display. Options are "individual", "subplots",
-        or "both".
+        Specify the type of plots to display. Options are "individual",
+        "subplots", or "both".
 
     rotate_plot : bool, optional (default=False)
         If True, rotates the plots by swapping the x and y axes.
+
+    custom_order : list, optional
+        Specifies the display order of categories along the comparison axis.
+        For example, passing ``["B", "A", "C"]`` will render group "B" first
+        regardless of the order it appears in the data. If None, the default
+        order observed in the data is used. For horizontal plots
+        (``rotate_plot=True``), this controls the y-axis order.
 
     individual_figsize : tuple of int, optional (default=(6, 4))
         Dimensions (width, height) for individual plots.
@@ -1669,30 +1684,66 @@ def box_violin_plot(
 
     **kwargs : additional keyword arguments
         Additional parameters passed to the Seaborn plotting function.
+        Note: layout-related keys ("figsize", "subplot_figsize",
+        "individual_figsize") are automatically stripped and will not be
+        forwarded to Seaborn. If ``palette`` is passed here, it takes
+        precedence over the internal default palette and is applied
+        consistently across all subplots.
 
     Returns:
     --------
     None
-        This function does not return a value. It generates and optionally saves
-        or displays the specified plots.
+        This function does not return a value. It generates and optionally
+        saves or displays the specified plots.
 
     Raises:
     -------
     ValueError
-        - If `show_plot` is not one of "individual", "subplots", or "both".
-        - If `save_plots` is True but `image_path_png` or `image_path_svg` is
-          not specified.
-        - If `rotate_plot` is not a boolean value.
-        - If `individual_figsize` or `subplot_figsize` is not a tuple or list of
-          two numbers.
+        - If ``show_plot`` is not one of "individual", "subplots", or "both".
+        - If ``rotate_plot`` is not a boolean value.
+        - If ``individual_figsize`` or ``subplot_figsize`` is not a tuple or
+          list of two numbers.
+        - If ``plot_type`` is not one of "boxplot", "violinplot", "box",
+          or "violin".
+        - If ``image_filename`` is provided but neither ``image_path_png`` nor
+          ``image_path_svg`` is specified.
 
     Notes:
     ------
-    - Automatically calculates `n_rows` and `n_cols` if not provided based on
-      the number of plots.
-    - Supports rotating the plot layout using the `rotate_plot` parameter.
-    - Saves plots to the specified paths if `save_plots` is True.
+    - Automatically calculates ``n_rows`` and ``n_cols`` if not provided based
+      on the number of plots.
+    - Supports rotating the plot layout using the ``rotate_plot`` parameter.
+    - Figures are saved via ``_save_figure`` only when ``image_filename`` is
+      provided.
+    - If ``palette`` is supplied via ``**kwargs``, it is resolved once before
+      any plotting loop and applied consistently to all subplots.
+    - ``custom_order`` is passed directly to Seaborn's ``order`` parameter
+      (or ``x_order`` / ``y_order`` depending on orientation).
     """
+
+    # Coerce metrics_comp string to list
+    if isinstance(metrics_comp, str):
+        metrics_comp = [metrics_comp]
+
+    # Normalize plot_type shorthands before validation
+    _plot_type_aliases = {
+        "violin": "violinplot",
+        "box": "boxplot",
+    }
+    plot_type = _plot_type_aliases.get(plot_type, plot_type)
+
+    if plot_type not in ("boxplot", "violinplot"):
+        raise ValueError(
+            f"Invalid `plot_type` '{plot_type}'. "
+            "Choose from 'boxplot', 'violinplot', 'box', or 'violin'."
+        )
+
+    # Strip layout kwargs before passing to seaborn
+    _layout_keys = {"figsize", "subplot_figsize", "individual_figsize"}
+    seaborn_kwargs = {k: v for k, v in kwargs.items() if k not in _layout_keys}
+
+    # Resolve caller-supplied palette once, before any loop
+    user_palette = seaborn_kwargs.pop("palette", None)
 
     # Check for valid show_plot values
     if show_plot not in ["individual", "subplots", "both"]:
@@ -1700,14 +1751,6 @@ def box_violin_plot(
             "Invalid `show_plot` value selected. Choose from 'individual', "
             "'subplots', or 'both'."
         )
-
-    # Check for valid save_plots value
-    if not isinstance(save_plots, bool):
-        raise ValueError("`save_plots` must be a boolean value (True or False).")
-
-    # Check if save_plots is set without image paths
-    if save_plots and not (image_path_png or image_path_svg):
-        raise ValueError("To save plots, specify `image_path_png` or `image_path_svg`.")
 
     # Check for valid rotate_plot values
     if not isinstance(rotate_plot, bool):
@@ -1733,8 +1776,16 @@ def box_violin_plot(
         and all(isinstance(x, (int, float)) for x in subplot_figsize)
     ):
         raise ValueError(
-            "Invalid `subplot_figsize` value. It should be a tuple or list of two "
-            "numbers (width, height)."
+            "Invalid `subplot_figsize` value. It should be a tuple or list of "
+            "two numbers (width, height)."
+        )
+
+    # Validate image_filename usage
+    if image_filename is not None and not (image_path_png or image_path_svg):
+        raise ValueError(
+            "``image_filename`` was provided but neither ``image_path_png`` "
+            "nor ``image_path_svg`` was specified. Provide at least one output "
+            "path to save figures."
         )
 
     total_plots = len(metrics_list) * len(metrics_comp)
@@ -1746,33 +1797,38 @@ def box_violin_plot(
             "`metrics_comp` are not empty."
         )
 
-    if n_cols is None:
-        # Ensure at least 1 column
+    # Respect whichever of n_rows / n_cols the caller provided
+    if n_rows is None and n_cols is None:
         n_cols = max(1, int(np.ceil(np.sqrt(total_plots))))
-
-    if n_rows is None:
-        # Ensure at least 1 row
         n_rows = max(1, int(np.ceil(total_plots / n_cols)))
+    elif n_rows is None:
+        n_rows = max(1, int(np.ceil(total_plots / n_cols)))
+    elif n_cols is None:
+        n_cols = max(1, int(np.ceil(total_plots / n_rows)))
 
     # Set default subplot figure size if not specified
     if subplot_figsize is None:
         subplot_figsize = (5 * n_cols, 5 * n_rows)
 
-    # Determine saving options based on `show_plot`
-    save_individual = save_plots and show_plot in ["individual", "both"]
-    save_subplots = save_plots and show_plot in ["subplots", "both"]
-
     # Map plot_type to the corresponding seaborn function
     plot_function = getattr(sns, plot_type)
 
-    # Save and/or show individual plots if required
-    if save_individual or show_plot in ["individual", "both"]:
+    # Resolve the seaborn `order` kwarg from custom_order.
+    # For vertical plots the comparison variable is on x; for rotated plots
+    # it is on y. Seaborn uses `order` for the categorical axis in both cases.
+    order_kwarg = {"order": custom_order} if custom_order is not None else {}
+
+    # Individual plots
+    if show_plot in ["individual", "both"]:
         for met_comp in metrics_comp:
-            unique_vals = df[met_comp].value_counts().count()
-            palette = _get_palette(unique_vals)
+            if user_palette is not None:
+                palette = user_palette
+            else:
+                unique_vals = df[met_comp].value_counts().count()
+                palette = _get_palette(unique_vals)
+
             for met_list in metrics_list:
-                plt.figure(figsize=individual_figsize)  # Adjust size as needed
-                # Use original column names for plotting
+                fig = plt.figure(figsize=individual_figsize)
                 ax = plot_function(
                     x=met_list if rotate_plot else met_comp,
                     y=met_comp if rotate_plot else met_list,
@@ -1780,12 +1836,13 @@ def box_violin_plot(
                     hue=met_comp,
                     palette=palette,
                     dodge=False,
-                    **kwargs,
+                    **order_kwarg,
+                    **seaborn_kwargs,
                 )
 
-                # Use custom labels only for display purposes
                 title = (
-                    f"Distribution of {_get_label(met_list)} by {_get_label(met_comp)}"
+                    f"Distribution of {_get_label(met_list)} "
+                    f"by {_get_label(met_comp)}"
                 )
                 plt.title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
@@ -1820,60 +1877,55 @@ def box_violin_plot(
                 ax.tick_params(axis="x", rotation=xlabel_rot)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
 
-                # Set x and y limits if specified
                 if xlim:
                     ax.set_xlim(xlim)
                 if ylim:
                     ax.set_ylim(ylim)
 
-                # Toggle legend
                 if show_legend and ax.legend_:
                     ax.legend(loc=legend_loc, fontsize=tick_fontsize)
                 elif ax.legend_:
                     ax.legend_.remove()
 
-                if save_individual:
+                if image_filename is not None:
                     safe_met_list = (
                         met_list.replace(" ", "_")
                         .replace("(", "")
                         .replace(")", "")
                         .replace("/", "_per_")
                     )
-                    if image_path_png:
-                        filename_png = (
-                            f"{safe_met_list}_by_{met_comp}_" f"{plot_type}.png"
-                        )
-                        plt.savefig(
-                            os.path.join(image_path_png, filename_png),
-                            bbox_inches="tight",
-                        )
-                    if image_path_svg:
-                        filename_svg = (
-                            f"{safe_met_list}_by_{met_comp}_" f"{plot_type}.svg"
-                        )
-                        plt.savefig(
-                            os.path.join(image_path_svg, filename_svg),
-                            bbox_inches="tight",
-                        )
+                    _save_figure(
+                        fig=fig,
+                        image_path_png=image_path_png,
+                        image_path_svg=image_path_svg,
+                        filename=(
+                            f"{image_filename}_{safe_met_list}"
+                            f"_by_{met_comp}_{plot_type}"
+                        ),
+                    )
 
-                if show_plot in ["individual", "both", "subplots"]:
-                    plt.show()  # Display the plot
+                plt.show()
 
-    # Save and/or show the entire subplot grid if required
-    if save_subplots or show_plot in ["subplots", "both"]:
+    # Subplot grid
+    if show_plot in ["subplots", "both"]:
         fig, axs = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
-        # Handle the case when axs is a single Axes object
+
         if n_rows * n_cols == 1:
             axs = [axs]
         else:
             axs = axs.flatten()
 
         for i, ax in enumerate(axs):
-            if i < len(metrics_list) * len(metrics_comp):
+            if i < total_plots:
                 met_comp = metrics_comp[i // len(metrics_list)]
                 met_list = metrics_list[i % len(metrics_list)]
-                unique_vals = df[met_comp].value_counts().count()
-                palette = _get_palette(unique_vals)
+
+                if user_palette is not None:
+                    palette = user_palette
+                else:
+                    unique_vals = df[met_comp].value_counts().count()
+                    palette = _get_palette(unique_vals)
+
                 plot_function(
                     x=met_list if rotate_plot else met_comp,
                     y=met_comp if rotate_plot else met_list,
@@ -1882,12 +1934,13 @@ def box_violin_plot(
                     ax=ax,
                     palette=palette,
                     dodge=False,
-                    **kwargs,
+                    **order_kwarg,
+                    **seaborn_kwargs,
                 )
                 title = (
-                    f"Distribution of {_get_label(met_list)} by {_get_label(met_comp)}"
+                    f"Distribution of {_get_label(met_list)} "
+                    f"by {_get_label(met_comp)}"
                 )
-
                 ax.set_title(
                     "\n".join(textwrap.wrap(title, width=text_wrap)),
                     fontsize=label_fontsize,
@@ -1920,13 +1973,12 @@ def box_violin_plot(
                 )
                 ax.tick_params(axis="x", rotation=xlabel_rot)
                 ax.tick_params(axis="both", labelsize=tick_fontsize)
-                # Set x and y limits if specified
+
                 if xlim:
                     ax.set_xlim(xlim)
                 if ylim:
                     ax.set_ylim(ylim)
 
-                # Toggle legend
                 if show_legend and ax.legend_:
                     ax.legend(loc=legend_loc, fontsize=tick_fontsize)
                 elif ax.legend_:
@@ -1936,26 +1988,16 @@ def box_violin_plot(
                 ax.set_visible(False)
 
         plt.tight_layout()
-        if save_subplots:
-            if image_path_png:
-                fig.savefig(
-                    os.path.join(
-                        image_path_png,
-                        f"all_plots_comparisons_{plot_type}.png",
-                    ),
-                    bbox_inches="tight",
-                )
-            if image_path_svg:
-                fig.savefig(
-                    os.path.join(
-                        image_path_svg,
-                        f"all_plots_comparisons_{plot_type}.svg",
-                    ),
-                    bbox_inches="tight",
-                )
 
-        if show_plot in ["subplots", "both"]:
-            plt.show()  # Display the plot
+        if image_filename is not None:
+            _save_figure(
+                fig=fig,
+                image_path_png=image_path_png,
+                image_path_svg=image_path_svg,
+                filename=f"{image_filename}_{plot_type}",
+            )
+
+        plt.show()
 
 
 ################################################################################
