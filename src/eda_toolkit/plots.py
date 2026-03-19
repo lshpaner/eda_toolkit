@@ -27,6 +27,8 @@ PathLike = Union[str, Path]
 
 from ._plot_utils import (
     _save_figure,
+    _apply_legend,
+    _annotate_stacked,
     _add_best_fit,
     _get_label,
     _plot_density_overlays,
@@ -861,17 +863,23 @@ def stacked_crosstab_plot(
     color: Optional[Union[List[str], str]] = None,
     output: str = "both",
     return_dict: bool = False,
-    x: Optional[int] = None,
-    y: Optional[int] = None,
-    p: Optional[int] = None,
+    figsize: Optional[Tuple[int, int]] = None,
+    outer_pad: float = 10.0,
+    h_pad: float = 5.0,
     file_prefix: Optional[str] = None,
     logscale: bool = False,
     plot_type: str = "both",
     show_legend: bool = True,
     legend_loc: str = "best",
+    reverse_legend: bool = True,
     label_fontsize: int = 12,
     tick_fontsize: int = 10,
-    text_wrap: int = 50,
+    title_wrap: int = 50,
+    tick_wrap: int = 20,
+    thousands_sep: bool = True,
+    pct_format: bool = True,
+    show_values: bool = False,
+    subtitle: Optional[List[str]] = None,
     remove_stacks: bool = False,
     xlim: Optional[Tuple[float, float]] = None,
     ylim: Optional[Tuple[float, float]] = None,
@@ -901,7 +909,8 @@ def stacked_crosstab_plot(
         List of legend labels corresponding to each column in `func_col`.
 
     title : list of str
-        List of titles for each plot generated.
+        List of titles for each plot generated. Each entry is embedded in the
+        auto-generated title string: "Prevalence of {title} by {col}".
 
     kind : str, optional (default='bar')
         The kind of plot to generate ('bar' or 'barh' for horizontal bars).
@@ -936,14 +945,18 @@ def stacked_crosstab_plot(
     return_dict : bool, optional (default=False)
         Specify whether to return the crosstabs dictionary.
 
-    x : int, optional
-        The width of the figure.
+    figsize : tuple of int, optional
+        A (width, height) tuple controlling the figure size in inches.
+        Defaults to (12, 8) if not provided.
 
-    y : int, optional
-        The height of the figure.
+    outer_pad : float, optional (default=10.0)
+        The outer padding around the entire figure, passed to
+        `tight_layout(pad=...)`.
 
-    p : int, optional
-        The padding between the subplots.
+    h_pad : float, optional (default=5.0)
+        The vertical padding between subplots in inches, passed to
+        `tight_layout(h_pad=...)`. Increase this if the title of the lower
+        plot overlaps the x-axis labels of the upper plot.
 
     file_prefix : str, optional
         Prefix for the filename when output includes plots.
@@ -962,14 +975,46 @@ def stacked_crosstab_plot(
         Common options include "best", "upper right", "upper left", "lower left",
         and "lower right".
 
+    reverse_legend : bool, optional (default=True)
+        If True, reverses the legend entry order so it matches the visual
+        stack order (top-to-bottom in the legend matches top-to-bottom in
+        the bars). Matplotlib's default order is the inverse of the stack.
+
     label_fontsize : int, optional (default=12)
-        Font size for axis labels.
+        Font size for axis labels and titles.
 
     tick_fontsize : int, optional (default=10)
         Font size for tick labels on the axes.
 
-    text_wrap : int, optional (default=50)
-        The maximum width of the title text before wrapping.
+    title_wrap : int, optional (default=50)
+        The maximum character width of the plot title text before wrapping
+        to a new line.
+
+    tick_wrap : int, optional (default=20)
+        The maximum character width of axis tick label text before wrapping
+        to a new line. Applied to x-axis tick labels for vertical bar plots
+        and y-axis tick labels for horizontal bar plots.
+
+    thousands_sep : bool, optional (default=True)
+        If True, applies a thousands separator (e.g. 1,000,000) to the count
+        axis of non-normalized plots. For vertical bar plots this is the
+        y-axis; for horizontal bar plots (`kind='barh'`) this is the x-axis.
+        Has no effect on normalized plots, which display percentages.
+
+    pct_format : bool, optional (default=True)
+        If True, formats the count axis of normalized plots as percentages
+        (e.g. 0.25 → 25%). For vertical bar plots this is the y-axis; for
+        horizontal bar plots (`kind='barh'`) this is the x-axis.
+
+    show_values : bool, optional (default=False)
+        If True, annotates each bar segment with its value. Regular plots
+        show counts; normalized plots show percentages. Segments too small
+        to fit a label are skipped automatically.
+
+    subtitle : list of str, optional
+        List of subtitle strings, one per entry in `func_col`. Each subtitle
+        is displayed as italic text below the figure. Must match the length
+        of `func_col` if provided.
 
     remove_stacks : bool, optional (default=False)
         If True, removes stacks and creates a regular bar plot using only
@@ -1004,6 +1049,9 @@ def stacked_crosstab_plot(
         If the lengths of `title`, `func_col`, and `legend_labels_list` are not
         equal.
 
+    ValueError
+        If `subtitle` is provided and its length does not match `func_col`.
+
     KeyError
         If any columns in `col` or `func_col` are missing in the DataFrame.
 
@@ -1032,10 +1080,15 @@ def stacked_crosstab_plot(
             f"Invalid plot type: {plot_type}. Valid options are {valid_plot_types}"
         )
 
+    # Validate subtitle length if provided
+    if subtitle is not None and len(subtitle) != len(func_col):
+        raise ValueError(
+            f"Length mismatch: `subtitle` has {len(subtitle)} entries but "
+            f"`func_col` has {len(func_col)}. They must be equal."
+        )
+
     # Ensure save_formats is a list even if None, string, or tuple is passed
-    save_formats = (
-        save_formats or []
-    )  # Modified line: Ensures save_formats is an empty list if None
+    save_formats = save_formats or []
     if isinstance(save_formats, str):
         save_formats = [save_formats]
     elif isinstance(save_formats, tuple):
@@ -1043,6 +1096,7 @@ def stacked_crosstab_plot(
 
     # Initialize the dictionary to store crosstabs
     crosstabs_dict = {}
+
     # Default color settings
     if color is None:
         color = ["#00BFC4", "#F8766D"]  # Default colors
@@ -1080,13 +1134,9 @@ def stacked_crosstab_plot(
         if file_prefix is None:
             file_prefix = f"{col}_{'_'.join(func_col)}"
 
-        # Set default values for x, y, and p if not provided
-        if x is None:
-            x = 12
-        if y is None:
-            y = 8
-        if p is None:
-            p = 10
+        # Set default values for figsize if not provided
+        if figsize is None:
+            figsize = (12, 8)
 
         # Determine the number of subplots based on the plot_type parameter
         if plot_type == "both":
@@ -1095,7 +1145,9 @@ def stacked_crosstab_plot(
             nrows = 1
 
         # Loop through each condition and create the plots
-        for truth, legend, tit in zip(func_col, legend_labels_list, title):
+        for idx, (truth, legend, tit) in enumerate(
+            zip(func_col, legend_labels_list, title)
+        ):
             image_path = {}
 
             if image_path_png:
@@ -1110,9 +1162,7 @@ def stacked_crosstab_plot(
                 )
                 image_path["svg"] = func_col_filename_svg
 
-            # Verify the DataFrame state before creating plots
-            fig, axes = plt.subplots(nrows=nrows, ncols=1, figsize=(x, y))
-            fig.tight_layout(w_pad=5, pad=p, h_pad=5)
+            fig, axes = plt.subplots(nrows=nrows, ncols=1, figsize=figsize)
 
             if remove_stacks:
                 # Create a regular bar plot using only the `col` parameter
@@ -1126,8 +1176,8 @@ def stacked_crosstab_plot(
                     color=color[0],
                     width=width,
                     rot=rot,
-                    fontsize=12,
-                    logy=logscale,  # Apply log scale if logscale is True
+                    fontsize=label_fontsize,
+                    logy=logscale,
                 )
                 ax0 = axes[0] if plot_type == "both" else axes
 
@@ -1145,16 +1195,65 @@ def stacked_crosstab_plot(
                     ax0.set_ylim(ylim)
 
                 ax0.set_title(
-                    "\n".join(textwrap.wrap(title1, width=text_wrap)),
-                    fontsize=label_fontsize,  # Ensure label_fontsize is applied
+                    "\n".join(textwrap.wrap(title1, width=title_wrap)),
+                    fontsize=label_fontsize,
                 )
                 ax0.tick_params(axis="both", labelsize=tick_fontsize)
 
+                # Apply thousands separator to the count axis
+                if thousands_sep:
+                    fmt = mticker.FuncFormatter(lambda val, _: f"{val:,.0f}")
+                    if kind == "barh":
+                        ax0.xaxis.set_major_formatter(fmt)
+                    else:
+                        ax0.yaxis.set_major_formatter(fmt)
+
+                # Apply tick_wrap to tick labels
+                if kind == "barh":
+                    ax0.set_yticklabels(
+                        [
+                            "\n".join(textwrap.wrap(str(l), width=tick_wrap))
+                            for l in counts.index
+                        ],
+                        fontsize=tick_fontsize,
+                    )
+                else:
+                    ax0.set_xticklabels(
+                        [
+                            "\n".join(textwrap.wrap(str(l), width=tick_wrap))
+                            for l in counts.index
+                        ],
+                        rotation=rot,
+                        fontsize=tick_fontsize,
+                    )
+
+                # Annotate bars with counts
+                if show_values:
+                    for bar_idx, val in enumerate(counts):
+                        if kind == "barh":
+                            ax0.text(
+                                val,
+                                bar_idx,
+                                f" {int(val):,}",
+                                ha="left",
+                                va="center",
+                                fontsize=tick_fontsize,
+                                fontweight="bold",
+                            )
+                        else:
+                            ax0.text(
+                                bar_idx,
+                                val,
+                                f"{int(val):,}",
+                                ha="center",
+                                va="bottom",
+                                fontsize=tick_fontsize,
+                                fontweight="bold",
+                            )
+
                 if show_legend:
-                    ax0.legend(
-                        legend,
-                        loc=legend_loc,
-                        fontsize=label_fontsize,
+                    _apply_legend(
+                        ax0, legend, legend_loc, label_fontsize, reverse_legend
                     )
                 else:
                     leg = ax0.get_legend()
@@ -1188,14 +1287,12 @@ def stacked_crosstab_plot(
                         color=color,
                         width=width,
                         rot=rot,
-                        fontsize=label_fontsize,  # Apply label_fontsize here
+                        fontsize=label_fontsize,
                     )
 
-                    # Explicitly set the title with the desired font size
                     ax0 = axes[0] if plot_type == "both" else axes
                     ax0.set_title(
-                        "\n".join(textwrap.wrap(title1, width=text_wrap)),
-                        # Ensure the title font size is consistent
+                        "\n".join(textwrap.wrap(title1, width=title_wrap)),
                         fontsize=label_fontsize,
                     )
 
@@ -1212,15 +1309,48 @@ def stacked_crosstab_plot(
                     if ylim:
                         ax0.set_ylim(ylim)
 
-                    # Set tick fontsize
                     ax0.tick_params(axis="both", labelsize=tick_fontsize)
 
-                    # Set legend font size to match label_fontsize
+                    # Apply thousands separator to the count axis
+                    if thousands_sep:
+                        fmt = mticker.FuncFormatter(lambda val, _: f"{val:,.0f}")
+                        if kind == "barh":
+                            ax0.xaxis.set_major_formatter(fmt)
+                        else:
+                            ax0.yaxis.set_major_formatter(fmt)
+
+                    # Apply tick_wrap to tick labels
+                    if kind == "barh":
+                        ax0.set_yticklabels(
+                            [
+                                "\n".join(textwrap.wrap(str(l), width=tick_wrap))
+                                for l in crosstabdest.index
+                            ],
+                            fontsize=tick_fontsize,
+                        )
+                    else:
+                        ax0.set_xticklabels(
+                            [
+                                "\n".join(textwrap.wrap(str(l), width=tick_wrap))
+                                for l in crosstabdest.index
+                            ],
+                            rotation=rot,
+                            fontsize=tick_fontsize,
+                        )
+
+                    # Annotate stacked bars with counts
+                    if show_values:
+                        _annotate_stacked(
+                            ax0,
+                            crosstabdest,
+                            lambda v: f"{int(v):,}",
+                            kind,
+                            tick_fontsize,
+                        )
+
                     if show_legend:
-                        ax0.legend(
-                            legend,
-                            loc=legend_loc,
-                            fontsize=label_fontsize,
+                        _apply_legend(
+                            ax0, legend, legend_loc, label_fontsize, reverse_legend
                         )
                     else:
                         leg = ax0.get_legend()
@@ -1247,16 +1377,13 @@ def stacked_crosstab_plot(
                         color=color,
                         width=width,
                         rot=rot,
-                        # This controls axis labels and ticks
                         fontsize=label_fontsize,
                         logy=logscale,
                     )
 
-                    # Explicitly set the title with the desired font size
                     ax1 = axes[1] if plot_type == "both" else axes
                     ax1.set_title(
-                        "\n".join(textwrap.wrap(title2, width=text_wrap)),
-                        # This should now control the title font size
+                        "\n".join(textwrap.wrap(title2, width=title_wrap)),
                         fontsize=label_fontsize,
                     )
 
@@ -1273,15 +1400,48 @@ def stacked_crosstab_plot(
                     if ylim:
                         ax1.set_ylim(ylim)
 
-                    # Set tick fontsize
                     ax1.tick_params(axis="both", labelsize=tick_fontsize)
 
-                    # Set legend font size to match label_fontsize
+                    # Apply percentage formatter to the normalized count axis
+                    if pct_format:
+                        pct_fmt = mticker.FuncFormatter(lambda val, _: f"{val:.0%}")
+                        if kind == "barh":
+                            ax1.xaxis.set_major_formatter(pct_fmt)
+                        else:
+                            ax1.yaxis.set_major_formatter(pct_fmt)
+
+                    # Apply tick_wrap to tick labels
+                    if kind == "barh":
+                        ax1.set_yticklabels(
+                            [
+                                "\n".join(textwrap.wrap(str(l), width=tick_wrap))
+                                for l in crosstabdestnorm.index
+                            ],
+                            fontsize=tick_fontsize,
+                        )
+                    else:
+                        ax1.set_xticklabels(
+                            [
+                                "\n".join(textwrap.wrap(str(l), width=tick_wrap))
+                                for l in crosstabdestnorm.index
+                            ],
+                            rotation=rot,
+                            fontsize=tick_fontsize,
+                        )
+
+                    # Annotate stacked bars with percentages
+                    if show_values:
+                        _annotate_stacked(
+                            ax1,
+                            crosstabdestnorm,
+                            lambda v: f"{v:.1%}",
+                            kind,
+                            tick_fontsize,
+                        )
+
                     if show_legend:
-                        ax1.legend(
-                            legend,
-                            loc=legend_loc,
-                            fontsize=label_fontsize,
+                        _apply_legend(
+                            ax1, legend, legend_loc, label_fontsize, reverse_legend
                         )
                     else:
                         leg = ax1.get_legend()
@@ -1289,6 +1449,19 @@ def stacked_crosstab_plot(
                             leg.remove()
 
             fig.align_ylabels()
+            fig.tight_layout(w_pad=5, pad=outer_pad, h_pad=h_pad)
+
+            # Add subtitle below the figure if provided
+            if subtitle is not None:
+                fig.text(
+                    0.5,
+                    -0.02,
+                    subtitle[idx],
+                    ha="center",
+                    va="top",
+                    fontsize=label_fontsize - 2,
+                    style="italic",
+                )
 
             # Ensure save_formats is a list even if a string or tuple is passed
             if isinstance(save_formats, str):
@@ -1372,14 +1545,11 @@ def stacked_crosstab_plot(
     # Display crosstabs only if required by output
     if output in ["both", "crosstabs_only"]:
         for col_results, crosstab_df in crosstabs_dict.items():
-            # Display results
             print()
             print("Crosstab for " + col_results)
             print()
             print(crosstab_df)
             print()
-            # Store the crosstab in the dictionary
-            # Use col_results as the key
 
     # Return the crosstabs_dict only if return_dict is True
     if return_dict:

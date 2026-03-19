@@ -74,6 +74,51 @@ def _save_figure(
 
 
 ################################################################################
+# Utilities For Stacked Crosstab Plots
+################################################################################
+
+
+# Helper: apply legend with optional reversal
+def _apply_legend(ax, labels, loc, fontsize, reverse):
+    handles, leg_labels = ax.get_legend_handles_labels()
+    if reverse:
+        handles, leg_labels = handles[::-1], leg_labels[::-1]
+    ax.legend(handles, leg_labels, loc=loc, fontsize=fontsize)
+
+
+# Helper: annotate stacked bar segments with values
+def _annotate_stacked(ax, data, fmt_func, kind, tick_fontsize):
+    for bar_idx, (_, row) in enumerate(data.iterrows()):
+        cumulative = 0.0
+        for val in row:
+            if val > 0:
+                label = fmt_func(val)
+                if kind == "barh":
+                    ax.text(
+                        cumulative + val / 2,
+                        bar_idx,
+                        label,
+                        ha="center",
+                        va="center",
+                        fontsize=tick_fontsize,
+                        color="white",
+                        fontweight="bold",
+                    )
+                else:
+                    ax.text(
+                        bar_idx,
+                        cumulative + val / 2,
+                        label,
+                        ha="center",
+                        va="center",
+                        fontsize=tick_fontsize,
+                        color="white",
+                        fontweight="bold",
+                    )
+            cumulative += val
+
+
+################################################################################
 # Best-Fit Line Utilitys
 ################################################################################
 
