@@ -846,7 +846,6 @@ def plot_distributions(
 ###################### Stacked Bar Plots W/ Crosstab Options ###################
 ################################################################################
 
-
 def stacked_crosstab_plot(
     df: pd.DataFrame,
     col: str,
@@ -879,7 +878,7 @@ def stacked_crosstab_plot(
     thousands_sep: bool = True,
     pct_format: bool = True,
     show_values: bool = False,
-    subtitle: Optional[List[str]] = None,
+    subtitle: Optional[Union[str, List[str]]] = None,
     remove_stacks: bool = False,
     xlim: Optional[Tuple[float, float]] = None,
     ylim: Optional[Tuple[float, float]] = None,
@@ -1011,10 +1010,11 @@ def stacked_crosstab_plot(
         show counts; normalized plots show percentages. Segments too small
         to fit a label are skipped automatically.
 
-    subtitle : list of str, optional
-        List of subtitle strings, one per entry in `func_col`. Each subtitle
-        is displayed as italic text below the figure. Must match the length
-        of `func_col` if provided.
+    subtitle : str or list of str, optional
+        Subtitle text displayed as italic text below each figure. Accepts
+        either a single string (applied to all plots) or a list of strings
+        with one entry per `func_col`. If a list, it must match the length
+        of `func_col`.
 
     remove_stacks : bool, optional (default=False)
         If True, removes stacks and creates a regular bar plot using only
@@ -1080,13 +1080,16 @@ def stacked_crosstab_plot(
             f"Invalid plot type: {plot_type}. Valid options are {valid_plot_types}"
         )
 
+    # Normalize subtitle to a list if a bare string is passed
+    if isinstance(subtitle, str):
+        subtitle = [subtitle] * len(func_col)
+ 
     # Validate subtitle length if provided
     if subtitle is not None and len(subtitle) != len(func_col):
         raise ValueError(
             f"Length mismatch: `subtitle` has {len(subtitle)} entries but "
             f"`func_col` has {len(func_col)}. They must be equal."
         )
-
     # Ensure save_formats is a list even if None, string, or tuple is passed
     save_formats = save_formats or []
     if isinstance(save_formats, str):
@@ -1252,9 +1255,7 @@ def stacked_crosstab_plot(
                             )
 
                 if show_legend:
-                    _apply_legend(
-                        ax0, legend, legend_loc, label_fontsize, reverse_legend
-                    )
+                    _apply_legend(ax0, legend, legend_loc, label_fontsize, reverse_legend)
                 else:
                     leg = ax0.get_legend()
                     if leg is not None:
@@ -1349,9 +1350,7 @@ def stacked_crosstab_plot(
                         )
 
                     if show_legend:
-                        _apply_legend(
-                            ax0, legend, legend_loc, label_fontsize, reverse_legend
-                        )
+                        _apply_legend(ax0, legend, legend_loc, label_fontsize, reverse_legend)
                     else:
                         leg = ax0.get_legend()
                         if leg is not None:
@@ -1404,7 +1403,9 @@ def stacked_crosstab_plot(
 
                     # Apply percentage formatter to the normalized count axis
                     if pct_format:
-                        pct_fmt = mticker.FuncFormatter(lambda val, _: f"{val:.0%}")
+                        pct_fmt = mticker.FuncFormatter(
+                            lambda val, _: f"{val:.0%}"
+                        )
                         if kind == "barh":
                             ax1.xaxis.set_major_formatter(pct_fmt)
                         else:
@@ -1440,9 +1441,7 @@ def stacked_crosstab_plot(
                         )
 
                     if show_legend:
-                        _apply_legend(
-                            ax1, legend, legend_loc, label_fontsize, reverse_legend
-                        )
+                        _apply_legend(ax1, legend, legend_loc, label_fontsize, reverse_legend)
                     else:
                         leg = ax1.get_legend()
                         if leg is not None:
