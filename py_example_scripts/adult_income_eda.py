@@ -17,7 +17,7 @@ from eda_toolkit import (
     box_violin_plot,
     scatter_fit_plot,
     flex_corr_matrix,
-    conditional_histograms,
+    grouped_distributions,
     distribution_gof_plots,
 )
 
@@ -731,14 +731,13 @@ stacked_crosstabs = stacked_crosstab_plot(
     title=title,
     kind="bar",
     width=0.8,
-    rot=0,  # axis rotation angle
+    rot=0,
     custom_order=None,
-    color=["#00BFC4", "#F8766D"],  # default color schema
+    color=["#00BFC4", "#F8766D"],
     output="both",
     return_dict=True,
-    x=14,
-    y=8,
-    p=10,
+    figsize=(14, 8),
+    outer_pad=10,
     logscale=False,
     plot_type="both",
     show_legend=True,
@@ -750,12 +749,10 @@ stacked_crosstabs = stacked_crosstab_plot(
     save_formats=["png", "svg"],
 )
 
-
 print("*" * terminal_width)
 
 ## Non-Normalized Stacked Bar Plots Example
 
-# Call the stacked_crosstab_plot function
 stacked_crosstabs = stacked_crosstab_plot(
     df=df,
     col="age_group",
@@ -764,14 +761,13 @@ stacked_crosstabs = stacked_crosstab_plot(
     title=title,
     kind="bar",
     width=0.8,
-    rot=0,  # axis rotation angle
+    rot=0,
     custom_order=None,
-    color=["#00BFC4", "#F8766D"],  # default color schema
+    color=["#00BFC4", "#F8766D"],
     output="both",
     return_dict=True,
-    x=14,
-    y=8,
-    p=10,
+    figsize=(14, 8),
+    outer_pad=10,
     logscale=False,
     plot_type="regular",
     show_legend=True,
@@ -787,7 +783,6 @@ print("*" * terminal_width)
 
 ## Regular Non-Stacked Bar Plots Example
 
-# Call the stacked_crosstab_plot function
 stacked_crosstabs = stacked_crosstab_plot(
     df=df,
     col="age_group",
@@ -796,14 +791,13 @@ stacked_crosstabs = stacked_crosstab_plot(
     title=title,
     kind="bar",
     width=0.8,
-    rot=0,  # axis rotation angle
+    rot=0,
     custom_order=None,
     color="#333333",
     output="both",
     return_dict=True,
-    x=14,
-    y=8,
-    p=10,
+    figsize=(14, 8),
+    outer_pad=10,
     logscale=False,
     plot_type="regular",
     show_legend=True,
@@ -931,9 +925,14 @@ scatter_fit_plot(
 ## Reload dataframe since a ton of `data_doctor` columns were added from above;
 ## this would cause too many additional columns to loop through; not necessary
 ## for this reproducible example, especially when it comes to saving so many files
-df = pd.read_csv(os.path.join(data_path, "adult_income.csv"))
-df = df.drop(columns=["Unnamed: 0"])
+try:
+    df = pd.read_csv(os.path.join(data_path, "adult_income.csv"))
+    df.drop(columns=["Unnamed: 0"], inplace=True)
+except (FileNotFoundError, KeyError):
+    from ucimlrepo import fetch_ucirepo
 
+    adult = fetch_ucirepo(id=2)
+    df = pd.concat([adult.data.features, adult.data.targets], axis=1)
 print()
 
 scatter_fit_plot(
@@ -1051,7 +1050,7 @@ features = [
     "capital-loss",
 ]
 
-conditional_histograms(
+grouped_distributions(
     df=df,
     features=features,
     by="income",
@@ -1063,7 +1062,7 @@ conditional_histograms(
     label_fontsize=10,
     image_path_png=image_path_png,
     image_path_svg=image_path_svg,
-    image_filename="conditional_histograms_adult_income",
+    image_filename="grouped_distributions_adult_income",
     # tick_fontsize=16,
     # text_wrap=10,
 )

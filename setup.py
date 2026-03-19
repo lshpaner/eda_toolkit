@@ -23,18 +23,18 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],  # Classifiers for the package
-    python_requires=">=3.7.4",  # Minimum version of Python required
-    install_requires=[
-        "jinja2>=3.1.4",  # Minimum version of jinja2 required
-        "matplotlib>=3.5.3",  # Minimum version of matplotlib required
-        "nbformat>=4.2.0",  # Minimum version of nbformat required
-        "numpy>=1.21.6",  # Minimum version of numpy required
-        "pandas>=1.3.5",  # Minimum version of pandas required
-        "plotly>=5.18.0",  # Minimum version of plotly required
-        "scikit-learn>=1.0.2",  # Minimum version of scikit-learn required
-        "scipy>=1.5.4",  # Minimum version of scipy required
-        "seaborn>=0.12.2",  # Minimum version of seaborn required
-        "tqdm>=4.66.4",  # Minimum version of tqdm required
-        "xlsxwriter>=3.2.0",  # Minimum version of xlsxwriter required
-    ],
+    python_requires=">=3.8",
+        install_requires=[
+            "jinja2>=3.0.0",
+            "matplotlib>=3.5.3,<=3.9.2",
+            "nbformat>=4.2.0,<=5.10.4",
+            "numpy>=1.21.6,<=2.1.2",
+            "pandas>=1.3.5,<=2.2.3",
+            "plotly>=5.18.0,<=5.24.1",
+            "scikit-learn>=1.0.2,<=1.2.2",
+            "scipy>=1.7.3",
+            "seaborn>=0.12.2,<=0.13.2",
+            "tqdm>=4.66.4,<=4.67.1",
+            "xlsxwriter==3.2.0",
+        ],
 )

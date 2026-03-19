@@ -18,7 +18,7 @@ from eda_toolkit import (
     box_violin_plot,
     stacked_crosstab_plot,
     outcome_crosstab_plot,
-    conditional_histograms,
+    grouped_distributions,
     distribution_gof_plots,
 )
 
@@ -1452,32 +1452,32 @@ def test_individual_plot_with_best_fit_and_limits(tmp_path):
     assert any(f.startswith("scatter_x_vs_y") and f.endswith(".png") for f in files)
 
 
-def test_conditional_histograms_non_binary_raises(binary_df):
+def test_grouped_distributions_non_binary_raises(binary_df):
     df = binary_df.copy()
     df["group"] = [0, 1, 2] * (len(df) // 3)
 
     with pytest.raises(ValueError, match="must be binary"):
-        conditional_histograms(
+        grouped_distributions(
             df=df,
             features=["x1"],
             by="group",
         )
 
 
-def test_conditional_histograms_non_binary_raises(binary_df):
+def test_grouped_distributions_non_binary_raises(binary_df):
     df = binary_df.copy()
     df["group"] = np.tile([0, 1, 2], len(df))[: len(df)]
     with pytest.raises(ValueError, match="must be binary"):
-        conditional_histograms(
+        grouped_distributions(
             df=df,
             features=["x1"],
             by="group",
         )
 
 
-def test_conditional_histograms_invalid_normalize(binary_df):
+def test_grouped_distributions_invalid_normalize(binary_df):
     with pytest.raises(ValueError, match="normalize must be"):
-        conditional_histograms(
+        grouped_distributions(
             df=binary_df,
             features=["x1"],
             by="group",
@@ -1487,7 +1487,7 @@ def test_conditional_histograms_invalid_normalize(binary_df):
 
 def test_density_plot_with_count_normalize_raises(binary_df):
     with pytest.raises(ValueError, match="Density plots only support"):
-        conditional_histograms(
+        grouped_distributions(
             df=binary_df,
             features=["x1"],
             by="group",
@@ -1498,7 +1498,7 @@ def test_density_plot_with_count_normalize_raises(binary_df):
 
 def test_image_filename_without_path_raises(binary_df):
     with pytest.raises(ValueError, match="image_path_png|image_path_svg"):
-        conditional_histograms(
+        grouped_distributions(
             df=binary_df,
             features=["x1"],
             by="group",
@@ -1506,17 +1506,17 @@ def test_image_filename_without_path_raises(binary_df):
         )
 
 
-def test_conditional_histograms_auto_layout(binary_df):
-    conditional_histograms(
+def test_grouped_distributions_auto_layout(binary_df):
+    grouped_distributions(
         df=binary_df,
         features=["x1", "x2"],
         by="group",
     )
 
 
-def test_conditional_histograms_grid_too_small(binary_df):
+def test_grouped_distributions_grid_too_small(binary_df):
     with pytest.raises(ValueError, match="Grid too small"):
-        conditional_histograms(
+        grouped_distributions(
             df=binary_df,
             features=["x1", "x2"],
             by="group",
@@ -1525,8 +1525,8 @@ def test_conditional_histograms_grid_too_small(binary_df):
         )
 
 
-def test_conditional_histograms_hist_runs(binary_df):
-    conditional_histograms(
+def test_grouped_distributions_hist_runs(binary_df):
+    grouped_distributions(
         df=binary_df,
         features=["x1"],
         by="group",
@@ -1534,8 +1534,8 @@ def test_conditional_histograms_hist_runs(binary_df):
     )
 
 
-def test_conditional_histograms_density_runs(binary_df):
-    conditional_histograms(
+def test_grouped_distributions_density_runs(binary_df):
+    grouped_distributions(
         df=binary_df,
         features=["x1"],
         by="group",
@@ -1543,9 +1543,9 @@ def test_conditional_histograms_density_runs(binary_df):
     )
 
 
-def test_conditional_histograms_calls_save_figure(binary_df, tmp_path):
+def test_grouped_distributions_calls_save_figure(binary_df, tmp_path):
     with patch("eda_toolkit.plots._save_figure") as mock_save:
-        conditional_histograms(
+        grouped_distributions(
             df=binary_df,
             features=["x1"],
             by="group",
@@ -1556,8 +1556,8 @@ def test_conditional_histograms_calls_save_figure(binary_df, tmp_path):
         mock_save.assert_called_once()
 
 
-def test_conditional_histograms_no_legend(binary_df):
-    conditional_histograms(
+def test_grouped_distributions_no_legend(binary_df):
+    grouped_distributions(
         df=binary_df,
         features=["x1"],
         by="group",
