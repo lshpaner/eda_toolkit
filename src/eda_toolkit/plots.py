@@ -4352,9 +4352,6 @@ def grouped_distributions(
     figsize : tuple of (int, int), optional (default=(24, 20))
         Size of the overall figure in inches.
 
-    save_plot : bool, optional (default=False)
-        Whether to save the figure to disk.
-
     image_path_png : str, optional
         Directory path to save the PNG image.
 
@@ -4387,7 +4384,7 @@ def grouped_distributions(
     # Validation
     # ------------------------------------------------------------------
 
-    # Check if save_plots=True but no image path is provided
+    # Check if image_filename is provided but no image path is provided
     if image_filename and not (image_path_png or image_path_svg):
         raise ValueError(
             "You must provide either 'image_path_png' or 'image_path_svg' "
