@@ -1070,8 +1070,6 @@ def generate_table1(
                 row["P-value"] = round(p, decimal_places)
             continuous_parts.append(row)
 
-    # FIX: value_counts block moved inside include_types guard so it does
-    # not run when include_types="continuous"
     if include_types in ["categorical", "both"]:
         for col in categorical_cols:
             series = df[col]
@@ -1081,7 +1079,7 @@ def generate_table1(
 
             if groupby_col:
                 ct = pd.crosstab(df[col], df[groupby_col])
-                # FIX: warn instead of silently dropping non-2-column tables
+                ## warn instead of silently dropping non-2-column tables
                 if ct.shape[1] != 2:
                     import warnings
                     warnings.warn(
@@ -1195,8 +1193,6 @@ def generate_table1(
                         }
                     categorical_parts.append(row)
 
-    # FIX: outer condition corrected to `apply_bonferroni or apply_bh_fdr`
-    # so the BH-FDR branch is actually reachable
     if apply_bonferroni or apply_bh_fdr:
         all_pval_keys = []
         all_raw_pvals = []
@@ -1281,8 +1277,6 @@ def generate_table1(
     drop_cols = ["Mean", "SD", "Median", "Min", "Max"]
     df_categorical.drop(columns=drop_cols, inplace=True, errors="ignore")
 
-    # FIX: apply drop_columns and drop_variables to returned DataFrames
-    # regardless of export_markdown — previously only applied in markdown branch
     if drop_columns:
         df_continuous = df_continuous.drop(columns=drop_columns, errors="ignore")
         df_categorical = df_categorical.drop(columns=drop_columns, errors="ignore")
