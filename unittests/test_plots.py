@@ -119,11 +119,25 @@ def gof_df():
         }
     )
 
-
 @pytest.fixture
 def reference_data():
     rng = np.random.default_rng(999)
     return rng.normal(size=200)
+
+@pytest.fixture
+def sample_corr_dataframe_large():
+    """Larger numeric DataFrame for significance / filtering tests."""
+    np.random.seed(0)
+    n = 100
+    x1 = np.random.randn(n)
+    return pd.DataFrame(
+        {
+            "A": x1,
+            "B": x1 * 0.9 + np.random.randn(n) * 0.1,   # strongly correlated
+            "C": np.random.randn(n),                        # uncorrelated
+            "D": x1 * -0.8 + np.random.randn(n) * 0.2,   # strongly negatively correlated
+        }
+    )
 
 
 @pytest.mark.parametrize(
@@ -779,6 +793,244 @@ def test_flex_corr_matrix_save_plot(sample_corr_dataframe, tmp_path):
         assert any(f.endswith(".svg") for f in os.listdir(save_path))
     except Exception as e:
         pytest.fail(f"flex_corr_matrix failed to save plots: {e}")
+
+
+# ------------------------------------------------------------------
+# Basic smoke tests
+# ------------------------------------------------------------------
+ 
+def test_flex_corr_matrix_no_colorbar(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, show_colorbar=False)
+ 
+ 
+def test_flex_corr_matrix_full_matrix(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, triangular=False)
+ 
+ 
+def test_flex_corr_matrix_with_title(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, title="Test Title")
+ 
+ 
+def test_flex_corr_matrix_custom_figsize(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, figsize=(6, 6))
+ 
+ 
+def test_flex_corr_matrix_label_names(sample_corr_dataframe):
+    flex_corr_matrix(
+        sample_corr_dataframe,
+        label_names={"Feature1": "F1", "Feature2": "F2", "Feature3": "F3"},
+    )
+ 
+ 
+def test_flex_corr_matrix_no_annot(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, annot=False)
+ 
+ 
+def test_flex_corr_matrix_custom_cmap(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, cmap="viridis")
+ 
+ 
+def test_flex_corr_matrix_xlabel_rotation(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, xlabel_rot=90)
+ 
+ 
+def test_flex_corr_matrix_image_filename(sample_corr_dataframe, tmp_path):
+    flex_corr_matrix(
+        sample_corr_dataframe,
+        image_filename="test_corr",
+        image_path_png=str(tmp_path),
+    )
+    assert any(f.endswith(".png") for f in os.listdir(tmp_path))
+ 
+ 
+def test_flex_corr_matrix_image_filename_svg(sample_corr_dataframe, tmp_path):
+    flex_corr_matrix(
+        sample_corr_dataframe,
+        image_filename="test_corr",
+        image_path_svg=str(tmp_path),
+    )
+    assert any(f.endswith(".svg") for f in os.listdir(tmp_path))
+ 
+ 
+# ------------------------------------------------------------------
+# corr_method
+# ------------------------------------------------------------------
+ 
+def test_flex_corr_matrix_spearman(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, corr_method="spearman")
+ 
+ 
+def test_flex_corr_matrix_kendall(sample_corr_dataframe):
+    flex_corr_matrix(sample_corr_dataframe, corr_method="kendall")
+ 
+ 
+def test_flex_corr_matrix_invalid_corr_method(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="Invalid `corr_method`"):
+        flex_corr_matrix(sample_corr_dataframe, corr_method="invalid")
+ 
+ 
+# ------------------------------------------------------------------
+# Significance overlay
+# ------------------------------------------------------------------
+ 
+def test_flex_corr_matrix_show_significance_stars(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        show_significance=True,
+        significance_method="stars",
+    )
+ 
+ 
+def test_flex_corr_matrix_show_significance_mask(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        show_significance=True,
+        significance_method="mask",
+    )
+ 
+ 
+def test_flex_corr_matrix_invalid_significance_method(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="Invalid `significance_method`"):
+        flex_corr_matrix(
+            sample_corr_dataframe,
+            show_significance=True,
+            significance_method="pvalues",
+        )
+ 
+ 
+def test_flex_corr_matrix_significance_level_strict(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        show_significance=True,
+        significance_level=0.01,
+        significance_method="stars",
+    )
+ 
+ 
+def test_flex_corr_matrix_significance_legend_x(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        show_significance=True,
+        significance_method="stars",
+        significance_legend_x=0.3,
+    )
+ 
+ 
+def test_flex_corr_matrix_spearman_significance(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        corr_method="spearman",
+        show_significance=True,
+        significance_method="stars",
+    )
+ 
+ 
+def test_flex_corr_matrix_kendall_significance(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        corr_method="kendall",
+        show_significance=True,
+        significance_method="mask",
+    )
+ 
+ 
+# ------------------------------------------------------------------
+# filter_significance
+# ------------------------------------------------------------------
+ 
+def test_flex_corr_matrix_filter_significance(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        filter_significance=0.05,
+    )
+ 
+ 
+def test_flex_corr_matrix_filter_significance_strict(sample_corr_dataframe_large):
+    flex_corr_matrix(
+        sample_corr_dataframe_large,
+        filter_significance=0.001,
+    )
+ 
+ 
+def test_flex_corr_matrix_filter_significance_auto_enables_show_significance(
+    sample_corr_dataframe_large,
+):
+    """filter_significance should auto-enable show_significance without error."""
+    try:
+        flex_corr_matrix(
+            sample_corr_dataframe_large,
+            filter_significance=0.05,
+            show_significance=False,  # should be overridden internally
+        )
+    except Exception as e:
+        pytest.fail(f"filter_significance failed to auto-enable significance: {e}")
+ 
+ 
+def test_flex_corr_matrix_filter_significance_invalid(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="`filter_significance`"):
+        flex_corr_matrix(
+            sample_corr_dataframe,
+            filter_significance=-0.05,
+        )
+ 
+ 
+def test_flex_corr_matrix_filter_significance_invalid_type(sample_corr_dataframe):
+    with pytest.raises((ValueError, TypeError)):
+        flex_corr_matrix(
+            sample_corr_dataframe,
+            filter_significance="0.05",
+        )
+ 
+ 
+# ------------------------------------------------------------------
+# Validation errors
+# ------------------------------------------------------------------
+ 
+def test_flex_corr_matrix_invalid_annot(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="Invalid value for `annot`"):
+        flex_corr_matrix(sample_corr_dataframe, annot="yes")
+ 
+ 
+def test_flex_corr_matrix_invalid_save_plots(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="Invalid `save_plots`"):
+        flex_corr_matrix(sample_corr_dataframe, save_plots="yes")
+ 
+ 
+def test_flex_corr_matrix_invalid_triangular(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="Invalid `triangular`"):
+        flex_corr_matrix(sample_corr_dataframe, triangular="yes")
+ 
+ 
+def test_flex_corr_matrix_invalid_cols_type(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="`cols` parameter must be a list"):
+        flex_corr_matrix(sample_corr_dataframe, cols="Feature1")
+ 
+ 
+def test_flex_corr_matrix_save_plots_without_path(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="image_path_png.*image_path_svg|image_path_svg.*image_path_png|specify"):
+        flex_corr_matrix(sample_corr_dataframe, save_plots=True)
+ 
+ 
+def test_flex_corr_matrix_image_filename_without_path(sample_corr_dataframe):
+    with pytest.raises(ValueError, match="image_path_png.*image_path_svg|image_path_svg.*image_path_png|specify"):
+        flex_corr_matrix(sample_corr_dataframe, image_filename="test")
+ 
+ 
+# ------------------------------------------------------------------
+# Near-zero artifact fix
+# ------------------------------------------------------------------
+ 
+def test_flex_corr_matrix_no_negative_zero(sample_corr_dataframe_large, tmp_path):
+    """Verify that near-zero values don't produce -0.00 in the heatmap."""
+    # The fixture has uncorrelated columns — some cells will be near zero
+    # Just check the function runs without error; visual check is manual
+    try:
+        flex_corr_matrix(
+            sample_corr_dataframe_large,
+            show_significance=False,
+        )
+    except Exception as e:
+        pytest.fail(f"Near-zero artifact fix caused an error: {e}")
 
 
 # Test that scatter_fit_plot runs without errors with default parameters

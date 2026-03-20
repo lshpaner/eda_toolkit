@@ -2651,7 +2651,6 @@ def scatter_fit_plot(
 ######################### Correlation Matrices #################################
 ################################################################################
 
-
 def flex_corr_matrix(
     df: pd.DataFrame,
     cols: Optional[List[str]] = None,
@@ -2660,6 +2659,7 @@ def flex_corr_matrix(
     save_plots: bool = False,
     image_path_png: Optional[str] = None,
     image_path_svg: Optional[str] = None,
+    image_filename: Optional[str] = None,
     figsize: Tuple[int, int] = (10, 10),
     title: Optional[str] = None,
     label_fontsize: int = 12,
@@ -2677,12 +2677,19 @@ def flex_corr_matrix(
     cbar_padding: float = 0.8,
     cbar_width_ratio: float = 0.05,
     show_colorbar: bool = True,
+    corr_method: str = "pearson",
+    show_significance: bool = False,
+    significance_level: float = 0.05,
+    significance_method: str = "stars",
+    significance_legend_x: float = 0.5,
+    filter_significance: Optional[float] = None,
     **kwargs: Dict[str, Any],
 ) -> None:
     """
     Creates a correlation heatmap with extensive customization options, including
-    triangular masking, alignment adjustments, title wrapping, and dynamic
-    colorbar scaling. Users can save the plot in PNG and SVG formats.
+    triangular masking, alignment adjustments, title wrapping, dynamic colorbar
+    scaling, and optional significance overlays. Users can save the plot in PNG
+    and SVG formats.
 
     Parameters:
     -----------
@@ -2700,13 +2707,22 @@ def flex_corr_matrix(
         The colormap to use for the heatmap.
 
     save_plots : bool, optional (default=False)
-        Whether to save the heatmap as an image.
+        Whether to save the heatmap as an image. When True, the plot is saved
+        using the title (or "Correlation Matrix" if no title is provided) as
+        the filename. For explicit filename control, use `image_filename`
+        instead.
 
     image_path_png : str, optional
         Directory path to save the heatmap as a PNG image.
 
     image_path_svg : str, optional
         Directory path to save the heatmap as an SVG image.
+
+    image_filename : str, optional
+        Base filename (without extension) for saving the figure via
+        `_save_figure`. When provided, takes precedence over the
+        `save_plots`-derived filename. Requires at least one of
+        `image_path_png` or `image_path_svg` to be set.
 
     figsize : tuple, optional (default=(10, 10))
         Width and height of the heatmap figure.
@@ -2761,6 +2777,44 @@ def flex_corr_matrix(
     show_colorbar : bool, optional (default=True)
         Whether to display the colorbar. If False, no colorbar will be shown.
 
+    corr_method : str, optional (default="pearson")
+        Method for computing the correlation matrix. Options are "pearson",
+        "spearman", or "kendall". The corresponding scipy pairwise function
+        is used when computing p-values for significance testing.
+
+    show_significance : bool, optional (default=False)
+        If True, overlays significance information on the heatmap cells based
+        on pairwise p-values computed using `corr_method`.
+
+    significance_level : float, optional (default=0.05)
+        The p-value threshold below which a correlation is considered
+        statistically significant. Used in both "stars" and "mask" modes.
+
+    significance_method : str, optional (default="stars")
+        How to display significance on the heatmap. Options are:
+        - "stars": appends significance stars to each cell annotation.
+          * p < 0.05, ** p < 0.01, *** p < 0.001
+        - "mask": blanks out cells where the correlation is not significant
+          (p >= significance_level), leaving only significant cells annotated.
+
+    significance_legend_x : float, optional (default=0.5)
+        Horizontal position of the significance legend in figure coordinates
+        when `show_significance=True` and `significance_method="stars"`.
+        0.0 is the left edge, 1.0 is the right edge, and 0.5 centers the
+        legend. The vertical position is computed automatically from the
+        rendered axes bounding box so it always sits just below the x-axis
+        labels regardless of figure size.
+
+    filter_significance : float or None, optional (default=None)
+        If provided, filters the correlation matrix to only include variables
+        that have at least one statistically significant correlation with
+        another variable at the specified p-value threshold. For example,
+        ``filter_significance=0.05`` drops any variable with no pairwise
+        p-value below 0.05. Valid values are ``None`` (no filtering), or a
+        float such as ``0.05``, ``0.01``, or ``0.001``.
+        When set, ``show_significance`` is automatically enabled so the
+        significance overlay is always visible alongside the filtered matrix.
+
     **kwargs : dict, optional
         Additional keyword arguments to pass to `sns.heatmap()`.
 
@@ -2782,19 +2836,34 @@ def flex_corr_matrix(
         If `save_plots` is True but neither `image_path_png` nor `image_path_svg`
         is specified.
 
+    ValueError
+        If `image_filename` is provided but neither `image_path_png` nor
+        `image_path_svg` is specified.
+
+    ValueError
+        If `corr_method` is not one of "pearson", "spearman", or "kendall".
+
+    ValueError
+        If `significance_method` is not one of "stars" or "mask".
+
+    ValueError
+        If `filter_significance` is not None and is not a positive float.
+
     Notes:
     ------
     - If `triangular=True`, the heatmap will display only the upper triangle
-    of the correlation matrix, excluding the diagonal.
+      of the correlation matrix, excluding the diagonal.
     - Custom labels specified in `label_names` will replace the default column
-    names in the heatmap's axes.
+      names in the heatmap's axes.
     - Save formats are determined by the paths provided for PNG and SVG files.
     - The colorbar width dynamically scales based on the grid square size for
-    consistent proportions.
+      consistent proportions.
     - The `cbar_padding` and `cbar_width_ratio` parameters control the relative
-    spacing and size of the colorbar, providing additional layout customization.
+      spacing and size of the colorbar, providing additional layout customization.
     - The `show_colorbar` parameter allows users to optionally exclude the
-    colorbar for a cleaner plot.
+      colorbar for a cleaner plot.
+    - When `show_significance=True`, the diagonal always displays "1.00" to
+      reflect the perfect self-correlation regardless of significance method.
     """
 
     # Validation: Ensure annot is a boolean
@@ -2817,6 +2886,32 @@ def flex_corr_matrix(
             "Invalid `triangular` value. Please enter either True or False."
         )
 
+    # Validate corr_method
+    valid_corr_methods = ["pearson", "spearman", "kendall"]
+    if corr_method not in valid_corr_methods:
+        raise ValueError(
+            f"Invalid `corr_method` '{corr_method}'. "
+            f"Choose from {valid_corr_methods}."
+        )
+
+    # Validate significance_method
+    valid_sig_methods = ["stars", "mask"]
+    if significance_method not in valid_sig_methods:
+        raise ValueError(
+            f"Invalid `significance_method` '{significance_method}'. "
+            f"Choose from {valid_sig_methods}."
+        )
+
+    # Validate filter_significance
+    if filter_significance is not None:
+        if not isinstance(filter_significance, float) or filter_significance <= 0:
+            raise ValueError(
+                "`filter_significance` must be a positive float (e.g. 0.05, 0.01, "
+                "0.001) or None."
+            )
+        # Auto-enable show_significance so p-values are always computed
+        show_significance = True
+
     # Validate paths are specified if save_plots is True
     if save_plots and not (image_path_png or image_path_svg):
         raise ValueError(
@@ -2824,17 +2919,116 @@ def flex_corr_matrix(
             f"when `save_plots` is True."
         )
 
+    # Validate paths are specified if image_filename is provided
+    if image_filename is not None and not (image_path_png or image_path_svg):
+        raise ValueError(
+            "You must specify `image_path_png` or `image_path_svg` "
+            "when `image_filename` is provided."
+        )
+
     # Filter DataFrame if cols are specified
     if cols is not None:
         df = df[cols]
 
+    # Select only numeric columns for correlation
+    df_numeric = df.select_dtypes(include="number")
+
     # Calculate the correlation matrix
-    corr_matrix = df.corr()
+    corr_matrix = df_numeric.corr(method=corr_method)
+
+    # Eliminate -0.00 display artifact by zeroing out near-zero values
+    corr_matrix = corr_matrix.where(corr_matrix.abs() >= 0.005, 0.0)
+
+    # Compute pairwise p-value matrix if significance is requested
+    if show_significance:
+        from scipy import stats as _stats
+
+        n_cols = len(df_numeric.columns)
+        pval_matrix = pd.DataFrame(
+            np.ones((n_cols, n_cols)),
+            index=df_numeric.columns,
+            columns=df_numeric.columns,
+        )
+
+        _stat_func = {
+            "pearson": _stats.pearsonr,
+            "spearman": _stats.spearmanr,
+            "kendall": _stats.kendalltau,
+        }[corr_method]
+
+        for i, col_i in enumerate(df_numeric.columns):
+            for j, col_j in enumerate(df_numeric.columns):
+                if i != j:
+                    valid = df_numeric[[col_i, col_j]].dropna()
+                    if len(valid) >= 3:
+                        _, p = _stat_func(valid[col_i], valid[col_j])
+                        pval_matrix.loc[col_i, col_j] = p
+                    else:
+                        pval_matrix.loc[col_i, col_j] = np.nan
+
+        # Filter variables that have no significant correlations
+        if filter_significance is not None:
+            cols_to_keep = []
+            for col_i in df_numeric.columns:
+                for col_j in df_numeric.columns:
+                    if col_i != col_j:
+                        p = pval_matrix.loc[col_i, col_j]
+                        if not pd.isna(p) and p < filter_significance:
+                            cols_to_keep.append(col_i)
+                            break
+            df_numeric = df_numeric[cols_to_keep]
+            corr_matrix = df_numeric.corr(method=corr_method)
+            pval_matrix = pval_matrix.loc[cols_to_keep, cols_to_keep]
+
+        def _stars(p):
+            if pd.isna(p) or p >= 0.05:
+                return ""
+            elif p < 0.001:
+                return "***"
+            elif p < 0.01:
+                return "**"
+            else:
+                return "*"
 
     # Generate a mask for the upper triangle, excluding the diagonal
     mask = None
     if triangular:
         mask = np.triu(np.ones_like(corr_matrix, dtype=bool), k=1)
+
+    # Build annotation matrix
+    if annot and show_significance:
+        if significance_method == "stars":
+            # Combine r value with significance stars
+            annot_data = corr_matrix.copy().astype(object)
+            for i, col_i in enumerate(corr_matrix.index):
+                for j, col_j in enumerate(corr_matrix.columns):
+                    if i == j:
+                        annot_data.loc[col_i, col_j] = "1.00"
+                    else:
+                        r_val = abs(corr_matrix.loc[col_i, col_j])
+                        star = _stars(pval_matrix.loc[col_i, col_j])
+                        annot_data.loc[col_i, col_j] = (
+                            f"{r_val:.2f}{star}" if star else f"{r_val:.2f}"
+                        )
+            annot_arg = annot_data
+            fmt_arg = ""
+        elif significance_method == "mask":
+            # Only show annotation for significant cells
+            annot_data = corr_matrix.copy().astype(object)
+            for i, col_i in enumerate(corr_matrix.index):
+                for j, col_j in enumerate(corr_matrix.columns):
+                    p = pval_matrix.loc[col_i, col_j]
+                    if i == j:
+                        annot_data.loc[col_i, col_j] = "1.00"
+                    elif not pd.isna(p) and p >= significance_level:
+                        annot_data.loc[col_i, col_j] = ""
+                    else:
+                        annot_data.loc[col_i, col_j] = f"{abs(corr_matrix.loc[col_i, col_j]):.2f}"
+            annot_arg = annot_data
+            fmt_arg = ""
+    else:
+        annot_arg = annot
+        fmt_arg = ".2f"
 
     # Set up the matplotlib figure
     fig, ax_heatmap = plt.subplots(figsize=figsize)
@@ -2844,11 +3038,11 @@ def flex_corr_matrix(
         corr_matrix,
         mask=mask,
         cmap=cmap,
-        annot=annot,
-        fmt=".2f",
+        annot=annot_arg,
+        fmt=fmt_arg,
         square=True,
         linewidths=0.5,
-        cbar=False,  # Disable the default colorbar
+        cbar=False,
         vmin=vmin,
         vmax=vmax,
         annot_kws={"fontsize": label_fontsize},
@@ -2858,44 +3052,39 @@ def flex_corr_matrix(
 
     # Add the colorbar
     if show_colorbar:
-        # Use make_axes_locatable to add the colorbar
         divider = make_axes_locatable(ax_heatmap)
         cax = divider.append_axes(
             "right", size=f"{cbar_width_ratio*100}%", pad=cbar_padding
         )
 
-        # Add the colorbar
         cbar = fig.colorbar(
             heatmap.collections[0],
             cax=cax,
             orientation="vertical",
         )
 
-        # Customize the colorbar
         cbar.ax.tick_params(labelsize=tick_fontsize)
         cbar.set_label(cbar_label, fontsize=label_fontsize)
 
-        # Align the colorbar's height to the heatmap
         pos_heatmap = ax_heatmap.get_position()
         pos_cax = cax.get_position()
         cax.set_position(
             [
-                pos_cax.x0,  # Keep x position
-                pos_heatmap.y0,  # Align bottom with heatmap
-                pos_cax.width,  # Keep the width set by `cbar_width_ratio`
-                pos_heatmap.height,  # Match height with heatmap
+                pos_cax.x0,
+                pos_heatmap.y0,
+                pos_cax.width,
+                pos_heatmap.height,
             ]
         )
 
-        # Remove the spines (despine the colorbar)
         for spine in cax.spines.values():
             spine.set_visible(False)
 
     # Set the title if provided
     if title:
-        plt.title(
+        ax_heatmap.set_title(
             "\n".join(textwrap.wrap(title, width=text_wrap)),
-            fontsize=label_fontsize,  # Now using label_fontsize instead
+            fontsize=label_fontsize,
         )
 
     # Apply custom labels if label_names is provided
@@ -2930,7 +3119,6 @@ def flex_corr_matrix(
             va=ylabel_alignment,
         )
     else:
-        # Directly set rotation and alignment for x-axis labels
         heatmap.set_xticklabels(
             [
                 "\n".join(textwrap.wrap(label.get_text(), width=text_wrap))
@@ -2941,8 +3129,6 @@ def flex_corr_matrix(
             fontsize=tick_fontsize,
             rotation_mode="anchor",
         )
-
-        # Directly set rotation and alignment for y-axis labels with wrapping
         heatmap.set_yticklabels(
             [
                 "\n".join(textwrap.wrap(label.get_text(), width=text_wrap))
@@ -2962,32 +3148,43 @@ def flex_corr_matrix(
         wspace=cbar_padding,
     )
 
-    # Determine the filename title for saving, using the default if None
-    filename_title = title or "Correlation Matrix"
+    # Add significance legend note if stars mode is active
+    if show_significance and significance_method == "stars":
+        fig.canvas.draw()
+        renderer = fig.canvas.get_renderer()
+        tight_bbox = ax_heatmap.get_tightbbox(renderer)
+        fig_height = fig.get_size_inches()[1] * fig.dpi
+        legend_y = (tight_bbox.y0 / fig_height) - 0.05
 
-    # Set the plot title only if a title is explicitly provided
-    if title:
-        plt.title(
-            "\n".join(textwrap.wrap(title, width=text_wrap)),
-            fontsize=label_fontsize,
+        fig.text(
+            significance_legend_x,
+            legend_y,
+            "* p < 0.05   ** p < 0.01   *** p < 0.001",
+            ha="center",
+            fontsize=tick_fontsize,
+            style="italic",
+            transform=fig.transFigure,
         )
 
-    # Save the plot if save_plots is True
-    if save_plots:
-        safe_title = filename_title.replace(" ", "_").replace(":", "").lower()
+    # Save via image_filename / _save_figure (preferred path)
+    if image_filename is not None:
+        _save_figure(
+            fig=fig,
+            image_path_png=image_path_png,
+            image_path_svg=image_path_svg,
+            filename=image_filename,
+        )
 
-        if image_path_png:
-            filename_png = f"{safe_title}.png"
-            plt.savefig(
-                os.path.join(image_path_png, filename_png),
-                bbox_inches="tight",
-            )
-        if image_path_svg:
-            filename_svg = f"{safe_title}.svg"
-            plt.savefig(
-                os.path.join(image_path_svg, filename_svg),
-                bbox_inches="tight",
-            )
+    # Legacy save_plots path — derives filename from title
+    elif save_plots:
+        filename_title = title or "Correlation Matrix"
+        safe_title = filename_title.replace(" ", "_").replace(":", "").lower()
+        _save_figure(
+            fig=fig,
+            image_path_png=image_path_png,
+            image_path_svg=image_path_svg,
+            filename=safe_title,
+        )
 
     plt.show()
 
