@@ -21,17 +21,16 @@ from eda_toolkit import (
     distribution_gof_plots,
 )
 
-import pandas as pd
-
-
 plt.ion()  # enables interactive mode
 plt.rcParams["figure.max_open_warning"] = 50  # or some other threshold
 
 # Get the width of the terminal
-terminal_width = os.get_terminal_size().columns
+try:
+    terminal_width = os.get_terminal_size().columns
+except OSError:
+    terminal_width = 80
 
 ## Ensure Directory
-
 base_path = os.path.join(os.pardir)
 
 # Go up one level from 'notebooks' to parent directory,

@@ -8,7 +8,10 @@ from ucimlrepo import fetch_ucirepo
 from eda_toolkit import groupby_imputer
 
 # Get the width of the terminal
-terminal_width = os.get_terminal_size().columns
+try:
+    terminal_width = os.get_terminal_size().columns
+except OSError:
+    terminal_width = 80
 
 ################################################################################
 ## UCI ML Repository
