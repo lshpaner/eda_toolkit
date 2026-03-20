@@ -23,7 +23,10 @@ from eda_toolkit import (
 ################################ Ensure Directory ##############################
 ################################################################################
 # Get the width of the terminal
-terminal_width = os.get_terminal_size().columns
+try:
+    terminal_width = os.get_terminal_size().columns
+except OSError:
+    terminal_width = 80
 
 base_path = os.path.join(os.pardir)
 
@@ -81,7 +84,7 @@ df1 = generate_table1(
     df,
     value_counts=True,
     export_markdown=True,
-    markdown_path="table1_summary.md",
+    markdown_path="data/table1_summary.md",
 )
 
 print(f"\nTable 1\n{df1}\n")
@@ -91,14 +94,14 @@ generate_table1(
     df,
     value_counts=True,
     export_markdown=True,
-    markdown_path="table1_summary.md",
+    markdown_path="data/table1_summary.md",
 )
 
 df2 = generate_table1(
     df,
     value_counts=True,
     export_markdown=True,
-    markdown_path="table1_summary.md",
+    markdown_path="data/table1_summary.md",
     include_types="continuous",
 )
 

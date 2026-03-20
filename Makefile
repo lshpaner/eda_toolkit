@@ -50,7 +50,18 @@ clean_dir:
 
 
 adult_income_data_management:
-	$(PYTHON_INTERPRETER) -m py_example_scripts.adult_income_data_management 
+	$(PYTHON_INTERPRETER) py_example_scripts/adult_income_data_management.py \
+		2>&1 | tee data/adult_income_data_management.txt
+	$(PYTHON_INTERPRETER) py_example_scripts/dataframe_profiler_efficiency.py \
+		2>&1 | tee data/dataframe_profiler_efficiency.txt
+	$(PYTHON_INTERPRETER) \
+		py_example_scripts/ecdf_plot_integration_in_data_doctor.py \
+		2>&1 | tee data/ecdf_plot_integration_in_data_doctor.txt
+	$(PYTHON_INTERPRETER) \
+		py_example_scripts/examples_del_inactive_dataframes.py \
+		2>&1 | tee data/examples_del_inactive_dataframes.txt
+	$(PYTHON_INTERPRETER) py_example_scripts/group_by_imputer.py \
+		2>&1 | tee data/group_by_imputer.txt
 
 adult_income_eda:
 	$(PYTHON_INTERPRETER) -m py_example_scripts.adult_income_eda 
