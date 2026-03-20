@@ -984,6 +984,31 @@ flex_corr_matrix(
     save_plots=True,
 )
 
+## Triangular Correlation Matrix w/ Statistical Significance
+flex_corr_matrix(
+    df=df,
+    cols=df_num.columns.to_list(),
+    annot=True,
+    cmap="viridis",
+    figsize=(10, 8),
+    title="US Census Correlation Matrix",
+    xlabel_alignment="right",
+    label_fontsize=14,
+    tick_fontsize=12,
+    xlabel_rot=45,
+    ylabel_rot=0,
+    text_wrap=50,
+    vmin=-1,
+    vmax=1,
+    cbar_label="Correlation Index",
+    triangular=True,
+    image_path_png=image_path_png,
+    image_path_svg=image_path_svg,
+    show_significance=True,
+    image_filename="correlation_matrix_stat_sig",
+    save_plots=True,
+)
+
 ## Full Correlation Matrix Example
 
 flex_corr_matrix(
