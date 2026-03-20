@@ -7,6 +7,7 @@ import os
 
 from eda_toolkit import (
     ensure_directory,
+    read_csv_with_progress,
     strip_trailing_period,
     strip_trailing_period,
     add_ids,
@@ -67,6 +68,13 @@ df.to_csv(os.path.join(data_path, "adult_income.csv"))
 print(df.head())
 print("*" * terminal_width)
 
+
+################################################################################
+### Read CSV w/ Progress Bar
+################################################################################
+
+print("\nReading CSV with progress bar...")
+df = read_csv_with_progress(os.path.join(data_path, "adult_income.csv"))
 
 # Get DataFrame and Markdown string
 df1 = generate_table1(
