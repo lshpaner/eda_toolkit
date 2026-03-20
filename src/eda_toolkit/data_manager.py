@@ -3,6 +3,7 @@ import gc
 import sys
 import pandas as pd
 import numpy as np
+import warnings
 from itertools import combinations
 from scipy.stats import ttest_ind, chi2_contingency, fisher_exact
 from tqdm import tqdm
@@ -28,7 +29,6 @@ else:
 ############################# Path Directories #################################
 ################################################################################
 
-
 def ensure_directory(path: PathLike) -> None:
     """
     Ensure that the directory exists. If not, create it.
@@ -39,6 +39,53 @@ def ensure_directory(path: PathLike) -> None:
         print(f"Created directory: {path}")
     else:
         print(f"Directory exists: {path}")
+
+
+################################################################################
+######################### Read CSV with Progress Bar ###########################
+################################################################################
+
+def read_csv_with_progress(file_path, nrows=None):
+    """
+    Read a CSV file with a progress bar. Optionally limit to the first `nrows` rows.
+
+    Parameters:
+    - file_path (str): Path to the CSV file.
+    - nrows (int or None): If specified, limits the number of rows read.
+
+    Returns:
+    - pd.DataFrame: DataFrame containing the read data.
+    """
+    # Count total lines (minus header)
+    with open(file_path, "r") as f:
+        total_lines = sum(1 for _ in f) - 1  # exclude header
+
+    # Suppress DtypeWarning
+    warnings.filterwarnings("ignore", category=pd.errors.DtypeWarning)
+
+    # Initialize reading
+    chunks = []
+    total_read = 0
+
+    with tqdm(
+        total=nrows if nrows else total_lines,
+        desc=f"Reading {file_path}",
+        unit="line",
+    ) as pbar:
+        for chunk in pd.read_csv(file_path, chunksize=10000, low_memory=False):
+            if nrows:
+                remaining = nrows - total_read
+                if remaining <= 0:
+                    break
+                chunk = chunk.head(remaining)
+            chunks.append(chunk)
+            read_now = len(chunk)
+            total_read += read_now
+            pbar.update(read_now)
+            if nrows and total_read >= nrows:
+                break
+
+    return pd.concat(chunks, ignore_index=True)
 
 
 ################################################################################

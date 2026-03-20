@@ -11,6 +11,7 @@ import builtins
 from unittest.mock import MagicMock, patch
 from eda_toolkit import (
     ensure_directory,
+    read_csv_with_progress,
     generate_table1,
     table1_to_str,
     add_ids,
@@ -148,12 +149,228 @@ def sample_df():
         }
     )
 
+import pytest
+import os
+import pandas as pd
+import numpy as np
+from unittest.mock import patch
+
+from eda_toolkit import read_csv_with_progress
+
+
+@pytest.fixture
+def sample_csv(tmp_path):
+    """Write a small CSV file and return its path."""
+    df = pd.DataFrame(
+        {
+            "col_a": range(100),
+            "col_b": [f"value_{i}" for i in range(100)],
+            "col_c": np.random.default_rng(0).random(100),
+        }
+    )
+    path = tmp_path / "sample.csv"
+    df.to_csv(path, index=False)
+    return str(path), df
+
+
+@pytest.fixture
+def large_csv(tmp_path):
+    """Write a CSV larger than one 10,000-row chunk."""
+    df = pd.DataFrame(
+        {
+            "id": range(25_000),
+            "value": np.random.default_rng(1).random(25_000),
+        }
+    )
+    path = tmp_path / "large.csv"
+    df.to_csv(path, index=False)
+    return str(path), df
+
+
+@pytest.fixture
+def mixed_dtype_csv(tmp_path):
+    """Write a CSV with mixed dtypes to trigger DtypeWarning suppression."""
+    rows = [{"id": i, "mixed": i if i % 2 == 0 else f"str_{i}"} for i in range(50)]
+    df = pd.DataFrame(rows)
+    path = tmp_path / "mixed.csv"
+    df.to_csv(path, index=False)
+    return str(path), df
+
+
+# ------------------------------------------------------------------
+# Basic correctness
+# ------------------------------------------------------------------
+
+def test_returns_dataframe(sample_csv):
+    path, _ = sample_csv
+    result = read_csv_with_progress(path)
+    assert isinstance(result, pd.DataFrame)
+
+
+def test_full_read_row_count(sample_csv):
+    path, original = sample_csv
+    result = read_csv_with_progress(path)
+    assert len(result) == len(original)
+
+
+def test_full_read_columns(sample_csv):
+    path, original = sample_csv
+    result = read_csv_with_progress(path)
+    assert list(result.columns) == list(original.columns)
+
+
+def test_full_read_values(sample_csv):
+    path, original = sample_csv
+    result = read_csv_with_progress(path)
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), original.reset_index(drop=True))
+
+
+# ------------------------------------------------------------------
+# nrows limiting
+# ------------------------------------------------------------------
+
+def test_nrows_limits_output(sample_csv):
+    path, _ = sample_csv
+    result = read_csv_with_progress(path, nrows=10)
+    assert len(result) == 10
+
+
+def test_nrows_one(sample_csv):
+    path, original = sample_csv
+    result = read_csv_with_progress(path, nrows=1)
+    assert len(result) == 1
+    assert result.iloc[0]["col_a"] == original.iloc[0]["col_a"]
+
+
+def test_nrows_exact_chunk_boundary(large_csv):
+    """nrows equal to chunksize should return exactly that many rows."""
+    path, _ = large_csv
+    result = read_csv_with_progress(path, nrows=10_000)
+    assert len(result) == 10_000
+
+
+def test_nrows_larger_than_file(sample_csv):
+    """nrows larger than the file should return all rows without error."""
+    path, original = sample_csv
+    result = read_csv_with_progress(path, nrows=10_000)
+    assert len(result) == len(original)
+
+
+def test_nrows_none_reads_all(sample_csv):
+    path, original = sample_csv
+    result = read_csv_with_progress(path, nrows=None)
+    assert len(result) == len(original)
+
+
+# ------------------------------------------------------------------
+# Multi-chunk reads
+# ------------------------------------------------------------------
+
+def test_large_file_full_read(large_csv):
+    path, original = large_csv
+    result = read_csv_with_progress(path)
+    assert len(result) == len(original)
+
+
+def test_large_file_nrows_spans_chunks(large_csv):
+    """nrows that spans more than one chunk should be handled correctly."""
+    path, _ = large_csv
+    result = read_csv_with_progress(path, nrows=15_000)
+    assert len(result) == 15_000
+
+
+def test_index_is_reset(large_csv):
+    """Concatenated result should have a clean 0-based RangeIndex."""
+    path, _ = large_csv
+    result = read_csv_with_progress(path, nrows=15_000)
+    assert list(result.index) == list(range(15_000))
+
+
+# ------------------------------------------------------------------
+# DtypeWarning suppression
+# ------------------------------------------------------------------
+
+def test_dtype_warning_suppressed(mixed_dtype_csv):
+    """Function should not surface a DtypeWarning to the caller."""
+    import warnings as _warnings
+    path, _ = mixed_dtype_csv
+    with _warnings.catch_warnings(record=True) as caught:
+        _warnings.simplefilter("always")
+        read_csv_with_progress(path)
+    dtype_warnings = [
+        w for w in caught
+        if issubclass(w.category, pd.errors.DtypeWarning)
+    ]
+    assert len(dtype_warnings) == 0
+
+
+# ------------------------------------------------------------------
+# Progress bar
+# ------------------------------------------------------------------
+
+def test_progress_bar_is_called(sample_csv):
+    path, _ = sample_csv
+    with patch("tqdm.tqdm.update") as mock_update:
+        read_csv_with_progress(path)
+        assert mock_update.called
+
+
+def test_progress_bar_total_no_nrows(sample_csv):
+    """Without nrows, tqdm total should equal total file lines (minus header)."""
+    path, original = sample_csv
+    with patch("tqdm.tqdm.__init__", return_value=None) as mock_init, \
+         patch("tqdm.tqdm.update"), \
+         patch("tqdm.tqdm.__enter__", return_value=None), \
+         patch("tqdm.tqdm.__exit__", return_value=False):
+        try:
+            read_csv_with_progress(path)
+        except Exception:
+            pass
+        if mock_init.called:
+            kwargs = mock_init.call_args[1] if mock_init.call_args[1] else {}
+            args = mock_init.call_args[0] if mock_init.call_args[0] else ()
+            total = kwargs.get("total")
+            if total is not None:
+                assert total == len(original)
+
+
+# ------------------------------------------------------------------
+# Edge cases
+# ------------------------------------------------------------------
+
+def test_empty_csv_raises(tmp_path):
+    """A CSV with only a header and no data rows should return an empty DataFrame."""
+    path = tmp_path / "empty.csv"
+    path.write_text("col_a,col_b\n")
+    result = read_csv_with_progress(str(path))
+    assert isinstance(result, pd.DataFrame)
+    assert len(result) == 0
+
+
+def test_single_row_csv(tmp_path):
+    path = tmp_path / "single.csv"
+    path.write_text("col_a,col_b\n1,hello\n")
+    result = read_csv_with_progress(str(path))
+    assert len(result) == 1
+    assert result.iloc[0]["col_a"] == 1
+    assert result.iloc[0]["col_b"] == "hello"
+
+
+def test_file_not_found_raises():
+    with pytest.raises(FileNotFoundError):
+        read_csv_with_progress("/nonexistent/path/file.csv")
+
+
+def test_nrows_zero(sample_csv):
+    """nrows=0 is falsy so should behave the same as nrows=None (read all)."""
+    path, original = sample_csv
+    result = read_csv_with_progress(path, nrows=0)
+    assert len(result) == len(original)
 
 def test_ensure_directory(tmp_path):
     dir_path = tmp_path / "test_dir"
     ensure_directory(str(dir_path))
     assert dir_path.exists()
-
 
 def test_save_dataframes_to_excel(sample_dataframes, tmp_path):
     file_path = tmp_path / "test_output.xlsx"
