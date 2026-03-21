@@ -16,23 +16,21 @@ Welcome to EDA Toolkit, a collection of utility functions designed to streamline
 
 Before you install `eda_toolkit`, ensure your system meets the following requirements:
 
-- `Python`: Version `3.7.4` or higher.
-
+- `Python`: Version `3.8` or higher.
 
 Additionally, `eda_toolkit` depends on the following packages, which will be automatically installed when you install `eda_toolkit`:
 
-- `jinja2`: version `3.1.4` (Exact version required)
+- `jinja2`: version `3.0.0` or higher
 - `matplotlib`: version `3.5.3` or higher, but capped at `3.9.2`
 - `nbformat`: version `4.2.0` or higher, but capped at `5.10.4`
-- `numpy`: version `1.21.6` or higher, but capped at `2.1.0`
+- `numpy`: version `1.21.6` or higher, but capped at `2.1.2`
 - `pandas`: version `1.3.5` or higher, but capped at `2.2.3`
-- `plotly`: version `5.18.0` or higher, but capped at `5.24.0`
+- `plotly`: version `5.18.0` or higher, but capped at `5.24.1`
 - `scikit-learn`: version `1.0.2` or higher, but capped at `1.5.2`
-- `scipy`: version `1.5.4` or higher, but capped at `1.16.3`
-- `seaborn`: version `0.12.2` or higher, but capped below `0.13.2`
-- `tqdm`: version `4.66.4` or higher, but capped below `4.67.1`
+- `scipy`: version `1.7.3` or higher
+- `seaborn`: version `0.12.2` or higher, but capped at `0.13.2`
+- `tqdm`: version `4.66.4` or higher, but capped at `4.67.1`
 - `xlsxwriter`: version `3.2.0` (Exact version required)
-
 
 ## 💾 Installation
 
@@ -45,7 +43,7 @@ pip install eda_toolkit
 
 ## 📄 Official Documentation
 
-https://lshpaner.github.io/eda_toolkit_docs 
+https://datasciencedynamics.com/eda_toolkit_docs/
 
 
 ## 🌐 Authors' Websites
@@ -84,7 +82,7 @@ If you use `eda_toolkit` in your research or projects, please consider citing it
   month        = aug,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {0.0.22},
+  version      = {0.0.23},
   doi          = {10.5281/zenodo.13162633},
   url          = {https://doi.org/10.5281/zenodo.13162633}
 }
