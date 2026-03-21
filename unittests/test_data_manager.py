@@ -29,7 +29,9 @@ from eda_toolkit import (
     del_inactive_dataframes,
     table1_to_str,
     TableWrapper,
+    detect_outliers,
 )
+
 
 base_path = os.getcwd()
 data_path = os.path.join(base_path, "data")
@@ -149,14 +151,74 @@ def sample_df():
         }
     )
 
-import pytest
-import os
-import pandas as pd
-import numpy as np
-from unittest.mock import patch
-
-from eda_toolkit import read_csv_with_progress
-
+@pytest.fixture
+def clean_df():
+    """DataFrame with no outliers under standard IQR thresholds."""
+    np.random.seed(0)
+    return pd.DataFrame(
+        {
+            "A": np.random.normal(0, 1, 100),
+            "B": np.random.normal(5, 1, 100),
+        }
+    )
+ 
+ 
+@pytest.fixture
+def outlier_df():
+    """DataFrame with known outliers injected at specific indices."""
+    np.random.seed(0)
+    df = pd.DataFrame(
+        {
+            "A": np.random.normal(0, 1, 100),
+            "B": np.random.normal(5, 1, 100),
+        }
+    )
+    df.loc[0, "A"] = 100.0   # extreme high outlier
+    df.loc[1, "A"] = -100.0  # extreme low outlier
+    df.loc[2, "B"] = 500.0   # extreme high outlier in B
+    return df
+ 
+ 
+@pytest.fixture
+def grouped_df():
+    """DataFrame with a groupby column and known per-group outliers."""
+    np.random.seed(42)
+    group_a = pd.DataFrame({
+        "value": np.random.normal(0, 1, 50),
+        "group": "A",
+    })
+    group_b = pd.DataFrame({
+        "value": np.random.normal(10, 1, 50),
+        "group": "B",
+    })
+    df = pd.concat([group_a, group_b], ignore_index=True)
+    df.loc[0, "value"] = 1000.0   # outlier in group A
+    df.loc[50, "value"] = -1000.0  # outlier in group B
+    return df
+ 
+ 
+@pytest.fixture
+def nan_df():
+    """DataFrame with NaN values in numeric columns."""
+    df = pd.DataFrame(
+        {
+            "A": [1.0, 2.0, np.nan, 4.0, 100.0],
+            "B": [np.nan, 2.0, 3.0, 4.0, 5.0],
+        }
+    )
+    return df
+ 
+ 
+@pytest.fixture
+def categorical_df():
+    """DataFrame with mixed numeric and non-numeric columns."""
+    np.random.seed(0)
+    return pd.DataFrame(
+        {
+            "numeric": np.random.normal(0, 1, 50),
+            "category": np.random.choice(["X", "Y"], 50),
+        }
+    )
 
 @pytest.fixture
 def sample_csv(tmp_path):
@@ -1692,3 +1754,268 @@ def test_ipython_cache_name_predicate_covered():
     )
 
     assert result["active"] == ["df"]
+
+
+# ------------------------------------------------------------------
+# Detect Outliers
+# ------------------------------------------------------------------
+ 
+def test_returns_dataframe(clean_df):
+    result = detect_outliers(clean_df)
+    assert isinstance(result, pd.DataFrame)
+ 
+ 
+def test_summary_columns(clean_df):
+    result = detect_outliers(clean_df)
+    expected = {"Variable", "Outlier (n)", "Outlier (%)", "Lower Bound", "Upper Bound"}
+    assert set(result.columns) == expected
+ 
+ 
+def test_summary_row_count_matches_features(clean_df):
+    result = detect_outliers(clean_df, features=["A", "B"])
+    assert len(result) == 2
+ 
+ 
+def test_return_mask_tuple(clean_df):
+    result = detect_outliers(clean_df, return_mask=True)
+    assert isinstance(result, tuple)
+    assert len(result) == 2
+    summary, mask = result
+    assert isinstance(summary, pd.DataFrame)
+    assert isinstance(mask, pd.DataFrame)
+ 
+ 
+def test_mask_shape(outlier_df):
+    _, mask = detect_outliers(outlier_df, return_mask=True)
+    assert mask.shape == (len(outlier_df), 2)
+ 
+ 
+def test_mask_dtype_bool(clean_df):
+    _, mask = detect_outliers(clean_df, return_mask=True)
+    assert mask.dtypes.apply(lambda d: d == bool).all()
+ 
+ 
+# ------------------------------------------------------------------
+# IQR method
+# ------------------------------------------------------------------
+ 
+def test_iqr_detects_known_outliers(outlier_df):
+    summary, mask = detect_outliers(
+        outlier_df, method="iqr", threshold=1.5, return_mask=True
+    )
+    assert mask.loc[0, "A"] == True
+    assert mask.loc[1, "A"] == True
+    assert mask.loc[2, "B"] == True
+ 
+ 
+def test_iqr_strict_threshold_finds_more(outlier_df):
+    summary_loose = detect_outliers(outlier_df, method="iqr", threshold=3.0)
+    summary_strict = detect_outliers(outlier_df, method="iqr", threshold=1.5)
+    loose_n = summary_loose["Outlier (n)"].sum()
+    strict_n = summary_strict["Outlier (n)"].sum()
+    assert strict_n >= loose_n
+ 
+ 
+def test_iqr_bounds_present(clean_df):
+    result = detect_outliers(clean_df, method="iqr")
+    assert result["Lower Bound"].notna().all()
+    assert result["Upper Bound"].notna().all()
+ 
+ 
+def test_iqr_no_outliers_on_clean_data(clean_df):
+    result = detect_outliers(clean_df, method="iqr", threshold=3.0)
+    assert result["Outlier (n)"].sum() == 0
+ 
+ 
+# ------------------------------------------------------------------
+# Z-score method
+# ------------------------------------------------------------------
+ 
+def test_zscore_detects_known_outliers(outlier_df):
+    summary, mask = detect_outliers(
+        outlier_df, method="zscore", threshold=3.0, return_mask=True
+    )
+    assert mask.loc[0, "A"] == True
+    assert mask.loc[1, "A"] == True
+    assert mask.loc[2, "B"] == True
+ 
+ 
+def test_zscore_bounds_present(clean_df):
+    result = detect_outliers(clean_df, method="zscore", threshold=3.0)
+    assert result["Lower Bound"].notna().all()
+    assert result["Upper Bound"].notna().all()
+ 
+ 
+def test_zscore_zero_variance_column():
+    """Z-score on a constant column should not raise and return 0 outliers."""
+    df = pd.DataFrame({"const": [5.0] * 50, "normal": np.random.randn(50)})
+    result = detect_outliers(df, method="zscore", features=["const"])
+    assert result.loc[result["Variable"] == "const", "Outlier (n)"].iloc[0] == 0
+ 
+ 
+# ------------------------------------------------------------------
+# Isolation Forest method
+# ------------------------------------------------------------------
+ 
+def test_isoforest_runs(outlier_df):
+    result = detect_outliers(outlier_df, method="isoforest", contamination=0.05)
+    assert isinstance(result, pd.DataFrame)
+ 
+ 
+def test_isoforest_bounds_na(outlier_df):
+    result = detect_outliers(outlier_df, method="isoforest")
+    assert (result["Lower Bound"] == "N/A").all()
+    assert (result["Upper Bound"] == "N/A").all()
+ 
+ 
+def test_isoforest_returns_nonzero_outliers(outlier_df):
+    result = detect_outliers(outlier_df, method="isoforest", contamination=0.05)
+    assert result["Outlier (n)"].sum() > 0
+ 
+ 
+# ------------------------------------------------------------------
+# groupby
+# ------------------------------------------------------------------
+ 
+def test_groupby_runs(grouped_df):
+    result = detect_outliers(grouped_df, features=["value"], groupby="group")
+    assert isinstance(result, pd.DataFrame)
+ 
+ 
+def test_groupby_detects_per_group_outliers(grouped_df):
+    summary, mask = detect_outliers(
+        grouped_df, features=["value"], groupby="group", return_mask=True
+    )
+    assert mask.loc[0, "value"] == True
+    assert mask.loc[50, "value"] == True
+ 
+ 
+def test_groupby_isoforest(grouped_df):
+    result = detect_outliers(
+        grouped_df,
+        features=["value"],
+        groupby="group",
+        method="isoforest",
+        contamination=0.05,
+    )
+    assert isinstance(result, pd.DataFrame)
+ 
+ 
+# ------------------------------------------------------------------
+# flag_col
+# ------------------------------------------------------------------
+ 
+def test_flag_col_added_to_df(outlier_df):
+    detect_outliers(outlier_df, flag_col="is_outlier")
+    assert "is_outlier" in outlier_df.columns
+ 
+ 
+def test_flag_col_dtype_bool(outlier_df):
+    detect_outliers(outlier_df, flag_col="is_outlier")
+    assert outlier_df["is_outlier"].dtype == bool
+ 
+ 
+def test_flag_col_any_feature_flags_row(outlier_df):
+    _, mask = detect_outliers(outlier_df, return_mask=True, flag_col="is_outlier")
+    expected = mask.any(axis=1)
+    pd.testing.assert_series_equal(
+        outlier_df["is_outlier"].reset_index(drop=True),
+        expected.reset_index(drop=True),
+        check_names=False,
+    )
+ 
+ 
+def test_flag_col_known_rows_flagged(outlier_df):
+    detect_outliers(outlier_df, flag_col="is_outlier")
+    assert outlier_df.loc[0, "is_outlier"] == True
+    assert outlier_df.loc[1, "is_outlier"] == True
+    assert outlier_df.loc[2, "is_outlier"] == True
+ 
+ 
+# ------------------------------------------------------------------
+# NaN handling
+# ------------------------------------------------------------------
+ 
+def test_nan_rows_not_flagged(nan_df):
+    _, mask = detect_outliers(nan_df, return_mask=True)
+    # Row 2 has NaN in A — should not be flagged for A
+    assert mask.loc[2, "A"] == False
+    # Row 0 has NaN in B — should not be flagged for B
+    assert mask.loc[0, "B"] == False
+ 
+ 
+def test_nan_df_runs_without_error(nan_df):
+    result = detect_outliers(nan_df)
+    assert isinstance(result, pd.DataFrame)
+ 
+ 
+# ------------------------------------------------------------------
+# features parameter
+# ------------------------------------------------------------------
+ 
+def test_features_subset(outlier_df):
+    result = detect_outliers(outlier_df, features=["A"])
+    assert list(result["Variable"]) == ["A"]
+ 
+ 
+def test_features_auto_excludes_non_numeric(categorical_df):
+    result = detect_outliers(categorical_df)
+    assert "category" not in result["Variable"].values
+    assert "numeric" in result["Variable"].values
+ 
+ 
+def test_features_invalid_cols_silently_dropped(clean_df):
+    # Non-numeric cols are silently excluded from features list
+    result = detect_outliers(clean_df, features=["A", "NonExistent"])
+    assert "NonExistent" not in result["Variable"].values
+ 
+ 
+# ------------------------------------------------------------------
+# Summary DataFrame properties
+# ------------------------------------------------------------------
+ 
+def test_summary_sorted_by_outlier_pct_desc(outlier_df):
+    result = detect_outliers(outlier_df)
+    pcts = result["Outlier (%)"].tolist()
+    assert pcts == sorted(pcts, reverse=True)
+ 
+ 
+def test_outlier_pct_between_0_and_100(outlier_df):
+    result = detect_outliers(outlier_df)
+    assert (result["Outlier (%)"] >= 0).all()
+    assert (result["Outlier (%)"] <= 100).all()
+ 
+ 
+def test_outlier_n_nonnegative(outlier_df):
+    result = detect_outliers(outlier_df)
+    assert (result["Outlier (n)"] >= 0).all()
+ 
+ 
+# ------------------------------------------------------------------
+# Validation errors
+# ------------------------------------------------------------------
+ 
+def test_invalid_method_raises(clean_df):
+    with pytest.raises(ValueError, match="Invalid `method`"):
+        detect_outliers(clean_df, method="median")
+ 
+ 
+def test_invalid_threshold_raises(clean_df):
+    with pytest.raises(ValueError, match="`threshold`"):
+        detect_outliers(clean_df, threshold=-1.0)
+ 
+ 
+def test_invalid_contamination_raises(clean_df):
+    with pytest.raises(ValueError, match="`contamination`"):
+        detect_outliers(clean_df, method="isoforest", contamination=0.6)
+ 
+ 
+def test_invalid_groupby_column_raises(clean_df):
+    with pytest.raises(ValueError, match="`groupby`"):
+        detect_outliers(clean_df, groupby="nonexistent_col")
+ 
+ 
+def test_no_numeric_features_raises():
+    df = pd.DataFrame({"cat": ["a", "b", "c"]})
+    with pytest.raises(ValueError, match="No numeric features"):
+        detect_outliers(df)

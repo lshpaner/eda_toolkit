@@ -21,6 +21,10 @@ from eda_toolkit import (
     distribution_gof_plots,
 )
 
+print("\n" + "#" * 80)
+print(f"Running script: {os.path.basename(__file__)}")
+print("#" * 80 + "\n")
+
 plt.ion()  # enables interactive mode
 plt.rcParams["figure.max_open_warning"] = 50  # or some other threshold
 

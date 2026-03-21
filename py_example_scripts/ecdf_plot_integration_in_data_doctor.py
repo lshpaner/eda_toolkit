@@ -3,8 +3,13 @@
 ##################### ECDF Plot Integration in data_doctor #####################
 ################################################################################
 
+import os
 from ucimlrepo import fetch_ucirepo
 from eda_toolkit import data_doctor
+
+print("\n" + "#" * 80)
+print(f"Running script: {os.path.basename(__file__)}")
+print("#" * 80 + "\n")
 
 ################################################################################
 ## UCI ML Repository

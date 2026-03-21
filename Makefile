@@ -52,6 +52,8 @@ clean_dir:
 adult_income_data_management:
 	$(PYTHON_INTERPRETER) py_example_scripts/adult_income_data_management.py \
 		2>&1 | tee data/adult_income_data_management.txt
+	$(PYTHON_INTERPRETER) py_example_scripts/detect_outliers.py \
+		2>&1 | tee data/detect_outliers.txt
 	$(PYTHON_INTERPRETER) py_example_scripts/dataframe_profiler_efficiency.py \
 		2>&1 | tee data/dataframe_profiler_efficiency.txt
 	$(PYTHON_INTERPRETER) \
