@@ -36,7 +36,7 @@ classifiers = [
 [project.urls]
 "Documentation" = "https://datasciencedynamics.com/eda_toolkit_docs/"
 "Source Code" = "https://github.com/lshpaner/eda_toolkit/"
-"Leonid Shpaner's Website" = "https://www.leonshpaner.com"
+"Leon Shpaner's Website" = "https://www.leonshpaner.com"
 "Oscar Gil's Website" = "https://www.oscargildata.com"
 "Zenodo Archive" = "https://zenodo.org/records/13162633"
 
