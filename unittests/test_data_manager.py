@@ -2019,3 +2019,95 @@ def test_no_numeric_features_raises():
     df = pd.DataFrame({"cat": ["a", "b", "c"]})
     with pytest.raises(ValueError, match="No numeric features"):
         detect_outliers(df)
+
+## additional detect_outliers tests (verbose, return_bounds, None return)
+
+def test_verbose_returns_none(outlier_df, capsys):
+    result = detect_outliers(outlier_df, method="iqr", verbose=True)
+    assert result is None
+
+
+def test_verbose_prints_report(outlier_df, capsys):
+    detect_outliers(outlier_df, method="iqr", verbose=True)
+    captured = capsys.readouterr()
+    assert "OUTLIER DETECTION SUMMARY REPORT" in captured.out
+    assert "Method" in captured.out
+    assert "Total rows" in captured.out
+    assert "Variable" in captured.out
+    assert "Outlier (n)" in captured.out
+    assert "Total flagged rows" in captured.out
+
+
+def test_verbose_with_return_mask_not_none(outlier_df):
+    result = detect_outliers(
+        outlier_df, method="iqr", verbose=True, return_mask=True
+    )
+    assert result is not None
+    assert isinstance(result, tuple)
+    assert len(result) == 2
+
+
+def test_verbose_with_return_bounds_not_none(outlier_df):
+    result = detect_outliers(
+        outlier_df, method="iqr", verbose=True, return_bounds=True
+    )
+    assert result is not None
+    assert isinstance(result, tuple)
+    assert len(result) == 2
+
+
+def test_verbose_groupby_prints_grouped_by(outlier_df, capsys):
+    # Add a groupby column
+    outlier_df = outlier_df.copy()
+    outlier_df["grp"] = ["X", "Y"] * (len(outlier_df) // 2)
+    detect_outliers(
+        outlier_df, features=["A"], method="iqr",
+        groupby="grp", verbose=True
+    )
+    captured = capsys.readouterr()
+    assert "Grouped by" in captured.out
+
+
+def test_return_bounds_type(outlier_df):
+    summary, bounds = detect_outliers(
+        outlier_df, method="iqr", return_bounds=True
+    )
+    assert isinstance(bounds, dict)
+    assert set(bounds.keys()) == {"A", "B"}
+
+
+def test_return_bounds_tuple_values(outlier_df):
+    _, bounds = detect_outliers(
+        outlier_df, method="iqr", return_bounds=True
+    )
+    for feat, (lower, upper) in bounds.items():
+        assert isinstance(lower, (int, float))
+        assert isinstance(upper, (int, float))
+        assert lower <= upper
+
+
+def test_return_bounds_isoforest_na(outlier_df):
+    _, bounds = detect_outliers(
+        outlier_df, method="isoforest", return_bounds=True
+    )
+    for feat, (lower, upper) in bounds.items():
+        assert lower == "N/A"
+        assert upper == "N/A"
+
+
+def test_return_mask_and_bounds_together(outlier_df):
+    result = detect_outliers(
+        outlier_df, method="iqr",
+        return_mask=True, return_bounds=True
+    )
+    assert isinstance(result, tuple)
+    assert len(result) == 3
+    summary, mask, bounds = result
+    assert isinstance(summary, pd.DataFrame)
+    assert isinstance(mask, pd.DataFrame)
+    assert isinstance(bounds, dict)
+
+
+def test_verbose_false_returns_dataframe(outlier_df):
+    result = detect_outliers(outlier_df, method="iqr", verbose=False)
+    assert isinstance(result, pd.DataFrame)

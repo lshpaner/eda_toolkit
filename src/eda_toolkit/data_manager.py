@@ -1,6 +1,7 @@
 import os
 import gc
 import sys
+from numpy.testing import verbose
 import pandas as pd
 import numpy as np
 import warnings
@@ -24,6 +25,7 @@ if sys.version_info >= (3, 7):
 else:
     import datetime
 
+from ._data_manager_utils import _flag_iqr, _flag_zscore
 
 ################################################################################
 ############################# Path Directories #################################
@@ -1996,8 +1998,10 @@ def detect_outliers(
     threshold: float = 1.5,
     contamination: float = 0.05,
     return_mask: bool = False,
+    return_bounds: bool = False,
     flag_col: Optional[str] = None,
     groupby: Optional[str] = None,
+    verbose: bool = False,
 ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
     """
     Detect outliers in numeric columns of a DataFrame using IQR, Z-score,
@@ -2034,6 +2038,13 @@ def detect_outliers(
         If True, also returns a boolean DataFrame of the same shape as the
         input (restricted to `features`) where ``True`` indicates an outlier.
 
+    return_bounds : bool, optional (default=False)
+        If True, also returns a dictionary mapping each feature name to a
+        ``(lower_bound, upper_bound)`` tuple. Bounds are ``"N/A"`` when
+        ``method="isoforest"``. The bounds dict can be passed directly to
+        ``data_doctor()`` as ``lower_cutoff`` / ``upper_cutoff`` inputs for
+        feature-level treatment.
+
     flag_col : str or None, optional (default=None)
         If provided, adds a boolean column with this name to ``df`` that is
         ``True`` for any row where at least one feature is an outlier.
@@ -2043,6 +2054,11 @@ def detect_outliers(
         If provided, outlier detection is performed within each group of this
         column rather than across the full dataset. Useful when distributions
         differ meaningfully between groups (e.g. by diagnosis, age group).
+
+    verbose : bool, optional (default=False)
+        If True, prints a formatted ASCII summary report to the console
+        showing each feature's outlier count, percentage, and bounds —
+        similar to the report style used in ``data_doctor()``.
 
     Returns:
     --------
@@ -2054,6 +2070,10 @@ def detect_outliers(
 
     mask : pd.DataFrame
         Boolean outlier mask, only returned when ``return_mask=True``.
+
+    bounds : dict
+        Dictionary mapping feature names to ``(lower_bound, upper_bound)``
+        tuples, only returned when ``return_bounds=True``.
 
     Raises:
     -------
@@ -2082,6 +2102,10 @@ def detect_outliers(
     - ``flag_col`` marks a row as an outlier if *any* feature is flagged,
       making it easy to filter the full outlier set with
       ``df[df[flag_col]]``.
+    - Use the ``Lower Bound`` and ``Upper Bound`` values from the summary
+      or the ``bounds`` dict directly as ``lower_cutoff`` / ``upper_cutoff``
+      inputs to ``data_doctor()`` for feature-level transformation and
+      treatment.
     """
 
     # ------------------------------------------------------------------
@@ -2155,9 +2179,7 @@ def detect_outliers(
 
         if groupby is None:
             clean = df[features].dropna()
-            iso = IsolationForest(
-                contamination=contamination, random_state=0
-            )
+            iso = IsolationForest(contamination=contamination, random_state=0)
             preds = iso.fit_predict(clean)
             outlier_idx = clean.index[preds == -1]
             for feat in features:
@@ -2168,9 +2190,7 @@ def detect_outliers(
                 clean = grp_df[features].dropna()
                 if len(clean) < 2:
                     continue
-                iso = IsolationForest(
-                    contamination=contamination, random_state=0
-                )
+                iso = IsolationForest(contamination=contamination, random_state=0)
                 preds = iso.fit_predict(clean)
                 outlier_idx = clean.index[preds == -1]
                 for feat in features:
@@ -2184,13 +2204,9 @@ def detect_outliers(
 
             if groupby is None:
                 if method == "iqr":
-                    low_mask, high_mask, lower, upper = _flag_iqr(
-                        series, threshold
-                    )
+                    low_mask, high_mask, lower, upper = _flag_iqr(series, threshold)
                 else:
-                    low_mask, high_mask, lower, upper = _flag_zscore(
-                        series, threshold
-                    )
+                    low_mask, high_mask, lower, upper = _flag_zscore(series, threshold)
                 outlier_idx = series[low_mask | high_mask].index
                 mask.loc[outlier_idx, feat] = True
                 bounds[feat] = (round(lower, 4), round(upper, 4))
@@ -2202,13 +2218,9 @@ def detect_outliers(
                     if len(grp_series) < 2:
                         continue
                     if method == "iqr":
-                        low_m, high_m, lower, upper = _flag_iqr(
-                            grp_series, threshold
-                        )
+                        low_m, high_m, lower, upper = _flag_iqr(grp_series, threshold)
                     else:
-                        low_m, high_m, lower, upper = _flag_zscore(
-                            grp_series, threshold
-                        )
+                        low_m, high_m, lower, upper = _flag_zscore(grp_series, threshold)
                     outlier_idx = grp_series[low_m | high_m].index
                     mask.loc[outlier_idx, feat] = True
                     all_lower.append(lower)
@@ -2247,7 +2259,94 @@ def detect_outliers(
         "Outlier (%)", ascending=False
     ).reset_index(drop=True)
 
-    if return_mask:
-        return summary, mask
+    # ------------------------------------------------------------------
+    # Verbose ASCII report
+    # ------------------------------------------------------------------
+    if verbose:
+        method_label = {
+            "iqr": f"IQR (threshold={threshold})",
+            "zscore": f"Z-Score (threshold={threshold})",
+            "isoforest": (
+                f"Isolation Forest "
+                f"(contamination={contamination})"
+            ),
+        }[method]
 
-    return summary
+        # Column widths — fixed so header and data rows always align
+        c0, c1, c2, c3, c4 = 22, 12, 12, 14, 14
+        # Top info table value col spans remaining cols + separators
+        info_key_w = c0
+        info_val_w = c1 + c2 + c3 + c4 + 9
+        total_width = c0 + c1 + c2 + c3 + c4 + 14
+
+        sep = (
+            f"+{'-'*(c0+2)}+{'-'*(c1+2)}"
+            f"+{'-'*(c2+2)}+{'-'*(c3+2)}+{'-'*(c4+2)}+"
+        )
+
+        print(
+            "OUTLIER DETECTION SUMMARY REPORT".center(total_width)
+        )
+        print(f"+{'-'*(info_key_w+2)}+{'-'*(info_val_w+2)}+")
+        print(
+            f"| {'Method':<{info_key_w}} "
+            f"| {method_label:<{info_val_w}} |"
+        )
+        print(
+            f"| {'Total rows':<{info_key_w}} "
+            f"| {total:<{info_val_w},} |"
+        )
+        if groupby:
+            print(
+                f"| {'Grouped by':<{info_key_w}} "
+                f"| {groupby:<{info_val_w}} |"
+            )
+        print(sep)
+        print(
+            f"| {'Variable':<{c0}} | {'Outlier (n)':>{c1}} | "
+            f"{'Outlier (%)':>{c2}} | "
+            f"{'Lower Bound':>{c3}} | {'Upper Bound':>{c4}} |"
+        )
+        print(sep)
+        for _, row in summary.iterrows():
+            lb = (
+                f"{row['Lower Bound']}"
+                if row['Lower Bound'] == "N/A"
+                else f"{row['Lower Bound']:,.4f}"
+            )
+            ub = (
+                f"{row['Upper Bound']}"
+                if row['Upper Bound'] == "N/A"
+                else f"{row['Upper Bound']:,.4f}"
+            )
+            print(
+                f"| {str(row['Variable']):<{c0}} "
+                f"| {row['Outlier (n)']:>{c1},} | "
+                f"{row['Outlier (%)']:>{c2}.2f} | "
+                f"{lb:>{c3}} | {ub:>{c4}} |"
+            )
+        print(sep)
+        total_flagged = mask.any(axis=1).sum()
+        print(
+            f"\nTotal flagged rows (any feature): "
+            f"{total_flagged:,} "
+            f"({100 * total_flagged / total:.2f}%)"
+        )
+
+    # ------------------------------------------------------------------
+    # Return
+    # ------------------------------------------------------------------
+    returns = [summary]
+    if return_mask:
+        returns.append(mask)
+    if return_bounds:
+        returns.append(bounds)
+
+    # When verbose=True and no structured returns are requested, suppress
+    # auto-display in Jupyter by returning None — the ASCII report is sufficient
+    if verbose and not (return_mask or return_bounds):
+        return None
+
+    if len(returns) == 1:
+        return returns[0]
+    return tuple(returns)

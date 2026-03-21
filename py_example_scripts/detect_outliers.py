@@ -208,4 +208,38 @@ outlier_counts = mask_co.sum(axis=1)
 print(outlier_counts.value_counts().sort_index().to_string())
 print("*" * terminal_width)
 
+################################################################################
+### 11. verbose=True — ASCII summary report
+################################################################################
+ 
+print("\n[11] verbose=True — ASCII summary report")
+detect_outliers(
+    df,
+    features=numeric_features,
+    method="iqr",
+    threshold=1.5,
+    verbose=True,
+)
+print("*" * terminal_width)
+ 
+################################################################################
+### 12. return_bounds=True — pipe bounds into data_doctor
+################################################################################
+ 
+print("\n[12] return_bounds=True — bounds dict for downstream data_doctor use")
+summary_b, bounds = detect_outliers(
+    df,
+    features=numeric_features,
+    method="iqr",
+    return_bounds=True,
+)
+print("  Bounds per feature:")
+for feat, (lower, upper) in bounds.items():
+    print(f"    {feat:<20} lower={lower:>10}  upper={upper:>10}")
+ 
+print("\n  Example: pass capital-gain bounds directly to data_doctor:")
+print(f"    lower_cutoff={bounds['capital-gain'][0]}")
+print(f"    upper_cutoff={bounds['capital-gain'][1]}")
+print("*" * terminal_width)
+ 
 print("\nAll detect_outliers usage examples completed successfully.")
