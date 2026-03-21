@@ -48,7 +48,7 @@ https://datasciencedynamics.com/eda_toolkit_docs/
 
 ## 🌐 Authors' Websites
 
-1. [Leonid Shpaner](https://www.leonshpaner.com)
+1. [Leon Shpaner](https://www.leonshpaner.com)
 2. [Oscar Gil](https://www.oscargildata.com)
 
 
