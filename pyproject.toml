@@ -33,7 +33,7 @@ classifiers = [
 
 # Correct place for URLs under [project.urls]
 [project.urls]
-"Documentation" = "https://lshpaner.github.io/eda_toolkit/"
+"Documentation" = "https://datasciencedynamics.com/eda_toolkit_docs/"
 "Source Code" = "https://github.com/lshpaner/eda_toolkit/"
 "Leonid Shpaner's Website" = "https://www.leonshpaner.com"
 "Oscar Gil's Website" = "https://www.oscargildata.com"
