@@ -14,7 +14,7 @@ more, helping you efficiently handle various aspects of data manipulation and
 analysis.
 
 PyPI: https://pypi.org/project/eda-toolkit/
-Documentation: https://lshpaner.github.io/eda_toolkit
+Documentation: https://datasciencedynamics.com/eda_toolkit_docs/
 
 Authors: Leonid Shpaner, Oscar Gil
 

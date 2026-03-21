@@ -14,7 +14,7 @@ setup(
     project_urls={  # Optional
         "Leonid Shpaner's Website": "https://www.leonshpaner.com",
         "Oscar Gil's Website": "https://www.oscargildata.com",
-        "Documentation": "https://lshpaner.github.io/eda_toolkit/",
+        "Documentation": "https://datasciencedynamics.com/eda_toolkit_docs/",
         "Zenodo Archive": "https://zenodo.org/records/13162633",
         "Source Code": "https://github.com/lshpaner/eda_toolkit/",
     },
