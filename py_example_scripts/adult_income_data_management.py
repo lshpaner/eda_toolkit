@@ -19,6 +19,10 @@ from eda_toolkit import (
     generate_table1,
 )
 
+print("\n" + "#" * 80)
+print(f"Running script: {os.path.basename(__file__)}")
+print("#" * 80 + "\n")
+
 ################################################################################
 ################################ Ensure Directory ##############################
 ################################################################################
@@ -71,13 +75,90 @@ df.to_csv(os.path.join(data_path, "adult_income.csv"))
 print(df.head())
 print("*" * terminal_width)
 
-
 ################################################################################
-### Read CSV w/ Progress Bar
+### 1. read_csv_with_progress — basic
 ################################################################################
 
-print("\nReading CSV with progress bar...")
+print("\n[1] read_csv_with_progress — basic read")
 df = read_csv_with_progress(os.path.join(data_path, "adult_income.csv"))
+df.drop(columns=["Unnamed: 0"], inplace=True, errors="ignore")
+print(f"  Shape: {df.shape}")
+print(df.head(3))
+print("*" * terminal_width)
+
+################################################################################
+### 2. read_csv_with_progress — nrows
+################################################################################
+
+print("\n[2] read_csv_with_progress — nrows=500")
+df_small = read_csv_with_progress(
+    os.path.join(data_path, "adult_income.csv"),
+    nrows=500,
+)
+df_small.drop(columns=["Unnamed: 0"], inplace=True, errors="ignore")
+assert len(df_small) == 500, f"Expected 500 rows, got {len(df_small)}"
+print(f"  Shape: {df_small.shape}")
+print("*" * terminal_width)
+
+################################################################################
+### 3. read_csv_with_progress — custom chunksize
+################################################################################
+
+print("\n[3] read_csv_with_progress — chunksize=5000")
+df_chunked = read_csv_with_progress(
+    os.path.join(data_path, "adult_income.csv"),
+    chunksize=5000,
+)
+df_chunked.drop(columns=["Unnamed: 0"], inplace=True, errors="ignore")
+print(f"  Shape: {df_chunked.shape}")
+print("*" * terminal_width)
+
+################################################################################
+### 4. read_csv_with_progress — usecols kwarg
+################################################################################
+
+print("\n[4] read_csv_with_progress — usecols kwarg")
+df_cols = read_csv_with_progress(
+    os.path.join(data_path, "adult_income.csv"),
+    usecols=["age", "education", "income"],
+)
+print(f"  Columns: {list(df_cols.columns)}")
+print(f"  Shape: {df_cols.shape}")
+print("*" * terminal_width)
+
+################################################################################
+### 5. read_csv_with_progress — dtype kwarg
+################################################################################
+
+print("\n[5] read_csv_with_progress — dtype kwarg")
+df_typed = read_csv_with_progress(
+    os.path.join(data_path, "adult_income.csv"),
+    dtype={"age": float, "hours-per-week": float},
+)
+df_typed.drop(columns=["Unnamed: 0"], inplace=True, errors="ignore")
+print(f"  age dtype: {df_typed['age'].dtype}")
+print(f"  hours-per-week dtype: {df_typed['hours-per-week'].dtype}")
+print("*" * terminal_width)
+
+################################################################################
+### 6. read_csv_with_progress — chunksize in kwargs raises ValueError
+################################################################################
+
+print("\n[6] read_csv_with_progress — chunksize in kwargs raises ValueError")
+try:
+    read_csv_with_progress(
+        os.path.join(data_path, "adult_income.csv"),
+        chunksize=10000,
+        **{"chunksize": 5000},  # should raise
+    )
+    print("  ERROR: should have raised ValueError")
+except TypeError:
+    # Python raises TypeError before our guard for duplicate kwargs
+    print("  Correctly raised error for duplicate chunksize kwarg")
+except ValueError as e:
+    print(f"  Correctly raised ValueError: {e}")
+print("*" * terminal_width)
+
 
 # Get DataFrame and Markdown string
 df1 = generate_table1(
@@ -298,3 +379,5 @@ print("*" * terminal_width)
 print("Contingency Table")
 print(contingency_table)
 print("*" * terminal_width)
+
+

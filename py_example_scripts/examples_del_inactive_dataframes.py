@@ -10,13 +10,17 @@ namespace=globals() so the function inspects variables defined in this examples 
 """
 
 import pandas as pd
-
+import os
 from eda_toolkit.data_manager import del_inactive_dataframes
 
 
 # ---------------------------------------------------------------------
 # Example 1: List active DataFrames (no deletion)
 # ---------------------------------------------------------------------
+print("\n" + "#" * 80)
+print(f"Running script: {os.path.basename(__file__)}")
+print("#" * 80 + "\n")
+
 print("\n=== Example 1: List active DataFrames (no deletion) ===")
 
 df_main = pd.DataFrame({"a": range(10)})

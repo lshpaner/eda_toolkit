@@ -7,6 +7,10 @@ import os
 from ucimlrepo import fetch_ucirepo
 from eda_toolkit import groupby_imputer
 
+print("\n" + "#" * 80)
+print(f"Running script: {os.path.basename(__file__)}")
+print("#" * 80 + "\n")
+
 # Get the width of the terminal
 try:
     terminal_width = os.get_terminal_size().columns

@@ -6,11 +6,16 @@
 
 import pandas as pd
 import numpy as np
+import os
 import random
 import string
 from datetime import datetime, timedelta
 
 from eda_toolkit import dataframe_profiler
+
+print("\n" + "#" * 80)
+print(f"Running script: {os.path.basename(__file__)}")
+print("#" * 80 + "\n")
 
 # Set the number of rows and columns
 n_rows = 2_000_000

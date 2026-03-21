@@ -1984,3 +1984,270 @@ def del_inactive_dataframes(
         "used_rich": used_rich,
         "memory": memory,
     }
+
+################################################################################
+############################## Outlier Detection ###############################
+################################################################################
+
+def detect_outliers(
+    df: pd.DataFrame,
+    features: Optional[List[str]] = None,
+    method: str = "iqr",
+    threshold: float = 1.5,
+    contamination: float = 0.05,
+    return_mask: bool = False,
+    flag_col: Optional[str] = None,
+    groupby: Optional[str] = None,
+) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
+    """
+    Detect outliers in numeric columns of a DataFrame using IQR, Z-score,
+    or Isolation Forest methods.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame to analyze for outliers.
+
+    features : list of str, optional
+        List of numeric column names to check for outliers. If None, all
+        numeric columns are used.
+
+    method : str, optional (default="iqr")
+        Outlier detection method. Options are:
+        - ``"iqr"``: flags values beyond ``threshold * IQR`` from Q1/Q3.
+        - ``"zscore"``: flags values whose absolute Z-score exceeds
+          ``threshold``.
+        - ``"isoforest"``: uses sklearn's IsolationForest with
+          ``contamination`` as the expected outlier fraction.
+
+    threshold : float, optional (default=1.5)
+        For ``"iqr"``: the IQR multiplier (e.g. 1.5 for standard Tukey
+        fences, 3.0 for extreme outliers).
+        For ``"zscore"``: the absolute Z-score cutoff (e.g. 3.0).
+        Ignored when ``method="isoforest"``.
+
+    contamination : float, optional (default=0.05)
+        Expected proportion of outliers in the dataset. Only used when
+        ``method="isoforest"``. Must be between 0 and 0.5.
+
+    return_mask : bool, optional (default=False)
+        If True, also returns a boolean DataFrame of the same shape as the
+        input (restricted to `features`) where ``True`` indicates an outlier.
+
+    flag_col : str or None, optional (default=None)
+        If provided, adds a boolean column with this name to ``df`` that is
+        ``True`` for any row where at least one feature is an outlier.
+        The DataFrame is modified in place.
+
+    groupby : str or None, optional (default=None)
+        If provided, outlier detection is performed within each group of this
+        column rather than across the full dataset. Useful when distributions
+        differ meaningfully between groups (e.g. by diagnosis, age group).
+
+    Returns:
+    --------
+    summary : pd.DataFrame
+        A summary DataFrame with columns:
+        ``Variable``, ``Outlier (n)``, ``Outlier (%)``,
+        ``Lower Bound``, ``Upper Bound``.
+        When ``method="isoforest"``, bounds are shown as ``N/A``.
+
+    mask : pd.DataFrame
+        Boolean outlier mask, only returned when ``return_mask=True``.
+
+    Raises:
+    -------
+    ValueError
+        If ``method`` is not one of ``"iqr"``, ``"zscore"``, or
+        ``"isoforest"``.
+
+    ValueError
+        If ``threshold`` is not a positive number.
+
+    ValueError
+        If ``contamination`` is not between 0 and 0.5.
+
+    ValueError
+        If ``groupby`` column is not found in the DataFrame.
+
+    ValueError
+        If none of the specified ``features`` are numeric.
+
+    Notes:
+    ------
+    - Rows with NaN in a feature are excluded from outlier calculation for
+      that feature and are never flagged as outliers.
+    - When ``groupby`` is specified, IQR and Z-score bounds are computed
+      per group; IsolationForest is fit per group.
+    - ``flag_col`` marks a row as an outlier if *any* feature is flagged,
+      making it easy to filter the full outlier set with
+      ``df[df[flag_col]]``.
+    """
+
+    # ------------------------------------------------------------------
+    # Validation
+    # ------------------------------------------------------------------
+    valid_methods = ["iqr", "zscore", "isoforest"]
+    if method not in valid_methods:
+        raise ValueError(
+            f"Invalid `method` '{method}'. Choose from {valid_methods}."
+        )
+
+    if threshold <= 0:
+        raise ValueError("`threshold` must be a positive number.")
+
+    if not (0 < contamination <= 0.5):
+        raise ValueError("`contamination` must be between 0 and 0.5.")
+
+    if groupby is not None and groupby not in df.columns:
+        raise ValueError(
+            f"`groupby` column '{groupby}' not found in DataFrame."
+        )
+
+    # ------------------------------------------------------------------
+    # Resolve features
+    # ------------------------------------------------------------------
+    if features is None:
+        features = df.select_dtypes(include="number").columns.tolist()
+        if groupby in features:
+            features.remove(groupby)
+    else:
+        features = [
+            f for f in features
+            if f in df.columns and pd.api.types.is_numeric_dtype(df[f])
+        ]
+
+    if not features:
+        raise ValueError(
+            "No numeric features found. Ensure `features` contains "
+            "numeric columns present in the DataFrame."
+        )
+
+    # ------------------------------------------------------------------
+    # Build boolean outlier mask (same index as df)
+    # ------------------------------------------------------------------
+    mask = pd.DataFrame(False, index=df.index, columns=features)
+
+    def _flag_iqr(series, thresh):
+        q1 = series.quantile(0.25)
+        q3 = series.quantile(0.75)
+        iqr = q3 - q1
+        lower = q1 - thresh * iqr
+        upper = q3 + thresh * iqr
+        return series < lower, series > upper, lower, upper
+
+    def _flag_zscore(series, thresh):
+        mean = series.mean()
+        std = series.std()
+        if std == 0:
+            return pd.Series(False, index=series.index), \
+                   pd.Series(False, index=series.index), np.nan, np.nan
+        z = (series - mean) / std
+        lower = mean - thresh * std
+        upper = mean + thresh * std
+        return z < -thresh, z > thresh, lower, upper
+
+    # Store bounds for the summary
+    bounds: Dict[str, Tuple] = {}
+
+    if method == "isoforest":
+        from sklearn.ensemble import IsolationForest
+
+        if groupby is None:
+            clean = df[features].dropna()
+            iso = IsolationForest(
+                contamination=contamination, random_state=0
+            )
+            preds = iso.fit_predict(clean)
+            outlier_idx = clean.index[preds == -1]
+            for feat in features:
+                mask.loc[outlier_idx, feat] = True
+                bounds[feat] = ("N/A", "N/A")
+        else:
+            for grp, grp_df in df.groupby(groupby, observed=True):
+                clean = grp_df[features].dropna()
+                if len(clean) < 2:
+                    continue
+                iso = IsolationForest(
+                    contamination=contamination, random_state=0
+                )
+                preds = iso.fit_predict(clean)
+                outlier_idx = clean.index[preds == -1]
+                for feat in features:
+                    mask.loc[outlier_idx, feat] = True
+            for feat in features:
+                bounds[feat] = ("N/A", "N/A")
+
+    else:
+        for feat in features:
+            series = df[feat].dropna()
+
+            if groupby is None:
+                if method == "iqr":
+                    low_mask, high_mask, lower, upper = _flag_iqr(
+                        series, threshold
+                    )
+                else:
+                    low_mask, high_mask, lower, upper = _flag_zscore(
+                        series, threshold
+                    )
+                outlier_idx = series[low_mask | high_mask].index
+                mask.loc[outlier_idx, feat] = True
+                bounds[feat] = (round(lower, 4), round(upper, 4))
+
+            else:
+                all_lower, all_upper = [], []
+                for grp, grp_df in df.groupby(groupby, observed=True):
+                    grp_series = grp_df[feat].dropna()
+                    if len(grp_series) < 2:
+                        continue
+                    if method == "iqr":
+                        low_m, high_m, lower, upper = _flag_iqr(
+                            grp_series, threshold
+                        )
+                    else:
+                        low_m, high_m, lower, upper = _flag_zscore(
+                            grp_series, threshold
+                        )
+                    outlier_idx = grp_series[low_m | high_m].index
+                    mask.loc[outlier_idx, feat] = True
+                    all_lower.append(lower)
+                    all_upper.append(upper)
+                bounds[feat] = (
+                    round(min(all_lower), 4) if all_lower else np.nan,
+                    round(max(all_upper), 4) if all_upper else np.nan,
+                )
+
+    # ------------------------------------------------------------------
+    # Add flag column to df if requested
+    # ------------------------------------------------------------------
+    if flag_col is not None:
+        df[flag_col] = mask.any(axis=1)
+
+    # ------------------------------------------------------------------
+    # Build summary DataFrame
+    # ------------------------------------------------------------------
+    total = len(df)
+    summary_rows = []
+    for feat in features:
+        n_outliers = mask[feat].sum()
+        pct = round(100 * n_outliers / total, 2)
+        lower_b, upper_b = bounds[feat]
+        summary_rows.append(
+            {
+                "Variable": feat,
+                "Outlier (n)": int(n_outliers),
+                "Outlier (%)": pct,
+                "Lower Bound": lower_b,
+                "Upper Bound": upper_b,
+            }
+        )
+
+    summary = pd.DataFrame(summary_rows).sort_values(
+        "Outlier (%)", ascending=False
+    ).reset_index(drop=True)
+
+    if return_mask:
+        return summary, mask
+
+    return summary
