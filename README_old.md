@@ -25,6 +25,10 @@ Full function reference, parameter descriptions, and examples:
 
 **https://datasciencedynamics.com/eda_toolkit_docs/**
 
+For a hands-on walkthrough, open the end-to-end Google Colab notebook:
+
+**https://colab.research.google.com/drive/1vg2mdR1aH60olgofjGXbWo2hOM3M_E1n**
+
 ---
 
 ## Prerequisites
