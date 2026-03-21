@@ -45,17 +45,40 @@ def ensure_directory(path: PathLike) -> None:
 ######################### Read CSV with Progress Bar ###########################
 ################################################################################
 
-def read_csv_with_progress(file_path, nrows=None):
+def read_csv_with_progress(
+    file_path,
+    nrows=None,
+    chunksize=10000,
+    low_memory=False,
+    **kwargs,
+):
     """
-    Read a CSV file with a progress bar. Optionally limit to the first `nrows` rows.
+    Read a CSV file with a progress bar. Optionally limit to the first
+    `nrows` rows.
 
     Parameters:
     - file_path (str): Path to the CSV file.
     - nrows (int or None): If specified, limits the number of rows read.
+    - chunksize (int): Number of rows per chunk. Default is 10,000.
+    - low_memory (bool): If False, disables mixed-type inference for
+      better dtype consistency at the cost of higher memory usage.
+      Default is False.
+    - **kwargs: Additional keyword arguments passed to pd.read_csv
+      (e.g. sep, encoding, usecols, dtype, skiprows). Note that
+      `chunksize` cannot be passed via kwargs — use the explicit
+      parameter instead.
 
     Returns:
     - pd.DataFrame: DataFrame containing the read data.
+
+    Raises:
+    - ValueError: If `chunksize` is passed via kwargs.
     """
+    if "chunksize" in kwargs:
+        raise ValueError(
+            "Pass `chunksize` as a direct argument, not via kwargs."
+        )
+
     # Count total lines (minus header)
     with open(file_path, "r") as f:
         total_lines = sum(1 for _ in f) - 1  # exclude header
@@ -63,7 +86,6 @@ def read_csv_with_progress(file_path, nrows=None):
     # Suppress DtypeWarning
     warnings.filterwarnings("ignore", category=pd.errors.DtypeWarning)
 
-    # Initialize reading
     chunks = []
     total_read = 0
 
@@ -72,7 +94,12 @@ def read_csv_with_progress(file_path, nrows=None):
         desc=f"Reading {file_path}",
         unit="line",
     ) as pbar:
-        for chunk in pd.read_csv(file_path, chunksize=10000, low_memory=False):
+        for chunk in pd.read_csv(
+            file_path,
+            chunksize=chunksize,
+            low_memory=low_memory,
+            **kwargs,
+        ):
             if nrows:
                 remaining = nrows - total_read
                 if remaining <= 0:
@@ -86,7 +113,6 @@ def read_csv_with_progress(file_path, nrows=None):
                 break
 
     return pd.concat(chunks, ignore_index=True)
-
 
 ################################################################################
 ############################ Generate Random IDs ###############################
