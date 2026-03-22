@@ -3005,7 +3005,7 @@ def flex_corr_matrix(
                     if i == j:
                         annot_data.loc[col_i, col_j] = "1.00"
                     else:
-                        r_val = abs(corr_matrix.loc[col_i, col_j])
+                        r_val = corr_matrix.loc[col_i, col_j]
                         star = _stars(pval_matrix.loc[col_i, col_j])
                         annot_data.loc[col_i, col_j] = (
                             f"{r_val:.2f}{star}" if star else f"{r_val:.2f}"
@@ -3023,7 +3023,7 @@ def flex_corr_matrix(
                     elif not pd.isna(p) and p >= significance_level:
                         annot_data.loc[col_i, col_j] = ""
                     else:
-                        annot_data.loc[col_i, col_j] = f"{abs(corr_matrix.loc[col_i, col_j]):.2f}"
+                        annot_data.loc[col_i, col_j] = f"{corr_matrix.loc[col_i, col_j]:.2f}"
             annot_arg = annot_data
             fmt_arg = ""
     else:

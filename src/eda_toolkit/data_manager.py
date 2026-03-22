@@ -25,7 +25,7 @@ if sys.version_info >= (3, 7):
 else:
     import datetime
 
-from ._data_manager_utils import _flag_iqr, _flag_zscore
+from ._data_manager_utils import _df_to_markdown, _flag_iqr, _flag_zscore
 
 ################################################################################
 ############################# Path Directories #################################
@@ -1333,21 +1333,6 @@ def generate_table1(
                 )
             ]
 
-    def df_to_markdown(df):
-        lines = []
-        header = "| " + " | ".join(df.columns) + " |"
-        separator = "| " + " | ".join(["---"] * len(df.columns)) + " |"
-        lines.append(header)
-        lines.append(separator)
-        for _, row in df.iterrows():
-            row_str = (
-                "| "
-                + " | ".join(str(val) if val != "" else "" for val in row)
-                + " |"
-            )
-            lines.append(row_str)
-        return "\n".join(lines)
-
     if export_markdown:
         if not markdown_path:
             markdown_path = "table1.md"
@@ -1355,20 +1340,20 @@ def generate_table1(
             markdown_path = str(markdown_path)
 
         if include_types == "continuous":
-            markdown_str = df_to_markdown(df_continuous)
+            markdown_str = _df_to_markdown(df_continuous)
             with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
                 f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
         elif include_types == "categorical":
-            markdown_str = df_to_markdown(df_categorical)
+            markdown_str = _df_to_markdown(df_categorical)
             with open(markdown_path.replace(".md", "_categorical.md"), "w") as f:
                 f.write(markdown_str)
             if return_markdown_only:
                 return markdown_str
         else:
-            md_cont = df_to_markdown(df_continuous)
-            md_cat = df_to_markdown(df_categorical)
+            md_cont = _df_to_markdown(df_continuous)
+            md_cat = _df_to_markdown(df_categorical)
             with open(markdown_path.replace(".md", "_continuous.md"), "w") as f:
                 f.write(md_cont)
             with open(markdown_path.replace(".md", "_categorical.md"), "w") as f:
@@ -1395,13 +1380,13 @@ def generate_table1(
 
     if return_markdown_only:
         if include_types == "continuous":
-            return df_to_markdown(df_continuous)
+            return _df_to_markdown(df_continuous)
         elif include_types == "categorical":
-            return df_to_markdown(df_categorical)
+            return _df_to_markdown(df_categorical)
         else:
             return {
-                "continuous": df_to_markdown(df_continuous),
-                "categorical": df_to_markdown(df_categorical),
+                "continuous": _df_to_markdown(df_continuous),
+                "categorical": _df_to_markdown(df_categorical),
             }
 
     if isinstance(result, pd.DataFrame):

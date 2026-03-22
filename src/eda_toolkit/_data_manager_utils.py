@@ -1,6 +1,28 @@
 import numpy as np
 import pandas as pd
 
+################################################################################
+###################  Generate Table 1 Utility Function(s) ######################
+################################################################################
+
+def _df_to_markdown(df):
+    lines = []
+    header = "| " + " | ".join(df.columns) + " |"
+    separator = "| " + " | ".join(["---"] * len(df.columns)) + " |"
+    lines.append(header)
+    lines.append(separator)
+    for _, row in df.iterrows():
+        row_str = (
+            "| "
+            + " | ".join(str(val) if val != "" else "" for val in row)
+            + " |"
+        )
+        lines.append(row_str)
+    return "\n".join(lines)
+
+################################################################################
+##################### Detect Outliers Utility Functions ########################
+################################################################################
 
 def _flag_iqr(series: pd.Series, thresh: float):
     """
