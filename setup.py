@@ -12,7 +12,7 @@ setup(
     # Automatically find packages in the specified directory
     packages=find_packages(where="src"),
     project_urls={  # Optional
-        "Leonid Shpaner's Website": "https://www.leonshpaner.com",
+        "Leon Shpaner's Website": "https://www.leonshpaner.com",
         "Oscar Gil's Website": "https://www.oscargildata.com",
         "Documentation": "https://datasciencedynamics.com/eda_toolkit_docs/",
         "Zenodo Archive": "https://zenodo.org/records/13162633",
