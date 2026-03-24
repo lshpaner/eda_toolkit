@@ -2342,3 +2342,246 @@ def detect_outliers(
     if len(returns) == 1:
         return returns[0]
     return tuple(returns)
+
+################################################################################
+############################## Normality Tests #################################
+################################################################################
+
+def normality_tests(
+    df: pd.DataFrame,
+    features: Optional[List[str]] = None,
+    alpha: float = 0.05,
+    tests: Optional[List[str]] = None,
+    decimal_places: int = 6,
+) -> pd.DataFrame:
+    """
+    Run batch normality tests across numeric columns of a DataFrame.
+
+    Applies Shapiro-Wilk, D'Agostino K², and/or Anderson-Darling tests
+    to each specified feature and returns a summary DataFrame with test
+    statistics, p-values, and a pass/fail determination at the given
+    significance level.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The DataFrame to analyze.
+
+    features : list of str, optional
+        List of numeric column names to test. If ``None``, all numeric
+        columns are used.
+
+    alpha : float, optional (default=0.05)
+        Significance level for the pass/fail determination. A feature
+        is considered normally distributed (``True``) if the p-value
+        exceeds ``alpha``. For Anderson-Darling, the test statistic is
+        compared to the critical value at the significance level closest
+        to ``alpha``.
+
+    tests : list of str, optional
+        List of tests to run. Options are ``"shapiro"``,
+        ``"dagostino"``, and ``"anderson"``. Defaults to all three if
+        not specified.
+
+    decimal_places : int, optional (default=6)
+        Number of decimal places to round the ``Statistic`` and
+        ``P-value`` columns in the returned summary DataFrame.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A summary DataFrame with columns:
+        ``Variable``, ``Test``, ``Statistic``, ``P-value``,
+        ``Normal``.
+
+        - ``P-value`` for Anderson-Darling is interpolated from
+          pre-calculated tables when scipy >= 1.17 is installed.
+          On older scipy versions, ``"-"`` is shown and pass/fail is
+          determined by comparing the statistic against the critical
+          value at ``alpha``.
+        - ``Normal`` is ``True`` if the feature passes the normality
+          test at the given ``alpha``, ``False`` otherwise.
+
+    Raises:
+    -------
+    ValueError
+        If ``alpha`` is not between 0 and 1.
+
+    ValueError
+        If any value in ``tests`` is not one of ``"shapiro"``,
+        ``"dagostino"``, or ``"anderson"``.
+
+    ValueError
+        If no numeric features are found.
+
+    Notes:
+    ------
+    - Shapiro-Wilk is most reliable for small samples (n < 5,000).
+      For larger samples it tends to reject normality even for
+      distributions that are approximately normal.
+    - D'Agostino K² is better suited for larger samples and tests
+      for skewness and kurtosis jointly.
+    - Anderson-Darling does not produce a p-value. Pass/fail is
+      determined by comparing the test statistic against the critical
+      value at the significance level closest to ``alpha`` from the
+      set ``[15%, 10%, 5%, 2.5%, 1%]``.
+    - NaN values are dropped per feature before testing.
+    - Results are sorted by ``Variable`` then ``Test`` for readability.
+    """
+
+    from scipy import stats as _stats
+
+    # ------------------------------------------------------------------
+    # Validation
+    # ------------------------------------------------------------------
+    valid_tests = ["shapiro", "dagostino", "anderson"]
+
+    if tests is None:
+        tests = valid_tests
+
+    invalid = [t for t in tests if t not in valid_tests]
+    if invalid:
+        raise ValueError(
+            f"Invalid test(s) {invalid}. "
+            f"Choose from {valid_tests}."
+        )
+
+    if not (0 < alpha < 1):
+        raise ValueError("`alpha` must be between 0 and 1.")
+
+    # ------------------------------------------------------------------
+    # Resolve features
+    # ------------------------------------------------------------------
+    if features is None:
+        features = df.select_dtypes(include="number").columns.tolist()
+    else:
+        features = [
+            f for f in features
+            if f in df.columns and pd.api.types.is_numeric_dtype(df[f])
+        ]
+
+    if not features:
+        raise ValueError(
+            "No numeric features found. Ensure `features` contains "
+            "numeric columns present in the DataFrame."
+        )
+
+    # Anderson-Darling significance levels available from scipy
+    _anderson_sig_levels = [0.15, 0.10, 0.05, 0.025, 0.01]
+
+    def _closest_anderson_idx(alpha):
+        """Return index of the significance level closest to alpha."""
+        return min(
+            range(len(_anderson_sig_levels)),
+            key=lambda i: abs(_anderson_sig_levels[i] - alpha),
+        )
+
+    # ------------------------------------------------------------------
+    # Run tests
+    # ------------------------------------------------------------------
+    rows = []
+
+    for feat in features:
+        series = df[feat].dropna().values
+
+        if "shapiro" in tests:
+            if len(series) < 3:
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Shapiro-Wilk",
+                    "Statistic": np.nan,
+                    "P-value": np.nan,
+                    "Normal": np.nan,
+                })
+            elif len(series) > 5000:
+                # Shapiro-Wilk is unreliable for n > 5,000 — skip it
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Shapiro-Wilk",
+                    "Statistic": "-",
+                    "P-value": "-",
+                    "Normal": "-",
+                })
+            else:
+                stat, p = _stats.shapiro(series)
+                normal = bool(p > alpha)
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Shapiro-Wilk",
+                    "Statistic": round(stat, decimal_places),
+                    "P-value": round(p, decimal_places),
+                    "Normal": normal,
+                })
+
+        if "dagostino" in tests:
+            if len(series) < 8:
+                stat, p, normal = np.nan, np.nan, np.nan
+            else:
+                stat, p = _stats.normaltest(series)
+                normal = bool(p > alpha)
+            rows.append({
+                "Variable": feat,
+                "Test": "D'Agostino K²",
+                "Statistic": round(stat, decimal_places) if not np.isnan(stat) else np.nan,
+                "P-value": round(p, decimal_places) if not np.isnan(p) else np.nan,
+                "Normal": normal,
+            })
+
+        if "anderson" in tests:
+            if len(series) < 3:
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Anderson-Darling",
+                    "Statistic": np.nan,
+                    "P-value": "-",
+                    "Normal": "-",
+                })
+            else:
+                # scipy >= 1.17 supports method="interpolate" which
+                # returns a p-value and silences the FutureWarning.
+                # Fall back to critical value comparison on older scipy.
+                try:
+                    result = _stats.anderson(
+                        series,
+                        dist="norm",
+                        method="interpolate",
+                    )
+                    p_ad = round(float(result.pvalue), decimal_places)
+                    normal = bool(p_ad > alpha)
+                except TypeError:
+                    result = _stats.anderson(series, dist="norm")
+                    idx = _closest_anderson_idx(alpha)
+                    critical_val = result.critical_values[idx]
+                    normal = bool(result.statistic < critical_val)
+                    p_ad = "-"
+                rows.append({
+                    "Variable": feat,
+                    "Test": "Anderson-Darling",
+                    "Statistic": round(
+                        result.statistic, decimal_places
+                    ),
+                    "P-value": p_ad,
+                    "Normal": normal,
+                })
+
+    summary = (
+        pd.DataFrame(rows)
+        .sort_values(["Variable", "Test"])
+        .reset_index(drop=True)
+    )
+
+    # Notify user if any features were too large for Shapiro-Wilk
+    shapiro_skipped = summary[
+        (summary["Test"] == "Shapiro-Wilk") & (summary["Statistic"] == "-")
+    ]["Variable"].tolist()
+    if shapiro_skipped:
+        skipped_str = ", ".join(shapiro_skipped)
+        print(
+            f"\nNote: Shapiro-Wilk was skipped for: {skipped_str}"
+        )
+        print("Reason: n > 5,000. The test is unreliable at large n")
+        print("— even trivial deviations cause rejection.")
+        print("Use D'Agostino K\u00b2 or Anderson-Darling instead.")
+        print()
+
+    return summary

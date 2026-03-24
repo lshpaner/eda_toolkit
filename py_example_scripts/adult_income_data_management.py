@@ -381,3 +381,34 @@ print(contingency_table)
 print("*" * terminal_width)
 
 
+################################################################################
+
+################################################################################
+########################### Normality Tests ###################################
+################################################################################
+
+from eda_toolkit import normality_tests
+
+# All three tests, all numeric features
+summary = normality_tests(df, decimal_places=4)
+
+
+print("*" * terminal_width)
+print("Normality Test Results: df")
+print(summary)
+print("*" * terminal_width)
+
+
+# Specific features and tests
+summary = normality_tests(
+    df,
+    features=["age", "capital-gain", "hours-per-week"],
+    tests=["shapiro", "dagostino"],
+    alpha=0.01,
+    decimal_places=10
+)
+
+print("*" * terminal_width)
+print("Normality Test Results: Feature Specific")
+print(summary)
+print("*" * terminal_width)
