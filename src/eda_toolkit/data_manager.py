@@ -1095,6 +1095,7 @@ def generate_table1(
                     f"{x2.mean():.{decimal_places}f} "
                     f"({x2.std():.{decimal_places}f})"
                 )
+                row["_raw_pval"] = p
                 row["P-value"] = round(p, decimal_places)
             continuous_parts.append(row)
 
@@ -1146,7 +1147,8 @@ def generate_table1(
                     "Proportion (%)": 100 * series.notna().sum() / total_rows,
                     group1_label: ct[g1].sum() if g1 in ct.columns else 0,
                     group2_label: ct[g2].sum() if g2 in ct.columns else 0,
-                    "P-value": round(p, 4),
+                    "_raw_pval": p,
+                    "P-value": round(p, decimal_places),
                 }
                 categorical_parts.append(summary_row)
 
@@ -1226,14 +1228,14 @@ def generate_table1(
         all_raw_pvals = []
 
         for i, row in enumerate(continuous_parts):
-            if "P-value" in row:
+            if "_raw_pval" in row:
                 all_pval_keys.append(("continuous", i))
-                all_raw_pvals.append(row["P-value"])
+                all_raw_pvals.append(row["_raw_pval"])
 
         for i, row in enumerate(categorical_parts):
-            if "P-value" in row:
+            if "_raw_pval" in row:
                 all_pval_keys.append(("categorical", i))
-                all_raw_pvals.append(row["P-value"])
+                all_raw_pvals.append(row["_raw_pval"])
 
         if apply_bonferroni:
             corrected = [min(p * len(all_raw_pvals), 1.0) for p in all_raw_pvals]
@@ -1253,9 +1255,14 @@ def generate_table1(
 
         for (section, i), p_adj in zip(all_pval_keys, corrected):
             if section == "continuous":
-                continuous_parts[i]["P-value"] = round(p_adj, 4)
+                continuous_parts[i]["P-value"] = p_adj
+                del continuous_parts[i]["_raw_pval"]
             else:
-                categorical_parts[i]["P-value"] = round(p_adj, 4)
+                categorical_parts[i]["P-value"] = p_adj
+                del categorical_parts[i]["_raw_pval"]
+
+    for row in continuous_parts + categorical_parts:
+        row.pop("_raw_pval", None)
 
     df_continuous = pd.DataFrame(continuous_parts).replace({np.nan: ""})
     df_categorical = pd.DataFrame(categorical_parts).replace({np.nan: ""})
