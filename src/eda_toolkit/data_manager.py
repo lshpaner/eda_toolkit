@@ -2190,25 +2190,6 @@ def detect_outliers(
     # ------------------------------------------------------------------
     mask = pd.DataFrame(False, index=df.index, columns=features)
 
-    def _flag_iqr(series, thresh):
-        q1 = series.quantile(0.25)
-        q3 = series.quantile(0.75)
-        iqr = q3 - q1
-        lower = q1 - thresh * iqr
-        upper = q3 + thresh * iqr
-        return series < lower, series > upper, lower, upper
-
-    def _flag_zscore(series, thresh):
-        mean = series.mean()
-        std = series.std()
-        if std == 0:
-            return pd.Series(False, index=series.index), \
-                   pd.Series(False, index=series.index), np.nan, np.nan
-        z = (series - mean) / std
-        lower = mean - thresh * std
-        upper = mean + thresh * std
-        return z < -thresh, z > thresh, lower, upper
-
     # Store bounds for the summary
     bounds: Dict[str, Tuple] = {}
 
