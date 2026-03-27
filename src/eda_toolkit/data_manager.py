@@ -993,6 +993,8 @@ def generate_table1(
     groupby_col: Optional[str] = None,
     use_fisher_exact: bool = False,
     use_welch: bool = True,
+    proportion_relative_to_cohort: bool = True,
+    include_overall: bool = True,
 ) -> Union[
     pd.DataFrame,
     Tuple[pd.DataFrame, pd.DataFrame],
@@ -1075,7 +1077,7 @@ def generate_table1(
                 "Missing (n)": series.isna().sum(),
                 "Missing (%)": 100 * series.isna().mean(),
                 "Count": non_missing.count(),
-                "Proportion (%)": 100 * non_missing.count() / total_rows,
+                "Proportion (%)": 100 * non_missing.count() / total_rows,  
             }
             if groupby_col:
                 x1 = df[df[groupby_col] == g1][col].dropna()
@@ -1145,8 +1147,18 @@ def generate_table1(
                     "Missing (%)": missing_pct,
                     "Count": series.notna().sum(),
                     "Proportion (%)": 100 * series.notna().sum() / total_rows,
-                    group1_label: ct[g1].sum() if g1 in ct.columns else 0,
-                    group2_label: ct[g2].sum() if g2 in ct.columns else 0,
+                    group1_label: (
+                        f"{ct[g1].sum():,} "
+                        f"({100 * ct[g1].sum() / (df[groupby_col] == g1).sum():.{decimal_places}f}%)"
+                        if g1 in ct.columns
+                        else "0"
+                    ),
+                    group2_label: (
+                        f"{ct[g2].sum():,} "
+                        f"({100 * ct[g2].sum() / (df[groupby_col] == g2).sum():.{decimal_places}f}%)"
+                        if g2 in ct.columns
+                        else "0"
+                    ),
                     "_raw_pval": p,
                     "P-value": round(p, decimal_places),
                 }
@@ -1202,7 +1214,11 @@ def generate_table1(
                             "Missing (n)": missing_n,
                             "Missing (%)": missing_pct,
                             "Count": count,
-                            "Proportion (%)": 100 * count / total_rows,
+                            "Proportion (%)": (
+                                100 * count / total_rows
+                                if proportion_relative_to_cohort
+                                else 100 * count / series.notna().sum()
+                            ),
                             group1_label: g1_str,
                             group2_label: g2_str,
                         }
@@ -1219,7 +1235,11 @@ def generate_table1(
                             "Missing (n)": missing_n,
                             "Missing (%)": missing_pct,
                             "Count": count,
-                            "Proportion (%)": 100 * count / total_rows,
+                            "Proportion (%)": (
+                                100 * count / total_rows
+                                if proportion_relative_to_cohort
+                                else 100 * count / series.notna().sum()
+                            ),
                         }
                     categorical_parts.append(row)
 
@@ -1264,50 +1284,77 @@ def generate_table1(
     for row in continuous_parts + categorical_parts:
         row.pop("_raw_pval", None)
 
+    if include_overall:     
+        def make_overall(row):
+            if row.get("Type") == "Continuous":
+                mean = row.get("Mean", "")
+                sd = row.get("SD", "")
+                if mean != "" and sd != "":
+                    return (
+                        f"{mean:.{decimal_places}f} "
+                        f"({sd:.{decimal_places}f})"
+                    )
+                return ""
+            elif row.get("Type") == "Categorical":
+                count = row.get("Count", "")
+                prop = row.get("Proportion (%)", "")
+                if count != "" and prop != "":
+                    return f"{int(count):,} ({prop:.{decimal_places}f}%)"
+                return ""
+            return ""
+
+        overall_continuous = [make_overall(r) for r in continuous_parts]
+        overall_categorical = [make_overall(r) for r in categorical_parts]
+
+    
     df_continuous = pd.DataFrame(continuous_parts).replace({np.nan: ""})
     df_categorical = pd.DataFrame(categorical_parts).replace({np.nan: ""})
 
     def format_numeric_cols(df):
-        float_cols = [
-            "Mean", "SD", "Median", "Min", "Max", "Mode",
-            "Missing (%)", "Proportion (%)", "P-value",
-        ]
-        int_cols = ["Count", "Missing (n)"]
-        if groupby_col:
-            int_cols.extend([group1_label, group2_label])
+            float_cols = [
+                "Mean", "SD", "Median", "Min", "Max", "Mode",
+                "Missing (%)", "Proportion (%)", "P-value",
+            ]
+            int_cols = ["Count", "Missing (n)"]
 
-        def is_numeric_string(x):
-            try:
-                return x != "" and float(str(x).replace(",", "")) == float(
-                    str(x).replace(",", "")
-                )
-            except Exception:
-                return False
-
-        for col in float_cols:
-            if col in df.columns:
-                df[col] = df[col].apply(
-                    lambda x: (
-                        f"{float(str(x).replace(',', '')):,.{decimal_places}f}"
-                        if is_numeric_string(x)
-                        else "" if pd.isna(x) else x
+            def is_numeric_string(x):
+                try:
+                    return x != "" and float(str(x).replace(",", "")) == float(
+                        str(x).replace(",", "")
                     )
-                )
+                except Exception:
+                    return False
 
-        for col in int_cols:
-            if col in df.columns:
-                df[col] = df[col].apply(
-                    lambda x: (
-                        f"{int(float(str(x).replace(',', ''))):,}"
-                        if is_numeric_string(x)
-                        else "" if pd.isna(x) else x
+            for col in float_cols:
+                if col in df.columns:
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            f"{float(str(x).replace(',', '')):,.{decimal_places}f}"
+                            if is_numeric_string(x)
+                            else "" if pd.isna(x) else x
+                        )
                     )
-                )
 
-        return df
+            for col in int_cols:
+                if col in df.columns:
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            f"{int(float(str(x).replace(',', ''))):,}"
+                            if is_numeric_string(x)
+                            else "" if pd.isna(x) else x
+                        )
+                    )
 
+            return df
+    
     df_continuous = format_numeric_cols(df_continuous)
     df_categorical = format_numeric_cols(df_categorical)
+
+    if include_overall:
+        if not df_continuous.empty:
+            df_continuous.insert(1, "Overall", overall_continuous)
+        if not df_categorical.empty:
+            df_categorical.insert(1, "Overall", overall_categorical)
 
     drop_cols = ["Mean", "SD", "Median", "Min", "Max"]
     df_categorical.drop(columns=drop_cols, inplace=True, errors="ignore")
@@ -1407,7 +1454,6 @@ def generate_table1(
         return TableWrapper(cont, pretty_cont), TableWrapper(cat, pretty_cat)
 
     return result
-
 
 ################################################################################
 ############################## Contingency Table ###############################
