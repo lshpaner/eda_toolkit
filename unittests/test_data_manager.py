@@ -1155,11 +1155,10 @@ def test_table1_return_markdown_only():
     df = pd.DataFrame({"x": ["A", "A", "B", "B", "C"]})
     result = generate_table1(df, return_markdown_only=True)
 
-    # The function returns a dict when both continuous and categorical are included
     assert isinstance(result, dict)
     assert "categorical" in result
     assert isinstance(result["categorical"], str)
-    assert "| Variable | Type | Mode" in result["categorical"]
+    assert "| Variable | Overall | Type | Mode" in result["categorical"]
 
 
 def test_table1_detect_binary_numeric_false():
