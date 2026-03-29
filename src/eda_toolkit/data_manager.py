@@ -1291,8 +1291,8 @@ def generate_table1(
                 sd = row.get("SD", "")
                 if mean != "" and sd != "":
                     return (
-                        f"{mean:.{decimal_places}f} "
-                        f"({sd:.{decimal_places}f})"
+                        f"{mean:,.{decimal_places}f} "
+                        f"({sd:,.{decimal_places}f})"
                     )
                 return ""
             elif row.get("Type") == "Categorical":
