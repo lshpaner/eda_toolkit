@@ -11,7 +11,8 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib import gridspec
-import matplotlib.ticker as mticker  # Import for formatting
+import matplotlib.ticker as mticker  
+from matplotlib.ticker import FuncFormatter
 import seaborn as sns
 import textwrap
 import os
@@ -1559,7 +1560,6 @@ def stacked_crosstab_plot(
 ############################ Box and Violin Plots ##############################
 ################################################################################
 
-
 def box_violin_plot(
     df: pd.DataFrame,
     metrics_list: List[str],
@@ -1578,6 +1578,8 @@ def box_violin_plot(
     custom_order: Optional[List] = None,
     individual_figsize: Tuple[int, int] = (6, 4),
     subplot_figsize: Optional[Tuple[int, int]] = None,
+    suptitle: Optional[str] = None,
+    suptitle_y: float = 1.02,
     label_fontsize: int = 12,
     tick_fontsize: int = 10,
     text_wrap: int = 50,
@@ -1666,6 +1668,17 @@ def box_violin_plot(
         Dimensions (width, height) of the subplots. Defaults to a size
         proportional to the number of rows and columns.
 
+    suptitle : str, optional
+        Figure-level title rendered above the subplot grid via
+        ``fig.suptitle``. Font size is controlled by ``label_fontsize``.
+        If None, no figure-level title is added. Only applies to the
+        subplot grid, not individual plots.
+
+    suptitle_y : float, optional (default=1.02)
+        Vertical position of the figure-level suptitle as a fraction of the
+        figure height. Values above 1.0 place the title above the subplot
+        grid. Increase to add more space between the title and the plots.
+
     label_fontsize : int, optional (default=12)
         Font size for axis labels.
 
@@ -1719,6 +1732,8 @@ def box_violin_plot(
       any plotting loop and applied consistently to all subplots.
     - ``custom_order`` is passed directly to Seaborn's ``order`` parameter
       (or ``x_order`` / ``y_order`` depending on orientation).
+    - ``suptitle`` applies only to the subplot grid. Individual plots use
+      per-subplot titles only.
     """
 
     # Coerce metrics_comp string to list
@@ -1818,7 +1833,9 @@ def box_violin_plot(
     # it is on y. Seaborn uses `order` for the categorical axis in both cases.
     order_kwarg = {"order": custom_order} if custom_order is not None else {}
 
+    # ------------------------------------------------------------------
     # Individual plots
+    # ------------------------------------------------------------------
     if show_plot in ["individual", "both"]:
         for met_comp in metrics_comp:
             if user_palette is not None:
@@ -1906,9 +1923,14 @@ def box_violin_plot(
 
                 plt.show()
 
+    # ------------------------------------------------------------------
     # Subplot grid
+    # ------------------------------------------------------------------
     if show_plot in ["subplots", "both"]:
         fig, axs = plt.subplots(n_rows, n_cols, figsize=subplot_figsize)
+
+        if suptitle is not None:
+            fig.suptitle(suptitle, fontsize=label_fontsize, y=suptitle_y)
 
         if n_rows * n_cols == 1:
             axs = [axs]
@@ -1998,7 +2020,6 @@ def box_violin_plot(
             )
 
         plt.show()
-
 
 ################################################################################
 ########################## Multi-Purpose Scatter Plots #########################
@@ -4488,9 +4509,8 @@ def distribution_gof_plots(
 
 
 ################################################################################
-######################### Conditional Histogram Function #######################
+######################### Grouped Distributions Function #######################
 ################################################################################
-
 
 def grouped_distributions(
     df: pd.DataFrame,
@@ -4500,6 +4520,7 @@ def grouped_distributions(
     bins: Union[int, List[Any], np.ndarray] = 30,
     normalize: str = "density",
     plot_style: str = "hist",
+    pct_format: bool = True,
     alpha: float = 0.6,
     colors: Optional[Dict[str, str]] = None,
     n_rows: Optional[int] = None,
@@ -4507,14 +4528,25 @@ def grouped_distributions(
     common_bins: bool = True,
     show_legend: bool = True,
     legend_loc: str = "best",
+    legend_bbox_to_anchor: Optional[Tuple[float, float]] = None,
+    legend_ncols: int = 1,
+    reverse_legend: bool = False,
     label_fontsize: int = 12,
     tick_fontsize: int = 10,
     text_wrap: int = 50,
     figsize: Tuple[int, int] = (10, 6),
+    suptitle: Optional[str] = None,
+    suptitle_y: float = 1.02,
+    xlim: Optional[Union[Tuple[float, float], Dict[str, Tuple[float, float]]]] = None,
+    ylim: Optional[Union[Tuple[float, float], Dict[str, Tuple[float, float]]]] = None,
+    w_pad: float = 1.0,
+    h_pad: float = 1.0,
+    bbox_inches: str = "tight",
+    dpi: Optional[int] = None,
     image_path_png: Optional[str] = None,
     image_path_svg: Optional[str] = None,
     image_filename: Optional[str] = None,
-):
+) -> None:
     """
     Plot conditional distributions of numeric features given a binary variable.
 
@@ -4555,16 +4587,17 @@ def grouped_distributions(
         - "hist": overlaid histograms
         - "density": overlaid filled KDE curves
 
-    overlay : bool, optional (default=True)
-        Currently informational only. Distributions are always overlaid on
-        the same axis regardless of this value.
+    pct_format : bool, optional (default=True)
+        If True, formats the y-axis as percentages when plot_style is
+        "density" or normalize is "density". Set to False to display
+        raw density values instead.
 
     alpha : float, optional (default=0.6)
         Transparency level for histogram bars or density fills.
 
     colors : dict, optional
         Mapping from group value to color. Keys must match the two unique
-        values in the `by` column. If None, a default color scheme is used.
+        values in the ``by`` column. If None, a default color scheme is used.
 
     n_rows : int, optional
         Number of subplot rows. If None, determined automatically.
@@ -4579,17 +4612,67 @@ def grouped_distributions(
     show_legend : bool, optional (default=True)
         Whether to display a legend identifying the two groups.
 
-    legend_loc : str, default="best"
-        Legend placement passed to Matplotlib.
+    legend_loc : str, optional (default="best")
+        Legend location string passed to Matplotlib. Valid options include
+        "best", "upper right", "upper left", "lower left", "lower right",
+        "right", "center left", "center right", "lower center",
+        "upper center", and "center".
+
+    legend_bbox_to_anchor : tuple of float, optional
+        (x, y) anchor point for placing the legend outside the axes.
+        Use with legend_loc="upper center" and a negative y value to
+        place the legend below the plot (e.g., (0.5, -0.15)).
+
+    legend_ncols : int, optional (default=1)
+        Number of columns in the legend. Use legend_ncols=2 when placing
+        the legend below a subplot to display labels side by side.
+
+    reverse_legend : bool, optional (default=False)
+        If True, reverses the order of legend handles and labels.
 
     label_fontsize : int, optional (default=12)
-        Font size for axis labels.
+        Font size for axis labels, subplot titles, and the figure-level
+        suptitle.
 
     tick_fontsize : int, optional (default=10)
         Font size for tick labels and legend text.
 
-    figsize : tuple of (int, int), optional (default=(24, 20))
+    text_wrap : int, optional (default=50)
+        Maximum character width before wrapping subplot titles and axis labels.
+
+    figsize : tuple of (int, int), optional (default=(10, 6))
         Size of the overall figure in inches.
+
+    suptitle : str, optional
+        Figure-level title rendered above all subplots via ``fig.suptitle``.
+        Font size is controlled by ``label_fontsize``. If None, no
+        figure-level title is added.
+
+    suptitle_y : float, optional (default=1.02)
+        Vertical position of the figure-level suptitle as a fraction of the
+        figure height. Values above 1.0 place the title above the subplot
+        grid. Increase to add more space between the title and the plots.
+
+    xlim : tuple of float or dict of {str: tuple of float}, optional
+        Limits for the x-axis. Provide a single tuple ``(min, max)`` to apply
+        uniformly to all subplots, or a dict keyed by feature name to set
+        per-feature limits (e.g., ``{"Age": (0, 25), "BMI": (10, 60)}``).
+        Features not present in the dict are left at Matplotlib defaults.
+
+    ylim : tuple of float or dict of {str: tuple of float}, optional
+        Limits for the y-axis. Accepts the same format as ``xlim``.
+
+    w_pad : float, optional (default=1.0)
+        Width padding between subplots passed to ``tight_layout``.
+
+    h_pad : float, optional (default=1.0)
+        Height padding between subplots passed to ``tight_layout``.
+
+    bbox_inches : str, optional (default="tight")
+        Bounding box option passed to ``_save_figure``.
+
+    dpi : int, optional
+        DPI for raster outputs such as PNG. Passed to ``_save_figure``.
 
     image_path_png : str, optional
         Directory path to save the PNG image.
@@ -4598,32 +4681,44 @@ def grouped_distributions(
         Directory path to save the SVG image.
 
     image_filename : str, optional
-        Base filename (without extension) for saving the figure.
+        Base filename (without extension) for saving the figure. No files
+        are saved if this is not provided.
+
+    Returns
+    -------
+    None
 
     Raises
     ------
     ValueError
-        If the `by` column is not binary.
-        If an invalid plot_style or normalize option is provided.
+        If the ``by`` column is not binary.
+        If an invalid ``plot_style`` or ``normalize`` option is provided.
+        If ``image_filename`` is provided but neither ``image_path_png`` nor
+        ``image_path_svg`` is specified.
+        If the subplot grid is too small for the number of features.
 
-    ValueError
-        If `image_filename` is provided but neither `image_path_png` nor
-        `image_path_svg` is specified.
+    Warnings
+    --------
+    UserWarning
+        If a feature has fewer than two non-null observations in either
+        group, that group's density curve is skipped.
 
     Notes
     -----
-    - Font sizes are specified in absolute points and may appear small on
-    large figures or dense subplot grids.
     - All distributions are plotted as overlays on a single axis per feature.
-    - The `overlay` parameter is reserved for future extensions and does not
-    currently alter behavior.
+    - ``xlim`` and ``ylim`` accept either a uniform tuple or a per-feature
+      dict. Features absent from a dict are left at Matplotlib defaults.
+    - ``w_pad`` and ``h_pad`` control subplot spacing via ``tight_layout``.
+    - ``dpi`` and ``bbox_inches`` are forwarded to ``_save_figure`` and only
+      take effect when ``image_filename`` is provided.
+    - To place the legend below a subplot, use
+      ``legend_loc="upper center"``, ``legend_bbox_to_anchor=(0.5, -0.15)``,
+      and ``legend_ncols=2``.
     """
 
     # ------------------------------------------------------------------
     # Validation
     # ------------------------------------------------------------------
-
-    # Check if image_filename is provided but no image path is provided
     if image_filename and not (image_path_png or image_path_svg):
         raise ValueError(
             "You must provide either 'image_path_png' or 'image_path_svg' "
@@ -4635,7 +4730,9 @@ def grouped_distributions(
 
     unique_vals = df[by].dropna().unique()
     if len(unique_vals) != 2:
-        raise ValueError(f"Column '{by}' must be binary. Found values: {unique_vals}")
+        raise ValueError(
+            f"Column '{by}' must be binary. Found values: {unique_vals}"
+        )
 
     if plot_style not in {"hist", "density"}:
         raise ValueError("plot_style must be 'hist' or 'density'.")
@@ -4662,12 +4759,18 @@ def grouped_distributions(
 
     if n_rows * n_cols < n_features:
         raise ValueError(
-            f"Grid too small: n_rows*n_cols={n_rows*n_cols}, but n_features={n_features}. "
-            f"Increase n_rows or n_cols."
+            f"Grid too small: n_rows*n_cols={n_rows * n_cols}, "
+            f"but n_features={n_features}. Increase n_rows or n_cols."
         )
 
     fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
     axes = np.atleast_1d(axes).flatten()
+
+    # ------------------------------------------------------------------
+    # Figure-level suptitle
+    # ------------------------------------------------------------------
+    if suptitle is not None:
+        fig.suptitle(suptitle, fontsize=label_fontsize, y=suptitle_y)
 
     # ------------------------------------------------------------------
     # Colors
@@ -4677,6 +4780,16 @@ def grouped_distributions(
             unique_vals[0]: "#1f77b4",
             unique_vals[1]: "#ff7f0e",
         }
+
+    # ------------------------------------------------------------------
+    # Axis limit helper
+    # ------------------------------------------------------------------
+    def _resolve_lim(lim_param, feature):
+        if lim_param is None:
+            return None
+        if isinstance(lim_param, dict):
+            return lim_param.get(feature, None)
+        return lim_param
 
     # ------------------------------------------------------------------
     # Plotting
@@ -4717,9 +4830,15 @@ def grouped_distributions(
         # -----------------------
         # Filled density style
         # -----------------------
-        else:  # plot_style == "density"
+        else:
             for vals, label in [(x0, unique_vals[0]), (x1, unique_vals[1])]:
                 if len(vals) < 2:
+                    warnings.warn(
+                        f"Feature '{feature}', group '{label}' has fewer than "
+                        f"2 non-null observations. Density curve skipped.",
+                        UserWarning,
+                        stacklevel=2,
+                    )
                     continue
 
                 kde = gaussian_kde(vals)
@@ -4737,24 +4856,61 @@ def grouped_distributions(
         # -----------------------
         # Axis labels
         # -----------------------
-        ax.set_xlabel(feature, fontsize=label_fontsize)
+        ax.set_xlabel(
+            "\n".join(textwrap.wrap(feature, width=text_wrap)),
+            fontsize=label_fontsize,
+        )
 
         if plot_style == "density" or normalize == "density":
-            ax.set_ylabel("Percentage", fontsize=label_fontsize)
+            ax.set_ylabel(
+                "Percentage" if pct_format else "Density",
+                fontsize=label_fontsize,
+            )
         else:
             ax.set_ylabel("Count", fontsize=label_fontsize)
 
         ax.tick_params(axis="both", labelsize=tick_fontsize)
 
+        # -----------------------
+        # Legend
+        # -----------------------
         if show_legend:
-            ax.legend(loc=legend_loc, fontsize=tick_fontsize)
+            _apply_legend(
+                ax=ax,
+                labels=None,
+                loc=legend_loc,
+                fontsize=tick_fontsize,
+                reverse=reverse_legend,
+                bbox_to_anchor=legend_bbox_to_anchor,
+                ncols=legend_ncols,
+            )
 
-        title = f"{feature} by {by}"
-
+        # -----------------------
+        # Subplot title
+        # -----------------------
         ax.set_title(
-            "\n".join(textwrap.wrap(title, width=text_wrap)),
+            "\n".join(textwrap.wrap(f"{feature} by {by}", width=text_wrap)),
             fontsize=label_fontsize,
         )
+
+        # -----------------------
+        # Percentage formatter
+        # -----------------------
+        if pct_format and (plot_style == "density" or normalize == "density"):
+            ax.yaxis.set_major_formatter(
+                FuncFormatter(lambda x, _: f"{x * 100:.0f}%")
+            )
+
+        # -----------------------
+        # Axis limits
+        # -----------------------
+        x_lim = _resolve_lim(xlim, feature)
+        y_lim = _resolve_lim(ylim, feature)
+
+        if x_lim is not None:
+            ax.set_xlim(x_lim)
+        if y_lim is not None:
+            ax.set_ylim(y_lim)
 
     # ------------------------------------------------------------------
     # Hide unused axes
@@ -4762,7 +4918,7 @@ def grouped_distributions(
     for ax in axes[n_features:]:
         ax.axis("off")
 
-    plt.tight_layout()
+    plt.tight_layout(w_pad=w_pad, h_pad=h_pad)
 
     # ------------------------------------------------------------------
     # Save
@@ -4773,6 +4929,8 @@ def grouped_distributions(
             image_path_png=image_path_png,
             image_path_svg=image_path_svg,
             filename=image_filename,
+            bbox_inches=bbox_inches,
+            dpi=dpi,
         )
 
     plt.show()
