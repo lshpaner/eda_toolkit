@@ -1,4 +1,5 @@
 ### Dependencies for development and documentation
+build>=1.2.2.post1
 jinja2>=3.0.0
 -e .
 fastparquet>=2024.2.0
@@ -15,5 +16,6 @@ scikit-learn>=1.0.2
 scipy>=1.7.3
 seaborn>=0.12.2,<=0.13.2
 tqdm>=4.66.4
+twine>=6.1.0
 ucimlrepo==0.0.7
 xlsxwriter==3.2.0
