@@ -1016,9 +1016,9 @@ def test_flex_corr_matrix_image_filename_without_path(sample_corr_dataframe):
         flex_corr_matrix(sample_corr_dataframe, image_filename="test")
  
  
-# ------------------------------------------------------------------
-# Near-zero artifact fix
-# ------------------------------------------------------------------
+################################################################################
+# Near-zero artifact
+################################################################################
  
 def test_flex_corr_matrix_no_negative_zero(sample_corr_dataframe_large, tmp_path):
     """Verify that near-zero values don't produce -0.00 in the heatmap."""
@@ -1030,7 +1030,7 @@ def test_flex_corr_matrix_no_negative_zero(sample_corr_dataframe_large, tmp_path
             show_significance=False,
         )
     except Exception as e:
-        pytest.fail(f"Near-zero artifact fix caused an error: {e}")
+        pytest.fail(f"Near-zero artifact caused an error: {e}")
 
 
 # Test that scatter_fit_plot runs without errors with default parameters
