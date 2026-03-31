@@ -79,12 +79,18 @@ def _save_figure(
 
 
 # Helper: apply legend with optional reversal
-def _apply_legend(ax, labels, loc, fontsize, reverse):
+def _apply_legend(ax, labels, loc, fontsize, reverse, bbox_to_anchor=None, ncols=1):
     handles, leg_labels = ax.get_legend_handles_labels()
     if reverse:
         handles, leg_labels = handles[::-1], leg_labels[::-1]
-    ax.legend(handles, leg_labels, loc=loc, fontsize=fontsize)
-
+    ax.legend(
+        handles,
+        leg_labels,
+        loc=loc,
+        fontsize=fontsize,
+        bbox_to_anchor=bbox_to_anchor,
+        ncols=ncols,
+    )
 
 # Helper: annotate stacked bar segments with values
 def _annotate_stacked(ax, data, fmt_func, kind, tick_fontsize):

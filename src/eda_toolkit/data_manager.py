@@ -1148,14 +1148,14 @@ def generate_table1(
                     "Count": series.notna().sum(),
                     "Proportion (%)": 100 * series.notna().sum() / total_rows,
                     group1_label: (
-                        f"{ct[g1].sum():,} "
-                        f"({100 * ct[g1].sum() / (df[groupby_col] == g1).sum():.{decimal_places}f}%)"
+                        f"{(df[groupby_col] == g1).sum():,} "
+                        f"({100 * (df[groupby_col] == g1).sum() / total_rows:.{decimal_places}f}%)"
                         if g1 in ct.columns
                         else "0"
                     ),
                     group2_label: (
-                        f"{ct[g2].sum():,} "
-                        f"({100 * ct[g2].sum() / (df[groupby_col] == g2).sum():.{decimal_places}f}%)"
+                        f"{(df[groupby_col] == g2).sum():,} "
+                        f"({100 * (df[groupby_col] == g2).sum() / total_rows:.{decimal_places}f}%)"
                         if g2 in ct.columns
                         else "0"
                     ),
