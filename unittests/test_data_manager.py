@@ -1199,6 +1199,62 @@ def test_include_types_invalid_option_raises():
         generate_table1(df, include_types="invalid_option")
 
 
+# ------------------------------------------------------------------
+# NaN handling in generate_table1
+# ------------------------------------------------------------------
+
+def test_value_counts_nan_row_has_correct_group_counts():
+    df = pd.DataFrame({
+        "x":     ["a", "a", "a", "b", "b", "b", np.nan, np.nan, np.nan, np.nan],
+        "group": ["A", "B", "A", "B", "A", "B", "A",    "B",    "A",    "B"],
+    })
+    result = generate_table1(
+        df,
+        categorical_cols=["x"],
+        continuous_cols=[],
+        groupby_col="group",
+        value_counts=True,
+    )
+
+    nan_rows = result[result["Variable"] == "x = NaN"]
+    assert len(nan_rows) == 1
+
+    nan_row = nan_rows.iloc[0]
+    # group columns are labeled like "A (n = 5)" / "B (n = 5)"
+    a_col = [c for c in result.columns if c.startswith("A ")][0]
+    b_col = [c for c in result.columns if c.startswith("B ")][0]
+
+    # bug presented as "0 (0.00%)" in both group columns
+    assert "0 (0.00%)" not in nan_row[a_col]
+    assert "0 (0.00%)" not in nan_row[b_col]
+
+
+def test_all_nan_categorical_column_emits_row_in_groupby():
+    import warnings as _warnings
+
+    df = pd.DataFrame({
+        "x":     [np.nan] * 6,
+        "group": ["A", "B", "A", "B", "A", "B"],
+    })
+
+    with _warnings.catch_warnings(record=True) as caught:
+        _warnings.simplefilter("always")
+        result = generate_table1(
+            df,
+            categorical_cols=["x"],
+            continuous_cols=[],
+            groupby_col="group",
+            value_counts=True,
+        )
+
+    # column should appear in the output, not be silently skipped
+    assert "x" in result["Variable"].values
+
+    # no "Skipping" warning should have fired
+    skip_warnings = [w for w in caught if "Skipping" in str(w.message)]
+    assert len(skip_warnings) == 0
+
+    
 def test_groupby_imputer_as_new_col_global_mean():
     df = pd.DataFrame(
         {

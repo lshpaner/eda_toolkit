@@ -1109,6 +1109,20 @@ def generate_table1(
             mode_val = series.mode().iloc[0] if not series.mode().empty else ""
 
             if groupby_col:
+                if series.dropna().empty:
+                    summary_row = {
+                        "Variable": col, "Type": "Categorical",
+                        "Mean": "", "SD": "", "Median": "", "Min": "", "Max": "",
+                        "Mode": mode_val,
+                        "Missing (n)": missing_n, "Missing (%)": missing_pct,
+                        "Count": 0, "Proportion (%)": 0,
+                        group1_label: "0 (0.00%)",
+                        group2_label: "0 (0.00%)",
+                        "P-value": "",
+                    }
+                    categorical_parts.append(summary_row)
+                    continue
+
                 ct = pd.crosstab(df[col], df[groupby_col])
                 ## warn instead of silently dropping non-2-column tables
                 if ct.shape[1] != 2:
@@ -1192,8 +1206,12 @@ def generate_table1(
                         else f"{col} = NaN"
                     )
                     if groupby_col:
-                        g1_mask = (df[col] == cat_val) & (df[groupby_col] == g1)
-                        g2_mask = (df[col] == cat_val) & (df[groupby_col] == g2)
+                        if pd.isna(cat_val):
+                            col_mask = df[col].isna()
+                        else:
+                            col_mask = df[col] == cat_val
+                        g1_mask = col_mask & (df[groupby_col] == g1)
+                        g2_mask = col_mask & (df[groupby_col] == g2)
                         g1_count = g1_mask.sum()
                         g2_count = g2_mask.sum()
                         g1_total = (df[groupby_col] == g1).sum()
